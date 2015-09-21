@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">Simple Daily Planner</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_registration">Registration</string>
+    <string name="title_activity_list_bugs">ListBugsActivity</string>
+    <string name="title_activity_user_logged_in">UserLoggedIn</string>
+    <string name="title_activity_slot_dialog">SlotDialog</string>
+
+    <style name="DefaultButtonText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#979797</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:shadowColor">#f9f9f9</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+
+    <string name="title_activity_my_slots_going_to">MySlotsGoingTo</string>
+    <string name="title_activity_update_account">UpdateAccount</string>
+    <string name="title_activity_slots_awaiting_my_response">SlotsAwaitingMyResponse</string>
+    <string name="title_activity_my_account">MyAccount</string>
+    <string name="title_activity_my_created_slots">MyCreatedSlots</string>
+    <string name="title_activity_forgot_password_reset">ForgotPasswordReset</string>
+    <string name="title_activity_slots_im_going_to_dialog">SlotsImGoingToDialog</string>
+    <string name="title_activity_create_slot">CreateSlot</string>
+    <string name="title_activity_find_contact">FindContact</string>
+    <string name="time_picker_example">Time Picker Example</string>
+    <string name="time_pick">Pick the time and press save button</string>
+    <string name="time_save">Save</string>
+    <string name="time_selected"></string>
+    <string name="time_current">The Time is:</string>
+
+
+    <string name="date_label_set">Press the button to set the date</string>
+    <string name="date_button_set">Set Date</string>
+    <string name="date_view_set">Date: </string>
+    <string name="date_selected"></string>
+    <string name="title_activity_recipients_for_slot">RecipientsForSlot</string>
+    <string name="title_activity_add_remove_contacts_tabbed">AddRemoveContactsTabbed</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_dialog_contacts_main">DialogContactsMain</string>
+
+
+    <string name="menu_settings">Settings</string>
+    <string name="str_btn_find">Find</string>
+    <string name="hnt_et_location">Enter location</string>
+
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_slots_pending_my_request_dialog">SlotsPendingMyRequestDialog
+    </string>
+
+</resources>

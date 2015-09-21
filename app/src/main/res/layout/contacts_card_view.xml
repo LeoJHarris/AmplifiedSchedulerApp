@@ -1,0 +1,77 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cv"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+            android:id="@+id/person_fullname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="contact det"
+            android:textColor="@android:color/white"
+            android:textSize="30sp" />
+
+        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+            android:id="@+id/person_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/person_fullname"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="Name"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+            android:id="@+id/person_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/person_email"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="Surname"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+            android:id="@+id/person_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/person_email"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:text="tets"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+            android:id="@+id/person_last_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/person_country"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

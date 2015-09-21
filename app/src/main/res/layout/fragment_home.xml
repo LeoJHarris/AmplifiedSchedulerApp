@@ -1,0 +1,80 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_color_bg"
+    tools:context="com.lh.leonard.simpledailyplanner.HomeFragment">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="2dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+                android:id="@+id/textViewHomeLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Simple Daily Planner"
+                android:textColor="@color/white"
+                android:textSize="100sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingBottom="30dp">
+
+            <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+                android:id="@+id/textViewAppStatement"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Planning Just got a whole lot simpler."
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                android:textStyle="italic" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
+
+            <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+                android:id="@+id/textViewWelcomeLabel"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:padding="10dp">
+
+            <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+                android:id="@+id/textViewNotificationNumberHome"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="50sp"
+                android:textStyle="bold" />
+        </TableRow>
+    </TableLayout>
+</FrameLayout>

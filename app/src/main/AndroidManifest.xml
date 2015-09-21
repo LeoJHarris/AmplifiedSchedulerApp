@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.lh.leonard.simpledailyplanner">
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <service android:name="com.backendless.AndroidService" />
+
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.MainActivity"
+            android:label="@string/title_activity_main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.RegistrationActivity"
+            android:label="@string/title_activity_registration" />
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.UserLoggedIn"
+            android:label="@string/title_activity_user_logged_in" />
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.MyCreatedSlotsDialog"
+            android:label="Hi" />
+
+        <fragment
+            android:name=".SlotsImGoingTo"
+            android:label="@string/title_activity_my_slots_going_to" />
+        <fragment
+            android:name=".SlotsAwaitingMyResponse"
+            android:label="@string/title_activity_slots_awaiting_my_response" />
+        <fragment
+            android:name=".UpdateAccount"
+            android:label="@string/title_activity_my_account" />
+        <fragment
+            android:name=".MyCreatedSlots"
+            android:label="@string/title_activity_my_created_slots" />
+
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.MapsActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.Dialog"></activity>
+
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.ForgotPasswordReset"
+            android:label="@string/title_activity_forgot_password_reset" />
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.SlotsImGoingToDialog"
+            android:label="@string/title_activity_slots_im_going_to_dialog" />
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.CreateSlot"
+            android:label="@string/title_activity_create_slot" />
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.AddRemoveContacts"
+            android:label="@string/title_activity_find_contact" />
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.RecipientsForSlot"
+            android:label="Add Contacts For Slot"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.AddRemoveContactsTabbed"
+            android:label="@string/title_activity_add_remove_contacts_tabbed" />
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.NavDrawerActivity"
+            android:label="@string/title_activity_add_remove_contacts_tabbed" />
+        <activity
+            android:name="com.lh.leonard.simpledailyplanner.SlotsPendingMyResponseDialog"
+            android:label="@string/title_activity_slots_pending_my_request_dialog"></activity>
+        <activity
+            android:name=".JustMapActivity"
+            android:label="JustMaps"></activity>
+        <activity
+            android:name=".ParticipantsActivity"
+            android:theme="@android:style/Theme.Dialog"></activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCie9wDjjfgkNxs2eFpRQf5v8oBY0mhLME" />
+    </application>
+
+</manifest>
