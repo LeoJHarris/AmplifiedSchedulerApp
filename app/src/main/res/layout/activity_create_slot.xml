@@ -14,7 +14,7 @@
         android:useDefaultMargins="true">
 
 
-        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/textViewHeaderCreateSlot"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
-        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/textViewDate"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -110,7 +110,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/black"
             android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnClickSetStartTime"
@@ -124,7 +125,7 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
-        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/outputStartTime"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -134,9 +135,10 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/black"
             android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/outputEndTime"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -160,7 +162,7 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
-        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/tvSpaces"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

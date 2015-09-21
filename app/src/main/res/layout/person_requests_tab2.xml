@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/gradient_color_bg"
-    tools:context="com.lh.leonard.simpledailyplanner.SlotsAwaitingMyResponse">
+    tools:context="com.lh.leonard.eventhub101.SlotsAwaitingMyResponse">
 
     <TableRow
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/textViewTextNoRequestingUsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

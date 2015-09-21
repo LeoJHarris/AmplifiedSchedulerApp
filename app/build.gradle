@@ -5,10 +5,10 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.lh.leonard.simpledailyplanner"
+        applicationId "com.lh.leonard.eventhub101"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 6
+        versionCode 1
         versionName "1.0"
     }
     buildTypes {

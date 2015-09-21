@@ -11,7 +11,7 @@
         android:paddingBottom="15dp"
         android:paddingTop="25dp">
 
-        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/textViewTitleSlotsDisplay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/textViewTextNoSlotAvaliable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

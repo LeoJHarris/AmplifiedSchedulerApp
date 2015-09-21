@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
-    tools:context="com.lh.leonard.simpledailyplanner.HomeFragment">
+    tools:context="com.lh.leonard.eventhub101.HomeFragment">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -16,12 +16,12 @@
             android:layout_height="match_parent"
             android:gravity="center">
 
-            <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+            <com.lh.leonard.eventhub101.AutoResizeTextView
                 android:id="@+id/textViewHomeLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Simple Daily Planner"
+                android:text="EventHub"
                 android:textColor="@color/white"
                 android:textSize="100sp"
                 android:textStyle="bold" />
@@ -33,7 +33,7 @@
             android:gravity="center"
             android:paddingBottom="30dp">
 
-            <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+            <com.lh.leonard.eventhub101.AutoResizeTextView
                 android:id="@+id/textViewAppStatement"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -52,7 +52,7 @@
             android:paddingBottom="5dp"
             android:paddingTop="5dp">
 
-            <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+            <com.lh.leonard.eventhub101.AutoResizeTextView
                 android:id="@+id/textViewWelcomeLabel"
                 android:layout_height="fill_parent"
                 android:gravity="center"
@@ -67,7 +67,7 @@
             android:gravity="center"
             android:padding="10dp">
 
-            <com.lh.leonard.simpledailyplanner.AutoResizeTextView
+            <com.lh.leonard.eventhub101.AutoResizeTextView
                 android:id="@+id/textViewNotificationNumberHome"
                 android:layout_height="fill_parent"
                 android:gravity="center"

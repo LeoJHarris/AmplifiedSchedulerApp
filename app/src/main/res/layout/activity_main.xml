@@ -1,24 +1,27 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
     android:gravity="center"
     android:padding="10dp">
 
-    <TableRow android:gravity="center">
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
 
-        <TextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/textViewheaderSlotAppMain"
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:gravity="center"
             android:paddingTop="5dp"
-            android:text="Simple Daily Planner"
+            android:text="EventHub101"
             android:textColor="@color/white"
-            android:textSize="50sp"
+            android:textSize="70sp"
             android:textStyle="bold" />
     </TableRow>
-
 
     <RelativeLayout
 
@@ -43,7 +46,7 @@
                 android:inputType="textEmailAddress"
                 android:padding="10dp"
                 android:textColorHint="#cccccc"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <EditText
                 android:id="@+id/passwordSignIn"
@@ -58,7 +61,7 @@
                 android:padding="10dp"
                 android:password="true"
                 android:textColorHint="#cccccc"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/buttonSignIn"
@@ -79,15 +82,16 @@
 
         android:gravity="center">
 
-        <TextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/buttonForgotPassword"
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
             android:clickable="true"
+            android:gravity="center"
             android:paddingTop="10dp"
             android:text="Forgot Password?"
             android:textColor="@color/white"
-            android:textSize="35sp"
+            android:textSize="25sp"
             android:textStyle="bold" />
     </TableRow>
 
@@ -95,15 +99,16 @@
 
         android:gravity="center">
 
-        <TextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/buttonRegistration"
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
             android:clickable="true"
+            android:gravity="center"
             android:paddingTop="20dp"
             android:text="Create Account"
             android:textColor="@color/white"
-            android:textSize="35sp"
+            android:textSize="25sp"
             android:textStyle="bold" />
     </TableRow>
 
@@ -111,11 +116,12 @@
 
         android:gravity="center">
 
-        <TextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/textViewMadeByMeMain"
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
             android:clickable="true"
+            android:gravity="center"
             android:paddingTop="20dp"
             android:text="App Designed And Made By Leonard Harris"
             android:textColor="@color/white"

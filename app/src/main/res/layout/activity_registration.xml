@@ -23,13 +23,13 @@
             android:padding="10dp">
 
             <TextView
+                android:id="@+id/textViewHeaderReg"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:paddingBottom="20dp"
                 android:text="Registration"
-                android:id="@+id/textViewHeaderReg"
                 android:textColor="@color/white"
                 android:textSize="60sp"
                 android:textStyle="bold" />
@@ -81,7 +81,7 @@
 
             <EditText
                 android:id="@+id/editTextEmail"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="-2dp"
@@ -95,9 +95,24 @@
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
+            <AutoCompleteTextView
+                android:id="@+id/autocomplete_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="-2dp"
+                android:background="@drawable/edittext_top_bg"
+                android:hint="Select Country"
+                android:drawableLeft="@drawable/ic_country"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="#bbbbbb"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/editTextPassword"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="-2dp"

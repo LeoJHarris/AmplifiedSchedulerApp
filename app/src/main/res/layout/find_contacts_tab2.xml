@@ -18,16 +18,16 @@
 
     <TableRow
         android:id="@+id/tableRowProgressFindContacts"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/progressBarFindContacts"
             style="?android:attr/progressBarStyleLarge"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="gone" />
     </TableRow>
 
