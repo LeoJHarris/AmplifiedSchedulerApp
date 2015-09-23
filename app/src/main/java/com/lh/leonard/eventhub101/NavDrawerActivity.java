@@ -79,7 +79,7 @@ public class NavDrawerActivity extends Activity {
         FragmentManager FM = getFragmentManager();
         FM
                 .beginTransaction()
-                .replace(R.id.frame_container, home).addToBackStack("home")
+                .replace(R.id.frame_container, home)
                 .commit();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
@@ -126,7 +126,6 @@ public class NavDrawerActivity extends Activity {
                 ));
             }
 
-
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -170,7 +169,6 @@ public class NavDrawerActivity extends Activity {
             case 8:
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
 
-
                     public void handleResponse(Void response) {
 
                         ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
@@ -205,7 +203,6 @@ public class NavDrawerActivity extends Activity {
             }
         } else {
             // error in creating fragment
-
         }
     }
 

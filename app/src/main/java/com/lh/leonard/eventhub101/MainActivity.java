@@ -53,7 +53,6 @@ public class MainActivity extends Activity {
         buttonRegistration.setTypeface(regularFont);
         textViewMadeByMeMain.setTypeface(regularFont);
 
-//TODO here log out when back button pressed
         if (Backendless.UserService.CurrentUser() != null) {
             BackendlessUser user = Backendless.UserService.CurrentUser();
             final Person personLoggedOut = (Person) user.getProperty("loggedoutperson");
@@ -167,14 +166,6 @@ public class MainActivity extends Activity {
             }
         });
     }
-//
-//    @JavascriptInterface
-//    public void sendsmss(String phoneNumber, String message) {
-//
-//        SmsManager smsManager = SmsManager.getDefault();
-//        smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-//    }
-
 
     public void sendSmsByManager() {
         try {
