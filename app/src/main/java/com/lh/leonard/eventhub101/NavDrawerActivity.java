@@ -209,6 +209,8 @@ public class NavDrawerActivity extends Activity {
     @Override
     public void onBackPressed() {
         if (fragmentManager != null) {
+
+
             if (fragmentManager.getBackStackEntryCount() >= 1) {
                 super.onBackPressed();
             } else {
@@ -245,35 +247,7 @@ public class NavDrawerActivity extends Activity {
                 });
             }
         } else {
-
-            new AlertDialog.Builder(NavDrawerActivity.this)
-                    .setTitle("Logging out").setMessage("You are about to logout out").
-                    setIcon(R.drawable.ic_xclamationmark)
-                    .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                            Backendless.UserService.logout(new AsyncCallback<Void>() {
-
-                                @Override
-                                public void handleResponse(Void aVoid) {
-                                    ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
-                                    ringProgressDialog.setCancelable(false);
-                                    Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                                    logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
-                                    startActivity(logOutIntent);
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault backendlessFault) {
-                                    ringProgressDialog.dismiss();
-                                }
-                            });
-                        }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int whichButton) {
-                }
-            }).show();
+            super.onBackPressed();
         }
     }
 }

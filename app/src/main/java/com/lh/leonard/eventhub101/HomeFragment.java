@@ -115,7 +115,7 @@ public class HomeFragment extends Fragment {
 
                         FragmentManager fragmentManager = getFragmentManager();
                         fragmentManager.beginTransaction()
-                                .replace(R.id.frame_container, unseenSlotsFragment).addToBackStack("home").commit();
+                                .replace(R.id.frame_container, unseenSlotsFragment).addToBackStack("home2").commit();
 
                     }
                 });

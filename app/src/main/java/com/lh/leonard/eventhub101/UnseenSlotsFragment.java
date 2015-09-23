@@ -73,7 +73,7 @@ public class UnseenSlotsFragment extends Fragment {
 
         final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
-        textViewTitleSlotsDisplay.setText("Latest Pending Event");
+        textViewTitleSlotsDisplay.setText("Latest Pending Events");
 
         textViewTitleSlotsDisplay.setTypeface(regularFont);
 
@@ -127,21 +127,6 @@ public class UnseenSlotsFragment extends Fragment {
 
             slot = slots.getData();
 
-
-            if (remove) {
-                ArrayList<String> relationProps = new ArrayList<String>();
-                relationProps.add("unseenSlots");
-                Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relationProps);
-
-                for (int j = 0; j < slot.size(); j++) {
-                    if (slot.get(j).getObjectId().equals(eventSeen)) {
-                        person1.removeUnseenSlot(j);
-                        slot.remove(j);
-                        Backendless.Data.of(Person.class).save(person1);
-                        break;
-                    }
-                }
-            }
             return null;
         }
 

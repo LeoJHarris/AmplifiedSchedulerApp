@@ -26,6 +26,7 @@ public class UnseenSlotsDialog extends Activity {
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     List<Slot> slotsList;
     Slot slotSelected;
+
     AutoResizeTextView textViewSubject;
     AutoResizeTextView textViewMessage;
     AutoResizeTextView textViewDateAndTime;
@@ -33,6 +34,7 @@ public class UnseenSlotsDialog extends Activity {
     AutoResizeTextView appointmentOnly;
     AutoResizeTextView textViewOrganiser;
     Integer position;
+    List<Slot> slotsUnseen;
     Button buttonCantGo;
     Button buttonGoing;
     Person person;
@@ -122,6 +124,8 @@ public class UnseenSlotsDialog extends Activity {
         @Override
         protected List<Address> doInBackground(Void... params) {
 
+
+            //TODO CAN BE OPTIMISED HERE : DOING 2 UNESSARY API CALLS COULD DO ONE
             Bundle data = getIntent().getExtras();
             position = data.getInt("slotRef");
 
@@ -131,12 +135,12 @@ public class UnseenSlotsDialog extends Activity {
 
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause.toString());
-
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
 
             slotsList = slots.getData();
 
             slotSelected = slotsList.get(position);
+
 
             Geocoder geocoder = new Geocoder(getBaseContext());
             List<Address> addresses = null;
@@ -152,6 +156,7 @@ public class UnseenSlotsDialog extends Activity {
 
         @Override
         protected void onPostExecute(List<Address> addresses) {
+
 
             if (slotSelected.getSubject() != null) {
                 textViewSubject.setText(slotSelected.getSubject());
@@ -184,7 +189,6 @@ public class UnseenSlotsDialog extends Activity {
                     content = new SpannableString("Where: " + addressText);
                     content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                     textViewLocation.setText(content); //TODO Button to get Location else just Text
-
                 }
             }
 
@@ -252,13 +256,50 @@ public class UnseenSlotsDialog extends Activity {
         }
     }
 
+    @Override
     public void onBackPressed() {
 
-        Intent backToUnseenSlots = new Intent(UnseenSlotsDialog.this, UnseenSlotsFragment.class);
-        backToUnseenSlots.putExtra("objectid", slotSelected.getObjectId());
+        new RemoveUnseenEvent().execute();
 
-        startActivity(backToUnseenSlots);
+        super.onBackPressed();
+    }
 
 
+    private class RemoveUnseenEvent extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            //  progressBar = (ProgressBar) findViewById(R.id.progressBar);
+            //   progressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            ArrayList<String> relationProps = new ArrayList<String>();
+            relationProps.add("unseenSlots");
+            Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relationProps);
+
+            for (int j = 0; j < person1.getUnseenSlots().size(); j++) {
+                if (person1.getUnseenSlots().get(j).getObjectId().equals(slotSelected.getObjectId())) {
+                    person1.removeUnseenSlot(j);
+                    person1.getUnseenSlots().remove(j);
+                    Backendless.Data.of(Person.class).save(person1);
+                    break;
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void params) {
+        }
     }
 }
