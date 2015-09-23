@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Simple Daily Planner</string>
+    <string name="app_name">EventHub101</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="hello_world">Hello world!</string>
@@ -64,5 +64,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_slots_pending_my_request_dialog">SlotsPendingMyRequestDialog
     </string>
+    <string name="title_activity_unseen_slots_dialog">UnseenSlotsDialog</string>
 
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lh.leonard.eventhub101">
+    package="com.lh.leonard.eventhub101" >
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -31,12 +31,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <service android:name="com.backendless.AndroidService" />
 
         <activity
-            android:name="com.lh.leonard.eventhub101.MainActivity"
-            android:label="@string/title_activity_main">
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,13 +44,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lh.leonard.eventhub101.RegistrationActivity"
+            android:name=".RegistrationActivity"
             android:label="@string/title_activity_registration" />
         <activity
-            android:name="com.lh.leonard.eventhub101.UserLoggedIn"
+            android:name=".UserLoggedIn"
             android:label="@string/title_activity_user_logged_in" />
         <activity
-            android:name="com.lh.leonard.eventhub101.MyCreatedSlotsDialog"
+            android:name=".MyCreatedSlotsDialog"
             android:label="Hi" />
 
         <fragment
@@ -67,46 +67,51 @@
             android:label="@string/title_activity_my_created_slots" />
 
         <activity
-            android:name="com.lh.leonard.eventhub101.MapsActivity"
+            android:name=".MapsActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.Dialog"></activity>
-
+            android:theme="@android:style/Theme.Dialog" />
         <activity
-            android:name="com.lh.leonard.eventhub101.ForgotPasswordReset"
+            android:name=".ForgotPasswordReset"
             android:label="@string/title_activity_forgot_password_reset" />
         <activity
-            android:name="com.lh.leonard.eventhub101.SlotsImGoingToDialog"
+            android:name=".SlotsImGoingToDialog"
             android:label="@string/title_activity_slots_im_going_to_dialog" />
         <activity
-            android:name="com.lh.leonard.eventhub101.CreateSlot"
+            android:name=".CreateSlot"
             android:label="@string/title_activity_create_slot" />
         <activity
-            android:name="com.lh.leonard.eventhub101.AddRemoveContacts"
+            android:name=".AddRemoveContacts"
             android:label="@string/title_activity_find_contact" />
         <activity
-            android:name="com.lh.leonard.eventhub101.RecipientsForSlot"
+            android:name=".RecipientsForSlot"
             android:label="Add Contacts For Slot"
             android:theme="@android:style/Theme.Dialog" />
         <activity
-            android:name="com.lh.leonard.eventhub101.AddRemoveContactsTabbed"
+            android:name=".AddRemoveContactsTabbed"
             android:label="@string/title_activity_add_remove_contacts_tabbed" />
         <activity
-            android:name="com.lh.leonard.eventhub101.NavDrawerActivity"
+            android:name=".NavDrawerActivity"
             android:label="@string/title_activity_add_remove_contacts_tabbed" />
         <activity
-            android:name="com.lh.leonard.eventhub101.SlotsPendingMyResponseDialog"
-            android:label="@string/title_activity_slots_pending_my_request_dialog"></activity>
+            android:name=".SlotsPendingMyResponseDialog"
+            android:label="@string/title_activity_slots_pending_my_request_dialog" />
         <activity
-            android:name="com.lh.leonard.eventhub101.JustMapActivity"
-            android:label="JustMaps"></activity>
+            android:name=".JustMapActivity"
+            android:label="JustMaps" />
         <activity
-            android:name="com.lh.leonard.eventhub101.ParticipantsActivity"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:name=".ParticipantsActivity"
+            android:theme="@android:style/Theme.Dialog" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCie9wDjjfgkNxs2eFpRQf5v8oBY0mhLME" />
+
+
+        <activity
+            android:name=".UnseenSlotsDialog"
+            android:label="@string/title_activity_unseen_slots_dialog" >
+        </activity>
     </application>
 
 </manifest>
