@@ -383,4 +383,53 @@ public class UnseenSlotsFragment extends Fragment {
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }
+
+//    @Override
+//    public void onBackPressed() {
+//
+//        new RemoveUnseenEvent().execute();
+//
+//    }
+//
+//
+//    private class RemoveUnseenEvent extends AsyncTask<Void, Integer, Void> {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            //  progressBar = (ProgressBar) findViewById(R.id.progressBar);
+//            //   progressBar.setVisibility(View.VISIBLE);
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected void onProgressUpdate(Integer... values) {
+//            super.onProgressUpdate(values);
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//
+//            ArrayList<String> relationProps = new ArrayList<String>();
+//            relationProps.add("unseenSlots");
+//            Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relationProps);
+//
+//            person1.getUnseenSlots().clear();
+//
+////            for (int j = 0; j < person1.getUnseenSlots().size(); j++) {
+////                if (person1.getUnseenSlots().get(j).getObjectId().equals(slotSelected.getObjectId())) {
+////                    person1.removeUnseenSlot(j);
+////                    person1.getUnseenSlots().remove(j);
+//            Backendless.Data.of(Person.class).save(person1);
+////                    break;
+////                }
+////            }
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void params) {
+//        }
+//    }
 }

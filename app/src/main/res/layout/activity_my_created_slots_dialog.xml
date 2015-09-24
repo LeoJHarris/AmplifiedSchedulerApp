@@ -78,7 +78,7 @@
                 android:visibility="gone" />
 
             <com.lh.leonard.eventhub101.AutoResizeTextView
-                android:id="@+id/textViewMySlotAppointment"
+                android:id="@+id/textViewMyEventSpacesAvaliable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textViewMySlotLocation"
@@ -94,7 +94,7 @@
                 android:id="@+id/buttonMySlotParticipantsSlot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textViewMySlotAppointment"
+                android:layout_below="@id/textViewMyEventSpacesAvaliable"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
                 android:text="See Participants"

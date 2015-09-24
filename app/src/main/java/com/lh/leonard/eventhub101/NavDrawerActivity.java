@@ -182,6 +182,7 @@ public class NavDrawerActivity extends Activity {
                         // something went wrong and logout failed, to get the error code call fault.getCode()
                         ringProgressDialog.dismiss();
 
+
                     }
                 });
 
@@ -209,9 +210,9 @@ public class NavDrawerActivity extends Activity {
     @Override
     public void onBackPressed() {
         if (fragmentManager != null) {
-
-
             if (fragmentManager.getBackStackEntryCount() >= 1) {
+               // fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()).getName();
+fragmentManager.getBackStackEntryAt(0).getName();
                 super.onBackPressed();
             } else {
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
@@ -247,7 +248,37 @@ public class NavDrawerActivity extends Activity {
                 });
             }
         } else {
-            super.onBackPressed();
+            Backendless.UserService.logout(new AsyncCallback<Void>() {
+
+                @Override
+                public void handleResponse(Void aVoid) {
+                    new AlertDialog.Builder(NavDrawerActivity.this)
+                            .setTitle("Logging out").setMessage("You are about to logout out").
+                            setIcon(R.drawable.ic_xclamationmark)
+                            .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                                            ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                                            ringProgressDialog.setCancelable(false);
+                                            Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
+                                            logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
+                                            startActivity(logOutIntent);
+
+                                        }
+                                    }
+                            ).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            }
+                    ).show();
+                }
+
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+
+                }
+            });
         }
     }
 }

@@ -72,11 +72,11 @@
                 android:background="@drawable/button_default_bg"
                 android:padding="10dp"
                 android:text="Sign In"
+                android:textColor="@color/black"
                 android:textSize="40sp" />
         </LinearLayout>
 
     </RelativeLayout>
-
 
     <TableRow
 
@@ -112,9 +112,7 @@
             android:textStyle="bold" />
     </TableRow>
 
-    <TableRow
-
-        android:gravity="center">
+    <TableRow android:gravity="center">
 
         <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/textViewMadeByMeMain"

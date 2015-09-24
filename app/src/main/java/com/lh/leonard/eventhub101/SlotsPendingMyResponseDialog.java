@@ -30,7 +30,7 @@ public class SlotsPendingMyResponseDialog extends Activity {
     AutoResizeTextView textViewMessage;
     AutoResizeTextView textViewDateAndTime;
     AutoResizeTextView textViewLocation;
-    AutoResizeTextView appointmentOnly;
+    AutoResizeTextView textViewMyEventSpacesAvaliable;
     AutoResizeTextView textViewOrganiser;
     Integer position;
     Button buttonCantGo;
@@ -55,7 +55,7 @@ public class SlotsPendingMyResponseDialog extends Activity {
         textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotMessage);
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotDateAndTime);
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotLocation);
-        appointmentOnly = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotAppointment);
+        textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
         textViewOrganiser = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotOrganizer);
         buttonGoing = (Button) findViewById(R.id.buttonRequestSlotGoing);
         buttonCantGo = (Button) findViewById(R.id.buttonRequestSlotCantGo);
@@ -64,7 +64,7 @@ public class SlotsPendingMyResponseDialog extends Activity {
         textViewMessage.setTypeface(regularFont);
         textViewDateAndTime.setTypeface(regularFont);
         textViewLocation.setTypeface(regularFont);
-        appointmentOnly.setTypeface(regularFont);
+        textViewMyEventSpacesAvaliable.setTypeface(regularFont);
         textViewOrganiser.setTypeface(regularFont);
         buttonCantGo.setTypeface(regularFont);
         buttonGoing.setTypeface(regularFont);
@@ -193,14 +193,17 @@ public class SlotsPendingMyResponseDialog extends Activity {
                 textViewOrganiser.setText(person.getFname() + " " + person.getLname() + " created this event/slot");
             }
 
-            if (slotSelected.getAppointmentOnly() != null) {
-                if (slotSelected.getAppointmentOnly() == true) {
+            if (slotSelected.getMaxattendees() != 0) {
 
-                    appointmentOnly.setText("Appointment required"); // Button to set appointment
-                } else {
 
-                    appointmentOnly.setText("Appointment not required"); // Button to set appointment
+                Integer spacesAvaliable = slotSelected.getMaxattendees();
+                Integer going = slotSelected.getAttendees().size();
+                {
+                    textViewMyEventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
                 }
+
+            } else {
+                textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
             }
         }
     }

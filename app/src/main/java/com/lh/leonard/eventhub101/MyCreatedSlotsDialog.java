@@ -12,6 +12,7 @@ import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -19,6 +20,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyCreatedSlotsDialog extends Activity {
@@ -30,7 +32,7 @@ public class MyCreatedSlotsDialog extends Activity {
     AutoResizeTextView textViewMessage;
     AutoResizeTextView textViewDateAndTime;
     AutoResizeTextView textViewLocation;
-    AutoResizeTextView appointmentOnly;
+    AutoResizeTextView textViewMyEventSpacesAvaliable;
     Integer position;
     Button buttonCancelSlot;
     Button buttonMySlotParticipantsSlot;
@@ -55,15 +57,15 @@ public class MyCreatedSlotsDialog extends Activity {
         textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewMySlotMessage);
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewMySlotDateAndTime);
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewMySlotLocation);
-        appointmentOnly = (AutoResizeTextView) findViewById(R.id.textViewMySlotAppointment);
-        //buttonCancelSlot = (Button) findViewById(R.id.buttonMySlotCancelSlot);
+        textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
+        buttonCancelSlot = (Button) findViewById(R.id.buttonMySlotCancelSlot);
         buttonMySlotParticipantsSlot = (Button) findViewById(R.id.buttonMySlotParticipantsSlot);
 
         textViewSubject.setTypeface(regularFont);
         textViewMessage.setTypeface(regularFont);
         textViewDateAndTime.setTypeface(regularFont);
         textViewLocation.setTypeface(regularFont);
-        appointmentOnly.setTypeface(regularFont);
+        textViewMyEventSpacesAvaliable.setTypeface(regularFont);
         buttonCancelSlot.setTypeface(regularFont);
         buttonMySlotParticipantsSlot.setTypeface(regularFont);
 
@@ -78,6 +80,7 @@ public class MyCreatedSlotsDialog extends Activity {
             @Override
             public void onClick(View v) {
 
+                Toast.makeText(v.getContext(), "Please long hold on events themselves to remove events on previous page", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -171,7 +174,6 @@ public class MyCreatedSlotsDialog extends Activity {
                         textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart());
 
                     } else {
-
                         textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart() + " - " + slotSelected.getEnd());
                     }
                 }
@@ -197,28 +199,63 @@ public class MyCreatedSlotsDialog extends Activity {
 //                textViewOrganiser.setText(person.getFname() + " " + person.getLname() + " created this event/slot");
 //            }
 
-            if (slotSelected.getAppointmentOnly() != null) {
-                if (slotSelected.getAppointmentOnly() == true) {
+            if (slotSelected.getMaxattendees() != 0) {
 
-                    appointmentOnly.setText("Appointment required"); // Button to set appointment
-                } else {
 
-                    appointmentOnly.setText("Appointment not required"); // Button to set appointment
+                Integer spacesAvaliable = slotSelected.getMaxattendees();
+                Integer going = slotSelected.getAttendees().size();
+                {
+                    Integer spacesLeft = spacesAvaliable - slotSelected.getAttendees().size();
+                    textViewMyEventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
+
                 }
+
+            } else {
+                textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
             }
 
             progressBar = (ProgressBar) findViewById(R.id.progressBarMyCreatedSlotsDialog);
             progressBar.setVisibility(View.GONE);
 
-            appointmentOnly.setVisibility(View.VISIBLE);
+            textViewMyEventSpacesAvaliable.setVisibility(View.VISIBLE);
             textViewSubject.setVisibility(View.VISIBLE);
             textViewMessage.setVisibility(View.VISIBLE);
             textViewLocation.setVisibility(View.VISIBLE);
             textViewDateAndTime.setVisibility(View.VISIBLE);
             buttonCancelSlot.setVisibility(View.VISIBLE);
             buttonMySlotParticipantsSlot.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private class GetAttendees extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+
+            List<String> relations = new ArrayList<String>();
+            relations.add("attendees");
+         //   relations.add("invitedpersons");
+            slotSelected = Backendless.Data.of(Slot.class).findById(slotSelected.getObjectId(), relations);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
 
 
         }
     }
+
 }

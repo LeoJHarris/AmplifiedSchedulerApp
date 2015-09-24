@@ -43,12 +43,14 @@ public class MainActivity extends Activity {
         AutoResizeTextView textViewMadeByMeMain = (AutoResizeTextView) findViewById(R.id.textViewMadeByMeMain);
 
         final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
+        final Typeface fontWelcome = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Amatic-Bold.ttf");
+
 
         buttonSignInMain.setTypeface(regularFont);
         buttonSignIn.setTypeface(regularFont);
         editTextEmailMain.setTypeface(regularFont);
         editTextPasswordMain.setTypeface(regularFont);
-        textViewheaderSlotAppMain.setTypeface(regularFont);
+        textViewheaderSlotAppMain.setTypeface(fontWelcome);
         buttonForgotPassword.setTypeface(regularFont);
         buttonRegistration.setTypeface(regularFont);
         textViewMadeByMeMain.setTypeface(regularFont);

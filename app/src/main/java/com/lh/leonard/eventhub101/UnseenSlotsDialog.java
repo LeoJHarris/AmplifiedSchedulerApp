@@ -31,7 +31,7 @@ public class UnseenSlotsDialog extends Activity {
     AutoResizeTextView textViewMessage;
     AutoResizeTextView textViewDateAndTime;
     AutoResizeTextView textViewLocation;
-    AutoResizeTextView appointmentOnly;
+    AutoResizeTextView textViewMyEventSpacesAvaliable;
     AutoResizeTextView textViewOrganiser;
     Integer position;
     List<Slot> slotsUnseen;
@@ -57,7 +57,7 @@ public class UnseenSlotsDialog extends Activity {
         textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotMessage);
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotDateAndTime);
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotLocation);
-        appointmentOnly = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotAppointment);
+        textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
         textViewOrganiser = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotOrganizer);
         buttonGoing = (Button) findViewById(R.id.buttonRequestSlotGoing);
         buttonCantGo = (Button) findViewById(R.id.buttonRequestSlotCantGo);
@@ -66,7 +66,7 @@ public class UnseenSlotsDialog extends Activity {
         textViewMessage.setTypeface(regularFont);
         textViewDateAndTime.setTypeface(regularFont);
         textViewLocation.setTypeface(regularFont);
-        appointmentOnly.setTypeface(regularFont);
+        textViewMyEventSpacesAvaliable.setTypeface(regularFont);
         textViewOrganiser.setTypeface(regularFont);
         buttonCantGo.setTypeface(regularFont);
         buttonGoing.setTypeface(regularFont);
@@ -197,14 +197,18 @@ public class UnseenSlotsDialog extends Activity {
                 textViewOrganiser.setText(person.getFname() + " " + person.getLname() + " created this event");
             }
 
-            if (slotSelected.getAppointmentOnly() != null) {
-                if (slotSelected.getAppointmentOnly() == true) {
+            if (slotSelected.getMaxattendees() != 0) {
 
-                    appointmentOnly.setText("Appointment required"); // Button to set appointment
-                } else {
 
-                    appointmentOnly.setText("Appointment not required"); // Button to set appointment
+                Integer spacesAvaliable = slotSelected.getMaxattendees();
+                Integer going = slotSelected.getAttendees().size();
+                {
+                    textViewMyEventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
+
                 }
+
+            } else {
+                textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
             }
         }
     }
@@ -253,53 +257,6 @@ public class UnseenSlotsDialog extends Activity {
         protected void onPostExecute(Void params) {
 
 
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        new RemoveUnseenEvent().execute();
-
-        super.onBackPressed();
-    }
-
-
-    private class RemoveUnseenEvent extends AsyncTask<Void, Integer, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            //  progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            //   progressBar.setVisibility(View.VISIBLE);
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            ArrayList<String> relationProps = new ArrayList<String>();
-            relationProps.add("unseenSlots");
-            Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relationProps);
-
-            for (int j = 0; j < person1.getUnseenSlots().size(); j++) {
-                if (person1.getUnseenSlots().get(j).getObjectId().equals(slotSelected.getObjectId())) {
-                    person1.removeUnseenSlot(j);
-                    person1.getUnseenSlots().remove(j);
-                    Backendless.Data.of(Person.class).save(person1);
-                    break;
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void params) {
         }
     }
 }
