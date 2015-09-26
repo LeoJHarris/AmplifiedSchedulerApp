@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
                 String[] NameSplit = NameArray.split(",");
 
                 Toast.makeText(this,
-                        "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1] + ". Please Check your email for confirmation email to sign in to Simple Daily Planner ",
+                        "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1],
                         Toast.LENGTH_LONG).show();
             } else if (extras.getString("loggedoutperson") != null) {
                 String NameArray = extras.getString("loggedoutperson");
@@ -156,7 +156,7 @@ public class MainActivity extends Activity {
                                 if (ringProgressDialog != null) {
                                     ringProgressDialog.dismiss();
                                 }
-                                Toast.makeText(getApplicationContext(), "Unable to sign In. Please check your internet connection and try again.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Unable to sign In. Please check your internet connection and credentials are correct.", Toast.LENGTH_LONG).show();
                             }
                         });
                     } else {

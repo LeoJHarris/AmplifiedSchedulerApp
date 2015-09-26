@@ -565,7 +565,6 @@ public class CreateSlot extends Activity {
             metaMap.put("slot", slot);
             eventLocation.setMetadata(metaMap);
 
-           // slot.setInvitedpersons(addedContactsForSlot);
             slot.setLocation(eventLocation);
             Slot savedSlot = Backendless.Data.save(slot);
 
@@ -593,6 +592,7 @@ public class CreateSlot extends Activity {
 
                 Backendless.Data.of(Person.class).loadRelations(personContact, contactRelationProps);
                 personContact.addSlotToPendingResponseSlot(savedSlot);
+                personContact.addToUnseenEvents(savedSlot);
                 personContact.addToUnseenEvents(savedSlot);
 
                 Backendless.Data.save(personContact);

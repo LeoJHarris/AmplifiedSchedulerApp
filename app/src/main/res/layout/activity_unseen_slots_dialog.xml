@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Invited Slots"
+            android:text="Event Invites"
             android:textColor="@color/white"
             android:textSize="25dp"
             android:textStyle="bold" />

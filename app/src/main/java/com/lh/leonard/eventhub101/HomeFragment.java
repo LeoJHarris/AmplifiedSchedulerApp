@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
 
             if (personLoggedIn.numberUnseenSlots() >= 1) {
 
-                textViewNotificationNumberHome.setText(String.valueOf(personLoggedIn.numberUnseenSlots()) + " new Notification");
+                textViewNotificationNumberHome.setText(String.valueOf(personLoggedIn.numberUnseenSlots()) + " New Event Invites");
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
                 textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {

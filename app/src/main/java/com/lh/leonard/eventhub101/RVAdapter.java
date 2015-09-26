@@ -71,7 +71,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
         messageSubString += "...";
         slotViewHolder.slotMessage.setText("Message: " + messageSubString);
 
-       // slotViewHolder.slotAvaliability.setTypeface(regularFont);
+        // slotViewHolder.slotAvaliability.setTypeface(regularFont);
         slotViewHolder.slotFullName.setTypeface(regularFont);
         slotViewHolder.slotTitle.setTypeface(regularFont);
         slotViewHolder.slotMessage.setTypeface(regularFont);

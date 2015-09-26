@@ -42,7 +42,7 @@ public class RegistrationActivity extends ActionBarActivity {
         TextView textViewHeaderReg = (TextView) findViewById(R.id.textViewHeaderReg);
 
         // Get a reference to the AutoCompleteTextView in the layout
-        AutoCompleteTextView textViewCountry = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
+        final AutoCompleteTextView textViewCountry = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
         // Get the string array
         String[] countries = getResources().getStringArray(R.array.countries_array);
         // Create the adapter and set it to the AutoCompleteTextView
@@ -80,6 +80,7 @@ public class RegistrationActivity extends ActionBarActivity {
                 final CharSequence fname = fnameField.getText();
                 final CharSequence lname = lnameField.getText();
                 final CharSequence phone = phoneField.getText();
+                CharSequence county = textViewCountry.getText();
                 CharSequence password = passwordField.getText();
                 CharSequence passwordConfirm = passwordConfirmField.getText();
 
@@ -99,6 +100,7 @@ public class RegistrationActivity extends ActionBarActivity {
                     person.setLname(lname.toString());
                     person.setEmail(email.toString());
                     person.setPhone(phone.toString());
+                    person.setCountry(county.toString());
                     person.setFullname(fname.toString() + " " + lname.toString()); // TODO Make textbox for full name
                     // person.setPhone(Integer.parseInt(phone.toString()));
                     // person.setMeAsContact(contact); // TODO Might not need this property
