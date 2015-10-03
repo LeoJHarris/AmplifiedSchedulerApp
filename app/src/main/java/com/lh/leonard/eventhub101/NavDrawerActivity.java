@@ -1,7 +1,6 @@
 package com.lh.leonard.eventhub101;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -11,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,7 +22,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
 
-public class NavDrawerActivity extends Activity {
+public class NavDrawerActivity extends AppCompatActivity {
 
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     Person personLoggedIn;
@@ -32,7 +32,7 @@ public class NavDrawerActivity extends Activity {
     //This Icons And Titles Are holded in an Array as you can see
 
     String TITLES[] = {"Home", "Manage Account", "Create Event", "Find Contacts",
-            "My Events", "Going To Events", "Pending Events", "Log Out"};
+            "My Events", "Going To Events", "Invited Events", "Log Out"};
     int ICONS[] = {R.drawable.ic_home, R.drawable.ic_updateaccount, R.drawable.ic_createslot,
             R.drawable.ic_addcontact, R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
             R.drawable.ic_pendingrequestslots, R.drawable.ic_logout};
@@ -211,8 +211,8 @@ public class NavDrawerActivity extends Activity {
     public void onBackPressed() {
         if (fragmentManager != null) {
             if (fragmentManager.getBackStackEntryCount() >= 1) {
-               // fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()).getName();
-fragmentManager.getBackStackEntryAt(0).getName();
+                // fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()).getName();
+                fragmentManager.getBackStackEntryAt(0).getName();
                 super.onBackPressed();
             } else {
                 Backendless.UserService.logout(new AsyncCallback<Void>() {

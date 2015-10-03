@@ -20,7 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.NumberPicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -63,21 +63,18 @@ public class CreateSlot extends Activity {
     List<Person> myContactsPersonsList;
     BackendlessCollection<Person> myContactPersons;
 
-
     BackendlessCollection<Person> persons;
 
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
 
     ArrayList<String> contactsIds = new ArrayList<>();
 
-    CheckBox checkBoxString;
-
     Person personLoggedIn;
     LatLng latLng;
     int outputInt = 0;
     Button recipientsForSlotBtn;
     public Button buttonSendSlot;
-
+    EditText editTextNumberAttendeesAvaliable;
     EditText slotSubjectEditText;
     EditText slotMessageEditText;
     TextView slotsDate;
@@ -88,7 +85,7 @@ public class CreateSlot extends Activity {
     StringBuilder dateFormatSet = new StringBuilder();
 
     Button btnSlotDate;
-    Button btnGetLocationGeoPoint;
+    ImageButton btnGetLocationGeoPoint;
 
     CharSequence[] testArray;
     ArrayList<Integer> mSelectedItems;
@@ -119,24 +116,26 @@ public class CreateSlot extends Activity {
         final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
 
         // TextView tv = (TextView) findViewById(R.id.tv);
-        NumberPicker numberPickerAttendees = (NumberPicker) findViewById(R.id.numberPickerAttendees);
-        final TextView tvNumberAttendees = (TextView) findViewById(R.id.tvSpaces);
+        //NumberPicker numberPickerAttendees = (NumberPicker) findViewById(R.id.numberPickerAttendees);
+        // final TextView tvNumberAttendees = (TextView) findViewById(R.id.tvSpaces);
         //Populate NumberPicker values from minimum and maximum value range
         //Set the minimum value of NumberPicker
-        numberPickerAttendees.setMinValue(1);
+        //  numberPickerAttendees.setMinValue(1);
         //Specify the maximum value/number of NumberPicker
-        numberPickerAttendees.setMaxValue(1000);
-        numberPickerAttendees.setWrapSelectorWheel(true);
+        //  numberPickerAttendees.setMaxValue(1000);
+        //numberPickerAttendees.setWrapSelectorWheel(true);
         //Set a value change listener for NumberPicker
-        numberPickerAttendees.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //Display the newly selected number from picker
+        //  numberPickerAttendees.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        ////   @Override
+        //   public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        //Display the newly selected number from picker
 
-                tvNumberAttendees.setText("Spaces selected: " + newVal);
-                numberAttendeesAvaliable = newVal;
-            }
-        });
+        //         tvNumberAttendees.setText("Spaces selected: " + newVal);
+        //     numberAttendeesAvaliable = newVal;
+        //      }
+        //   });
+
+        editTextNumberAttendeesAvaliable = (EditText) findViewById(R.id.numberPickerAttendees);
         recipientsForSlotBtn = (Button) findViewById(R.id.recipientsForSlot);
         slotsDate = (TextView) findViewById(R.id.textViewDate);
         btnSlotDate = (Button) findViewById(R.id.btnSlotDate);
@@ -147,18 +146,17 @@ public class CreateSlot extends Activity {
         locationStringTV = (TextView) findViewById(R.id.editTextStringLocation);
         TextView textViewHeaderCreateSlot = (TextView) findViewById(R.id.textViewHeaderCreateSlot);
         TextView tvSpaces = (TextView) findViewById(R.id.tvSpaces);
-        CheckBox checkBoxAppointmentRequired = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
+        // CheckBox checkBoxAppointmentRequired = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
         buttonSendSlot = (Button) findViewById(R.id.buttonSendSlot);
-        checkBoxString = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
+        //checkBoxString = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
         Button btnSlotDate = (Button) findViewById(R.id.btnSlotDate);
         Button btnClickSetStartTime = (Button) findViewById(R.id.btnClickSetStartTime);
         btnClickSetEndTime = (Button) findViewById(R.id.btnClickSetEndTime);
-        btnGetLocationGeoPoint = (Button) findViewById(R.id.btnGetLocationGeoPoint);
+        btnGetLocationGeoPoint = (ImageButton) findViewById(R.id.btnGetLocationGeoPoint);
 
-        btnGetLocationGeoPoint.setTypeface(regularFont);
         recipientsForSlotBtn.setTypeface(regularFont);
         slotsDate.setTypeface(regularFont);
-        checkBoxAppointmentRequired.setTypeface(regularFont);
+        // checkBoxAppointmentRequired.setTypeface(regularFont);
         btnSlotDate.setTypeface(regularFont);
         slotSubjectEditText.setTypeface(regularFont);
         slotMessageEditText.setTypeface(regularFont);
@@ -167,7 +165,7 @@ public class CreateSlot extends Activity {
         locationStringTV.setTypeface(regularFont);
         textViewHeaderCreateSlot.setTypeface(regularFont);
         tvSpaces.setTypeface(regularFont);
-        checkBoxString.setTypeface(regularFont);
+        //checkBoxString.setTypeface(regularFont);
         buttonSendSlot.setTypeface(regularFont);
         btnClickSetStartTime.setTypeface(regularFont);
         btnClickSetEndTime.setTypeface(regularFont);
@@ -236,6 +234,7 @@ public class CreateSlot extends Activity {
 
                         slotSubjectEditText.getText().toString();
                         date = slotsDate.getText().toString();
+                        numberAttendeesAvaliable = Integer.parseInt(editTextNumberAttendeesAvaliable.getText().toString());
                         startTime = slotStartTime.getText().toString();
                         endTime = slotEndTime.getText().toString();
                         subject = slotSubjectEditText.getText().toString();
@@ -277,17 +276,17 @@ public class CreateSlot extends Activity {
                                     emptys += ", Subject";
                                 }
                             }
-                            Toast.makeText(getApplicationContext(), "Please ensure inputs: " + emptys + " are not empty", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Please input: " + emptys, Toast.LENGTH_LONG).show();
                         } else {
 
 
                             new ParseURL().execute();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "No Contacts Selected For Slot", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Add contacts for events", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "No Contacts Selected For Slot", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Add contacts for event", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -366,22 +365,22 @@ public class CreateSlot extends Activity {
 
     }
 
-    public void onCheckboxClicked(View view) {
-        // Is the view now checked?
-        boolean checked = ((CheckBox) view).isChecked();
-
-        // Check which checkbox was clicked
-        switch (view.getId()) {
-            case R.id.checkBoxAppointmentRequired:
-                if (checked) {
-                    appointmentBoolean = true;
-
-                } else {
-                    appointmentBoolean = false;
-                }
-                break;
-        }
-    }
+//    public void onCheckboxClicked(View view) {
+//        // Is the view now checked?
+//        boolean checked = ((CheckBox) view).isChecked();
+//
+//        // Check which checkbox was clicked
+//        switch (view.getId()) {
+//            case R.id.checkBoxAppointmentRequired:
+//                if (checked) {
+//                    appointmentBoolean = true;
+//
+//                } else {
+//                    appointmentBoolean = false;
+//                }
+//                break;
+//        }
+//    }
 
     @SuppressWarnings("deprecation")
     public void setDate(View view) {
@@ -418,7 +417,9 @@ public class CreateSlot extends Activity {
     };
 
     private void showDate(int year, int month, int day) {
-        dateView.setText("Date Selected: " + dateFormatSet.append(day).append("/")
+
+        dateFormatSet.setLength(0);
+        dateView.setText("Date: " + dateFormatSet.append(day).append("/")
                 .append(month).append("/").append(year));
 
         dateSet = true;
@@ -514,14 +515,14 @@ public class CreateSlot extends Activity {
 
         if (outputInt == 1) {
             justStartTime = aTime;
-            output.setText("Start Time Selected: " + aTime);
+            output.setText("Start Time: " + aTime);
 
             btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
 
         } else if (outputInt == 2) {
 
             justEndTime = aTime;
-            output1.setText("End Time Selected: " + aTime);
+            output1.setText("End Time: " + aTime);
             btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
         }
     }
@@ -553,19 +554,24 @@ public class CreateSlot extends Activity {
             slot.setSubject(subject);
             slot.setMessage(message);
             slot.setMaxattendees(numberAttendeesAvaliable);
-            slot.setAppointmentOnly(appointmentBoolean);
+            // slot.setAppointmentOnly(appointmentBoolean);
             slot.setDateofslot(dateFormatSet.toString());
             slot.setStart(justStartTime);
             slot.setEnd(justEndTime);
+            slot.setMaxattendees(numberAttendeesAvaliable);
             slot.setPhone(personLoggedIn.getPhone());
 
             slot.setOwnername(personLoggedIn.getFname() + " " + personLoggedIn.getLname());
 
-            Map<String, Object> metaMap = new HashMap<>();
-            metaMap.put("slot", slot);
-            eventLocation.setMetadata(metaMap);
+            if (eventLocation != null) {
 
-            slot.setLocation(eventLocation);
+                Map<String, Object> metaMap = new HashMap<>();
+                metaMap.put("slot", slot);
+                eventLocation.setMetadata(metaMap);
+
+
+                slot.setLocation(eventLocation);
+            }
             Slot savedSlot = Backendless.Data.save(slot);
 
 
@@ -679,7 +685,7 @@ public class CreateSlot extends Activity {
             AlertDialog.Builder builder = new AlertDialog.Builder(CreateSlot.this);
 
             // set the dialog title
-            builder.setTitle("Select Contacts For Your Slot")
+            builder.setTitle("Add contacts for Event")
 
                     // specify the list array, the items to be selected by default (null for none),
                     // and the listener through which to receive call backs when items are selected
