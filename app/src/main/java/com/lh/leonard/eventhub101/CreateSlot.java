@@ -687,7 +687,7 @@ public class CreateSlot extends Activity {
                 relationProps.add("pendingresponseslots");
                 relationProps.add("unseenSlots");
 
-                sendsmss(pId.getPhone(), message);
+                sendsmss(pId.getPhone(), message, subject, dateFormatSet.toString(), justEndTime);
 
                 Backendless.Data.of(Person.class).loadRelations(personContact, contactRelationProps);
                 personContact.addSlotToPendingResponseSlot(savedSlot);
@@ -711,24 +711,34 @@ public class CreateSlot extends Activity {
 
             ringProgressDialog.dismiss();
 
-            Toast.makeText(CreateSlot.this, "Slot Sent To Selected Contacts", Toast.LENGTH_LONG).show();
+            Toast.makeText(CreateSlot.this, "Event Sent", Toast.LENGTH_LONG).show();
         }
     }
 
     @JavascriptInterface
-    public void sendsmss(String phoneNumber, String message) {
+    public void sendsmss(String phoneNumber, String message, String subject, String date, String time) {
 
-        int lengthToSubString;
-        int lengthMessage = message.length();
-        if (lengthMessage <= 160) {
-            lengthToSubString = lengthMessage;
+        String fullnameLoggedin = personLoggedIn.getFullname();
+
+        if (!message.trim().equals("")) {
+            int lengthToSubString;
+            int lengthMessage = message.length();
+            if (lengthMessage <= 120) {
+                lengthToSubString = lengthMessage;
+            } else {
+                lengthToSubString = 120;
+            }
+            String messageSubString = message.substring(0, lengthToSubString);
+            messageSubString = "EVENTHUB101: event invite. Host: " + fullnameLoggedin +
+                    ". " + subject + " " + messageSubString + " " + " when: " + date + " at " + time;
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         } else {
-            lengthToSubString = 160;
+            String messageSubString = "EVENTHUB101: event invite. Host: " + fullnameLoggedin +
+                    ". " + subject + " no message included " + " when: " + date + " at " + time;
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         }
-        String messageSubString = message.substring(0, lengthToSubString);
-
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }
 
     private class GetContactsThread extends AsyncTask<Void, Integer, Void> {
@@ -767,8 +777,6 @@ public class CreateSlot extends Activity {
                 testArray[i] = pers.fullname;
                 i++;
             }
-
-
             return null;
         }
 
