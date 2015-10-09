@@ -158,9 +158,9 @@
                     android:id="@+id/textViewDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginLeft="5dp"
-                    android:text="Please Set Date"
+                    android:layout_weight="1"
+                    android:text="Set Date"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -179,16 +179,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="20sp"
                     android:background="@drawable/button_default_bg"
-                    android:text="Start Time" />
+                    android:text="Start Time"
+                    android:textSize="20sp" />
 
                 <com.lh.leonard.eventhub101.AutoResizeTextView
                     android:id="@+id/outputStartTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
                     android:text="Set Start Time"
                     android:textSize="20sp" />
 
@@ -216,8 +216,8 @@
                     android:id="@+id/outputEndTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
                     android:text="Set End Time"
                     android:textSize="20sp" />
 
@@ -246,7 +246,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint=""
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:numeric="integer" />
 
             </LinearLayout>
 

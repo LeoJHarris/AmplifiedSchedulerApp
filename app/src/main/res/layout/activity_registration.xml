@@ -102,8 +102,8 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="-2dp"
                 android:background="@drawable/edittext_top_bg"
-                android:hint="Select Country"
                 android:drawableLeft="@drawable/ic_country"
+                android:hint="Select Country"
                 android:padding="10dp"
                 android:textColor="@color/black"
                 android:textColorHint="#bbbbbb"
@@ -158,18 +158,6 @@
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/buttonRegToMainBack"
-                style="@style/DefaultButtonText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="@drawable/button_default_bg"
-                android:padding="10dp"
-                android:text="Cancel"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

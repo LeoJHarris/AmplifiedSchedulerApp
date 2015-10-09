@@ -31,8 +31,6 @@ public class RegistrationActivity extends ActionBarActivity {
 
         final Button registerButton = (Button) findViewById(R.id.buttonRegisterUser);
 
-        final Button regBackToMainButton = (Button) findViewById(R.id.buttonRegToMainBack);
-
         final EditText emailField = (EditText) findViewById(R.id.editTextEmail);
         final EditText passwordField = (EditText) findViewById(R.id.editTextPassword);
         final EditText passwordConfirmField = (EditText) findViewById(R.id.editTextPasswordConfirmReg);
@@ -64,7 +62,6 @@ public class RegistrationActivity extends ActionBarActivity {
         passwordConfirmField.setTypeface(regularFont);
         fnameField.setTypeface(regularFont);
         lnameField.setTypeface(regularFont);
-        regBackToMainButton.setTypeface(regularFont);
         phoneField.setTypeface(regularFont);
         registerButton.setTypeface(regularFont);
         textViewHeaderReg.setTypeface(regularFont);
@@ -129,14 +126,6 @@ public class RegistrationActivity extends ActionBarActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "Passwords did not match, please check passwords match", Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-
-        regBackToMainButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                startActivity(intent);
             }
         });
     }

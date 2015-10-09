@@ -203,11 +203,92 @@ public class CreateSlot extends Activity {
         // set current time into output textview
         updateTime(hour, minute);
 
+        new GetContactsThread().execute();
 
         recipientsForSlotBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GetContactsThread().execute();
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateSlot.this);
+
+                // set the dialog title
+                builder.setTitle("Add contacts for Event")
+
+                        // specify the list array, the items to be selected by default (null for none),
+                        // and the listener through which to receive call backs when items are selected
+                        // R.array.choices were set in the resources res/values/strings.xml
+                        .setMultiChoiceItems(testArray, null, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+                                if (isChecked) {
+                                    // if the user checked the item, add it to the selected items
+                                    mSelectedItems.add(which);
+                                } else if (mSelectedItems.contains(which)) {
+                                    // else if the item is already in the array, remove it
+                                    mSelectedItems.remove(Integer.valueOf(which));
+                                }
+
+                                // you can also add other codes here,
+                                // for example a tool tip that gives user an idea of what he is selecting
+                                // showToast("Just an example description.");
+                            }
+
+                        })
+
+                                // Set the action buttons
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                // user clicked OK, so save the mSelectedItems results somewhere
+                                // here we are trying to retrieve the selected items indices
+                                String selectedIndex = "";
+                                for (Integer i : mSelectedItems) {
+                                    selectedIndex += i + ", ";
+                                }
+
+                                addedContactsForSlot = new ArrayList<Person>();
+
+                                String[] selectedContacts = selectedIndex.split(",");
+
+                                for (int j = 0; j < selectedContacts.length - 1; j++) {
+
+                                    if (selectedContacts[j] != " ") {
+                                        addedContactsForSlot.add(myContactsPersonsList.get(Integer.parseInt(selectedContacts[j])));
+                                    }
+                                }
+                                if (!(addedContactsForSlot.isEmpty())) {
+                                    recipientsForSlotBtn.setText("Contact(s) added");
+                                    recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
+                                    recipientsForSlotBtn.setTextColor(getResources().getColorStateList(R.color.darkgreen));
+
+                                    contactsAdded = true;
+
+                                    Toast.makeText(CreateSlot.this, "Contact(s) Added", Toast.LENGTH_LONG).show();
+
+                                    if (dateSet && subjectSet) {
+                                        buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.darkgreen));
+                                        buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
+                                    }
+
+                                } else {
+                                    Toast.makeText(CreateSlot.this, "No Contacts Added", Toast.LENGTH_LONG).show();
+                                    contactsAdded = false;
+                                    recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                                    buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
+                                    buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.red));
+                                }
+                            }
+                        })
+
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                // removes the AlertDialog in the screen
+                            }
+                        })
+
+                        .show();
             }
         });
 
@@ -234,7 +315,11 @@ public class CreateSlot extends Activity {
 
                         slotSubjectEditText.getText().toString();
                         date = slotsDate.getText().toString();
-                        numberAttendeesAvaliable = Integer.parseInt(editTextNumberAttendeesAvaliable.getText().toString());
+                        if (editTextNumberAttendeesAvaliable.getText().toString().equals("")) {
+                            numberAttendeesAvaliable = 0;
+                        } else {
+                            numberAttendeesAvaliable = Integer.parseInt(editTextNumberAttendeesAvaliable.getText().toString());
+                        }
                         startTime = slotStartTime.getText().toString();
                         endTime = slotEndTime.getText().toString();
                         subject = slotSubjectEditText.getText().toString();
@@ -244,31 +329,31 @@ public class CreateSlot extends Activity {
 
                         String emptys = "";
 
-                        if (subject.trim().equals("") || date.equals("Please Set Date") || startTime.equals("Please Set Start Time") || endTime.trim().equals("Please Set End Time") || endTime.trim().equals("") || message.trim().equals("")) {
-                            if (date.equals("Please Set Date")) {
+                        if (subject.trim().equals("") || date.equals("Set Date") || startTime.equals("Set Start Time")) {
+                            if (date.equals("Set Date")) {
                                 emptys += "Date";
                             }
-                            if (startTime.equals("Please Set Start Time")) {
+                            if (startTime.equals("Set Start Time")) {
                                 if ((emptys.trim().equals(""))) {
                                     emptys += "Start Time";
                                 } else {
                                     emptys += ", Start Time";
                                 }
                             }
-                            if (endTime.trim().equals("Please Set End Time")) {
-                                if ((emptys.trim().equals(""))) {
-                                    emptys += "End Time";
-                                } else {
-                                    emptys += ", End Time";
-                                }
-                            }
-                            if (message.trim().equals("")) {
-                                if ((emptys.trim().equals(""))) {
-                                    emptys += "Message";
-                                } else {
-                                    emptys += ", Message";
-                                }
-                            }
+//                            if (endTime.trim().equals("Please Set End Time")) {
+//                                if ((emptys.trim().equals(""))) {
+//                                    emptys += "End Time";
+//                                } else {
+//                                    emptys += ", End Time";
+//                                }
+//                            }
+//                            if (message.trim().equals("")) {
+//                                if ((emptys.trim().equals(""))) {
+//                                    emptys += "Message";
+//                                } else {
+//                                    emptys += ", Message";
+//                                }
+//                            }
                             if (subject.trim().equals("")) {
                                 if ((emptys.trim().equals(""))) {
                                     emptys += "Subject";
@@ -610,9 +695,9 @@ public class CreateSlot extends Activity {
         protected void onPostExecute(Void result) {
 
             slotSubjectEditText.setText("");
-            slotsDate.setText("Please Set Date");
-            slotStartTime.setText("Please Set Start Time");
-            slotEndTime.setText("Please Set End Time");
+            slotsDate.setText("Set Date");
+            slotStartTime.setText("Set Start Time");
+            slotEndTime.setText("Set End Time");
             slotSubjectEditText.setText("");
             slotMessageEditText.setText("");
 
@@ -682,87 +767,6 @@ public class CreateSlot extends Activity {
         @Override
         protected void onPostExecute(Void result) {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(CreateSlot.this);
-
-            // set the dialog title
-            builder.setTitle("Add contacts for Event")
-
-                    // specify the list array, the items to be selected by default (null for none),
-                    // and the listener through which to receive call backs when items are selected
-                    // R.array.choices were set in the resources res/values/strings.xml
-                    .setMultiChoiceItems(testArray, null, new DialogInterface.OnMultiChoiceClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
-                            if (isChecked) {
-                                // if the user checked the item, add it to the selected items
-                                mSelectedItems.add(which);
-                            } else if (mSelectedItems.contains(which)) {
-                                // else if the item is already in the array, remove it
-                                mSelectedItems.remove(Integer.valueOf(which));
-                            }
-
-                            // you can also add other codes here,
-                            // for example a tool tip that gives user an idea of what he is selecting
-                            // showToast("Just an example description.");
-                        }
-
-                    })
-
-                            // Set the action buttons
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-
-                            // user clicked OK, so save the mSelectedItems results somewhere
-                            // here we are trying to retrieve the selected items indices
-                            String selectedIndex = "";
-                            for (Integer i : mSelectedItems) {
-                                selectedIndex += i + ", ";
-                            }
-
-                            addedContactsForSlot = new ArrayList<Person>();
-
-                            String[] selectedContacts = selectedIndex.split(",");
-
-                            for (int j = 0; j < selectedContacts.length - 1; j++) {
-
-                                if (selectedContacts[j] != " ") {
-                                    addedContactsForSlot.add(myContactsPersonsList.get(Integer.parseInt(selectedContacts[j])));
-                                }
-                            }
-                            if (!(addedContactsForSlot.isEmpty())) {
-                                recipientsForSlotBtn.setText("Contacts added");
-                                recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                                recipientsForSlotBtn.setTextColor(getResources().getColorStateList(R.color.darkgreen));
-
-                                contactsAdded = true;
-
-                                Toast.makeText(CreateSlot.this, "Contacts Added", Toast.LENGTH_LONG).show();
-
-                                if (dateSet && subjectSet) {
-                                    buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.darkgreen));
-                                    buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                                }
-
-                            } else {
-                                Toast.makeText(CreateSlot.this, "No Contacts Added", Toast.LENGTH_LONG).show();
-                                contactsAdded = false;
-                                recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                                buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
-                                buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.red));
-                            }
-                        }
-                    })
-
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            // removes the AlertDialog in the screen
-                        }
-                    })
-
-                    .show();
         }
     }
 }

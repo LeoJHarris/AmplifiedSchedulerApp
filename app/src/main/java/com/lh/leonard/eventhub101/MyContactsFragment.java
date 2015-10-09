@@ -124,12 +124,9 @@ public class MyContactsFragment extends Fragment {
             StringBuilder whereClause = new StringBuilder();
             whereClause.append("Person[contacts]");
             whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
-
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause.toString());
-
             myContacts = Backendless.Persistence.of(Person.class).find(dataQuery);
-
             myContactsList = myContacts.getData();
 
             return null;
@@ -147,11 +144,8 @@ public class MyContactsFragment extends Fragment {
                     rvMyContacts.setLayoutManager(llm);
 
                     Resources r = getResources();
-
                     adapter = new ContactsAdapter(myContactsList, r);
-
                     rvMyContacts.setAdapter(adapter);
-
                     rvMyContacts.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rvMyContacts, new RecyclerItemClickListener.OnItemClickListener() {
 
                         @Override

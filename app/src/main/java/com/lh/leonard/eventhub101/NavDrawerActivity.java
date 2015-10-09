@@ -142,6 +142,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     private void selectItem(int position) {
 
         Fragment fragment = null;
+        Intent intent = null;
         switch (position) {
             case 1:
                 fragment = new HomeFragment();
@@ -150,12 +151,10 @@ public class NavDrawerActivity extends AppCompatActivity {
                 fragment = new UpdateAccount();
                 break;
             case 3:
-                Intent createSlot = new Intent(NavDrawerActivity.this, CreateSlot.class);
-                startActivity(createSlot);
+                intent = new Intent(NavDrawerActivity.this, CreateSlot.class);
                 break;
             case 4:
-                Intent manageContacts = new Intent(NavDrawerActivity.this, AddRemoveContactsTabbed.class);
-                startActivity(manageContacts);
+                intent = new Intent(NavDrawerActivity.this, AddRemoveContactsTabbed.class);
                 break;
             case 5:
                 fragment = new MyCreatedSlots();
@@ -196,8 +195,6 @@ public class NavDrawerActivity extends AppCompatActivity {
 
                 fragmentManager.beginTransaction()
                         .replace(R.id.frame_container, fragment).addToBackStack("home").commit();
-
-                Drawer.closeDrawer(mRecyclerView);
             } else {
                 fragmentManager.beginTransaction()
                         .replace(R.id.frame_container, fragment).commit();
@@ -205,80 +202,96 @@ public class NavDrawerActivity extends AppCompatActivity {
         } else {
             // error in creating fragment
         }
+        if (intent != null) {
+            startActivity(intent);
+        }
     }
 
     @Override
     public void onBackPressed() {
-        if (fragmentManager != null) {
+
+        if (Drawer.isDrawerOpen(mRecyclerView)) {
+            Drawer.closeDrawer(mRecyclerView);
+        } else if (fragmentManager != null) {
             if (fragmentManager.getBackStackEntryCount() >= 1) {
                 // fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()).getName();
-                fragmentManager.getBackStackEntryAt(0).getName();
-                super.onBackPressed();
+                System.out.println(fragmentManager.getBackStackEntryAt(0).getName());
+                System.out.println(fragmentManager.getBackStackEntryCount());
+
+                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                    fragmentManager.popBackStackImmediate();
+                }
             } else {
-                Backendless.UserService.logout(new AsyncCallback<Void>() {
+                new AlertDialog.Builder(NavDrawerActivity.this)
+                        .setTitle("Logging out").setMessage("You are about to logout out").
+                        setIcon(R.drawable.ic_xclamationmark)
+                        .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
 
-                    @Override
-                    public void handleResponse(Void aVoid) {
-                        new AlertDialog.Builder(NavDrawerActivity.this)
-                                .setTitle("Logging out").setMessage("You are about to logout out").
-                                setIcon(R.drawable.ic_xclamationmark)
-                                .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                                ringProgressDialog.setCancelable(false);
 
-                                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
-                                                ringProgressDialog.setCancelable(false);
-                                                Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                                                logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
-                                                startActivity(logOutIntent);
+                                Backendless.UserService.logout(new AsyncCallback<Void>() {
 
-                                            }
-                                        }
-                                ).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void handleResponse(Void aVoid) {
 
-                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
+                                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
+                                        ringProgressDialog.dismiss();
+                                        startActivity(logOutIntent);
                                     }
-                                }
-                        ).show();
-                    }
 
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-
-                    }
-                });
-            }
-        } else {
-            Backendless.UserService.logout(new AsyncCallback<Void>() {
-
-                @Override
-                public void handleResponse(Void aVoid) {
-                    new AlertDialog.Builder(NavDrawerActivity.this)
-                            .setTitle("Logging out").setMessage("You are about to logout out").
-                            setIcon(R.drawable.ic_xclamationmark)
-                            .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                                            ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
-                                            ringProgressDialog.setCancelable(false);
-                                            Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                                            logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
-                                            startActivity(logOutIntent);
-
-                                        }
+                                    @Override
+                                    public void handleFault(BackendlessFault backendlessFault) {
+                                        ringProgressDialog.dismiss();
                                     }
-                            ).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                }
+                                });
                             }
-                    ).show();
-                }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        }
+                ).show();
+            }
 
-                }
-            });
+        } else {
+
+            new AlertDialog.Builder(NavDrawerActivity.this)
+                    .setTitle("Logging out").setMessage("You are about to logout out").
+                    setIcon(R.drawable.ic_xclamationmark)
+                    .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                            ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                            ringProgressDialog.setCancelable(false);
+
+                            Backendless.UserService.logout(new AsyncCallback<Void>() {
+
+                                @Override
+                                public void handleResponse(Void aVoid) {
+
+                                    Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
+                                    logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
+                                    ringProgressDialog.dismiss();
+                                    startActivity(logOutIntent);
+                                }
+
+                                @Override
+                                public void handleFault(BackendlessFault backendlessFault) {
+                                    ringProgressDialog.dismiss();
+                                }
+                            });
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                        }
+                    }
+            ).show();
         }
     }
 }
+
+

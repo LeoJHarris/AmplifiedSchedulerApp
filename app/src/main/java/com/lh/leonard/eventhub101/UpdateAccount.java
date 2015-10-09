@@ -1,7 +1,6 @@
 package com.lh.leonard.eventhub101;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -56,7 +55,7 @@ public class UpdateAccount extends Fragment {
         editTextUpdatePasswordConfirmReg = (EditText) v.findViewById(R.id.editTextUpdatePasswordConfirmReg);
 
         Button updateDetailsBtn = (Button) v.findViewById(R.id.buttonUpdateUser);
-        final Button buttonBackToLoggedIn = (Button) v.findViewById(R.id.buttonBackToLoggedIn);
+
 
         textViewHeaderUpdateAccount.setTypeface(regularFont);
         editTextUpdateFNameReg.setTypeface(regularFont);
@@ -65,7 +64,6 @@ public class UpdateAccount extends Fragment {
         editTextUpdateEmail.setTypeface(regularFont);
         ediTextUpdatePassword.setTypeface(regularFont);
         editTextUpdatePasswordConfirmReg.setTypeface(regularFont);
-        buttonBackToLoggedIn.setTypeface(regularFont);
         updateDetailsBtn.setTypeface(regularFont);
 
         updateDetailsBtn.setOnClickListener(new View.OnClickListener() {
@@ -83,17 +81,6 @@ public class UpdateAccount extends Fragment {
 
                                                 }
                                             }
-        );
-        buttonBackToLoggedIn.setOnClickListener(new View.OnClickListener()
-
-                                                {
-                                                    public void onClick(View v) {
-                                                        Intent loggedInIntent = new Intent(getActivity(), UserLoggedIn.class);
-                                                        startActivity(loggedInIntent);
-
-                                                    }
-                                                }
-
         );
         return v;
     }
