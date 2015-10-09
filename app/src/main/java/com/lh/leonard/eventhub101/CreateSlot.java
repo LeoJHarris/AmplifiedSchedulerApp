@@ -56,6 +56,7 @@ public class CreateSlot extends Activity {
     Boolean dateSet = false;
     Boolean subjectSet = false;
     Boolean contactsAdded = false;
+    Boolean startTimeSet = false;
 
     String justStartTime;
     String justEndTime;
@@ -260,14 +261,14 @@ public class CreateSlot extends Activity {
                                 if (!(addedContactsForSlot.isEmpty())) {
                                     recipientsForSlotBtn.setText("Contact(s) added");
                                     recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                                    recipientsForSlotBtn.setTextColor(getResources().getColorStateList(R.color.darkgreen));
+                                    recipientsForSlotBtn.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
 
                                     contactsAdded = true;
 
-                                    Toast.makeText(CreateSlot.this, "Contact(s) Added", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(CreateSlot.this, "Contact(s) Added", Toast.LENGTH_SHORT).show();
 
-                                    if (dateSet && subjectSet) {
-                                        buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.darkgreen));
+                                    if (dateSet && subjectSet && startTimeSet) {
+                                        buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                                         buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
                                     }
 
@@ -330,8 +331,13 @@ public class CreateSlot extends Activity {
                         String emptys = "";
 
                         if (subject.trim().equals("") || date.equals("Set Date") || startTime.equals("Set Start Time")) {
-                            if (date.equals("Set Date")) {
-                                emptys += "Date";
+
+                            if (subject.trim().equals("")) {
+                                if ((emptys.trim().equals(""))) {
+                                    emptys += "Subject";
+                                } else {
+                                    emptys += ", Subject";
+                                }
                             }
                             if (startTime.equals("Set Start Time")) {
                                 if ((emptys.trim().equals(""))) {
@@ -339,6 +345,9 @@ public class CreateSlot extends Activity {
                                 } else {
                                     emptys += ", Start Time";
                                 }
+                            }
+                            if (date.equals("Set Date")) {
+                                emptys += "Date";
                             }
 //                            if (endTime.trim().equals("Please Set End Time")) {
 //                                if ((emptys.trim().equals(""))) {
@@ -354,14 +363,7 @@ public class CreateSlot extends Activity {
 //                                    emptys += ", Message";
 //                                }
 //                            }
-                            if (subject.trim().equals("")) {
-                                if ((emptys.trim().equals(""))) {
-                                    emptys += "Subject";
-                                } else {
-                                    emptys += ", Subject";
-                                }
-                            }
-                            Toast.makeText(getApplicationContext(), "Please input: " + emptys, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Please input: " + emptys, Toast.LENGTH_SHORT).show();
                         } else {
 
 
@@ -384,12 +386,12 @@ public class CreateSlot extends Activity {
                     if ((!(string.equals("")))) {
                         slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
 
-                        if (dateSet && contactsAdded) {
-                            buttonSendSlot.getResources().getColorStateList(R.color.darkgreen);
+                        if (dateSet && contactsAdded && startTimeSet) {
+                            buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                             buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
                         }
 
-                        slotSubjectEditText.setTextColor(getResources().getColorStateList(R.color.darkgreen));
+                        slotSubjectEditText.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                         subjectSet = true;
 
                     } else {
@@ -407,7 +409,7 @@ public class CreateSlot extends Activity {
                 if (!hasFocus) {
                     String string = slotMessageEditText.getText().toString();
                     if ((!(string.equals("")))) {
-                        slotMessageEditText.setTextColor(getResources().getColorStateList(R.color.darkgreen));
+                        slotMessageEditText.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                         slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
                     } else {
                         slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -422,7 +424,7 @@ public class CreateSlot extends Activity {
                     String string = locationStringTV.getText().toString();
                     if ((!(string.equals("")))) {
                         locationStringTV.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                        locationStringTV.setTextColor(getResources().getColorStateList(R.color.darkgreen));
+                        locationStringTV.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                     } else {
                         locationStringTV.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     }
@@ -511,7 +513,7 @@ public class CreateSlot extends Activity {
         btnSlotDate.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
 
         if (subjectSet && contactsAdded) {
-            buttonSendSlot.getResources().getColorStateList(R.color.darkgreen);
+            buttonSendSlot.getResources().getColorStateList(R.color.deepdarkgreen);
             buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
         }
     }
@@ -602,6 +604,12 @@ public class CreateSlot extends Activity {
             justStartTime = aTime;
             output.setText("Start Time: " + aTime);
 
+            if (dateSet && contactsAdded && subjectSet) {
+                buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
+                buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
+            }
+
+            startTimeSet = true;
             btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
 
         } else if (outputInt == 2) {
