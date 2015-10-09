@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
 
             if (personLoggedIn.numberUnseenSlots() >= 1) {
 
-                textViewNotificationNumberHome.setText(String.valueOf(personLoggedIn.numberUnseenSlots()) + " New Event Invites");
+                textViewNotificationNumberHome.setText(String.valueOf(personLoggedIn.numberUnseenSlots()) + " New Event Invites (under construction)");
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
                 textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +120,7 @@ public class HomeFragment extends Fragment {
                 });
 
             } else {
-                textViewNotificationNumberHome.setText("No New Notifications");
+                textViewNotificationNumberHome.setText("No New Notifications (under construction)");
             }
         }
     }
