@@ -62,6 +62,7 @@ public class CreateSlot extends AppCompatActivity implements
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
+    Place place;
     private Calendar calendar;
     private TextView dateView;
     private int year, month, day;
@@ -344,7 +345,7 @@ public class CreateSlot extends AppCompatActivity implements
                         endTime = slotEndTime.getText().toString();
                         subject = slotSubjectEditText.getText().toString();
                         message = slotMessageEditText.getText().toString();
-                        locationString = mAutocompleteTextView.getText().toString();
+                        locationString = mAddressTextView.getText().toString();
                         //TODO Set Slot Ready to send with tick
 
                         String emptys = "";
@@ -374,7 +375,11 @@ public class CreateSlot extends AppCompatActivity implements
                                 }
                             }
                             if (date.equals("Set Date")) {
-                                emptys += "Date";
+                                if ((emptys.trim().equals(""))) {
+                                    emptys += "Date";
+                                } else {
+                                    emptys += ", Date";
+                                }
                             }
 //                            if (endTime.trim().equals("Please Set End Time")) {
 //                                if ((emptys.trim().equals(""))) {
@@ -681,17 +686,27 @@ public class CreateSlot extends AppCompatActivity implements
             slot.setMaxattendees(numberAttendeesAvaliable);
             slot.setPhone(personLoggedIn.getPhone());
 
+            LatLng latLngPlace = place.getLatLng();
+
+            GeoPoint geoPlace = new GeoPoint(latLngPlace.latitude, latLngPlace.longitude);
+
+            Map<String, Object> locationMap = new HashMap<>();
+            locationMap.put("location", place.getAddress());
+            geoPlace.setMetadata(locationMap);
+
+            // slot.setPlace(place.getAddress().toString());
             slot.setOwnername(personLoggedIn.getFname() + " " + personLoggedIn.getLname());
 
-            if (eventLocation != null) {
+            // eventLocation has the data from the map activity
+            //  if (eventLocation != null) {
 
-                Map<String, Object> metaMap = new HashMap<>();
-                metaMap.put("slot", slot);
-                eventLocation.setMetadata(metaMap);
+            Map<String, Object> metaMap = new HashMap<>();
+            metaMap.put("slot", slot);
+            geoPlace.setMetadata(metaMap);
 
 
-                slot.setLocation(eventLocation);
-            }
+            slot.setLocation(geoPlace);
+            //  }
             Slot savedSlot = Backendless.Data.save(slot);
 
 
@@ -837,7 +852,7 @@ public class CreateSlot extends AppCompatActivity implements
                 return;
             }
             // Selecting the first object buffer.
-            final Place place = places.get(0);
+            place = places.get(0);
             CharSequence attributions = places.getAttributions();
 
             mAddressTextView.setText(Html.fromHtml("Selected Place: " + place.getAddress() + " " + place.getPhoneNumber()));

@@ -28,9 +28,18 @@ public class Slot {
     public GeoPoint location;
     public String phone;
     public List<Person> invitedpersons;
+public String place;
 
     public void setInvitedpersons(List<Person> invitedpersons) {
         this.invitedpersons = invitedpersons;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
     }
 
     public List<Person> getInvitedpersons() {
