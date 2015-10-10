@@ -305,8 +305,7 @@ public class MyCreatedSlots extends Fragment {
     @JavascriptInterface
     public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
 
-        String messageSubString = "EVENTHUB101: event canceled by " + from +
-                ". Event:" + subject + ", date: " + date + ", place: " + place;
+        String messageSubString = "Automated TXT - EVENTHUB101: Event" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }

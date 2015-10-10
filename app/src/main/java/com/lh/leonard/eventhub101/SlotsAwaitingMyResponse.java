@@ -256,8 +256,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                 }
             }
 
-            sendsmss(slot.get(positionInList).getPhone(), "From EventHub: " + person.getFullname() + " has indicated he/she is not to your " + slot.get(positionInList).getSubject() + " event");
-
+            sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - EVENTHUB101: " + person.getFullname() + " has indicated he/she is not to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
 
             person.pendingResponseSlot.remove(pos);
             eventRemoved = slot.get(positionInList).getSubject();
@@ -334,7 +333,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                     }
                 }
 
-                sendsmss(slot.get(position).getPhone(), "From EventHub: " + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event");
+                sendsmss(slot.get(position).getPhone(), "Automated TXT - EVENTHUB101: " + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
 
                 person.pendingResponseSlot.remove(pos);
 
@@ -391,10 +390,10 @@ public class SlotsAwaitingMyResponse extends Fragment {
 
         int lengthToSubString;
         int lengthMessage = message.length();
-        if (lengthMessage < 1836) {
+        if (lengthMessage < 300) {
             lengthToSubString = lengthMessage;
         } else {
-            lengthToSubString = 1836;
+            lengthToSubString = 300;
         }
         String messageSubString = message.substring(0, lengthToSubString);
 
