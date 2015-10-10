@@ -228,15 +228,15 @@ public class SlotsImGoingTo extends Fragment {
 
             int pos = 0;
 
-            for (int i = 0; i < person1.myCreatedSlot.size(); i++) {
+            for (int i = 0; i < person1.getGoingToSlot().size(); i++) {
 
-                if (person.myCreatedSlot.get(i).getObjectId().equals(slot.get(positionInList).getObjectId())) {
+                if (person1.getGoingToSlot().get(i).getObjectId().equals(slot.get(positionInList).getObjectId())) {
                     pos = i;
                     break;
                 }
             }
 
-            person1.myCreatedSlot.remove(pos);
+            person1.getGoingToSlot().remove(pos);
             eventRemoved = slot.get(positionInList).getSubject();
             slot.remove(positionInList);
             Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person1);
