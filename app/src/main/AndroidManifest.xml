@@ -97,7 +97,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCie9wDjjfgkNxs2eFpRQf5v8oBY0mhLME" />
 
-
         <activity
             android:name=".UnseenSlotsDialog"
             android:label="@string/title_activity_unseen_slots_dialog"></activity>

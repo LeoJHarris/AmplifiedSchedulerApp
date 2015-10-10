@@ -1,6 +1,5 @@
 package com.lh.leonard.eventhub101;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -12,15 +11,19 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
+import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -30,7 +33,15 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,8 +49,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CreateSlot extends Activity {
+public class CreateSlot extends AppCompatActivity implements
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks {
+    private static final String LOG_TAG = "MainActivity";
+    private static final int GOOGLE_API_CLIENT_ID = 0;
+    private AutoCompleteTextView mAutocompleteTextView;
+    private AutoResizeTextView mAddressTextView;
+    private AutoResizeTextView mAttTextView;
+    private GoogleApiClient mGoogleApiClient;
+    private PlaceArrayAdapter mPlaceArrayAdapter;
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
+    Place place;
     private Calendar calendar;
     private TextView dateView;
     private int year, month, day;
@@ -81,12 +104,11 @@ public class CreateSlot extends Activity {
     TextView slotsDate;
     TextView slotStartTime;
     TextView slotEndTime;
-    TextView locationStringTV;
 
     StringBuilder dateFormatSet = new StringBuilder();
 
     Button btnSlotDate;
-    ImageButton btnGetLocationGeoPoint;
+    //  ImageButton btnGetLocationGeoPoint;
 
     CharSequence[] testArray;
     ArrayList<Integer> mSelectedItems;
@@ -110,31 +132,27 @@ public class CreateSlot extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_slot);
 
+
+        mGoogleApiClient = new GoogleApiClient.Builder(CreateSlot.this)
+                .addApi(Places.GEO_DATA_API)
+                .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
+                .addConnectionCallbacks(this)
+                .build();
+        mAutocompleteTextView = (AutoCompleteTextView) findViewById(R.id
+                .autoCompleteTextView);
+        mAutocompleteTextView.setThreshold(3);
+        mAddressTextView = (AutoResizeTextView) findViewById(R.id.address);
+        mAttTextView = (AutoResizeTextView) findViewById(R.id.att);
+        mAutocompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
+        mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
+                BOUNDS_MOUNTAIN_VIEW, null);
+        mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
+
+
         tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
         crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
 
-
         final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
-
-        // TextView tv = (TextView) findViewById(R.id.tv);
-        //NumberPicker numberPickerAttendees = (NumberPicker) findViewById(R.id.numberPickerAttendees);
-        // final TextView tvNumberAttendees = (TextView) findViewById(R.id.tvSpaces);
-        //Populate NumberPicker values from minimum and maximum value range
-        //Set the minimum value of NumberPicker
-        //  numberPickerAttendees.setMinValue(1);
-        //Specify the maximum value/number of NumberPicker
-        //  numberPickerAttendees.setMaxValue(1000);
-        //numberPickerAttendees.setWrapSelectorWheel(true);
-        //Set a value change listener for NumberPicker
-        //  numberPickerAttendees.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-        ////   @Override
-        //   public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        //Display the newly selected number from picker
-
-        //         tvNumberAttendees.setText("Spaces selected: " + newVal);
-        //     numberAttendeesAvaliable = newVal;
-        //      }
-        //   });
 
         editTextNumberAttendeesAvaliable = (EditText) findViewById(R.id.numberPickerAttendees);
         recipientsForSlotBtn = (Button) findViewById(R.id.recipientsForSlot);
@@ -144,7 +162,7 @@ public class CreateSlot extends Activity {
         slotMessageEditText = (EditText) findViewById(R.id.editTextSlotMessage);
         slotStartTime = (TextView) findViewById(R.id.outputStartTime);
         slotEndTime = (TextView) findViewById(R.id.outputEndTime);
-        locationStringTV = (TextView) findViewById(R.id.editTextStringLocation);
+        mAutocompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         TextView textViewHeaderCreateSlot = (TextView) findViewById(R.id.textViewHeaderCreateSlot);
         TextView tvSpaces = (TextView) findViewById(R.id.tvSpaces);
         // CheckBox checkBoxAppointmentRequired = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
@@ -153,7 +171,7 @@ public class CreateSlot extends Activity {
         Button btnSlotDate = (Button) findViewById(R.id.btnSlotDate);
         Button btnClickSetStartTime = (Button) findViewById(R.id.btnClickSetStartTime);
         btnClickSetEndTime = (Button) findViewById(R.id.btnClickSetEndTime);
-        btnGetLocationGeoPoint = (ImageButton) findViewById(R.id.btnGetLocationGeoPoint);
+        // btnGetLocationGeoPoint = (ImageButton) findViewById(R.id.btnGetLocationGeoPoint);
 
         recipientsForSlotBtn.setTypeface(regularFont);
         slotsDate.setTypeface(regularFont);
@@ -161,9 +179,11 @@ public class CreateSlot extends Activity {
         btnSlotDate.setTypeface(regularFont);
         slotSubjectEditText.setTypeface(regularFont);
         slotMessageEditText.setTypeface(regularFont);
+        mAddressTextView.setTypeface(regularFont);
+        mAttTextView.setTypeface(regularFont);
         slotStartTime.setTypeface(regularFont);
         slotEndTime.setTypeface(regularFont);
-        locationStringTV.setTypeface(regularFont);
+        mAutocompleteTextView.setTypeface(regularFont);
         textViewHeaderCreateSlot.setTypeface(regularFont);
         tvSpaces.setTypeface(regularFont);
         //checkBoxString.setTypeface(regularFont);
@@ -293,12 +313,12 @@ public class CreateSlot extends Activity {
             }
         });
 
-        btnGetLocationGeoPoint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(CreateSlot.this, MapsActivity.class), 1000);
-            }
-        });
+//        btnGetLocationGeoPoint.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivityForResult(new Intent(CreateSlot.this, MapsActivity.class), 1000);
+//            }
+//        });
 
         //TODO Google maps
 
@@ -325,12 +345,12 @@ public class CreateSlot extends Activity {
                         endTime = slotEndTime.getText().toString();
                         subject = slotSubjectEditText.getText().toString();
                         message = slotMessageEditText.getText().toString();
-                        locationString = locationStringTV.getText().toString();
+                        locationString = mAddressTextView.getText().toString();
                         //TODO Set Slot Ready to send with tick
 
                         String emptys = "";
 
-                        if (subject.trim().equals("") || date.equals("Set Date") || startTime.equals("Set Start Time")) {
+                        if (subject.trim().equals("") || date.equals("Set Date") || startTime.equals("Set Start Time") || locationString.equals("Please Set Place")) {
 
                             if (subject.trim().equals("")) {
                                 if ((emptys.trim().equals(""))) {
@@ -339,6 +359,14 @@ public class CreateSlot extends Activity {
                                     emptys += ", Subject";
                                 }
                             }
+                            if (locationString.equals("Please Set Place")) {
+                                if ((emptys.trim().equals(""))) {
+                                    emptys += "Event Place";
+                                } else {
+                                    emptys += ", Event Place";
+                                }
+                            }
+
                             if (startTime.equals("Set Start Time")) {
                                 if ((emptys.trim().equals(""))) {
                                     emptys += "Start Time";
@@ -347,7 +375,11 @@ public class CreateSlot extends Activity {
                                 }
                             }
                             if (date.equals("Set Date")) {
-                                emptys += "Date";
+                                if ((emptys.trim().equals(""))) {
+                                    emptys += "Date";
+                                } else {
+                                    emptys += ", Date";
+                                }
                             }
 //                            if (endTime.trim().equals("Please Set End Time")) {
 //                                if ((emptys.trim().equals(""))) {
@@ -417,16 +449,16 @@ public class CreateSlot extends Activity {
                 }
             }
         });
-        locationStringTV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mAutocompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    String string = locationStringTV.getText().toString();
+                    String string = mAutocompleteTextView.getText().toString();
                     if ((!(string.equals("")))) {
-                        locationStringTV.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                        locationStringTV.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
+                        mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
+                        mAutocompleteTextView.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                     } else {
-                        locationStringTV.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                        mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     }
                 }
             }
@@ -654,17 +686,27 @@ public class CreateSlot extends Activity {
             slot.setMaxattendees(numberAttendeesAvaliable);
             slot.setPhone(personLoggedIn.getPhone());
 
+            LatLng latLngPlace = place.getLatLng();
+
+            GeoPoint geoPlace = new GeoPoint(latLngPlace.latitude, latLngPlace.longitude);
+
+            Map<String, Object> locationMap = new HashMap<>();
+            locationMap.put("location", place.getAddress());
+            geoPlace.setMetadata(locationMap);
+
+            // slot.setPlace(place.getAddress().toString());
             slot.setOwnername(personLoggedIn.getFname() + " " + personLoggedIn.getLname());
 
-            if (eventLocation != null) {
+            // eventLocation has the data from the map activity
+            //  if (eventLocation != null) {
 
-                Map<String, Object> metaMap = new HashMap<>();
-                metaMap.put("slot", slot);
-                eventLocation.setMetadata(metaMap);
+            Map<String, Object> metaMap = new HashMap<>();
+            metaMap.put("slot", slot);
+            geoPlace.setMetadata(metaMap);
 
 
-                slot.setLocation(eventLocation);
-            }
+            slot.setLocation(geoPlace);
+            //  }
             Slot savedSlot = Backendless.Data.save(slot);
 
 
@@ -785,4 +827,65 @@ public class CreateSlot extends Activity {
 
         }
     }
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+            Log.i(LOG_TAG, "Selected: " + item.description);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
+        }
+    };
+
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                Log.e(LOG_TAG, "Place query did not complete. Error: " +
+                        places.getStatus().toString());
+                return;
+            }
+            // Selecting the first object buffer.
+            place = places.get(0);
+            CharSequence attributions = places.getAttributions();
+
+            mAddressTextView.setText(Html.fromHtml("Selected Place: " + place.getAddress() + " " + place.getPhoneNumber()));
+            if (attributions != null) {
+                mAttTextView.setVisibility(View.VISIBLE);
+                mAttTextView.setText(Html.fromHtml(attributions.toString()));
+            }
+        }
+    };
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
+        Log.i(LOG_TAG, "Google Places API connected.");
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
+                + connectionResult.getErrorCode());
+
+        Toast.makeText(this,
+                "Google Places API connection failed with error code:" +
+                        connectionResult.getErrorCode(),
+                Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mPlaceArrayAdapter.setGoogleApiClient(null);
+        Log.e(LOG_TAG, "Google Places API connection suspended.");
+    }
+
+
 }
