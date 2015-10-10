@@ -234,7 +234,6 @@ public class MyCreatedSlots extends Fragment {
             whereClause.append("Slot[attendees]");
             whereClause.append(".objectId='").append(slot.get(positionInList).getObjectId()).append("'");
 
-
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause.toString());
 

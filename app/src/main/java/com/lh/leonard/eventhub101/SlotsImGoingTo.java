@@ -221,7 +221,6 @@ public class SlotsImGoingTo extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-
             List<String> relations = new ArrayList<String>();
             relations.add("goingToSlot");
             Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relations);
