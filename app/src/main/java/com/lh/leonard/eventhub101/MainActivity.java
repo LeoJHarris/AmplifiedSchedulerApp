@@ -156,7 +156,7 @@ public class MainActivity extends Activity {
                                 if (ringProgressDialog != null) {
                                     ringProgressDialog.dismiss();
                                 }
-                                Toast.makeText(getApplicationContext(), "Unable to sign In. Please check your internet connection and credentials are correct.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Unable to sign in. Please check internet connection & credentials are correct.", Toast.LENGTH_LONG).show();
                             }
                         });
                     } else {
