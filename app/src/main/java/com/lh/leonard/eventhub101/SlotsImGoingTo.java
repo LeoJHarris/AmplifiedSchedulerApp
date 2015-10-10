@@ -1,6 +1,9 @@
 package com.lh.leonard.eventhub101;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
@@ -16,12 +19,14 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SlotsImGoingTo extends Fragment {
@@ -35,10 +40,13 @@ public class SlotsImGoingTo extends Fragment {
     AutoResizeTextView textViewTextNoSlotAvaliable;
     RVAdapter adapter;
     private ProgressBar progressBar;
-
+    AlertDialog dialog;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
-
+    ProgressDialog ringProgressDialog;
     View v;
+    String eventRemoved;
+    RecyclerView rv;
+    LinearLayoutManager llm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,10 +133,10 @@ public class SlotsImGoingTo extends Fragment {
 
                 if (!slot.isEmpty()) {
 
-                    RecyclerView rv = (RecyclerView) v.findViewById(R.id.rv);
+                    rv = (RecyclerView) v.findViewById(R.id.rv);
 
                     rv.setHasFixedSize(true);
-                    LinearLayoutManager llm = new LinearLayoutManager(v.getContext());
+                    llm = new LinearLayoutManager(v.getContext());
                     rv.setLayoutManager(llm);
 
                     Resources r = getResources();
@@ -150,10 +158,30 @@ public class SlotsImGoingTo extends Fragment {
                         }
 
                         @Override
-                        public void onItemLongClick(View view, int position) {
+                        public void onItemLongClick(View view, final int position) {
 
-                            //TODO: Dialog show, remove slot. Remove from list clear adapter, give adapter now list
-                            //TODO Yes: get the ownerObjectId and remove from database
+                            dialog = new AlertDialog.Builder(v.getContext())
+                                    .setTitle("Not Going To Event?")
+                                    .setMessage("Do you want to remove " + slot.get(position).getSubject())
+                                    .setIcon(R.drawable.ic_questionmark)
+                                    .setPositiveButton("Remove Event", new DialogInterface.OnClickListener() {
+
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                                            dialog.dismiss();
+                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
+                                                    "Remove event " + slot.get(position).getSubject() + " ...", true);
+                                            ringProgressDialog.setCancelable(false);
+                                            new RemoveEvent(position).execute();
+
+                                        }
+                                    }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            dialog.dismiss();
+                                        }
+                                    }).show();
+
                         }
                     }
                     ));
@@ -167,6 +195,82 @@ public class SlotsImGoingTo extends Fragment {
                     textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
                 }
             }
+        }
+    }
+
+    private class RemoveEvent extends AsyncTask<Void, Integer, Void> {
+
+        int positionInList;
+
+        public RemoveEvent(int positionInList) {
+
+            this.positionInList = positionInList;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+
+            List<String> relations = new ArrayList<String>();
+            relations.add("goingToSlot");
+            Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relations);
+
+            int pos = 0;
+
+            for (int i = 0; i < person1.getGoingToSlot().size(); i++) {
+
+                if (person1.getGoingToSlot().get(i).getObjectId().equals(slot.get(positionInList).getObjectId())) {
+                    pos = i;
+                    break;
+                }
+            }
+
+            person1.getGoingToSlot().remove(pos);
+            eventRemoved = slot.get(positionInList).getSubject();
+            slot.remove(positionInList);
+            Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person1);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            rv.setAdapter(null);
+
+            if (!slot.isEmpty()) {
+
+                rv.setHasFixedSize(true);
+
+                rv.setLayoutManager(llm);
+
+                // rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
+
+                Resources r = getResources();
+
+                adapter = new RVAdapter(slot, r);
+
+                rv.setAdapter(adapter);
+                ringProgressDialog.dismiss();
+            } else {
+                ringProgressDialog.dismiss();
+                searchViewSlots.setVisibility(View.GONE);
+                rv.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
+            }
+            Toast.makeText(v.getContext(), eventRemoved + " was removed", Toast.LENGTH_SHORT).show();
         }
     }
 }

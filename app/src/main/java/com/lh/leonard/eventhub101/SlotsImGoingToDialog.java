@@ -38,7 +38,7 @@ public class SlotsImGoingToDialog extends Activity {
     AutoResizeTextView textViewLocation;
     AutoResizeTextView textViewMyEventSpacesAvaliable;
     AutoResizeTextView organizer;
-    Button buttonCantGo;
+   // Button buttonCantGo;
     Integer position;
     BackendlessCollection<Slot> slots;
     SpannableString content;
@@ -62,7 +62,7 @@ public class SlotsImGoingToDialog extends Activity {
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewGoingToSlotDateAndTime);
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewGoingToSlotLocation);
         textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
-        buttonCantGo = (Button) findViewById(R.id.buttonGoingToSlotCantGo);
+      //  buttonCantGo = (Button) findViewById(R.id.buttonGoingToSlotCantGo);
 
         organizer.setTypeface(regularFont);
         textViewSubject.setTypeface(regularFont);
@@ -70,35 +70,35 @@ public class SlotsImGoingToDialog extends Activity {
         textViewDateAndTime.setTypeface(regularFont);
         textViewLocation.setTypeface(regularFont);
         textViewMyEventSpacesAvaliable.setTypeface(regularFont);
-        buttonCantGo.setTypeface(regularFont);
+       // buttonCantGo.setTypeface(regularFont);
 
         person = (Person) userLoggedIn.getProperty("persons");
 
         new LoadSlotsImGoingTo().execute();
 
-        buttonCantGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                new AlertDialog.Builder(v.getContext())
-                        .setTitle("Remove Slot?")
-                        .setMessage("Do you want to remove this slot?")
-                        .setIcon(R.drawable.ic_questionmark)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                                new RemoveGoingToSlot().execute();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        }).show();
-            }
-        });
+//        buttonCantGo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//                new AlertDialog.Builder(v.getContext())
+//                        .setTitle("Remove Slot?")
+//                        .setMessage("Do you want to remove this slot?")
+//                        .setIcon(R.drawable.ic_questionmark)
+//                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                                new RemoveGoingToSlot().execute();
+//                            }
+//                        })
+//                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//                            }
+//                        }).show();
+//            }
+//        });
         textViewLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -83,15 +83,15 @@
                 android:padding="5dp"
                 android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/buttonGoingToSlotCantGo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewGoingToSlotOrganizer"
-                android:layout_marginTop="10dp"
-                android:padding="10dp"
-                android:text="Can't Go"
-                android:textSize="30sp" />
+            <!--<Button-->
+            <!--android:id="@+id/buttonGoingToSlotCantGo"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/textViewGoingToSlotOrganizer"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:padding="10dp"-->
+            <!--android:text="Can't Go"-->
+            <!--android:textSize="30sp" />-->
 
         </RelativeLayout>
 

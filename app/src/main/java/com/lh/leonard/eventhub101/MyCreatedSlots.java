@@ -11,10 +11,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TableRow;
@@ -33,6 +35,8 @@ public class MyCreatedSlots extends Fragment {
     Contact contact;
     Person personLoggedIn;
     List<Slot> slot;
+    List<Person> personsToSms;
+    BackendlessCollection<Person> personsToSmsCollection;
     private ProgressBar progressBar;
     BackendlessCollection<Person> persons;
     BackendlessCollection<Slot> slots;
@@ -164,7 +168,7 @@ public class MyCreatedSlots extends Fragment {
 
 
                             dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Remove Contact?")
+                                    .setTitle("Cancel Event?")
                                     .setMessage("Do you want cancel " + slot.get(position).getSubject())
                                     .setIcon(R.drawable.ic_questionmark)
                                     .setPositiveButton("Cancel Event", new DialogInterface.OnClickListener() {
@@ -226,6 +230,27 @@ public class MyCreatedSlots extends Fragment {
         protected Void doInBackground(Void... params) {
 
 
+            StringBuilder whereClause = new StringBuilder();
+            whereClause.append("Slot[attendees]");
+            whereClause.append(".objectId='").append(slot.get(positionInList).getObjectId()).append("'");
+
+
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            dataQuery.setWhereClause(whereClause.toString());
+
+            personsToSmsCollection = Backendless.Data.of(Person.class).find(dataQuery);
+            personsToSms = personsToSmsCollection.getData();
+
+            String fullnamePersonLoggedIn = personLoggedIn.getFullname();
+            String dateofslot = slot.get(positionInList).getDateofslot();
+            String subject = slot.get(positionInList).getSubject();
+            String placeofSlot = slot.get(positionInList).getPlace();
+
+            for (Person pId : personsToSms) {
+
+                sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
+            }
+
             List<String> relations = new ArrayList<String>();
             relations.add("myCreatedSlot");
             Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
@@ -259,7 +284,7 @@ public class MyCreatedSlots extends Fragment {
 
                 rv.setLayoutManager(llm);
 
-                rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
+                //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
                 Resources r = getResources();
 
@@ -276,5 +301,14 @@ public class MyCreatedSlots extends Fragment {
             }
             Toast.makeText(v.getContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @JavascriptInterface
+    public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
+
+        String messageSubString = "EVENTHUB101: event canceled by " + from +
+                ". Event:" + subject + ", date: " + date + ", place: " + place;
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }
 }

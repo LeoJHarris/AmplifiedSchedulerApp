@@ -16,7 +16,6 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:gravity="center"
-            android:paddingTop="5dp"
             android:text="EventHub101"
             android:textColor="@color/white"
             android:textSize="100sp"
