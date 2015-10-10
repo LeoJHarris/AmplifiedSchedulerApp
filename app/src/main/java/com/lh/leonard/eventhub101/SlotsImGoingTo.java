@@ -11,10 +11,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TableRow;
@@ -221,7 +223,6 @@ public class SlotsImGoingTo extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-
             List<String> relations = new ArrayList<String>();
             relations.add("goingToSlot");
             Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relations);
@@ -235,6 +236,9 @@ public class SlotsImGoingTo extends Fragment {
                     break;
                 }
             }
+
+            sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - EVENTHUB101: " + person.getFullname() + "  has indicated he/she is no longer going to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
+
 
             person1.getGoingToSlot().remove(pos);
             eventRemoved = slot.get(positionInList).getSubject();
@@ -272,5 +276,21 @@ public class SlotsImGoingTo extends Fragment {
             }
             Toast.makeText(v.getContext(), eventRemoved + " was removed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @JavascriptInterface
+    public void sendsmss(String phoneNumber, String message) {
+
+        int lengthToSubString;
+        int lengthMessage = message.length();
+        if (lengthMessage < 300) {
+            lengthToSubString = lengthMessage;
+        } else {
+            lengthToSubString = 300;
+        }
+        String messageSubString = message.substring(0, lengthToSubString);
+
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }
 }

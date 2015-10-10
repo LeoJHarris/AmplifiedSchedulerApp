@@ -50,9 +50,9 @@ public class ParticipantsActivity extends Activity {
 
         SearchView searchView = (SearchView) findViewById(R.id.searchViewSlots);
 
-        searchView.setQueryHint("Search Participants");
+        searchView.setQueryHint("Search People Going");
         textViewTextNoSlotAvaliable.setTypeface(regularFont);
-        textViewTitleSlotsDisplay.setText("Participants");
+        textViewTitleSlotsDisplay.setText("People Going");
 
         textViewTitleSlotsDisplay.setTypeface(regularFont);
 

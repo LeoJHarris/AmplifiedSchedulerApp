@@ -97,7 +97,7 @@
                 android:layout_below="@id/textViewMyEventSpacesAvaliable"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
-                android:text="See Participants"
+                android:text="People Going"
                 android:textColor="@color/black"
                 android:textSize="30sp"
                 android:visibility="gone" />
