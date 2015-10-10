@@ -164,7 +164,7 @@ public class MyCreatedSlots extends Fragment {
 
 
                             dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Remove Contact?")
+                                    .setTitle("Cancel Event?")
                                     .setMessage("Do you want cancel " + slot.get(position).getSubject())
                                     .setIcon(R.drawable.ic_questionmark)
                                     .setPositiveButton("Cancel Event", new DialogInterface.OnClickListener() {
@@ -259,7 +259,7 @@ public class MyCreatedSlots extends Fragment {
 
                 rv.setLayoutManager(llm);
 
-                rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
+             //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
                 Resources r = getResources();
 

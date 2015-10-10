@@ -365,7 +365,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
 
                 rv.setLayoutManager(llm);
 
-                rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
+                // rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
                 Resources r = getResources();
 
@@ -382,7 +382,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
             }
-            Toast.makeText(v.getContext(), eventRemoved + " was added to your going to events", Toast.LENGTH_SHORT).show();
+            Toast.makeText(v.getContext(), "Going to " + eventRemoved, Toast.LENGTH_SHORT).show();
         }
     }
 
