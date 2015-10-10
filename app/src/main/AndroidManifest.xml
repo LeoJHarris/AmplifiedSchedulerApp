@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lh.leonard.eventhub101" >
+    package="com.lh.leonard.eventhub101">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -31,12 +32,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <service android:name="com.backendless.AndroidService" />
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="EventHub101">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,19 +54,6 @@
             android:name=".MyCreatedSlotsDialog"
             android:label="Hi" />
 
-        <fragment
-            android:name=".SlotsImGoingTo"
-            android:label="@string/title_activity_my_slots_going_to" />
-        <fragment
-            android:name=".SlotsAwaitingMyResponse"
-            android:label="@string/title_activity_slots_awaiting_my_response" />
-        <fragment
-            android:name=".UpdateAccount"
-            android:label="@string/title_activity_my_account" />
-        <fragment
-            android:name=".MyCreatedSlots"
-            android:label="@string/title_activity_my_created_slots" />
-
         <activity
             android:name=".MapsActivity"
             android:excludeFromRecents="true"
@@ -79,7 +67,8 @@
             android:label="@string/title_activity_slots_im_going_to_dialog" />
         <activity
             android:name=".CreateSlot"
-            android:label="@string/title_activity_create_slot" />
+            android:label="@string/title_activity_create_slot"
+            android:noHistory="true" />
         <activity
             android:name=".AddRemoveContacts"
             android:label="@string/title_activity_find_contact" />
@@ -89,7 +78,8 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".AddRemoveContactsTabbed"
-            android:label="@string/title_activity_add_remove_contacts_tabbed" />
+            android:label="@string/title_activity_add_remove_contacts_tabbed"
+            android:noHistory="true" />
         <activity
             android:name=".NavDrawerActivity"
             android:label="@string/title_activity_add_remove_contacts_tabbed" />
@@ -110,8 +100,7 @@
 
         <activity
             android:name=".UnseenSlotsDialog"
-            android:label="@string/title_activity_unseen_slots_dialog" >
-        </activity>
+            android:label="@string/title_activity_unseen_slots_dialog"></activity>
     </application>
 
 </manifest>

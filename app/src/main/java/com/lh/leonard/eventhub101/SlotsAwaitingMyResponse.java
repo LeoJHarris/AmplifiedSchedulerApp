@@ -64,7 +64,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
         TextView textViewTitleSlotsDisplay = (TextView) v.findViewById(R.id.textViewTitleSlotsDisplay);
         textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
 
-        textViewTitleSlotsDisplay.setText("Events Pending My Response");
+        textViewTitleSlotsDisplay.setText("Event Invites");
 
         final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 

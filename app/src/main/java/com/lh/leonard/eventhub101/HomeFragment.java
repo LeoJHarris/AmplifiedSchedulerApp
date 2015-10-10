@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
 
             if (personLoggedIn.numberUnseenSlots() >= 1) {
 
-                textViewNotificationNumberHome.setText(String.valueOf(personLoggedIn.numberUnseenSlots()) + " new Notification");
+                textViewNotificationNumberHome.setText(String.valueOf(personLoggedIn.numberUnseenSlots()) + " New Event Invites (under construction)");
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
                 textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
@@ -115,13 +115,12 @@ public class HomeFragment extends Fragment {
 
                         FragmentManager fragmentManager = getFragmentManager();
                         fragmentManager.beginTransaction()
-                                .replace(R.id.frame_container, unseenSlotsFragment).commit();
-
+                                .replace(R.id.frame_container, unseenSlotsFragment).addToBackStack("home").commit();
                     }
                 });
 
             } else {
-                textViewNotificationNumberHome.setText("No New Notifications");
+                textViewNotificationNumberHome.setText("No New Notifications (under construction)");
             }
         }
     }

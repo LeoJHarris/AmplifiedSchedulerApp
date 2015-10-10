@@ -22,7 +22,7 @@
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center">
+        android:gravity="center">
 
         <ProgressBar
             android:id="@+id/progressBarPersonRequestTab"
@@ -47,9 +47,8 @@
             android:id="@+id/textViewTextNoRequestingUsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:background="@color/black"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:padding="10dp"
             android:text="You currently have no contact requests"
             android:textAllCaps="true"

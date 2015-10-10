@@ -124,12 +124,9 @@ public class MyContactsFragment extends Fragment {
             StringBuilder whereClause = new StringBuilder();
             whereClause.append("Person[contacts]");
             whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
-
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause.toString());
-
             myContacts = Backendless.Persistence.of(Person.class).find(dataQuery);
-
             myContactsList = myContacts.getData();
 
             return null;
@@ -147,11 +144,8 @@ public class MyContactsFragment extends Fragment {
                     rvMyContacts.setLayoutManager(llm);
 
                     Resources r = getResources();
-
                     adapter = new ContactsAdapter(myContactsList, r);
-
                     rvMyContacts.setAdapter(adapter);
-
                     rvMyContacts.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rvMyContacts, new RecyclerItemClickListener.OnItemClickListener() {
 
                         @Override
@@ -167,7 +161,7 @@ public class MyContactsFragment extends Fragment {
 
                                             dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Adding " + myContactsList.get(position).getFullname() + " to your contact ...", true);
+                                                    "Removing " + myContactsList.get(position).getFullname() + " from your contact ...", true);
                                             ringProgressDialog.setCancelable(false);
                                             new RemoveContact(position).execute();
                                         }
@@ -251,7 +245,7 @@ public class MyContactsFragment extends Fragment {
                     break;
                 }
             }
-
+            removedFullName = person1.contacts.get(pos).getFullname();
             person1.contacts.remove(pos);
             Person updatedPersonOther = Backendless.Data.of(Person.class).save(person1);
             myContactsList.remove(positionInList);
@@ -285,7 +279,7 @@ public class MyContactsFragment extends Fragment {
                 progressBarMyContacts.setVisibility(View.GONE);
                 textViewTextNoContacts.setVisibility(View.VISIBLE);
             }
-            Toast.makeText(v.getContext(), removedFullName + " rejected as contact", Toast.LENGTH_SHORT).show();
+            Toast.makeText(v.getContext(), removedFullName + " removed as contact", Toast.LENGTH_SHORT).show();
         }
     }
 }

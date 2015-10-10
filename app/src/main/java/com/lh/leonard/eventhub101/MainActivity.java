@@ -43,17 +43,18 @@ public class MainActivity extends Activity {
         AutoResizeTextView textViewMadeByMeMain = (AutoResizeTextView) findViewById(R.id.textViewMadeByMeMain);
 
         final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
+        final Typeface fontWelcome = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Amatic-Bold.ttf");
+
 
         buttonSignInMain.setTypeface(regularFont);
         buttonSignIn.setTypeface(regularFont);
         editTextEmailMain.setTypeface(regularFont);
         editTextPasswordMain.setTypeface(regularFont);
-        textViewheaderSlotAppMain.setTypeface(regularFont);
+        textViewheaderSlotAppMain.setTypeface(fontWelcome);
         buttonForgotPassword.setTypeface(regularFont);
         buttonRegistration.setTypeface(regularFont);
         textViewMadeByMeMain.setTypeface(regularFont);
 
-//TODO here log out when back button pressed
         if (Backendless.UserService.CurrentUser() != null) {
             BackendlessUser user = Backendless.UserService.CurrentUser();
             final Person personLoggedOut = (Person) user.getProperty("loggedoutperson");
@@ -78,7 +79,7 @@ public class MainActivity extends Activity {
                 String[] NameSplit = NameArray.split(",");
 
                 Toast.makeText(this,
-                        "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1] + ". Please Check your email for confirmation email to sign in to Simple Daily Planner ",
+                        "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1],
                         Toast.LENGTH_LONG).show();
             } else if (extras.getString("loggedoutperson") != null) {
                 String NameArray = extras.getString("loggedoutperson");
@@ -155,7 +156,7 @@ public class MainActivity extends Activity {
                                 if (ringProgressDialog != null) {
                                     ringProgressDialog.dismiss();
                                 }
-                                Toast.makeText(getApplicationContext(), "Unable to sign In. Please check your internet connection and try again.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Unable to sign In. Please check your internet connection and credentials are correct.", Toast.LENGTH_LONG).show();
                             }
                         });
                     } else {
@@ -167,14 +168,6 @@ public class MainActivity extends Activity {
             }
         });
     }
-//
-//    @JavascriptInterface
-//    public void sendsmss(String phoneNumber, String message) {
-//
-//        SmsManager smsManager = SmsManager.getDefault();
-//        smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-//    }
-
 
     public void sendSmsByManager() {
         try {

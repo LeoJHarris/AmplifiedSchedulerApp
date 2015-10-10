@@ -42,6 +42,4 @@ public class AddRemoveContactsTabbed extends AppCompatActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
     }
-
-
 }

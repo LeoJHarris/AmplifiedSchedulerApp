@@ -51,11 +51,12 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/slot_person_name"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="60dp"
+            android:layout_marginRight="30dp"
             android:layout_marginTop="10dp"
             android:padding="5dp"
             android:text="Emaildsddsad"
             android:textSize="20sp" />
+
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

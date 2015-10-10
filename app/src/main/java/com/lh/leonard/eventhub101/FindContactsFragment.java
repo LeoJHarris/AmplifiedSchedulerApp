@@ -163,7 +163,7 @@ public class FindContactsFragment extends Fragment {
 
                         String title = "Send Contact Request?";
                         String message = "Do you want to send contact request to ";
-                        String messageToAppend = " for contact";
+                        String messageToAppend = "";
                         dialogMessage = "Sending contact request to " + personsFoundQuery.get(position).getFullname() + " ...";
                         postMessage = "Contact request sent to " + personsFoundQuery.get(position).getFullname();
 

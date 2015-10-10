@@ -26,13 +26,15 @@ public class UnseenSlotsDialog extends Activity {
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     List<Slot> slotsList;
     Slot slotSelected;
+
     AutoResizeTextView textViewSubject;
     AutoResizeTextView textViewMessage;
     AutoResizeTextView textViewDateAndTime;
     AutoResizeTextView textViewLocation;
-    AutoResizeTextView appointmentOnly;
+    AutoResizeTextView textViewMyEventSpacesAvaliable;
     AutoResizeTextView textViewOrganiser;
     Integer position;
+    List<Slot> slotsUnseen;
     Button buttonCantGo;
     Button buttonGoing;
     Person person;
@@ -55,7 +57,7 @@ public class UnseenSlotsDialog extends Activity {
         textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotMessage);
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotDateAndTime);
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotLocation);
-        appointmentOnly = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotAppointment);
+        textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
         textViewOrganiser = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotOrganizer);
         buttonGoing = (Button) findViewById(R.id.buttonRequestSlotGoing);
         buttonCantGo = (Button) findViewById(R.id.buttonRequestSlotCantGo);
@@ -64,7 +66,7 @@ public class UnseenSlotsDialog extends Activity {
         textViewMessage.setTypeface(regularFont);
         textViewDateAndTime.setTypeface(regularFont);
         textViewLocation.setTypeface(regularFont);
-        appointmentOnly.setTypeface(regularFont);
+        textViewMyEventSpacesAvaliable.setTypeface(regularFont);
         textViewOrganiser.setTypeface(regularFont);
         buttonCantGo.setTypeface(regularFont);
         buttonGoing.setTypeface(regularFont);
@@ -122,6 +124,8 @@ public class UnseenSlotsDialog extends Activity {
         @Override
         protected List<Address> doInBackground(Void... params) {
 
+
+            //TODO CAN BE OPTIMISED HERE : DOING 2 UNESSARY API CALLS COULD DO ONE
             Bundle data = getIntent().getExtras();
             position = data.getInt("slotRef");
 
@@ -131,12 +135,12 @@ public class UnseenSlotsDialog extends Activity {
 
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause.toString());
-
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
 
             slotsList = slots.getData();
 
             slotSelected = slotsList.get(position);
+
 
             Geocoder geocoder = new Geocoder(getBaseContext());
             List<Address> addresses = null;
@@ -152,6 +156,7 @@ public class UnseenSlotsDialog extends Activity {
 
         @Override
         protected void onPostExecute(List<Address> addresses) {
+
 
             if (slotSelected.getSubject() != null) {
                 textViewSubject.setText(slotSelected.getSubject());
@@ -184,7 +189,6 @@ public class UnseenSlotsDialog extends Activity {
                     content = new SpannableString("Where: " + addressText);
                     content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                     textViewLocation.setText(content); //TODO Button to get Location else just Text
-
                 }
             }
 
@@ -193,14 +197,18 @@ public class UnseenSlotsDialog extends Activity {
                 textViewOrganiser.setText(person.getFname() + " " + person.getLname() + " created this event");
             }
 
-            if (slotSelected.getAppointmentOnly() != null) {
-                if (slotSelected.getAppointmentOnly() == true) {
+            if (slotSelected.getMaxattendees() != 0) {
 
-                    appointmentOnly.setText("Appointment required"); // Button to set appointment
-                } else {
 
-                    appointmentOnly.setText("Appointment not required"); // Button to set appointment
+                Integer spacesAvaliable = slotSelected.getMaxattendees();
+                Integer going = slotSelected.getAttendees().size();
+                {
+                    textViewMyEventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
+
                 }
+
+            } else {
+                textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
             }
         }
     }
@@ -250,15 +258,5 @@ public class UnseenSlotsDialog extends Activity {
 
 
         }
-    }
-
-    public void onBackPressed() {
-
-        Intent backToUnseenSlots = new Intent(UnseenSlotsDialog.this, UnseenSlotsFragment.class);
-        backToUnseenSlots.putExtra("objectid", slotSelected.getObjectId());
-
-        startActivity(backToUnseenSlots);
-
-
     }
 }

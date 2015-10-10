@@ -20,7 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.NumberPicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -56,6 +56,7 @@ public class CreateSlot extends Activity {
     Boolean dateSet = false;
     Boolean subjectSet = false;
     Boolean contactsAdded = false;
+    Boolean startTimeSet = false;
 
     String justStartTime;
     String justEndTime;
@@ -63,21 +64,18 @@ public class CreateSlot extends Activity {
     List<Person> myContactsPersonsList;
     BackendlessCollection<Person> myContactPersons;
 
-
     BackendlessCollection<Person> persons;
 
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
 
     ArrayList<String> contactsIds = new ArrayList<>();
 
-    CheckBox checkBoxString;
-
     Person personLoggedIn;
     LatLng latLng;
     int outputInt = 0;
     Button recipientsForSlotBtn;
     public Button buttonSendSlot;
-
+    EditText editTextNumberAttendeesAvaliable;
     EditText slotSubjectEditText;
     EditText slotMessageEditText;
     TextView slotsDate;
@@ -88,7 +86,7 @@ public class CreateSlot extends Activity {
     StringBuilder dateFormatSet = new StringBuilder();
 
     Button btnSlotDate;
-    Button btnGetLocationGeoPoint;
+    ImageButton btnGetLocationGeoPoint;
 
     CharSequence[] testArray;
     ArrayList<Integer> mSelectedItems;
@@ -119,24 +117,26 @@ public class CreateSlot extends Activity {
         final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
 
         // TextView tv = (TextView) findViewById(R.id.tv);
-        NumberPicker numberPickerAttendees = (NumberPicker) findViewById(R.id.numberPickerAttendees);
-        final TextView tvNumberAttendees = (TextView) findViewById(R.id.tvSpaces);
+        //NumberPicker numberPickerAttendees = (NumberPicker) findViewById(R.id.numberPickerAttendees);
+        // final TextView tvNumberAttendees = (TextView) findViewById(R.id.tvSpaces);
         //Populate NumberPicker values from minimum and maximum value range
         //Set the minimum value of NumberPicker
-        numberPickerAttendees.setMinValue(1);
+        //  numberPickerAttendees.setMinValue(1);
         //Specify the maximum value/number of NumberPicker
-        numberPickerAttendees.setMaxValue(1000);
-        numberPickerAttendees.setWrapSelectorWheel(true);
+        //  numberPickerAttendees.setMaxValue(1000);
+        //numberPickerAttendees.setWrapSelectorWheel(true);
         //Set a value change listener for NumberPicker
-        numberPickerAttendees.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //Display the newly selected number from picker
+        //  numberPickerAttendees.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        ////   @Override
+        //   public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        //Display the newly selected number from picker
 
-                tvNumberAttendees.setText("Spaces selected: " + newVal);
-                numberAttendeesAvaliable = newVal;
-            }
-        });
+        //         tvNumberAttendees.setText("Spaces selected: " + newVal);
+        //     numberAttendeesAvaliable = newVal;
+        //      }
+        //   });
+
+        editTextNumberAttendeesAvaliable = (EditText) findViewById(R.id.numberPickerAttendees);
         recipientsForSlotBtn = (Button) findViewById(R.id.recipientsForSlot);
         slotsDate = (TextView) findViewById(R.id.textViewDate);
         btnSlotDate = (Button) findViewById(R.id.btnSlotDate);
@@ -147,18 +147,17 @@ public class CreateSlot extends Activity {
         locationStringTV = (TextView) findViewById(R.id.editTextStringLocation);
         TextView textViewHeaderCreateSlot = (TextView) findViewById(R.id.textViewHeaderCreateSlot);
         TextView tvSpaces = (TextView) findViewById(R.id.tvSpaces);
-        CheckBox checkBoxAppointmentRequired = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
+        // CheckBox checkBoxAppointmentRequired = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
         buttonSendSlot = (Button) findViewById(R.id.buttonSendSlot);
-        checkBoxString = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
+        //checkBoxString = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
         Button btnSlotDate = (Button) findViewById(R.id.btnSlotDate);
         Button btnClickSetStartTime = (Button) findViewById(R.id.btnClickSetStartTime);
         btnClickSetEndTime = (Button) findViewById(R.id.btnClickSetEndTime);
-        btnGetLocationGeoPoint = (Button) findViewById(R.id.btnGetLocationGeoPoint);
+        btnGetLocationGeoPoint = (ImageButton) findViewById(R.id.btnGetLocationGeoPoint);
 
-        btnGetLocationGeoPoint.setTypeface(regularFont);
         recipientsForSlotBtn.setTypeface(regularFont);
         slotsDate.setTypeface(regularFont);
-        checkBoxAppointmentRequired.setTypeface(regularFont);
+        // checkBoxAppointmentRequired.setTypeface(regularFont);
         btnSlotDate.setTypeface(regularFont);
         slotSubjectEditText.setTypeface(regularFont);
         slotMessageEditText.setTypeface(regularFont);
@@ -167,7 +166,7 @@ public class CreateSlot extends Activity {
         locationStringTV.setTypeface(regularFont);
         textViewHeaderCreateSlot.setTypeface(regularFont);
         tvSpaces.setTypeface(regularFont);
-        checkBoxString.setTypeface(regularFont);
+        //checkBoxString.setTypeface(regularFont);
         buttonSendSlot.setTypeface(regularFont);
         btnClickSetStartTime.setTypeface(regularFont);
         btnClickSetEndTime.setTypeface(regularFont);
@@ -205,11 +204,92 @@ public class CreateSlot extends Activity {
         // set current time into output textview
         updateTime(hour, minute);
 
+        new GetContactsThread().execute();
 
         recipientsForSlotBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GetContactsThread().execute();
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateSlot.this);
+
+                // set the dialog title
+                builder.setTitle("Add contacts for Event")
+
+                        // specify the list array, the items to be selected by default (null for none),
+                        // and the listener through which to receive call backs when items are selected
+                        // R.array.choices were set in the resources res/values/strings.xml
+                        .setMultiChoiceItems(testArray, null, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+                                if (isChecked) {
+                                    // if the user checked the item, add it to the selected items
+                                    mSelectedItems.add(which);
+                                } else if (mSelectedItems.contains(which)) {
+                                    // else if the item is already in the array, remove it
+                                    mSelectedItems.remove(Integer.valueOf(which));
+                                }
+
+                                // you can also add other codes here,
+                                // for example a tool tip that gives user an idea of what he is selecting
+                                // showToast("Just an example description.");
+                            }
+
+                        })
+
+                                // Set the action buttons
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                // user clicked OK, so save the mSelectedItems results somewhere
+                                // here we are trying to retrieve the selected items indices
+                                String selectedIndex = "";
+                                for (Integer i : mSelectedItems) {
+                                    selectedIndex += i + ", ";
+                                }
+
+                                addedContactsForSlot = new ArrayList<Person>();
+
+                                String[] selectedContacts = selectedIndex.split(",");
+
+                                for (int j = 0; j < selectedContacts.length - 1; j++) {
+
+                                    if (selectedContacts[j] != " ") {
+                                        addedContactsForSlot.add(myContactsPersonsList.get(Integer.parseInt(selectedContacts[j])));
+                                    }
+                                }
+                                if (!(addedContactsForSlot.isEmpty())) {
+                                    recipientsForSlotBtn.setText("Contact(s) added");
+                                    recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
+                                    recipientsForSlotBtn.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
+
+                                    contactsAdded = true;
+
+                                    Toast.makeText(CreateSlot.this, "Contact(s) Added", Toast.LENGTH_SHORT).show();
+
+                                    if (dateSet && subjectSet && startTimeSet) {
+                                        buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
+                                        buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
+                                    }
+
+                                } else {
+                                    Toast.makeText(CreateSlot.this, "No Contacts Added", Toast.LENGTH_LONG).show();
+                                    contactsAdded = false;
+                                    recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                                    buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
+                                    buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.red));
+                                }
+                            }
+                        })
+
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                // removes the AlertDialog in the screen
+                            }
+                        })
+
+                        .show();
             }
         });
 
@@ -236,6 +316,11 @@ public class CreateSlot extends Activity {
 
                         slotSubjectEditText.getText().toString();
                         date = slotsDate.getText().toString();
+                        if (editTextNumberAttendeesAvaliable.getText().toString().equals("")) {
+                            numberAttendeesAvaliable = 0;
+                        } else {
+                            numberAttendeesAvaliable = Integer.parseInt(editTextNumberAttendeesAvaliable.getText().toString());
+                        }
                         startTime = slotStartTime.getText().toString();
                         endTime = slotEndTime.getText().toString();
                         subject = slotSubjectEditText.getText().toString();
@@ -245,31 +330,8 @@ public class CreateSlot extends Activity {
 
                         String emptys = "";
 
-                        if (subject.trim().equals("") || date.equals("Please Set Date") || startTime.equals("Please Set Start Time") || endTime.trim().equals("Please Set End Time") || endTime.trim().equals("") || message.trim().equals("")) {
-                            if (date.equals("Please Set Date")) {
-                                emptys += "Date";
-                            }
-                            if (startTime.equals("Please Set Start Time")) {
-                                if ((emptys.trim().equals(""))) {
-                                    emptys += "Start Time";
-                                } else {
-                                    emptys += ", Start Time";
-                                }
-                            }
-                            if (endTime.trim().equals("Please Set End Time")) {
-                                if ((emptys.trim().equals(""))) {
-                                    emptys += "End Time";
-                                } else {
-                                    emptys += ", End Time";
-                                }
-                            }
-                            if (message.trim().equals("")) {
-                                if ((emptys.trim().equals(""))) {
-                                    emptys += "Message";
-                                } else {
-                                    emptys += ", Message";
-                                }
-                            }
+                        if (subject.trim().equals("") || date.equals("Set Date") || startTime.equals("Set Start Time")) {
+
                             if (subject.trim().equals("")) {
                                 if ((emptys.trim().equals(""))) {
                                     emptys += "Subject";
@@ -277,17 +339,41 @@ public class CreateSlot extends Activity {
                                     emptys += ", Subject";
                                 }
                             }
-                            Toast.makeText(getApplicationContext(), "Please ensure inputs: " + emptys + " are not empty", Toast.LENGTH_LONG).show();
+                            if (startTime.equals("Set Start Time")) {
+                                if ((emptys.trim().equals(""))) {
+                                    emptys += "Start Time";
+                                } else {
+                                    emptys += ", Start Time";
+                                }
+                            }
+                            if (date.equals("Set Date")) {
+                                emptys += "Date";
+                            }
+//                            if (endTime.trim().equals("Please Set End Time")) {
+//                                if ((emptys.trim().equals(""))) {
+//                                    emptys += "End Time";
+//                                } else {
+//                                    emptys += ", End Time";
+//                                }
+//                            }
+//                            if (message.trim().equals("")) {
+//                                if ((emptys.trim().equals(""))) {
+//                                    emptys += "Message";
+//                                } else {
+//                                    emptys += ", Message";
+//                                }
+//                            }
+                            Toast.makeText(getApplicationContext(), "Please input: " + emptys, Toast.LENGTH_SHORT).show();
                         } else {
 
 
                             new ParseURL().execute();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "No Contacts Selected For Slot", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Add contacts for events", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "No Contacts Selected For Slot", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Add contacts for event", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -300,12 +386,12 @@ public class CreateSlot extends Activity {
                     if ((!(string.equals("")))) {
                         slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
 
-                        if (dateSet && contactsAdded) {
-                            buttonSendSlot.getResources().getColorStateList(R.color.darkgreen);
+                        if (dateSet && contactsAdded && startTimeSet) {
+                            buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                             buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
                         }
 
-                        slotSubjectEditText.setTextColor(getResources().getColorStateList(R.color.darkgreen));
+                        slotSubjectEditText.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                         subjectSet = true;
 
                     } else {
@@ -323,7 +409,7 @@ public class CreateSlot extends Activity {
                 if (!hasFocus) {
                     String string = slotMessageEditText.getText().toString();
                     if ((!(string.equals("")))) {
-                        slotMessageEditText.setTextColor(getResources().getColorStateList(R.color.darkgreen));
+                        slotMessageEditText.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                         slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
                     } else {
                         slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -338,7 +424,7 @@ public class CreateSlot extends Activity {
                     String string = locationStringTV.getText().toString();
                     if ((!(string.equals("")))) {
                         locationStringTV.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                        locationStringTV.setTextColor(getResources().getColorStateList(R.color.darkgreen));
+                        locationStringTV.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                     } else {
                         locationStringTV.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     }
@@ -366,22 +452,22 @@ public class CreateSlot extends Activity {
 
     }
 
-    public void onCheckboxClicked(View view) {
-        // Is the view now checked?
-        boolean checked = ((CheckBox) view).isChecked();
-
-        // Check which checkbox was clicked
-        switch (view.getId()) {
-            case R.id.checkBoxAppointmentRequired:
-                if (checked) {
-                    appointmentBoolean = true;
-
-                } else {
-                    appointmentBoolean = false;
-                }
-                break;
-        }
-    }
+//    public void onCheckboxClicked(View view) {
+//        // Is the view now checked?
+//        boolean checked = ((CheckBox) view).isChecked();
+//
+//        // Check which checkbox was clicked
+//        switch (view.getId()) {
+//            case R.id.checkBoxAppointmentRequired:
+//                if (checked) {
+//                    appointmentBoolean = true;
+//
+//                } else {
+//                    appointmentBoolean = false;
+//                }
+//                break;
+//        }
+//    }
 
     @SuppressWarnings("deprecation")
     public void setDate(View view) {
@@ -418,14 +504,16 @@ public class CreateSlot extends Activity {
     };
 
     private void showDate(int year, int month, int day) {
-        dateView.setText("Date Selected: " + dateFormatSet.append(day).append("/")
+
+        dateFormatSet.setLength(0);
+        dateView.setText("Date: " + dateFormatSet.append(day).append("/")
                 .append(month).append("/").append(year));
 
         dateSet = true;
         btnSlotDate.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
 
         if (subjectSet && contactsAdded) {
-            buttonSendSlot.getResources().getColorStateList(R.color.darkgreen);
+            buttonSendSlot.getResources().getColorStateList(R.color.deepdarkgreen);
             buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
         }
     }
@@ -514,14 +602,20 @@ public class CreateSlot extends Activity {
 
         if (outputInt == 1) {
             justStartTime = aTime;
-            output.setText("Start Time Selected: " + aTime);
+            output.setText("Start Time: " + aTime);
 
+            if (dateSet && contactsAdded && subjectSet) {
+                buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
+                buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
+            }
+
+            startTimeSet = true;
             btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
 
         } else if (outputInt == 2) {
 
             justEndTime = aTime;
-            output1.setText("End Time Selected: " + aTime);
+            output1.setText("End Time: " + aTime);
             btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
         }
     }
@@ -553,19 +647,24 @@ public class CreateSlot extends Activity {
             slot.setSubject(subject);
             slot.setMessage(message);
             slot.setMaxattendees(numberAttendeesAvaliable);
-            slot.setAppointmentOnly(appointmentBoolean);
+            // slot.setAppointmentOnly(appointmentBoolean);
             slot.setDateofslot(dateFormatSet.toString());
             slot.setStart(justStartTime);
             slot.setEnd(justEndTime);
+            slot.setMaxattendees(numberAttendeesAvaliable);
             slot.setPhone(personLoggedIn.getPhone());
 
             slot.setOwnername(personLoggedIn.getFname() + " " + personLoggedIn.getLname());
 
-            Map<String, Object> metaMap = new HashMap<>();
-            metaMap.put("slot", slot);
-            eventLocation.setMetadata(metaMap);
+            if (eventLocation != null) {
 
-            slot.setLocation(eventLocation);
+                Map<String, Object> metaMap = new HashMap<>();
+                metaMap.put("slot", slot);
+                eventLocation.setMetadata(metaMap);
+
+
+                slot.setLocation(eventLocation);
+            }
             Slot savedSlot = Backendless.Data.save(slot);
 
 
@@ -588,7 +687,7 @@ public class CreateSlot extends Activity {
                 relationProps.add("pendingresponseslots");
                 relationProps.add("unseenSlots");
 
-                sendsmss(pId.getPhone(), message);
+                sendsmss(pId.getPhone(), message, subject, dateFormatSet.toString(), justEndTime);
 
                 Backendless.Data.of(Person.class).loadRelations(personContact, contactRelationProps);
                 personContact.addSlotToPendingResponseSlot(savedSlot);
@@ -604,32 +703,42 @@ public class CreateSlot extends Activity {
         protected void onPostExecute(Void result) {
 
             slotSubjectEditText.setText("");
-            slotsDate.setText("Please Set Date");
-            slotStartTime.setText("Please Set Start Time");
-            slotEndTime.setText("Please Set End Time");
+            slotsDate.setText("Set Date");
+            slotStartTime.setText("Set Start Time");
+            slotEndTime.setText("Set End Time");
             slotSubjectEditText.setText("");
             slotMessageEditText.setText("");
 
             ringProgressDialog.dismiss();
 
-            Toast.makeText(CreateSlot.this, "Slot Sent To Selected Contacts", Toast.LENGTH_LONG).show();
+            Toast.makeText(CreateSlot.this, "Event Sent", Toast.LENGTH_LONG).show();
         }
     }
 
     @JavascriptInterface
-    public void sendsmss(String phoneNumber, String message) {
+    public void sendsmss(String phoneNumber, String message, String subject, String date, String time) {
 
-        int lengthToSubString;
-        int lengthMessage = message.length();
-        if (lengthMessage <= 160) {
-            lengthToSubString = lengthMessage;
+        String fullnameLoggedin = personLoggedIn.getFullname();
+
+        if (!message.trim().equals("")) {
+            int lengthToSubString;
+            int lengthMessage = message.length();
+            if (lengthMessage <= 120) {
+                lengthToSubString = lengthMessage;
+            } else {
+                lengthToSubString = 120;
+            }
+            String messageSubString = message.substring(0, lengthToSubString);
+            messageSubString = "EVENTHUB101: event invite. Host: " + fullnameLoggedin +
+                    ". " + subject + " " + messageSubString + " " + " when: " + date + " at " + time;
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         } else {
-            lengthToSubString = 160;
+            String messageSubString = "EVENTHUB101: event invite. Host: " + fullnameLoggedin +
+                    ". " + subject + " no message included " + " when: " + date + " at " + time;
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         }
-        String messageSubString = message.substring(0, lengthToSubString);
-
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }
 
     private class GetContactsThread extends AsyncTask<Void, Integer, Void> {
@@ -668,95 +777,12 @@ public class CreateSlot extends Activity {
                 testArray[i] = pers.fullname;
                 i++;
             }
-
-
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(CreateSlot.this);
-
-            // set the dialog title
-            builder.setTitle("Select Contacts For Your Slot")
-
-                    // specify the list array, the items to be selected by default (null for none),
-                    // and the listener through which to receive call backs when items are selected
-                    // R.array.choices were set in the resources res/values/strings.xml
-                    .setMultiChoiceItems(testArray, null, new DialogInterface.OnMultiChoiceClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
-                            if (isChecked) {
-                                // if the user checked the item, add it to the selected items
-                                mSelectedItems.add(which);
-                            } else if (mSelectedItems.contains(which)) {
-                                // else if the item is already in the array, remove it
-                                mSelectedItems.remove(Integer.valueOf(which));
-                            }
-
-                            // you can also add other codes here,
-                            // for example a tool tip that gives user an idea of what he is selecting
-                            // showToast("Just an example description.");
-                        }
-
-                    })
-
-                            // Set the action buttons
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-
-                            // user clicked OK, so save the mSelectedItems results somewhere
-                            // here we are trying to retrieve the selected items indices
-                            String selectedIndex = "";
-                            for (Integer i : mSelectedItems) {
-                                selectedIndex += i + ", ";
-                            }
-
-                            addedContactsForSlot = new ArrayList<Person>();
-
-                            String[] selectedContacts = selectedIndex.split(",");
-
-                            for (int j = 0; j < selectedContacts.length - 1; j++) {
-
-                                if (selectedContacts[j] != " ") {
-                                    addedContactsForSlot.add(myContactsPersonsList.get(Integer.parseInt(selectedContacts[j])));
-                                }
-                            }
-                            if (!(addedContactsForSlot.isEmpty())) {
-                                recipientsForSlotBtn.setText("Contacts added");
-                                recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                                recipientsForSlotBtn.setTextColor(getResources().getColorStateList(R.color.darkgreen));
-
-                                contactsAdded = true;
-
-                                Toast.makeText(CreateSlot.this, "Contacts Added", Toast.LENGTH_LONG).show();
-
-                                if (dateSet && subjectSet) {
-                                    buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.darkgreen));
-                                    buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                                }
-
-                            } else {
-                                Toast.makeText(CreateSlot.this, "No Contacts Added", Toast.LENGTH_LONG).show();
-                                contactsAdded = false;
-                                recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                                buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
-                                buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.red));
-                            }
-                        }
-                    })
-
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            // removes the AlertDialog in the screen
-                        }
-                    })
-
-                    .show();
         }
     }
 }

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
     public SlotViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
 
-
         regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
         SlotViewHolder pvh = new SlotViewHolder(v);
@@ -49,6 +47,19 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
         slotViewHolder.slotDate.setText("Date: " + listSlots.get(i).getDateofslot().toString());
         slotViewHolder.slotFullName.setText("From: " + listSlots.get(i).getOwnername().toString());
 
+//        if (listSlots.get(i).getMaxattendees() != 0) {
+//            Integer spacesAvaliable = listSlots.get(i).getMaxattendees();
+//            Integer going = listSlots.get(i).getAttendees().size();
+//            {
+//
+//                slotViewHolder.slotAvaliability.setText(going + " going, waiting response from " + (spacesAvaliable - going));
+//
+//            }
+//
+//        } else {
+//            slotViewHolder.slotAvaliability.setText("Unlimited Spaces");
+//        }
+
         int lengthToSubString;
         int lengthMessage = listSlots.get(i).getMessage().length();
         if (lengthMessage < 50) {
@@ -60,6 +71,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
         messageSubString += "...";
         slotViewHolder.slotMessage.setText("Message: " + messageSubString);
 
+        // slotViewHolder.slotAvaliability.setTypeface(regularFont);
         slotViewHolder.slotFullName.setTypeface(regularFont);
         slotViewHolder.slotTitle.setTypeface(regularFont);
         slotViewHolder.slotMessage.setTypeface(regularFont);
@@ -111,10 +123,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
 
     public static class SlotViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
-        TextView slotTitle;
-        TextView slotDate;
-        TextView slotMessage;
-        TextView slotFullName;
+        AutoResizeTextView slotTitle;
+        AutoResizeTextView slotDate;
+        AutoResizeTextView slotMessage;
+        AutoResizeTextView slotFullName;
+        //  AutoResizeTextView slotAvaliability;
 
         SlotViewHolder(View itemView) {
             super(itemView);
@@ -123,6 +136,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
             slotDate = (AutoResizeTextView) itemView.findViewById(R.id.slot_date);
             slotMessage = (AutoResizeTextView) itemView.findViewById(R.id.slot_message);
             slotFullName = (AutoResizeTextView) itemView.findViewById(R.id.slot_person_name);
+            //     slotAvaliability = (AutoResizeTextView) itemView.findViewById(R.id.Availability);
         }
     }
 }

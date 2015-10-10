@@ -26,22 +26,12 @@ public class ForgotPasswordReset extends Activity {
         final EditText emailPasswordRecovery = (EditText) findViewById(R.id.emailPasswordRecovery);
         TextView textViewHeaderPasswordReset = (TextView) findViewById(R.id.textViewHeaderPasswordReset);
         Button passwordwordRecoveryButton = (Button) findViewById(R.id.buttonEmailNewPassword);
-        Button forgotPasswordToMainBack = (Button) findViewById(R.id.buttonForgotPasswordBackToMain);
 
         final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
 
         textViewHeaderPasswordReset.setTypeface(regularFont);
         emailPasswordRecovery.setTypeface(regularFont);
         passwordwordRecoveryButton.setTypeface(regularFont);
-        forgotPasswordToMainBack.setTypeface(regularFont);
-
-        forgotPasswordToMainBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent backToMainIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(backToMainIntent);
-            }
-        });
 
         passwordwordRecoveryButton.setOnClickListener(new View.OnClickListener() {
             @Override

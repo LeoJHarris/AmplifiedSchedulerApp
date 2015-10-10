@@ -62,7 +62,7 @@
                 android:textSize="30sp" />
 
             <com.lh.leonard.eventhub101.AutoResizeTextView
-                android:id="@+id/textViewGoingToSlotAppointment"
+                android:id="@+id/textViewMyEventSpacesAvaliable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textViewGoingToSlotLocation"
@@ -76,7 +76,7 @@
                 android:id="@+id/textViewGoingToSlotOrganizer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textViewGoingToSlotAppointment"
+                android:layout_below="@id/textViewMyEventSpacesAvaliable"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
