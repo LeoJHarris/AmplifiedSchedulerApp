@@ -728,7 +728,7 @@ public class CreateSlot extends AppCompatActivity implements
                 relationProps.add("pendingresponseslots");
                 relationProps.add("unseenSlots");
 
-                sendsmss(pId.getPhone(), message, subject, dateFormatSet.toString(), justEndTime);
+                sendsmss(pId.getPhone(), message, subject, dateFormatSet.toString(), justStartTime);
 
                 Backendless.Data.of(Person.class).loadRelations(personContact, contactRelationProps);
                 personContact.addSlotToPendingResponseSlot(savedSlot);
@@ -760,18 +760,21 @@ public class CreateSlot extends AppCompatActivity implements
     public void sendsmss(String phoneNumber, String message, String subject, String date, String time) {
 
         String fullnameLoggedin = personLoggedIn.getFullname();
+        String dots = "";
 
         if (!message.trim().equals("")) {
             int lengthToSubString;
             int lengthMessage = message.length();
-            if (lengthMessage <= 120) {
+            if (lengthMessage <= 150) {
                 lengthToSubString = lengthMessage;
+
             } else {
-                lengthToSubString = 120;
+                lengthToSubString = 150;
+                dots = "...";
             }
             String messageSubString = message.substring(0, lengthToSubString);
             messageSubString = "EVENTHUB101: event invite. Host: " + fullnameLoggedin +
-                    ". " + subject + " " + messageSubString + " " + " when: " + date + " at " + time;
+                    ". " + subject + " " + messageSubString + dots + " " + " when: " + date + " at " + time;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         } else {

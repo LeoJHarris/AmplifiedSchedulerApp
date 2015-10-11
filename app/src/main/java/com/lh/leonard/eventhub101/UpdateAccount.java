@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -39,6 +38,8 @@ public class UpdateAccount extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.activity_update_account, container, false);
 
+        getActivity().setTitle("Account Details");
+
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 
         user = Backendless.UserService.CurrentUser();
@@ -46,7 +47,6 @@ public class UpdateAccount extends Fragment {
 
         final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
-        TextView textViewHeaderUpdateAccount = (TextView) v.findViewById(R.id.textViewHeaderUpdateAccount);
         editTextUpdateFNameReg = (EditText) v.findViewById(R.id.editTextUpdateFNameReg);
         editTextUpdateLNameReg = (EditText) v.findViewById(R.id.editTextUpdateLNameReg);
         editTextUpdatePhoneReg = (EditText) v.findViewById(R.id.editTextUpdatePhoneReg);
@@ -56,8 +56,6 @@ public class UpdateAccount extends Fragment {
 
         Button updateDetailsBtn = (Button) v.findViewById(R.id.buttonUpdateUser);
 
-
-        textViewHeaderUpdateAccount.setTypeface(regularFont);
         editTextUpdateFNameReg.setTypeface(regularFont);
         editTextUpdateLNameReg.setTypeface(regularFont);
         editTextUpdatePhoneReg.setTypeface(regularFont);

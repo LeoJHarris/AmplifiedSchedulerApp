@@ -35,7 +35,7 @@
                     android:gravity="center"
                     android:text="Create Event"
                     android:textColor="@color/white"
-                    android:textSize="60sp" />
+                    android:textSize="40sp" />
 
             </LinearLayout>
 
@@ -91,7 +91,7 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:hint="Event Message"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:textSize="25sp" />
                 </LinearLayout>
             </LinearLayout>

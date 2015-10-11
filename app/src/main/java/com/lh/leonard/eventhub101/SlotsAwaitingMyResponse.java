@@ -20,7 +20,6 @@ import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -393,7 +392,6 @@ public class SlotsAwaitingMyResponse extends Fragment {
             lengthToSubString = 300;
         }
         String messageSubString = message.substring(0, lengthToSubString);
-
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }

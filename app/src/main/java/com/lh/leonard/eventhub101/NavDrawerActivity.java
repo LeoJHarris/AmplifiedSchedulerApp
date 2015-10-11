@@ -22,7 +22,6 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
-
 public class NavDrawerActivity extends AppCompatActivity {
 
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
@@ -32,7 +31,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     //First We Declare Titles And Icons For Our Navigation Drawer List View
     //This Icons And Titles Are holded in an Array as you can see
 
-    String TITLES[] = {"Home", "Manage Account", "Create Event", "Find Contacts",
+    String TITLES[] = {"Home", "Manage Account", "Create Event", "Manage Contacts",
             "My Events", "Going To Events", "Invited Events", "Log Out"};
     int ICONS[] = {R.drawable.ic_home, R.drawable.ic_updateaccount, R.drawable.ic_createslot,
             R.drawable.ic_addcontact, R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
@@ -108,7 +107,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                 super.onDrawerOpened(drawerView);
                 // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
                 // open I am not going to put anything here)
-               // invalidateOptionsMenu();
+                // invalidateOptionsMenu();
 
                 mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
 
@@ -134,7 +133,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 // Code here will execute once drawer is closed
-              //  invalidateOptionsMenu();
+                //  invalidateOptionsMenu();
             }
 
         }; // Drawer Toggle Object Made
