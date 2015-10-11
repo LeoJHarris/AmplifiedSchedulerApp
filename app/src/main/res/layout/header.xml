@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:background="@drawable/bg3"
+    android:layout_height="60dp"
+    android:background="@drawable/bkdiscoheadersmall"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -15,25 +15,25 @@
         android:layout_alignParentStart="true"
         android:orientation="vertical">
 
-        <TextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="Akash Bangad"
+            android:text="Some one"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
 
             />
 
-        <TextView
+        <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="5dp"
-            android:text="akash.bangad93@gmail.com"
+            android:text="someone@gmail.com"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="normal"
@@ -41,11 +41,11 @@
             />
     </LinearLayout>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/circleView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/user" />
+    <!--<de.hdodenhof.circleimageview.CircleImageView-->
+    <!--android:id="@+id/circleView"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginTop="30dp"-->
+    <!--android:src="@drawable/user" />-->
 </RelativeLayout>
