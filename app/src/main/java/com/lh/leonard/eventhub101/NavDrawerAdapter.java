@@ -24,7 +24,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
     private int mIcons[];       // Int Array to store the passed icons resource value from MainActivity.java
 
     private String name;        //String Resource for header View Name
-    private int profile;        //int Resource for header view profile picture
+    // private int profile;        //int Resource for header view profile picture
     private String email;       //String Resource for header view email
 
 
@@ -36,9 +36,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
 
         TextView textView;
         ImageView imageView;
-        ImageView profile;
-        TextView Name;
-        TextView email;
+        // ImageView profile;
+        AutoResizeTextView Name;
+        AutoResizeTextView email;
 
 
         public ViewHolder(View itemView, int ViewType) {                 // Creating ViewHolder Constructor with View and viewType As a parameter
@@ -54,9 +54,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
             } else {
 
 
-                Name = (TextView) itemView.findViewById(R.id.name);         // Creating Text View object from header.xml for name
-                email = (TextView) itemView.findViewById(R.id.email);       // Creating Text View object from header.xml for email
-                profile = (ImageView) itemView.findViewById(R.id.circleView);// Creating Image view object from header.xml for profile pic
+                Name = (AutoResizeTextView) itemView.findViewById(R.id.name);         // Creating Text View object from header.xml for name
+                email = (AutoResizeTextView) itemView.findViewById(R.id.email);       // Creating Text View object from header.xml for email
+                //profile = (ImageView) itemView.findViewById(R.id.circleView);// Creating Image view object from header.xml for profile pic
                 Holderid = 0;                                                // Setting holder id = 0 as the object being populated are of type header view
             }
         }
@@ -68,10 +68,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
         mIcons = Icons;
         name = Name;
         email = Email;
-        profile = Profile;                     //here we assign those passed values to the values we declared here
+        // profile = Profile;                     //here we assign those passed values to the values we declared here
         //in adapter
-
-
     }
 
 
@@ -117,7 +115,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
             holder.imageView.setImageResource(mIcons[position - 1]);// Settimg the image with array of our icons
         } else {
 
-            holder.profile.setImageResource(profile);           // Similarly we set the resources for header view
+            // holder.profile.setImageResource(profile);           // Similarly we set the resources for header view
             holder.Name.setText(name);
             holder.email.setText(email);
         }

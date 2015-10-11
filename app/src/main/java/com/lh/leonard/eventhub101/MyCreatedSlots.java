@@ -56,25 +56,17 @@ public class MyCreatedSlots extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
+        getActivity().setTitle("My Events");
+
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
-
         final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
-
-        AutoResizeTextView textViewTitleSlotsDisplay = (AutoResizeTextView) v.findViewById(R.id.textViewTitleSlotsDisplay);
         textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
-
         textViewTextNoSlotAvaliable.setTypeface(regularFont);
-        textViewTitleSlotsDisplay.setText("My Events");
-
-        textViewTitleSlotsDisplay.setTypeface(regularFont);
-
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
-
         new ParseURL().execute();
-
         searchViewSlots = (SearchView) v.findViewById(R.id.searchViewSlots);
 
         searchViewSlots.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -250,6 +242,9 @@ public class MyCreatedSlots extends Fragment {
                 sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
             }
 
+
+            // Deleting process
+
             List<String> relations = new ArrayList<String>();
             relations.add("myCreatedSlot");
             Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
@@ -264,10 +259,11 @@ public class MyCreatedSlots extends Fragment {
                 }
             }
 
-            person.myCreatedSlot.remove(pos);
             eventRemoved = slot.get(positionInList).getSubject();
             slot.remove(positionInList);
-            Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person);
+            Backendless.Geo.removePoint(slot.get(positionInList).getLocation());
+
+            Long result = Backendless.Persistence.of(Slot.class).remove(slot.get(positionInList)); // TODO toast "'result' events removed"
 
             return null;
         }

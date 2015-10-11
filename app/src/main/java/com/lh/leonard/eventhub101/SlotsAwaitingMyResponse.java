@@ -20,7 +20,6 @@ import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -47,9 +46,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
     LinearLayoutManager llm;
     private ProgressBar progressBar;
     String eventRemoved;
-
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
-
     View v;
 
     @Override
@@ -57,19 +54,16 @@ public class SlotsAwaitingMyResponse extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
+        getActivity().setTitle("Event Invites");
+
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
-
-        TextView textViewTitleSlotsDisplay = (TextView) v.findViewById(R.id.textViewTitleSlotsDisplay);
         textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
-
-        textViewTitleSlotsDisplay.setText("Event Invites");
 
         final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
         textViewTextNoSlotAvaliable.setTypeface(regularFont);
-        textViewTitleSlotsDisplay.setTypeface(regularFont);
 
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 
@@ -94,9 +88,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                                                    }
                                                }
         );
-
         new ParseURL().execute();
-
         return v;
     }
 
@@ -125,9 +117,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
             dataQuery.setWhereClause(whereClause.toString());
 
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
-
             slot = slots.getData();
-
 
             for (int j = 0; j < slot.size(); j++) {
                 if (slot.get(j).getMaxattendees() != 0) {
@@ -210,7 +200,6 @@ public class SlotsAwaitingMyResponse extends Fragment {
                     TableRow rowSearchView = (TableRow) v.findViewById(R.id.rowSearchView);
                     rowSearchView.setVisibility(View.VISIBLE);
                     rv.setVisibility(View.VISIBLE);
-
                 } else {
                     progressBar.setVisibility(View.GONE);
                     textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
@@ -277,7 +266,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
 
                 rv.setLayoutManager(llm);
 
-                rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
+                // rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
                 Resources r = getResources();
 

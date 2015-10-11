@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        //final Typeface fontTitle = Typeface.createFromAsset(v.getContext().getAssets(), "assets/fonts/Pacifico.ttf");
+        getActivity().setTitle("Home");
 
         textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
 

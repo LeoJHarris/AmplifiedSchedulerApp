@@ -1,6 +1,5 @@
 package com.lh.leonard.eventhub101;
 
-
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -14,13 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-
 
 public class NavDrawerActivity extends AppCompatActivity {
 
@@ -31,8 +31,8 @@ public class NavDrawerActivity extends AppCompatActivity {
     //First We Declare Titles And Icons For Our Navigation Drawer List View
     //This Icons And Titles Are holded in an Array as you can see
 
-    String TITLES[] = {"Home", "Manage Account", "Create Event", "Find Contacts",
-            "My Events", "Going To Events", "Invited Events", "Log Out"};
+    String TITLES[] = {"Home", "Manage Account", "Create Event", "Manage Contacts",
+            "My Events", "Going To Events", "Event Invites", "Log Out"};
     int ICONS[] = {R.drawable.ic_home, R.drawable.ic_updateaccount, R.drawable.ic_createslot,
             R.drawable.ic_addcontact, R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
             R.drawable.ic_pendingrequestslots, R.drawable.ic_logout};
@@ -60,6 +60,9 @@ public class NavDrawerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_drawer);
+
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
@@ -104,7 +107,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                 super.onDrawerOpened(drawerView);
                 // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
                 // open I am not going to put anything here)
-                invalidateOptionsMenu();
+                // invalidateOptionsMenu();
 
                 mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
 
@@ -130,7 +133,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 // Code here will execute once drawer is closed
-                invalidateOptionsMenu();
+                //  invalidateOptionsMenu();
             }
 
         }; // Drawer Toggle Object Made
@@ -138,6 +141,28 @@ public class NavDrawerActivity extends AppCompatActivity {
         mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private void selectItem(int position) {
 
