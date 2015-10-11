@@ -32,7 +32,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     //This Icons And Titles Are holded in an Array as you can see
 
     String TITLES[] = {"Home", "Manage Account", "Create Event", "Manage Contacts",
-            "My Events", "Going To Events", "Invited Events", "Log Out"};
+            "My Events", "Going To Events", "Event Invites", "Log Out"};
     int ICONS[] = {R.drawable.ic_home, R.drawable.ic_updateaccount, R.drawable.ic_createslot,
             R.drawable.ic_addcontact, R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
             R.drawable.ic_pendingrequestslots, R.drawable.ic_logout};
