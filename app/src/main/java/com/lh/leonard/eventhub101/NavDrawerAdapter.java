@@ -70,8 +70,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
         email = Email;
         // profile = Profile;                     //here we assign those passed values to the values we declared here
         //in adapter
-
-
     }
 
 

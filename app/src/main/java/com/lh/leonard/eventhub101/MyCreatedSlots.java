@@ -56,25 +56,17 @@ public class MyCreatedSlots extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
+        getActivity().setTitle("My Events");
+
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
-
         final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
-
-        AutoResizeTextView textViewTitleSlotsDisplay = (AutoResizeTextView) v.findViewById(R.id.textViewTitleSlotsDisplay);
         textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
-
         textViewTextNoSlotAvaliable.setTypeface(regularFont);
-        textViewTitleSlotsDisplay.setText("My Events");
-
-        textViewTitleSlotsDisplay.setTypeface(regularFont);
-
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
-
         new ParseURL().execute();
-
         searchViewSlots = (SearchView) v.findViewById(R.id.searchViewSlots);
 
         searchViewSlots.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

@@ -57,19 +57,16 @@ public class SlotsAwaitingMyResponse extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
+        getActivity().setTitle("Event Invites");
+
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
-
-        TextView textViewTitleSlotsDisplay = (TextView) v.findViewById(R.id.textViewTitleSlotsDisplay);
         textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
-
-        textViewTitleSlotsDisplay.setText("Event Invites");
 
         final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
         textViewTextNoSlotAvaliable.setTypeface(regularFont);
-        textViewTitleSlotsDisplay.setTypeface(regularFont);
 
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 

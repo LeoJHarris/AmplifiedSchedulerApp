@@ -20,7 +20,6 @@ import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -55,20 +54,15 @@ public class SlotsImGoingTo extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
+        getActivity().setTitle("Going To Events");
+
         Backendless.Persistence.mapTableToClass("Person", Person.class);
-        Backendless.Persistence.mapTableToClass("Contact", Contact.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
-
-        TextView textViewTitleSlotsDisplay = (TextView) v.findViewById(R.id.textViewTitleSlotsDisplay);
-        textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
-
-        textViewTitleSlotsDisplay.setText("Going To Events");
 
         final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
-
+        textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
         textViewTextNoSlotAvaliable.setTypeface(regularFont);
-        textViewTitleSlotsDisplay.setTypeface(regularFont);
 
         person = (Person) userLoggedIn.getProperty("persons");
 

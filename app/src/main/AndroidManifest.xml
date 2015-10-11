@@ -77,11 +77,12 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".AddRemoveContactsTabbed"
-            android:label="@string/title_activity_add_remove_contacts_tabbed"
+            android:label="EventHub101 Home"
             android:noHistory="true" />
+
         <activity
             android:name=".NavDrawerActivity"
-            android:label="@string/title_activity_add_remove_contacts_tabbed" />
+            android:label="EventHub101" />
         <activity
             android:name=".SlotsPendingMyResponseDialog"
             android:label="@string/title_activity_slots_pending_my_request_dialog" />
