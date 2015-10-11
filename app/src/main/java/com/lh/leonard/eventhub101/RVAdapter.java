@@ -28,15 +28,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
 
         resources = R;
         listSlots = list;
-
     }
 
     @Override
     public SlotViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
-
         regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
-
         SlotViewHolder pvh = new SlotViewHolder(v);
         return pvh;
     }

@@ -46,9 +46,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
     LinearLayoutManager llm;
     private ProgressBar progressBar;
     String eventRemoved;
-
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
-
     View v;
 
     @Override
@@ -90,9 +88,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                                                    }
                                                }
         );
-
         new ParseURL().execute();
-
         return v;
     }
 
@@ -121,9 +117,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
             dataQuery.setWhereClause(whereClause.toString());
 
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
-
             slot = slots.getData();
-
 
             for (int j = 0; j < slot.size(); j++) {
                 if (slot.get(j).getMaxattendees() != 0) {
@@ -206,7 +200,6 @@ public class SlotsAwaitingMyResponse extends Fragment {
                     TableRow rowSearchView = (TableRow) v.findViewById(R.id.rowSearchView);
                     rowSearchView.setVisibility(View.VISIBLE);
                     rv.setVisibility(View.VISIBLE);
-
                 } else {
                     progressBar.setVisibility(View.GONE);
                     textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
@@ -273,7 +266,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
 
                 rv.setLayoutManager(llm);
 
-                rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
+                // rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
                 Resources r = getResources();
 
@@ -392,6 +385,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
             lengthToSubString = 300;
         }
         String messageSubString = message.substring(0, lengthToSubString);
+
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }

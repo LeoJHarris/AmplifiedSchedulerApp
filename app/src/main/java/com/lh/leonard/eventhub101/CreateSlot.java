@@ -694,7 +694,7 @@ public class CreateSlot extends AppCompatActivity implements
             geoPlace.setMetadata(locationMap);
 
             // slot.setPlace(place.getAddress().toString());
-            slot.setOwnername(personLoggedIn.getFname() + " " + personLoggedIn.getLname());
+            slot.setOwnername(personLoggedIn.getFullname());
 
             // eventLocation has the data from the map activity
             //  if (eventLocation != null) {
