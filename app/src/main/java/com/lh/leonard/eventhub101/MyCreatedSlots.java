@@ -242,6 +242,9 @@ public class MyCreatedSlots extends Fragment {
                 sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
             }
 
+
+            // Deleting process
+
             List<String> relations = new ArrayList<String>();
             relations.add("myCreatedSlot");
             Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
@@ -256,10 +259,11 @@ public class MyCreatedSlots extends Fragment {
                 }
             }
 
-            person.myCreatedSlot.remove(pos);
             eventRemoved = slot.get(positionInList).getSubject();
             slot.remove(positionInList);
-            Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person);
+            Backendless.Geo.removePoint(slot.get(positionInList).getLocation());
+
+            Long result = Backendless.Persistence.of(Slot.class).remove(slot.get(positionInList)); // TODO toast "'result' events removed"
 
             return null;
         }

@@ -774,7 +774,7 @@ public class CreateSlot extends AppCompatActivity implements
             }
             String messageSubString = message.substring(0, lengthToSubString);
             messageSubString = "EVENTHUB101: event invite. Host: " + fullnameLoggedin +
-                    ". " + subject + " " + messageSubString + dots + " " + " when: " + date + " at " + time;
+                    ". " + subject + ". Message: " + messageSubString + dots + " When: " + date + " at " + time;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         } else {
