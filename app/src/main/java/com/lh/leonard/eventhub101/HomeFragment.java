@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
         welcomeLabel.setTypeface(regularFont);
         textViewAppStatement.setTypeface(fontWelcome);
 
-        welcomeLabel.setText("Welcome! " + personLoggedIn.getFname() + " " + personLoggedIn.getLname());
+        welcomeLabel.setText("Welcome! " + personLoggedIn.getFullname());
 
         new ParseURL().execute();
 
