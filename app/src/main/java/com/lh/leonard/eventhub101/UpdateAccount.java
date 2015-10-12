@@ -18,7 +18,7 @@ public class UpdateAccount extends Fragment {
 
     View v;
     Person personLoggedIn;
-    EditText editTextUpdateFNameReg;
+    EditText editTextUpdateFNameReg; // TODO set hints to user info
     EditText editTextUpdateLNameReg;
     EditText editTextUpdatePhoneReg;
     EditText editTextUpdateEmail;

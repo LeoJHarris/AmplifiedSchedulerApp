@@ -238,7 +238,6 @@ public class PersonRequestsTabs extends Fragment {
                 List<String> relations = new ArrayList<String>();
                 relations.add("personsRequestingMe");
                 Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
-                System.out.println("Loaded object. Name - " + person.getFname() + ", relations - " + person.personsRequestingMe.size());
 
                 int pos = 0;
 
