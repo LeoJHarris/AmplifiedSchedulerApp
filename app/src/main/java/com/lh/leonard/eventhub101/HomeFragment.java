@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment {
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
-                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications - Click To Refresh"));
+                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications - Tap To Refresh"));
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
 //                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +131,7 @@ public class HomeFragment extends Fragment {
                     public void onClick(View v) {
 
                         Intent n = new Intent(getActivity(), NavDrawerActivity.class);
-                        n.putExtra("refresh", false);
+                        n.putExtra("refresh", true);
                         startActivity(n);
                     }
                 });

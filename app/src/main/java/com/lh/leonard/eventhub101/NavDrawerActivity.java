@@ -62,7 +62,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
 
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
-    Boolean updateNavDrawer = true;
+    Boolean updateNavDrawer = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class NavDrawerActivity extends AppCompatActivity {
         if (extras != null) {
             updateNavDrawer = extras.getBoolean("refresh");
         }
+
 
         // Set up a home fragment with some welcome in.
         Fragment home = new HomeFragment();
@@ -174,7 +175,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 //                        .addToBackStack("YOUR_SOURCE_FRAGMENT_TAG").commit();
 
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.frame_container, fragment,null
+                        .replace(R.id.frame_container, fragment, null
                         ).addToBackStack("home").commit();
 
             } else {
@@ -317,7 +318,6 @@ public class NavDrawerActivity extends AppCompatActivity {
             Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
             mDrawerToggle = new ActionBarDrawerToggle(NavDrawerActivity.this, Drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
-
                 @Override
                 public void onDrawerOpened(View drawerView) {
                     super.onDrawerOpened(drawerView);
@@ -355,7 +355,9 @@ public class NavDrawerActivity extends AppCompatActivity {
             }; // Drawer Toggle Object Made
             Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
             mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
-
+            if (updateNavDrawer) {
+                Drawer.openDrawer(mRecyclerView);
+            }
         }
     }
 }
