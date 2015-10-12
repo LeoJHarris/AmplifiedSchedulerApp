@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -67,7 +68,6 @@ public class HomeFragment extends Fragment {
         welcomeLabel.setText("Welcome! " + personLoggedIn.getFullname());
 
         new ParseURL().execute();
-
         return v;
     }
 
@@ -89,8 +89,13 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
+            //    try {
+            //       Thread.sleep(10000);
+            //   } catch (InterruptedException e) {
+            //   }
 
-            ArrayList<String> relationProps = new ArrayList<String>();
+
+            ArrayList<String> relationProps = new ArrayList<>();
             // relationProps.add("unseenSlots");
             relationProps.add("personsRequestingMe");
             // relationProps.add("goingToSlot");
@@ -101,7 +106,6 @@ public class HomeFragment extends Fragment {
             return null;
         }
 
-
         @Override
         protected void onPostExecute(Void result) {
 
@@ -110,7 +114,7 @@ public class HomeFragment extends Fragment {
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
-                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " New Notifications"));
+                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " New Notifications - Click Menu To Check"));
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
 //                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +132,9 @@ public class HomeFragment extends Fragment {
             } else {
                 textViewNotificationNumberHome.setText("No New Notifications");
             }
+            Toast.makeText(getContext(), "Check", Toast.LENGTH_SHORT).show();
+            //  new ParseURL().execute();
         }
     }
+
 }
