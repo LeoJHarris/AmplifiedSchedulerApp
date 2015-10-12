@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment {
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
-                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications - Tap To Refresh"));
+                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications - Tap To See"));
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
 //                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
