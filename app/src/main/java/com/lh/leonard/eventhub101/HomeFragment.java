@@ -2,7 +2,6 @@ package com.lh.leonard.eventhub101;
 
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -92,7 +91,11 @@ public class HomeFragment extends Fragment {
 
 
             ArrayList<String> relationProps = new ArrayList<String>();
-            relationProps.add("unseenSlots");
+            // relationProps.add("unseenSlots");
+            relationProps.add("personsRequestingMe");
+            // relationProps.add("goingToSlot");
+            // relationProps.add("myCreatedSlot");
+            relationProps.add("pendingResponseSlot");
             Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
 
             return null;
@@ -102,25 +105,28 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
 
-            if (personLoggedIn.numberUnseenSlots() >= 1) {
+            int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
+            int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
-                textViewNotificationNumberHome.setText(String.valueOf(personLoggedIn.numberUnseenSlots()) + " New Event Invites (under construction)");
+            if (personsRequestingMe >= 1 || invitedEvents >= 1) {
+
+                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " New Notifications"));
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
-                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Fragment unseenSlotsFragment = new UnseenSlotsFragment();
-
-                        FragmentManager fragmentManager = getFragmentManager();
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.frame_container, unseenSlotsFragment).addToBackStack("home").commit();
-                    }
-                });
+//                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        Fragment unseenSlotsFragment = new UnseenSlotsFragment();
+//
+//                        FragmentManager fragmentManager = getFragmentManager();
+//                        fragmentManager.beginTransaction()
+//                                .replace(R.id.frame_container, unseenSlotsFragment).addToBackStack("home").commit();
+//                    }
+//                });
 
             } else {
-                textViewNotificationNumberHome.setText("No New Notifications (under construction)");
+                textViewNotificationNumberHome.setText("No New Notifications");
             }
         }
     }
