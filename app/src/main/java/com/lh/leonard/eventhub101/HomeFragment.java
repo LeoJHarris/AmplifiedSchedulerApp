@@ -2,6 +2,7 @@ package com.lh.leonard.eventhub101;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -9,7 +10,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -89,32 +89,29 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            //    try {
-            //       Thread.sleep(10000);
-            //   } catch (InterruptedException e) {
-            //   }
+            if (isAdded()) {
 
-
-            ArrayList<String> relationProps = new ArrayList<>();
-            // relationProps.add("unseenSlots");
-            relationProps.add("personsRequestingMe");
-            // relationProps.add("goingToSlot");
-            // relationProps.add("myCreatedSlot");
-            relationProps.add("pendingResponseSlot");
-            Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
-
+                ArrayList<String> relationProps = new ArrayList<>();
+                // relationProps.add("unseenSlots");
+                relationProps.add("personsRequestingMe");
+                // relationProps.add("goingToSlot");
+                // relationProps.add("myCreatedSlot");
+                relationProps.add("pendingResponseSlot");
+                Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
 
+
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
-                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " New Notifications - Click Menu To Check"));
+                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications - Click To Refresh"));
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
 //                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
@@ -129,10 +126,20 @@ public class HomeFragment extends Fragment {
 //                    }
 //                });
 
+                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent n = new Intent(getActivity(), NavDrawerActivity.class);
+                        n.putExtra("refresh", false);
+                        startActivity(n);
+                    }
+                });
+
             } else {
                 textViewNotificationNumberHome.setText("No New Notifications");
             }
-            Toast.makeText(getContext(), "Check", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getContext(), "Check", Toast.LENGTH_SHORT).show();
             //  new ParseURL().execute();
         }
     }

@@ -28,6 +28,7 @@ import java.util.List;
 
 public class NavDrawerActivity extends AppCompatActivity {
 
+
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     ProgressDialog ringProgressDialog;
 
@@ -61,28 +62,29 @@ public class NavDrawerActivity extends AppCompatActivity {
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
 
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
-
+    Boolean updateNavDrawer = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_drawer);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            updateNavDrawer = extras.getBoolean("refresh");
+        }
 
         // Set up a home fragment with some welcome in.
         Fragment home = new HomeFragment();
-        FragmentManager FM = getFragmentManager();
-        FM
-                .beginTransaction()
-                .replace(R.id.frame_container, home)
-                .commit();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.frame_container, home, "home")
+                .addToBackStack("home1").commit();
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
-
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
         new GetNavInfo().execute();
@@ -164,10 +166,17 @@ public class NavDrawerActivity extends AppCompatActivity {
 
         if (fragment != null) {
             fragmentManager = getFragmentManager();
-            if (position != 1 && fragmentManager.getBackStackEntryCount() < 1) {
+            if (position == 1 || getFragmentManager().findFragmentByTag("home").isVisible()) {
 
-                fragmentManager.beginTransaction()
-                        .replace(R.id.frame_container, fragment).addToBackStack("home").commit();
+//                Fragment fragmentA = new FragmentA();
+//                getFragmentManager().beginTransaction()
+//                        .replace(R.id.MainFrameLayout, fragmentA, "YOUR_TARGET_FRAGMENT_TAG")
+//                        .addToBackStack("YOUR_SOURCE_FRAGMENT_TAG").commit();
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.frame_container, fragment,null
+                        ).addToBackStack("home").commit();
+
             } else {
                 fragmentManager.beginTransaction()
                         .replace(R.id.frame_container, fragment).commit();
@@ -183,18 +192,17 @@ public class NavDrawerActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (Drawer.isDrawerOpen(mRecyclerView)) {
-            Drawer.closeDrawer(mRecyclerView);
-        } else if (fragmentManager != null) {
-            if (fragmentManager.getBackStackEntryCount() >= 1) {
-                // fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()).getName();
-                System.out.println(fragmentManager.getBackStackEntryAt(0).getName());
-                System.out.println(fragmentManager.getBackStackEntryCount());
 
-                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                    fragmentManager.popBackStackImmediate();
-                }
+        Fragment HomeFragment = getFragmentManager().findFragmentByTag("home");
+
+
+        if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
+
+            if (Drawer.isDrawerOpen(mRecyclerView)) {
+                Drawer.closeDrawer(mRecyclerView);
             } else {
+
+
                 new AlertDialog.Builder(NavDrawerActivity.this)
                         .setTitle("Logging out").setMessage("You are about to logout out").
                         setIcon(R.drawable.ic_xclamationmark)
@@ -228,41 +236,10 @@ public class NavDrawerActivity extends AppCompatActivity {
                         }
                 ).show();
             }
-
         } else {
-
-            new AlertDialog.Builder(NavDrawerActivity.this)
-                    .setTitle("Logging out").setMessage("You are about to logout out").
-                    setIcon(R.drawable.ic_xclamationmark)
-                    .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                            ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
-                            ringProgressDialog.setCancelable(false);
-
-                            Backendless.UserService.logout(new AsyncCallback<Void>() {
-
-                                @Override
-                                public void handleResponse(Void aVoid) {
-
-                                    Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                                    logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
-                                    ringProgressDialog.dismiss();
-                                    startActivity(logOutIntent);
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault backendlessFault) {
-                                    ringProgressDialog.dismiss();
-                                }
-                            });
-                        }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                        }
-                    }
-            ).show();
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                fragmentManager.popBackStackImmediate();
+            }
         }
     }
 
