@@ -186,11 +186,11 @@ public class NavDrawerActivity extends AppCompatActivity {
 //                        .addToBackStack("YOUR_SOURCE_FRAGMENT_TAG").commit();
 
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.frame_container, fragment, "home_tag"
+                        .replace(R.id.frame_container, fragment, null
                         ).addToBackStack(null).commit();
 
             } else {
-                fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(null).commit();
+                fragmentManager.beginTransaction().add(R.id.frame_container, fragment).commit();
             }
         } else {
             // error in creating fragment
@@ -208,6 +208,7 @@ public class NavDrawerActivity extends AppCompatActivity {
         if (Drawer.isDrawerOpen(mRecyclerView)) {
             Drawer.closeDrawer(mRecyclerView);
         } else if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
+
 
             new AlertDialog.Builder(NavDrawerActivity.this)
                     .setTitle("Logging out").setMessage("You are about to logout out").
