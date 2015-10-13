@@ -28,11 +28,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SmsManager sms = SmsManager.getDefault();
-
-        // sms.sendTextMessage("+0278720215", null, "Yol", null, null);
-        // sendsmss("+64278720215", "HI");
-
         AutoResizeTextView textViewheaderSlotAppMain = (AutoResizeTextView) findViewById(R.id.textViewheaderSlotAppMain);
         EditText editTextEmailMain = (EditText) findViewById(R.id.emailSignIn);
         EditText editTextPasswordMain = (EditText) findViewById(R.id.passwordSignIn);
@@ -79,14 +74,22 @@ public class MainActivity extends Activity {
                 String[] NameSplit = NameArray.split(",");
 
                 Toast.makeText(this,
-                        "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1],
+                        "Successfully Registered Account For " + NameSplit[0] + " " + NameSplit[1],
                         Toast.LENGTH_LONG).show();
             } else if (extras.getString("loggedoutperson") != null) {
                 String NameArray = extras.getString("loggedoutperson");
                 String[] NameSplit = NameArray.split(",");
 
                 Toast.makeText(this,
-                        "Successfully logged out " + NameSplit[0] + " " + NameSplit[1],
+                        "Successfully Logged Out " + NameSplit[0] + " " + NameSplit[1],
+                        Toast.LENGTH_LONG).show();
+                loggedOutPersons = true;
+            } else if (extras.getString("loggedoutpersonError") != null) {
+                String NameArray = extras.getString("loggedoutperson");
+                String[] NameSplit = NameArray.split(",");
+
+                Toast.makeText(this,
+                        "Error Occurred: Logged Out " + NameSplit[0] + " " + NameSplit[1],
                         Toast.LENGTH_LONG).show();
                 loggedOutPersons = true;
             }

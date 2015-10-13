@@ -74,24 +74,13 @@ public class NavDrawerActivity extends AppCompatActivity {
             updateNavDrawer = extras.getBoolean("refresh");
         }
 
-        //If if we have already have the home fragment on the stack
-        if (fragmentManager != null) {
-            if (fragmentManager.getBackStackEntryCount() <= 0) {
-                // Set up a home fragment with some welcome in.
-                Fragment home = new HomeFragment();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.frame_container, home, "home_tag")
-                        .addToBackStack(null).commit();
 
-            }
-        }
-        //If the home fragment is not on the stack
-        else {
-            Fragment home = new HomeFragment();
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.frame_container, home, "home_tag")
-                    .addToBackStack("home_stack").commit();
-        }
+        // Set up a home fragment with some welcome in.
+        Fragment home = new HomeFragment();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.frame_container, home, "home_tag")
+                .addToBackStack("home_stack").commit();
+
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
@@ -175,7 +164,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             default:
                 break;
         }
-// Create fragment
+
         if (fragment != null) {
             fragmentManager = getFragmentManager();
             if (position == 1 || getFragmentManager().findFragmentByTag("home_tag").isVisible()) {
@@ -185,12 +174,14 @@ public class NavDrawerActivity extends AppCompatActivity {
 //                        .replace(R.id.MainFrameLayout, fragmentA, "YOUR_TARGET_FRAGMENT_TAG")
 //                        .addToBackStack("YOUR_SOURCE_FRAGMENT_TAG").commit();
 
+
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.frame_container, fragment, null
+                        .replace(R.id.frame_container, fragment
                         ).addToBackStack(null).commit();
 
             } else {
-                fragmentManager.beginTransaction().add(R.id.frame_container, fragment).commit();
+                fragmentManager.beginTransaction()
+                        .add(R.id.frame_container, fragment).commit();
             }
         } else {
             // error in creating fragment
@@ -203,50 +194,54 @@ public class NavDrawerActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+
         Fragment HomeFragment = getFragmentManager().findFragmentByTag("home_tag");
 
-        if (Drawer.isDrawerOpen(mRecyclerView)) {
-            Drawer.closeDrawer(mRecyclerView);
-        } else if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
+
+        if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
+
+            if (Drawer.isDrawerOpen(mRecyclerView)) {
+                Drawer.closeDrawer(mRecyclerView);
+            } else {
 
 
-            new AlertDialog.Builder(NavDrawerActivity.this)
-                    .setTitle("Logging out").setMessage("You are about to logout out").
-                    setIcon(R.drawable.ic_xclamationmark)
-                    .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
+                new AlertDialog.Builder(NavDrawerActivity.this)
+                        .setTitle("Logging out").setMessage("You are about to logout out").
+                        setIcon(R.drawable.ic_xclamationmark)
+                        .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
 
-                            ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
-                            ringProgressDialog.setCancelable(false);
+                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                                ringProgressDialog.setCancelable(false);
 
-                            Backendless.UserService.logout(new AsyncCallback<Void>() {
+                                Backendless.UserService.logout(new AsyncCallback<Void>() {
 
-                                @Override
-                                public void handleResponse(Void aVoid) {
+                                    @Override
+                                    public void handleResponse(Void aVoid) {
 
-                                    Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                                    logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
-                                    ringProgressDialog.dismiss();
-                                    startActivity(logOutIntent);
-                                }
+                                        Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
+                                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
+                                        ringProgressDialog.dismiss();
+                                        startActivity(logOutIntent);
+                                    }
 
-                                @Override
-                                public void handleFault(BackendlessFault backendlessFault) {
-                                    ringProgressDialog.dismiss();
-                                }
-                            });
+                                    @Override
+                                    public void handleFault(BackendlessFault backendlessFault) {
+                                        ringProgressDialog.dismiss();
+                                    }
+                                });
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
                         }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                        }
-                    }
-            ).show();
-
+                ).show();
+            }
         } else {
-
-            fragmentManager.popBackStack();
-
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                fragmentManager.popBackStackImmediate();
+            }
         }
     }
 

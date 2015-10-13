@@ -888,6 +888,4 @@ public class CreateSlot extends AppCompatActivity implements
         mPlaceArrayAdapter.setGoogleApiClient(null);
         Log.e(LOG_TAG, "Google Places API connection suspended.");
     }
-
-
 }
