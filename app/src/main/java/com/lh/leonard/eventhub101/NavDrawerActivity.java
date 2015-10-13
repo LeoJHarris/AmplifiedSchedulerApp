@@ -195,8 +195,6 @@ public class NavDrawerActivity extends AppCompatActivity {
 
 
         Fragment HomeFragment = getFragmentManager().findFragmentByTag("home");
-
-
         if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
 
             if (Drawer.isDrawerOpen(mRecyclerView)) {

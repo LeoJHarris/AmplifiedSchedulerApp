@@ -195,7 +195,7 @@ public class SlotsImGoingToDialog extends Activity {
             }
 
             if (person.fname != null) {
-                organizer.setText(person.getFname() + " " + person.getLname() + " created this event/slot");
+                organizer.setText(person.getFname() + " " + person.getLname() + " created this event");
             }
 
             if (slotSelected.getMaxattendees() != 0) {
@@ -244,7 +244,7 @@ public class SlotsImGoingToDialog extends Activity {
         protected void onPostExecute(Void result) {
 
             if (removed) {
-                Toast.makeText(getApplicationContext(), "Slot Removed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Event Removed", Toast.LENGTH_SHORT).show();
             }
             finish();
         }
