@@ -36,9 +36,12 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
+        textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
+
+        textViewNotificationNumberHome.setText("fetching  notifications");
+
         getActivity().setTitle("Home");
 
-        textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
 
         Backendless.Data.mapTableToClass("Contact", Contact.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
@@ -111,7 +114,7 @@ public class HomeFragment extends Fragment {
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
-                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications - Tap To Refresh"));
+                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications - Tap To See"));
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
 //                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {

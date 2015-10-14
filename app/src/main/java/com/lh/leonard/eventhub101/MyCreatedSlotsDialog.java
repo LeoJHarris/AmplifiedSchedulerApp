@@ -181,6 +181,10 @@ public class MyCreatedSlotsDialog extends Activity {
 
             if (slotSelected.getLocation() != null) {
 
+
+                System.out.println(slotSelected.getLocation().getName());
+
+
                 for (int i = 0; i < addresses.size(); i++) {
                     Address address = (Address) addresses.get(i);
                     String addressText = String.format("%s, %s",
@@ -245,7 +249,7 @@ public class MyCreatedSlotsDialog extends Activity {
 
             List<String> relations = new ArrayList<String>();
             relations.add("attendees");
-         //   relations.add("invitedpersons");
+            //   relations.add("invitedpersons");
             slotSelected = Backendless.Data.of(Slot.class).findById(slotSelected.getObjectId(), relations);
 
             return null;

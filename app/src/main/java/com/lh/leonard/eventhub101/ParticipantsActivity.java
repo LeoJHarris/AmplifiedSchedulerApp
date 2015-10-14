@@ -45,16 +45,14 @@ public class ParticipantsActivity extends Activity {
 
         final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
 
-        AutoResizeTextView textViewTitleSlotsDisplay = (AutoResizeTextView) findViewById(R.id.textViewTitleSlotsDisplay);
         textViewTextNoSlotAvaliable = (AutoResizeTextView) findViewById(R.id.textViewTextNoSlotAvaliable);
+
+        this.setTitle("People Going");
 
         SearchView searchView = (SearchView) findViewById(R.id.searchViewSlots);
 
         searchView.setQueryHint("Search People Going");
         textViewTextNoSlotAvaliable.setTypeface(regularFont);
-        textViewTitleSlotsDisplay.setText("People Going");
-
-        textViewTitleSlotsDisplay.setTypeface(regularFont);
 
         person = (Person) userLoggedIn.getProperty("persons");
 

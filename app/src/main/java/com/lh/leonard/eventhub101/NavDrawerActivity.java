@@ -78,8 +78,8 @@ public class NavDrawerActivity extends AppCompatActivity {
         // Set up a home fragment with some welcome in.
         Fragment home = new HomeFragment();
         getFragmentManager().beginTransaction()
-                .replace(R.id.frame_container, home, "home")
-                .addToBackStack("home1").commit();
+                .replace(R.id.frame_container, home, "home_tag")
+                .addToBackStack("home_stack").commit();
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -167,20 +167,21 @@ public class NavDrawerActivity extends AppCompatActivity {
 
         if (fragment != null) {
             fragmentManager = getFragmentManager();
-            if (position == 1 || getFragmentManager().findFragmentByTag("home").isVisible()) {
+            if (position == 1 || getFragmentManager().findFragmentByTag("home_tag").isVisible()) {
 
 //                Fragment fragmentA = new FragmentA();
 //                getFragmentManager().beginTransaction()
 //                        .replace(R.id.MainFrameLayout, fragmentA, "YOUR_TARGET_FRAGMENT_TAG")
 //                        .addToBackStack("YOUR_SOURCE_FRAGMENT_TAG").commit();
 
+
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.frame_container, fragment, null
-                        ).addToBackStack("home").commit();
+                        .replace(R.id.frame_container, fragment
+                        ).addToBackStack(null).commit();
 
             } else {
                 fragmentManager.beginTransaction()
-                        .replace(R.id.frame_container, fragment).commit();
+                        .add(R.id.frame_container, fragment).commit();
             }
         } else {
             // error in creating fragment
@@ -194,7 +195,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     public void onBackPressed() {
 
 
-        Fragment HomeFragment = getFragmentManager().findFragmentByTag("home");
+        Fragment HomeFragment = getFragmentManager().findFragmentByTag("home_tag");
 
 
         if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
