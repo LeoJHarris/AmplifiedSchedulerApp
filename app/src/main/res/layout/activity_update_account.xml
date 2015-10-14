@@ -1,135 +1,210 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
-    tools:context=".RegistrationActivity">
+    android:orientation="vertical"
+    tools:context="com.lh.leonard.eventhub101.NavDrawerActivity">
 
-
-    <RelativeLayout
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.lh.leonard.eventhub101.AutoResizeTextView
+                android:id="@+id/editTextNoticeUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_xclamationmark"
+                android:gravity="center"
+                android:hint="PLEASE NOTE: Only non-empty fields will be submitted."
+                android:paddingBottom="4dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="20dp"
+                android:textSize="20sp" />
+
+            <com.lh.leonard.eventhub101.AutoResizeTextView
+                android:id="@+id/txtLabelFnameUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:text="First Name:"
+                android:textSize="25sp" />
 
             <EditText
-                android:id="@+id/editTextUpdateFNameReg"
+                android:id="@+id/editTextUpdateFName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/edittext_top_bg"
-                android:drawableLeft="@drawable/user"
-                android:hint="First Name"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_user_profile"
+                android:ems="10"
+                android:hint="Tap To Enter New First Name"
                 android:inputType="text"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:textColorHint="#bbbbbb"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textSize="25sp" />
+
+            <com.lh.leonard.eventhub101.AutoResizeTextView
+                android:id="@+id/txtLabeLnameUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:text="Last Name:"
+                android:textSize="25sp" />
+
 
             <EditText
-                android:id="@+id/editTextUpdateLNameReg"
+                android:id="@+id/editTextUpdateLName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/edittext_top_bg"
-                android:drawableLeft="@drawable/user"
-                android:hint="Last Name"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_user_profile"
+                android:ems="10"
+                android:hint="Tap To Enter New Last Name"
                 android:inputType="text"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:textColorHint="#bbbbbb"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textSize="25sp" />
 
-            <EditText
-                android:id="@+id/editTextUpdatePhoneReg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/edittext_top_bg"
-                android:drawableLeft="@drawable/user"
-                android:hint="Cell Phone"
-                android:inputType="phone"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:textColorHint="#bbbbbb"
-                android:textSize="30sp"
-                android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/editTextUpdateEmail"
+            <com.lh.leonard.eventhub101.AutoResizeTextView
+                android:id="@+id/txtLabelTextPasswordUpdate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="-2dp"
-                android:background="@drawable/edittext_top_bg"
-                android:drawableLeft="@drawable/email"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:textColorHint="#bbbbbb"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:text="Password:"
+                android:textSize="25sp" />
 
             <EditText
                 android:id="@+id/ediTextUpdatePassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="-2dp"
-                android:background="@drawable/edittext_top_bg"
-                android:drawableLeft="@drawable/password"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:padding="10dp"
-                android:password="true"
-                android:textColor="@color/black"
-                android:textColorHint="#bbbbbb"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_password"
+                android:hint="Tap To Enter New Password"
+                android:inputType="text"
+                android:textSize="25sp" />
+
+            <com.lh.leonard.eventhub101.AutoResizeTextView
+                android:id="@+id/txtLabelPasswordConfirmUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:text="Confirm Password:"
+                android:textSize="25sp" />
 
             <EditText
-                android:id="@+id/editTextUpdatePasswordConfirmReg"
+                android:id="@+id/editTextUpdatePasswordConfirm"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="-2dp"
-                android:background="@drawable/edittext_top_bg"
-                android:drawableLeft="@drawable/password"
-                android:hint="Confirm Password"
-                android:inputType="textPassword"
-                android:padding="10dp"
-                android:password="true"
-                android:textColor="@color/black"
-                android:textColorHint="#bbbbbb"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_password"
+                android:hint="Tap To Enter New Password"
+                android:inputType="text"
+                android:textSize="25sp" />
+
+
+            <com.lh.leonard.eventhub101.AutoResizeTextView
+                android:id="@+id/txtLabelEmailUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:text="Email (User Identity For Login):"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/editTextUpdateEmail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_email"
+                android:ems="10"
+                android:hint="Tap To Enter New Email"
+                android:inputType="textEmailAddress"
+                android:textSize="25sp" />
+
+
+            <com.lh.leonard.eventhub101.AutoResizeTextView
+                android:id="@+id/txtLabelPhoneUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:text="Phone Number (Event Notifications Via SMS):"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/editTextUpdatePhone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_phone"
+                android:hint="Tap To Enter New Phone Number"
+                android:inputType="phone"
+                android:numeric="integer"
+                android:textSize="25sp" />
+
+
+            <com.lh.leonard.eventhub101.AutoResizeTextView
+                android:id="@+id/txtLabelUpdateCountry"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:text="Your Country (Helps For Finding Users):"
+                android:textSize="25sp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autocomplete_countryUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_country"
+                android:hint="Tap To Enter Your New Country"
+                android:inputType="text"
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/buttonUpdateUser"
-                style="@style/DefaultButtonText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:layout_marginBottom="40dp"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
                 android:background="@drawable/button_default_bg"
                 android:padding="10dp"
                 android:text="Update Details"
-                android:textColor="@color/black"
-                android:textSize="40sp"
-                android:textStyle="bold" />
+                android:textSize="25sp" />
+
         </LinearLayout>
-    </RelativeLayout>
-</ScrollView>
+    </ScrollView>
+</RelativeLayout>

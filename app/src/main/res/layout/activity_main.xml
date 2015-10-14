@@ -3,6 +3,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="10dp">
 
     <TableRow
@@ -18,68 +19,78 @@
             android:gravity="center"
             android:text="EventHub101"
             android:textColor="@color/white"
-            android:textSize="100sp"
+            android:textSize="90sp"
             android:textStyle="bold" />
     </TableRow>
 
-    <RelativeLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
-        android:paddingBottom="@dimen/activity_vertical_margin"
 
-        android:paddingTop="@dimen/activity_vertical_margin">
-
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
             <EditText
                 android:id="@+id/emailSignIn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_height="match_parent"
                 android:background="@drawable/edittext_top_bg"
-                android:drawableLeft="@drawable/email"
+                android:drawableLeft="@drawable/ic_user_profile"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:padding="10dp"
                 android:textColorHint="#cccccc"
                 android:textSize="25sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
             <EditText
                 android:id="@+id/passwordSignIn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="-2dp"
+                android:layout_height="match_parent"
                 android:background="@drawable/edittext_top_bg"
-                android:drawableLeft="@drawable/password"
+                android:drawableLeft="@drawable/ic_password"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="10dp"
                 android:password="true"
                 android:textColorHint="#cccccc"
                 android:textSize="25sp" />
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
             <Button
                 android:id="@+id/buttonSignIn"
-                style="@style/DefaultButtonText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="4dp"
                 android:background="@drawable/button_default_bg"
                 android:padding="10dp"
                 android:text="Sign In"
                 android:textColor="@color/black"
                 android:textSize="40sp" />
-        </LinearLayout>
+        </TableRow>
+    </LinearLayout>
 
-    </RelativeLayout>
-
-    <TableRow
-
-        android:gravity="center">
+    <TableRow android:gravity="center">
 
         <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/buttonForgotPassword"
@@ -87,16 +98,14 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:gravity="center"
-            android:paddingTop="10dp"
+            android:paddingTop="25dp"
             android:text="Forgot Password?"
             android:textColor="@color/white"
             android:textSize="25sp"
             android:textStyle="bold" />
     </TableRow>
 
-    <TableRow
-
-        android:gravity="center">
+    <TableRow android:gravity="center">
 
         <com.lh.leonard.eventhub101.AutoResizeTextView
             android:id="@+id/buttonRegistration"

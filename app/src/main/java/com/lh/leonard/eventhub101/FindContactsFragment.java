@@ -161,6 +161,8 @@ public class FindContactsFragment extends Fragment {
                     @Override
                     public void onItemClick(View view, final int position) {
 
+                       // view.setBackgroundColor(getResources().getColor(R.color.red));
+
                         String title = "Send Contact Request?";
                         String message = "Do you want to send contact request to ";
                         String messageToAppend = "";
