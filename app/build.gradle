@@ -8,7 +8,7 @@ android {
         applicationId "com.lh.leonard.eventhub101"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 11
+        versionCode 12
         versionName "1.8"
     }
     buildTypes {
@@ -26,5 +26,5 @@ dependencies {
     compile 'com.android.support:support-v4:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.android.support:cardview-v7:23.0.1'
-    compile 'de.hdodenhof:circleimageview:1.2.1'
+//    compile 'de.hdodenhof:circleimageview:1.2.1'
 }

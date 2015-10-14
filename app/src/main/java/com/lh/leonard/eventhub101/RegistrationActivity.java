@@ -37,7 +37,15 @@ public class RegistrationActivity extends ActionBarActivity {
         final EditText fnameField = (EditText) findViewById(R.id.editTextFNameReg);
         final EditText lnameField = (EditText) findViewById(R.id.editTextLNameReg);
         final EditText phoneField = (EditText) findViewById(R.id.editTextPhoneReg);
-        TextView textViewHeaderReg = (TextView) findViewById(R.id.textViewHeaderReg);
+
+        final AutoResizeTextView txtLabelFnameReg = (AutoResizeTextView) findViewById(R.id.txtLabelFnameReg);
+        final AutoResizeTextView txtLabeLnameReg = (AutoResizeTextView) findViewById(R.id.txtLabeLnameReg);
+        final AutoResizeTextView txtLabelTextPasswordReg = (AutoResizeTextView) findViewById(R.id.txtLabelTextPasswordReg);
+        final AutoResizeTextView txtLabelPasswordConfirmReg = (AutoResizeTextView) findViewById(R.id.txtLabelPasswordConfirmReg);
+        final AutoResizeTextView txtLabelEmailReg = (AutoResizeTextView) findViewById(R.id.txtLabelEmailReg);
+        final AutoResizeTextView txtLabelCountryReg = (AutoResizeTextView) findViewById(R.id.txtLabelCountryReg);
+        final AutoResizeTextView txtLabelPhone = (AutoResizeTextView) findViewById(R.id.txtLabelPhone);
+        TextView textViewHeaderReg = (TextView) findViewById(R.id.textViewHeaderRegister);
 
         // Get a reference to the AutoCompleteTextView in the layout
         final AutoCompleteTextView textViewCountry = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
@@ -65,6 +73,13 @@ public class RegistrationActivity extends ActionBarActivity {
         phoneField.setTypeface(regularFont);
         registerButton.setTypeface(regularFont);
         textViewHeaderReg.setTypeface(regularFont);
+        txtLabelCountryReg.setTypeface(regularFont);
+        txtLabelEmailReg.setTypeface(regularFont);
+        txtLabelFnameReg.setTypeface(regularFont);
+        txtLabeLnameReg.setTypeface(regularFont);
+        txtLabelPasswordConfirmReg.setTypeface(regularFont);
+        txtLabelPhone.setTypeface(regularFont);
+        txtLabelTextPasswordReg.setTypeface(regularFont);
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 
