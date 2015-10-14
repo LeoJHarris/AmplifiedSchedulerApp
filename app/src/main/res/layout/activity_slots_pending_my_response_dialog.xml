@@ -89,6 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textViewRequestSlotOrganizer"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/button_default_bg"
                 android:padding="10dp"
                 android:text="Going"
                 android:textSize="30sp" />
@@ -99,6 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/buttonRequestSlotGoing"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/button_default_bg"
                 android:padding="10dp"
                 android:text="Can't Go"
                 android:textSize="30sp" />

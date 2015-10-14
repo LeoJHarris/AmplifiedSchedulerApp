@@ -36,9 +36,12 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
+        textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
+
+        textViewNotificationNumberHome.setText("fetching  notifications");
+
         getActivity().setTitle("Home");
 
-        textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
 
         Backendless.Data.mapTableToClass("Contact", Contact.class);
         Backendless.Data.mapTableToClass("Person", Person.class);

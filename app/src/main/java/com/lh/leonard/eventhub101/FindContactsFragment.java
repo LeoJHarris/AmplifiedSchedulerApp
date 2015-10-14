@@ -279,13 +279,12 @@ public class FindContactsFragment extends Fragment {
                                             ringProgressDialog.setCancelable(false);
                                             new AddContact(position).execute();
 
-
-                                            dialog.dismiss();
                                         }
                                     }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
                                             dialog.dismiss();
+
                                         }
                                     }).show();
 

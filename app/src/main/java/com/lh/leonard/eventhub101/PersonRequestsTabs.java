@@ -81,7 +81,9 @@ public class PersonRequestsTabs extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                                               public boolean onQueryTextChange(String text) {
                                                   if (TextUtils.isEmpty(text)) {
-                                                      adapterRequest.getFilter().filter("");
+                                                      if (adapterRequest != null) {
+                                                          adapterRequest.getFilter().filter("");
+                                                      }
                                                   } else {
                                                       adapterRequest.getFilter().filter(text.toString());
                                                   }
