@@ -223,71 +223,151 @@ public class FindContactsFragment extends Fragment {
                         }
                         if (statusOnPerson != 2) {
 
-                            alertDialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle(title)
-                                    .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
-                                    .setIcon(R.drawable.ic_questionmark)
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                                        public void onClick(DialogInterface dialog, int whichButton) {
+                            if (alertDialog != null) {
 
+                                if (!alertDialog.isShowing()) {
+                                    alertDialog = new AlertDialog.Builder(v.getContext())
+                                            .setTitle(title)
+                                            .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
+                                            .setIcon(R.drawable.ic_questionmark)
+                                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                                            dialog.dismiss();
-                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
-                                            ringProgressDialog.setCancelable(false);
-                                            new AddContact(position).execute();
+                                                public void onClick(DialogInterface dialog, int whichButton) {
 
 
-                                            //TODO should set personLoggedInWithRequesting person
-                                            //TODO for this activity, although may need to reload each tme
+                                                    dialog.dismiss();
+                                                    ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
+                                                    ringProgressDialog.setCancelable(false);
+                                                    new AddContact(position).execute();
 
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
+                                                    //TODO should set personLoggedInWithRequesting person
+                                                    //TODO for this activity, although may need to reload each tme
+
+                                                }
+                                            })
+                                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                                    dialog.dismiss();
+                                                }
+                                            }).show();
+                                }
+                            }
+                            else{
+                                alertDialog = new AlertDialog.Builder(v.getContext())
+                                        .setTitle(title)
+                                        .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
+                                        .setIcon(R.drawable.ic_questionmark)
+                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+
+
+                                                dialog.dismiss();
+                                                ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
+                                                ringProgressDialog.setCancelable(false);
+                                                new AddContact(position).execute();
+
+
+                                                //TODO should set personLoggedInWithRequesting person
+                                                //TODO for this activity, although may need to reload each tme
+
+                                            }
+                                        })
+                                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();
+
+                            }
                         } else {
-                            alertDialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle(title)
-                                    .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
-                                    .setIcon(R.drawable.ic_questionmark)
-                                    .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
 
-                                        public void onClick(DialogInterface dialog, int whichButton) {
+                            if (alertDialog != null) {
 
-                                            statusOnPerson = 2;
-                                            dialog.dismiss();
-                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
-                                            ringProgressDialog.setCancelable(false);
-                                            new AddContact(position).execute();
+                                if (!alertDialog.isShowing()) {
 
-                                            //TODO should set personLoggedInWithRequesting person
-                                            //TODO for this activity, although may need to reload each tme
+                                    alertDialog = new AlertDialog.Builder(v.getContext())
+                                            .setTitle(title)
+                                            .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
+                                            .setIcon(R.drawable.ic_questionmark)
+                                            .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
 
-                                        }
-                                    })
-                                    .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int whichButton) {
 
-                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                                    statusOnPerson = 2;
+                                                    dialog.dismiss();
+                                                    ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
+                                                    ringProgressDialog.setCancelable(false);
+                                                    new AddContact(position).execute();
 
-                                            statusOnPerson = 4;
-                                            dialog.dismiss();
-                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
-                                            ringProgressDialog.setCancelable(false);
-                                            new AddContact(position).execute();
+                                                    //TODO should set personLoggedInWithRequesting person
+                                                    //TODO for this activity, although may need to reload each tme
 
-                                        }
-                                    }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                                                }
+                                            })
+                                            .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
 
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
+                                                public void onClick(DialogInterface dialog, int whichButton) {
 
-                                        }
-                                    }).show();
+                                                    statusOnPerson = 4;
+                                                    dialog.dismiss();
+                                                    ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
+                                                    ringProgressDialog.setCancelable(false);
+                                                    new AddContact(position).execute();
 
+                                                }
+                                            }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                                    dialog.dismiss();
+
+                                                }
+                                            }).show();
+
+                                }
+                            } else {
+                                alertDialog = new AlertDialog.Builder(v.getContext())
+                                        .setTitle(title)
+                                        .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
+                                        .setIcon(R.drawable.ic_questionmark)
+                                        .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                                statusOnPerson = 2;
+                                                dialog.dismiss();
+                                                ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
+                                                ringProgressDialog.setCancelable(false);
+                                                new AddContact(position).execute();
+
+                                                //TODO should set personLoggedInWithRequesting person
+                                                //TODO for this activity, although may need to reload each tme
+
+                                            }
+                                        })
+                                        .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
+
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                                statusOnPerson = 4;
+                                                dialog.dismiss();
+                                                ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
+                                                ringProgressDialog.setCancelable(false);
+                                                new AddContact(position).execute();
+
+                                            }
+                                        }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                                dialog.dismiss();
+
+                                            }
+                                        }).show();
+                            }
                         }
                     }
 
