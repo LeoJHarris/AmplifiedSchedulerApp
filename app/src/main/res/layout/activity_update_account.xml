@@ -50,7 +50,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_user_profile"
                 android:ems="10"
-                android:hint="Tap To Enter New First Name"
+                android:hint="Tap To Enter First Name"
                 android:inputType="text"
                 android:textSize="25sp" />
 
@@ -64,7 +64,6 @@
                 android:text="Last Name:"
                 android:textSize="25sp" />
 
-
             <EditText
                 android:id="@+id/editTextUpdateLName"
                 android:layout_width="match_parent"
@@ -74,7 +73,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_user_profile"
                 android:ems="10"
-                android:hint="Tap To Enter New Last Name"
+                android:hint="Tap To Enter Last Name"
                 android:inputType="text"
                 android:textSize="25sp" />
 
@@ -98,7 +97,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_password"
                 android:hint="Tap To Enter New Password"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:textSize="25sp" />
 
             <com.lh.leonard.eventhub101.AutoResizeTextView
@@ -120,7 +119,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_password"
                 android:hint="Tap To Enter New Password"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:textSize="25sp" />
 
 

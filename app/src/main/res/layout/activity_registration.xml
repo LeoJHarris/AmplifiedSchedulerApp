@@ -106,7 +106,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_password"
                 android:hint="Tap To Enter Password"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:textSize="25sp" />
 
             <com.lh.leonard.eventhub101.AutoResizeTextView
@@ -128,7 +128,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_password"
                 android:hint="Tap To Enter Password"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:textSize="25sp" />
 
 
@@ -151,7 +151,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_email"
                 android:ems="10"
-                android:hint="Tap To Enter Email"
+                android:hint="Tap To Enter Email Address"
                 android:inputType="textEmailAddress"
                 android:textSize="25sp" />
 
@@ -163,7 +163,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:text="Phone Number (Event Notifications Via SMS):"
+                android:text="Phone Number (For Event Notifications Via SMS):"
                 android:textSize="25sp" />
 
             <EditText

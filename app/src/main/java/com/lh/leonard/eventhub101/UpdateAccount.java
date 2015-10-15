@@ -2,6 +2,7 @@ package com.lh.leonard.eventhub101;
 
 import android.app.Fragment;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,21 +29,58 @@ public class UpdateAccount extends Fragment {
     EditText editTextUpdatePasswordConfirmReg;
     BackendlessUser user;
 
+    Drawable tickIconDraw;
+    Drawable crossIconDraw;
+    Drawable emailIconDraw;
+    Drawable userProfileIconDraw;
+    Drawable passwordIconDraw;
+    Drawable countryIconDraw;
+    Drawable phoneIconDraw;
+
+    Drawable emailGoodIconDraw;
+    Drawable userGoodProfileDraw;
+    Drawable passwordGoodIconDraw;
+    Drawable countryGoodIconDraw;
+    Drawable phoneGoodIconDraw;
+
+    Drawable passwordBadIconDraw;
+    Drawable emailBadIconDraw;
+
     String fname;
     String lname;
     String phone;
     String email;
     String password;
     String passwordConfirm;
+    Validator validator = new Validator();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.activity_update_account, container, false);
 
+        //TODO set the ic_.. icons to green and keep tick when validated
+
         getActivity().setTitle("Update Account");
 
-        Backendless.Persistence.mapTableToClass("Person", Person.class);
+        tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
+        crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
+        emailIconDraw = getResources().getDrawable(R.drawable.ic_email);
+        userProfileIconDraw = getResources().getDrawable(R.drawable.ic_user_profile);
+        passwordIconDraw = getResources().getDrawable(R.drawable.ic_password);
+        countryIconDraw = getResources().getDrawable(R.drawable.ic_country);
+        phoneIconDraw = getResources().getDrawable(R.drawable.ic_phone);
+
+        emailGoodIconDraw = getResources().getDrawable(R.drawable.ic_email_good);
+        userGoodProfileDraw = getResources().getDrawable(R.drawable.ic_country_good);
+        passwordGoodIconDraw = getResources().getDrawable(R.drawable.ic_password_good);
+        countryGoodIconDraw = getResources().getDrawable(R.drawable.ic_country_good);
+        phoneGoodIconDraw = getResources().getDrawable(R.drawable.ic_phone_good);
+
+        emailBadIconDraw = getResources().getDrawable(R.drawable.ic_email_bad);
+        passwordBadIconDraw = getResources().getDrawable(R.drawable.ic_password_bad);
+
+        Backendless.Data.mapTableToClass("Person", Person.class);
 
         user = Backendless.UserService.CurrentUser();
         personLoggedIn = (Person) user.getProperty("persons");
@@ -105,18 +143,120 @@ public class UpdateAccount extends Fragment {
                                                     phone = editTextUpdatePhoneReg.getText().toString();
                                                     password = ediTextUpdatePassword.getText().toString();
                                                     passwordConfirm = editTextUpdatePasswordConfirmReg.getText().toString();
-
                                                     new Parse().execute();
-
                                                 }
                                             }
         );
+
+
+        editTextUpdateFNameReg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(editTextUpdateFNameReg.getText().toString().equals("")))) {
+                    editTextUpdateFNameReg.setCompoundDrawablesWithIntrinsicBounds(userGoodProfileDraw, null, tickIconDraw, null);
+                } else {
+                    editTextUpdateFNameReg.setCompoundDrawablesWithIntrinsicBounds(userProfileIconDraw, null, null, null);
+                }
+            }
+        });
+        editTextUpdateLNameReg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(editTextUpdateLNameReg.getText().toString().equals("")))) {
+                    editTextUpdateLNameReg.setCompoundDrawablesWithIntrinsicBounds(userGoodProfileDraw, null, tickIconDraw, null);
+                } else {
+                    editTextUpdateLNameReg.setCompoundDrawablesWithIntrinsicBounds(userProfileIconDraw, null, null, null);
+                }
+            }
+        });
+        editTextUpdateEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(editTextUpdateEmail.getText().toString().equals("")))) {
+                    if (validator.isValidEmail(editTextUpdateEmail.getText().toString())) {
+                        editTextUpdateEmail.setCompoundDrawablesWithIntrinsicBounds(emailGoodIconDraw, null, tickIconDraw, null);
+                    } else {
+                        editTextUpdateEmail.setCompoundDrawablesWithIntrinsicBounds(emailBadIconDraw, null, crossIconDraw, null);
+                        Toast.makeText(v.getContext(), "Please enter your email address in the format someone@example.com", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    editTextUpdateEmail.setCompoundDrawablesWithIntrinsicBounds(phoneGoodIconDraw, null, null, null);
+                }
+            }
+        });
+        editTextUpdatePhoneReg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(editTextUpdatePhoneReg.getText().toString().equals("")))) {
+                    editTextUpdatePhoneReg.setCompoundDrawablesWithIntrinsicBounds(phoneGoodIconDraw, null, tickIconDraw, null);
+                } else {
+                    editTextUpdatePhoneReg.setCompoundDrawablesWithIntrinsicBounds(phoneIconDraw, null, null, null);
+                }
+            }
+        });
+        ediTextUpdatePassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(ediTextUpdatePassword.getText().toString().equals("")))) {
+                    if (validator.isPasswordValid(ediTextUpdatePassword.getText().toString())) {
+                        if (editTextUpdatePasswordConfirmReg.getText().toString().equals("")) {
+                            ediTextUpdatePassword.setCompoundDrawablesWithIntrinsicBounds(passwordGoodIconDraw, null, tickIconDraw, null);
+                        } else {
+                            if (ediTextUpdatePassword.getText().toString().equals(editTextUpdatePasswordConfirmReg.getText().toString())) {
+                                ediTextUpdatePassword.setCompoundDrawablesWithIntrinsicBounds(passwordGoodIconDraw, null, tickIconDraw, null);
+                            } else {
+                                Toast.makeText(v.getContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+                                ediTextUpdatePassword.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
+                            }
+                        }
+                    } else {
+                        ediTextUpdatePassword.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
+                        Toast.makeText(v.getContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    ediTextUpdatePassword.setCompoundDrawablesWithIntrinsicBounds(passwordIconDraw, null, null, null);
+                }
+            }
+        });
+        editTextUpdatePasswordConfirmReg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(editTextUpdatePasswordConfirmReg.getText().toString().equals("")))) {
+                    if (validator.isPasswordValid(editTextUpdatePasswordConfirmReg.getText().toString())) {
+                        if (ediTextUpdatePassword.getText().toString().equals("")) {
+                            editTextUpdatePasswordConfirmReg.setCompoundDrawablesWithIntrinsicBounds(passwordGoodIconDraw, null, tickIconDraw, null);
+                        } else {
+                            if (editTextUpdatePasswordConfirmReg.getText().toString().equals(ediTextUpdatePassword.getText().toString())) {
+                                editTextUpdatePasswordConfirmReg.setCompoundDrawablesWithIntrinsicBounds(passwordGoodIconDraw, null, tickIconDraw, null);
+                            } else {
+                                Toast.makeText(v.getContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+                                editTextUpdatePasswordConfirmReg.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
+                            }
+                        }
+                    } else {
+                        Toast.makeText(v.getContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_SHORT).show();
+                        editTextUpdatePasswordConfirmReg.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
+                    }
+                } else {
+                    editTextUpdatePasswordConfirmReg.setCompoundDrawablesWithIntrinsicBounds(passwordIconDraw, null, null, null);
+                }
+            }
+        });
+        textViewCountry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(textViewCountry.getText().toString().equals("")))) {
+                    textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryGoodIconDraw, null, tickIconDraw, null);
+                } else {
+                    textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryIconDraw, null, null, null);
+                }
+            }
+        });
+
         return v;
     }
 
-
     private class Parse extends AsyncTask<Void, Integer, Boolean> {
-
 
         @Override
         protected void onPreExecute() {
@@ -136,24 +276,25 @@ public class UpdateAccount extends Fragment {
             Boolean lastNameChange = false;
             Boolean inputSet = false;
 
+            Person p = Backendless.Data.of(Person.class).findById(personLoggedIn);
 
             if (!(email.equals(""))) {
-                personLoggedIn.setEmail(email);
+                p.setEmail(email);
                 user.setEmail(email);
                 inputSet = true;
             }
             if (!(fname.equals(""))) {
-                personLoggedIn.setFname(fname);
+                p.setFname(fname);
                 firstNameChange = true;
                 inputSet = true;
             }
             if (!(lname.equals(""))) {
-                personLoggedIn.setLname(lname);
+                p.setLname(lname);
                 lastNameChange = true;
                 inputSet = true;
             }
             if (!(phone.equals(""))) {
-                personLoggedIn.setPhone(phone.toString());
+                p.setPhone(phone.toString());
                 inputSet = true;
             }
             if ((!(password.equals(""))) && (!(passwordConfirm.equals("")))) {
@@ -166,16 +307,17 @@ public class UpdateAccount extends Fragment {
             }
 
             if (firstNameChange && lastNameChange) {
-                personLoggedIn.setFullname(fname + " " + lname);
+                p.setFullname(fname + " " + lname);
             } else {
                 if (fname != "") {
-                    personLoggedIn.setFullname(fname + " " + personLoggedIn.getLname());
+                    p.setFullname(fname + " " + p.getLname());
                 } else {
-                    personLoggedIn.setFullname(personLoggedIn.getFname() + " " + lname);
+                    p.setFullname(p.getFname() + " " + lname);
                 }
             }
             if (inputSet) {
-                Backendless.Data.of(Person.class).save(personLoggedIn);
+
+                Backendless.Data.of(Person.class).save(p);
                 Backendless.UserService.update(user);
             }
 
@@ -193,6 +335,20 @@ public class UpdateAccount extends Fragment {
                 Toast.makeText(getActivity(), "No Inputs Submitted", Toast.LENGTH_SHORT).show();
             }
 
+        }
+    }
+
+    public class Validator {
+
+
+        private boolean isPasswordValid(CharSequence password) {
+            return password.toString().length() > 4;
+        }
+
+        private boolean isValidEmail(CharSequence target) {
+            if (target == null)
+                return false;
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
     }
 }
