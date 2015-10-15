@@ -125,7 +125,6 @@ public class CreateSlot extends AppCompatActivity implements
     String locationString;
     Integer numberAttendeesAvaliable = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

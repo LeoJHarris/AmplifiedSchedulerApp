@@ -2,6 +2,7 @@ package com.lh.leonard.eventhub101;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -19,6 +20,26 @@ import com.backendless.async.callback.BackendlessCallback;
 
 
 public class RegistrationActivity extends ActionBarActivity {
+
+    Drawable tickIconDraw;
+    Drawable crossIconDraw;
+
+    Drawable emailIconDraw;
+    Drawable userProfileIconDraw;
+    Drawable passwordIconDraw;
+    Drawable countryIconDraw;
+    Drawable phoneIconDraw;
+
+    Drawable emailGoodIconDraw;
+    Drawable userGoodProfileDraw;
+    Drawable passwordGoodIconDraw;
+    Drawable countryGoodIconDraw;
+    Drawable phoneGoodIconDraw;
+
+    Drawable passwordBadIconDraw;
+    Drawable emailBadIconDraw;
+
+    Validator validator = new Validator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +67,23 @@ public class RegistrationActivity extends ActionBarActivity {
         final AutoResizeTextView txtLabelCountryReg = (AutoResizeTextView) findViewById(R.id.txtLabelCountryReg);
         final AutoResizeTextView txtLabelPhone = (AutoResizeTextView) findViewById(R.id.txtLabelPhone);
         TextView textViewHeaderReg = (TextView) findViewById(R.id.textViewHeaderRegister);
+
+        tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
+        crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
+        emailIconDraw = getResources().getDrawable(R.drawable.ic_email);
+        userProfileIconDraw = getResources().getDrawable(R.drawable.ic_user_profile);
+        passwordIconDraw = getResources().getDrawable(R.drawable.ic_password);
+        countryIconDraw = getResources().getDrawable(R.drawable.ic_country);
+        phoneIconDraw = getResources().getDrawable(R.drawable.ic_phone);
+
+        emailGoodIconDraw = getResources().getDrawable(R.drawable.ic_email_good);
+        userGoodProfileDraw = getResources().getDrawable(R.drawable.ic_country_good);
+        passwordGoodIconDraw = getResources().getDrawable(R.drawable.ic_password_good);
+        countryGoodIconDraw = getResources().getDrawable(R.drawable.ic_country_good);
+        phoneGoodIconDraw = getResources().getDrawable(R.drawable.ic_phone_good);
+
+        emailBadIconDraw = getResources().getDrawable(R.drawable.ic_email_bad);
+        passwordBadIconDraw = getResources().getDrawable(R.drawable.ic_password_bad);
 
         // Get a reference to the AutoCompleteTextView in the layout
         final AutoCompleteTextView textViewCountry = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
@@ -96,132 +134,198 @@ public class RegistrationActivity extends ActionBarActivity {
                 CharSequence password = passwordField.getText();
                 CharSequence passwordConfirm = passwordConfirmField.getText();
 
-                BackendlessUser user = new BackendlessUser();
 
-                //TODO Create Person instance with name and additional info
+                if (!(fname.toString().trim().equals("") && lname.toString().equals("")
+                        && phone.toString().equals("") && county.toString().equals("")
+                        && password.toString().equals("") &&
+                        passwordConfirm.toString().equals("")
+                        && email.toString().equals(""))) {
+                    {
 
-                if (password.toString().equals(passwordConfirm.toString())) {
+                        //TODO Create Person instance with name and additional info
 
-                    user.setEmail(email.toString());
-                    user.setPassword(password.toString());
+                        if (password.toString().equals(passwordConfirm.toString())) {
 
-                    //TODO SEND ME TEXT; check that Cell phone is correct
+                            if (validator.isPasswordValid(passwordConfirm)) {
 
-                    Person person = new Person();
-                    person.setFname(fname.toString());
-                    person.setLname(lname.toString());
-                    person.setEmail(email.toString());
-                    person.setPhone(phone.toString());
-                    person.setCountry(county.toString());
-                    person.setFullname(fname.toString() + " " + lname.toString()); // TODO Make textbox for full name
-                    // person.setPhone(Integer.parseInt(phone.toString()));
-                    // person.setMeAsContact(contact); // TODO Might not need this property
+                                if (validator.isValidEmail(email)) {
 
-                    user.setProperty("persons", person);
+                                    BackendlessUser user = new BackendlessUser();
 
-                    Backendless.UserService.register(user, new BackendlessCallback<BackendlessUser>() {
-                        @Override
-                        public void handleResponse(BackendlessUser backendlessUser) {
+                                    user.setEmail(email.toString());
+                                    user.setPassword(password.toString());
 
-                            //TODO Threading when users registers, show spinner.
+                                    //TODO SEND ME TEXT; check that Cell phone is correct
 
-                            Log.i("Registration", backendlessUser.getEmail() + " successfully registered");
 
-                            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                            intent.putExtra("nameRegistered", fname + "," + lname);
+                                    Person person = new Person();
+                                    person.setFname(fname.toString());
+                                    person.setLname(lname.toString());
+                                    person.setEmail(email.toString());
+                                    person.setPhone(phone.toString());
+                                    person.setCountry(county.toString());
+                                    person.setFullname(fname.toString() + " " + lname.toString()); // TODO Make textbox for full name
 
-                            startActivity(intent);
-                        }
+                                    user.setProperty("persons", person);
+
+                                    Backendless.UserService.register(user, new BackendlessCallback<BackendlessUser>() {
+                                        @Override
+                                        public void handleResponse(BackendlessUser backendlessUser) {
+
+                                            //TODO Threading when users registers, show spinner.
+
+                                            Log.i("Registration", backendlessUser.getEmail() + " successfully registered");
+
+                                            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                                            intent.putExtra("nameRegistered", fname + "," + lname);
+
+                                            startActivity(intent);
+                                        }
 
 //                        public void handleFault(BackendlessFault fault) {
 //                            // an error has occurred, the error code can be retrieved with fault.getCode() // TODO: use getCode and provide appriate user feedback http://backendless.com/documentation/users/android/users_user_registration.htm
 //                            Toast.makeText(getApplicationContext(), "Please re-enter valid details" + fault.getCode(), Toast.LENGTH_LONG).show();
 //                        }
-                    });
+                                    });
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Passwords did not match, please check passwords match", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
                 } else {
-                    Toast.makeText(getApplicationContext(), "Passwords did not match, please check passwords match", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please input all fields to complete sign up", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        fnameField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(fnameField.getText().toString().equals("")))) {
+                    fnameField.setCompoundDrawablesWithIntrinsicBounds(userGoodProfileDraw, null, tickIconDraw, null);
+
+
+                } else {
+                    fnameField.setCompoundDrawablesWithIntrinsicBounds(userProfileIconDraw, null, null, null);
+                }
+            }
+        });
+        lnameField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(lnameField.getText().toString().equals("")))) {
+                    lnameField.setCompoundDrawablesWithIntrinsicBounds(userGoodProfileDraw, null, tickIconDraw, null);
+                } else {
+                    lnameField.setCompoundDrawablesWithIntrinsicBounds(userProfileIconDraw, null, null, null);
+                }
+            }
+        });
+        emailField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(emailField.getText().toString().equals("")))) {
+                    if (validator.isValidEmail(emailField.getText().toString())) {
+                        emailField.setCompoundDrawablesWithIntrinsicBounds(emailGoodIconDraw, null, tickIconDraw, null);
+                    } else {
+                        emailField.setCompoundDrawablesWithIntrinsicBounds(emailBadIconDraw, null, crossIconDraw, null);
+                        Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    emailField.setCompoundDrawablesWithIntrinsicBounds(emailIconDraw, null, null, null);
+                }
+            }
+        });
+        phoneField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(phoneField.getText().toString().equals("")))) {
+                    phoneField.setCompoundDrawablesWithIntrinsicBounds(phoneGoodIconDraw, null, tickIconDraw, null);
+                } else {
+                    phoneField.setCompoundDrawablesWithIntrinsicBounds(phoneIconDraw, null, null, null);
+                }
+            }
+        });
+        passwordField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(passwordField.getText().toString().equals("")))) {
+                    if (validator.isPasswordValid(passwordField.getText().toString())) {
+                        if (passwordConfirmField.getText().toString().equals("")) {
+                            passwordField.setCompoundDrawablesWithIntrinsicBounds(passwordGoodIconDraw, null, tickIconDraw, null);
+                        } else {
+                            if (passwordField.getText().toString().equals(passwordConfirmField.getText().toString())) {
+                                passwordField.setCompoundDrawablesWithIntrinsicBounds(passwordGoodIconDraw, null, tickIconDraw, null);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+                                passwordField.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
+                            }
+                        }
+                    } else {
+                        passwordField.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
+                        Toast.makeText(getApplicationContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    passwordField.setCompoundDrawablesWithIntrinsicBounds(passwordIconDraw, null, null, null);
+                }
+            }
+        });
+        passwordConfirmField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(passwordConfirmField.getText().toString().equals("")))) {
+                    if (validator.isPasswordValid(passwordConfirmField.getText().toString())) {
+                        if (passwordField.getText().toString().equals("")) {
+                            passwordConfirmField.setCompoundDrawablesWithIntrinsicBounds(passwordGoodIconDraw, null, tickIconDraw, null);
+                        } else {
+                            if (passwordConfirmField.getText().toString().equals(passwordField.getText().toString())) {
+                                passwordConfirmField.setCompoundDrawablesWithIntrinsicBounds(passwordGoodIconDraw, null, tickIconDraw, null);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+                                passwordConfirmField.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
+                            }
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_SHORT).show();
+                        passwordConfirmField.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
+                    }
+                } else {
+                    passwordConfirmField.setCompoundDrawablesWithIntrinsicBounds(passwordIconDraw, null, null, null);
+                }
+            }
+        });
+        textViewCountry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if ((!(textViewCountry.getText().toString().equals("")))) {
+                    textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryGoodIconDraw, null, tickIconDraw, null);
+                } else {
+                    textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryIconDraw, null, null, null);
                 }
             }
         });
     }
 
-//
-//    public boolean isRegistrationValuesValid(CharSequence name, CharSequence email, CharSequence password,
-//                                             CharSequence passwordConfirm) {
-//        Validator v = new Validator();
-//        return v.isValidEmail(email) &&
-//                v.isPasswordValid(password) && isPasswordsMatch(password, passwordConfirm);
-//
-//
-//    }
-
-//    public boolean isPasswordsMatch(CharSequence password, CharSequence passwordConfirm) {
-//        if (!TextUtils.equals(password, passwordConfirm)) {
-//            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_LONG).show();
-//            return false;
-//
-//        }
-//        return true;
-//
-//    }
-
-//    public void registerUser(String name, String email, String password,
-//                             AsyncCallback<BackendlessUser> registrationCallback) {
-//        BackendlessUser user = new BackendlessUser();
-//        user.setEmail(email);
-//        user.setPassword(password);
-//        user.setProperty("name", name);
-//
-//        //handles hashing by itself
-//        Backendless.UserService.register(user, registrationCallback);
-//    }
-
-//    public LoadingCallback<BackendlessUser> createRegistrationCallback() {
-//        return new LoadingCallback<BackendlessUser>(this, "Sending registration request...") {
-//            @Override
-//            public void handleResponse(BackendlessUser registerUser) {
-//                handleResponse(registerUser);
-//                Toast.makeText(RegistrationActivity.this, String.format("Register. ObjectId: \n",
-//                        registerUser.getObjectId()), Toast.LENGTH_LONG).show(); // check this
-//
-//
-//            }
-//        };
-//    }
-
-//    public View.OnClickListener createRegisterButtonClickListener() {
-//
-//        return (v) -> {
-//
-//
-//            if (isRegistrationValuesValid(name, email, password, passwordConfirm)) {
-//
-//                LoadingCallback<BackendlessUser> registrationCallback = createRegistrationCallback();
-//
-//                registrationCallback.showLoading();
-//                registerUser(name.toString(), email.toString(), password.toString(), registrationCallback);
-//
-//            }
-//        };
-//    }
-
     /**
      * Created by Leonard on 17/04/2015.
      */
-//    public class Validator {
-//
-//
-//        private boolean isPasswordValid(CharSequence password) {
-//            //TODO: Replace this with your own logic
-//            return password.toString().length() > 4;
-//        }
-//
-//        private boolean isValidEmail(CharSequence target) {
-//            if (target == null)
-//                return false;
-//
-//            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-//        }
-//    }
+    public class Validator {
+
+
+        private boolean isPasswordValid(CharSequence password) {
+            return password.toString().length() > 4;
+        }
+
+        private boolean isValidEmail(CharSequence target) {
+            if (target == null)
+                return false;
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
 }
 
