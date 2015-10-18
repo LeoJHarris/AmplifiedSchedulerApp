@@ -7,22 +7,22 @@
     android:padding="10dp">
 
     <TableRow
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center">
 
-        <com.lh.leonard.eventhub101.AutoResizeTextView
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewheaderSlotAppMain"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
             android:layout_marginTop="5dp"
             android:gravity="center"
-            android:text="EventHub101"
+            android:text="Amplified Scheduler"
             android:textColor="@color/white"
-            android:textSize="90sp"
+            android:textSize="80sp"
             android:textStyle="bold" />
     </TableRow>
 
@@ -95,7 +95,7 @@
 
     <TableRow android:gravity="center">
 
-        <com.lh.leonard.eventhub101.AutoResizeTextView
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/buttonForgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -110,7 +110,7 @@
 
     <TableRow android:gravity="center">
 
-        <com.lh.leonard.eventhub101.AutoResizeTextView
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/buttonRegistration"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -125,7 +125,7 @@
 
     <TableRow android:gravity="center">
 
-        <com.lh.leonard.eventhub101.AutoResizeTextView
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewMadeByMeMain"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

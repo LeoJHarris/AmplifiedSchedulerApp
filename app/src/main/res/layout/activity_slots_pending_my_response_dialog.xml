@@ -17,7 +17,7 @@
             android:background="@drawable/gradient_color_bg"
             android:paddingTop="20dp">
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewRequestSlotSubject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewRequestSlotMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 android:padding="5dp"
                 android:textSize="30sp" />
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewRequestSlotDateAndTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                 android:padding="5dp"
                 android:textSize="30sp" />
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewRequestSlotLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 android:padding="5dp"
                 android:textSize="30sp" />
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewMyEventSpacesAvaliable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                 android:padding="5dp"
                 android:textSize="30sp" />
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewRequestSlotOrganizer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
