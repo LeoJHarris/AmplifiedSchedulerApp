@@ -48,6 +48,7 @@ public class MyCreatedSlots extends Fragment {
     ProgressDialog ringProgressDialog;
     AlertDialog dialog;
     RecyclerView rv;
+    TableRow tableRowRecyclerView;
     LinearLayoutManager llm;
     String eventRemoved;
 
@@ -66,8 +67,10 @@ public class MyCreatedSlots extends Fragment {
         textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
         textViewTextNoSlotAvaliable.setTypeface(regularFont);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
-        new ParseURL().execute();
+        tableRowRecyclerView = (TableRow) v.findViewById(R.id.tableRowRecyclerView);
         searchViewSlots = (SearchView) v.findViewById(R.id.searchViewSlots);
+        new ParseURL().execute();
+
 
         searchViewSlots.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                                                    public boolean onQueryTextChange(String text) {
@@ -290,8 +293,9 @@ public class MyCreatedSlots extends Fragment {
             } else {
                 ringProgressDialog.dismiss();
                 searchViewSlots.setVisibility(View.GONE);
-                rv.setVisibility(View.GONE);
+                rv.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
+                tableRowRecyclerView.setVisibility(View.VISIBLE);
                 textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
             }
             Toast.makeText(v.getContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();

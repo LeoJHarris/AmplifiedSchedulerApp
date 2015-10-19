@@ -22,6 +22,7 @@ public class MainActivity extends Activity {
 
     ProgressDialog ringProgressDialog;
     Boolean loggedOutPersons = false;
+    Boolean entered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,51 +123,60 @@ public class MainActivity extends Activity {
 
         //TODO Threading when users registers, show spinner.
 
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                if (!entered) {
+                    ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
+                    ringProgressDialog.setCancelable(true);
 
-                EditText emailField = (EditText) findViewById(R.id.emailSignIn);
-                EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
+                    entered = true;
+                    EditText emailField = (EditText) findViewById(R.id.emailSignIn);
+                    EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
 
-                if (new Validator().isValidEmail(emailField.getText())) {
-                    if (new Validator().isPasswordValid(passwordField.getText())) {
-
-
-                        Backendless.Data.mapTableToClass("Person", Person.class);
-                        Backendless.Data.mapTableToClass("Slot", Slot.class);
-                        Backendless.Data.mapTableToClass("Contact", Contact.class);
-                        Backendless.Persistence.mapTableToClass("Person", Person.class);
-                        Backendless.Persistence.mapTableToClass("Slot", Slot.class);
-                        Backendless.Persistence.mapTableToClass("Contact", Contact.class);
-
-                        Backendless.UserService.login(emailField.getText().toString(), passwordField.getText().toString(), new AsyncCallback<BackendlessUser>() {
+                    if (new Validator().isValidEmail(emailField.getText())) {
+                        if (new Validator().isPasswordValid(passwordField.getText())) {
 
 
-                            public void handleResponse(BackendlessUser user) {
-                                // user has been logged
-                                ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
-                                ringProgressDialog.setCancelable(true);
+                            Backendless.Data.mapTableToClass("Person", Person.class);
+                            Backendless.Data.mapTableToClass("Slot", Slot.class);
+                            Backendless.Data.mapTableToClass("Contact", Contact.class);
+                            Backendless.Persistence.mapTableToClass("Person", Person.class);
+                            Backendless.Persistence.mapTableToClass("Slot", Slot.class);
+                            Backendless.Persistence.mapTableToClass("Contact", Contact.class);
 
-                                Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
-                                startActivity(loggedInIntent);
-                            }
+                            Backendless.UserService.login(emailField.getText().toString(), passwordField.getText().toString(), new AsyncCallback<BackendlessUser>() {
 
-                            public void handleFault(BackendlessFault fault) {
-                                // login failed, to get the error code call fault.getCode()
-                                System.out.println(fault.getMessage());
-                                System.out.println(fault.getCode());
-                                if (ringProgressDialog != null) {
-                                    ringProgressDialog.dismiss();
+
+                                public void handleResponse(BackendlessUser user) {
+                                    // user has been logged
+
+
+                                    entered = false;
+                                    Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
+                                    startActivity(loggedInIntent);
                                 }
-                                Toast.makeText(getApplicationContext(), "Unable to sign in. Please check internet connection & credentials are correct.", Toast.LENGTH_LONG).show();
-                            }
-                        });
+
+                                public void handleFault(BackendlessFault fault) {
+                                    // login failed, to get the error code call fault.getCode()
+                                    System.out.println(fault.getMessage());
+                                    System.out.println(fault.getCode());
+                                    if (ringProgressDialog != null) {
+                                        entered = false;
+                                        ringProgressDialog.dismiss();
+                                    }
+                                    Toast.makeText(getApplicationContext(), "Unable to sign in. Please check internet connection & credentials are correct.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } else {
+                            entered = false;
+                            Toast.makeText(getApplicationContext(), "That password is incorrect. Try again or click 'forgot password' to receive a new password.", Toast.LENGTH_LONG).show();
+                        }
                     } else {
-                        Toast.makeText(getApplicationContext(), "That password is incorrect. Try again or click 'forgot password' to receive a new password.", Toast.LENGTH_LONG).show();
+                        entered = false;
+                        Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com.", Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com.", Toast.LENGTH_LONG).show();
                 }
             }
         });

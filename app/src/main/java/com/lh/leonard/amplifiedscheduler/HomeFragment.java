@@ -28,7 +28,8 @@ public class HomeFragment extends Fragment {
     BackendlessCollection<Person> persons;
     AutoResizeTextView textViewNotificationNumberHome;
     Typeface fontHomeName;
-
+    int personsRequestingMe;
+    int invitedEvents;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,38 +37,28 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
+        getActivity().setTitle("Home");
+
         textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
 
         textViewNotificationNumberHome.setText("fetching  notifications");
 
-        getActivity().setTitle("Home");
-
-
         Backendless.Data.mapTableToClass("Contact", Contact.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
-        personLoggedIn = (Person) userLoggedIn.getProperty("persons");
-
-        final AutoResizeTextView welcomeLabel = (AutoResizeTextView) v.findViewById(R.id.textViewWelcomeLabel);
-
+        final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
         final AutoResizeTextView textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
 
         final AutoResizeTextView homeLogo = (AutoResizeTextView) v.findViewById(R.id.textViewHomeLogo);
-
-       // final AutoResizeTextView textViewAppStatement = (AutoResizeTextView) v.findViewById(R.id.textViewAppStatement);
-
-        final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
-
+        textViewNotificationNumberHome.setTypeface(regularFont);
         final Typeface fontWelcome = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/Amatic-Bold.ttf");
+        homeLogo.setTypeface(fontWelcome);
 
         fontHomeName = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/SEASRN__.ttf");
 
-        textViewNotificationNumberHome.setTypeface(regularFont);
-
-        homeLogo.setTypeface(fontWelcome);
+        personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+        final AutoResizeTextView welcomeLabel = (AutoResizeTextView) v.findViewById(R.id.textViewWelcomeLabel);
         welcomeLabel.setTypeface(regularFont);
-    //    textViewAppStatement.setTypeface(fontWelcome);
-
         welcomeLabel.setText("Welcome! " + personLoggedIn.getFullname());
 
         new ParseURL().execute();
@@ -101,16 +92,15 @@ public class HomeFragment extends Fragment {
                 // relationProps.add("myCreatedSlot");
                 relationProps.add("pendingResponseSlot");
                 Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
+
+                personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
+                invitedEvents = personLoggedIn.getPendingResponseSlot().size();
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-
-
-            int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
-            int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
