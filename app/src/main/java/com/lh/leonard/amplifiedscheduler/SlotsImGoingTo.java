@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TableRow;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -182,9 +181,8 @@ public class SlotsImGoingTo extends Fragment {
                     }
                     ));
                     progressBar.setVisibility(View.GONE);
-                    TableRow rowSearchView = (TableRow) v.findViewById(R.id.rowSearchView);
-                    rowSearchView.setVisibility(View.VISIBLE);
                     rv.setVisibility(View.VISIBLE);
+                    searchViewSlots.setVisibility(View.VISIBLE);
 
                 } else {
                     progressBar.setVisibility(View.GONE);
@@ -271,6 +269,7 @@ public class SlotsImGoingTo extends Fragment {
             Toast.makeText(v.getContext(), eventRemoved + " was removed", Toast.LENGTH_SHORT).show();
         }
     }
+//TODO SHOULD JUST PASS THE LIST OF NUMBERS _ QUICKER
 
     @JavascriptInterface
     public void sendsmss(String phoneNumber, String message) {

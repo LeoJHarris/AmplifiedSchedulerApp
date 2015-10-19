@@ -1,24 +1,18 @@
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg">
 
-    <TableRow
-        android:id="@+id/rowSearchView"
+    <SearchView
+        android:id="@+id/searchViewSlots"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:background="@color/white"
         android:padding="10dp"
-        android:visibility="gone">
-
-        <SearchView
-            android:id="@+id/searchViewSlots"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:background="@color/white"
-            android:queryHint="Search Slots"
-            android:searchIcon="@drawable/ic_searchicon" />
-    </TableRow>
+        android:queryHint="Search Slots"
+        android:searchIcon="@drawable/ic_searchicon"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -27,29 +21,24 @@
         android:layout_centerInParent="true"
         android:gravity="center" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
-        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/rv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+    <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+        android:id="@+id/textViewTextNoSlotAvaliable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="You have no Events available"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:visibility="gone" />
 
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewTextNoSlotAvaliable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/black"
-            android:gravity="center_vertical"
-            android:padding="10dp"
-            android:text="You have no Events available"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            android:visibility="gone" />
-    </TableRow>
-</TableLayout>
+</RelativeLayout>

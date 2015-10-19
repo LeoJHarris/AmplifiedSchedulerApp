@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TableRow;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -197,9 +196,8 @@ public class SlotsAwaitingMyResponse extends Fragment {
                     }
                     ));
                     progressBar.setVisibility(View.GONE);
-                    TableRow rowSearchView = (TableRow) v.findViewById(R.id.rowSearchView);
-                    rowSearchView.setVisibility(View.VISIBLE);
                     rv.setVisibility(View.VISIBLE);
+                    searchViewSlots.setVisibility(View.VISIBLE);
                 } else {
                     progressBar.setVisibility(View.GONE);
                     textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
