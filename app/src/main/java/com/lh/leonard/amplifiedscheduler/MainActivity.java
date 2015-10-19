@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if (!entered) {
+
                     ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
                     ringProgressDialog.setCancelable(true);
 
@@ -178,7 +178,6 @@ public class MainActivity extends Activity {
                         Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com.", Toast.LENGTH_LONG).show();
                     }
                 }
-            }
         });
     }
 

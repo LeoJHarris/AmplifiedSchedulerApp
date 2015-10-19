@@ -74,6 +74,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             updateNavDrawer = extras.getBoolean("refresh");
         }
 
+
         // Set up a home fragment with some welcome in.
         Fragment home = new HomeFragment();
         getFragmentManager().beginTransaction()
