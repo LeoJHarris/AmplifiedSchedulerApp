@@ -1,121 +1,118 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cv"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp"
-    card_view:cardCornerRadius="4dp">
+    android:fillViewport="true">
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/dialogInfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:background="@drawable/gradient_color_bg"
+        android:paddingBottom="10dp">
 
+        <ProgressBar
+            android:id="@+id/progressBarMyCreatedSlotsDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
 
-        <RelativeLayout
-            android:id="@+id/dialogInfo"
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewMySlotSubject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="jhsdoidsdsAddDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDsdadjsadjsadk\\hsoid"
+            android:textColor="@android:color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewMySlotMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewMySlotSubject"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:visibility="gone" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewMySlotDateAndTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewMySlotMessage"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:visibility="gone" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewMySlotLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewMySlotDateAndTime"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:visibility="gone" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewMyEventSpacesAvaliable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewMySlotLocation"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/gradient_color_bg"
-            android:paddingTop="20dp">
-
-            <ProgressBar
-
-                android:id="@+id/progressBarMyCreatedSlotsDialog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewMySlotSubject"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:gravity="center"
-                android:padding="10dp"
-                android:textColor="@android:color/white"
-                android:textSize="40sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewMySlotMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewMySlotSubject"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                android:visibility="gone" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewMySlotDateAndTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewMySlotMessage"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                android:visibility="gone" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewMySlotLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewMySlotDateAndTime"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                android:visibility="gone" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewMyEventSpacesAvaliable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewMySlotLocation"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                android:visibility="gone" />
+            android:layout_below="@id/textViewMyEventSpacesAvaliable"
+            android:layout_margin="10px"
+            android:gravity="center_horizontal|bottom"
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/buttonMySlotParticipantsSlot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textViewMyEventSpacesAvaliable"
-                android:layout_marginTop="10dp"
+                android:layout_above="@+id/buttonMySlotCancelSlot"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/button_default_bg"
-                android:padding="10dp"
                 android:text="People Going"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:visibility="gone" />
 
             <Button
                 android:id="@+id/buttonMySlotCancelSlot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/buttonMySlotParticipantsSlot"
+                android:layout_alignParentBottom="true"
                 android:background="@drawable/button_default_bg"
-                android:padding="10dp"
                 android:text="Cancel Event"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:visibility="gone" />
-
-        </RelativeLayout>
-    </ScrollView>
-
-</android.support.v7.widget.CardView>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

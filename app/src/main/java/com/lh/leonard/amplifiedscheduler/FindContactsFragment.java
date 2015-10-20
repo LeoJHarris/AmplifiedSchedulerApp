@@ -161,7 +161,7 @@ public class FindContactsFragment extends Fragment {
                     @Override
                     public void onItemClick(View view, final int position) {
 
-                       // view.setBackgroundColor(getResources().getColor(R.color.red));
+                        // view.setBackgroundColor(getResources().getColor(R.color.red));
 
                         String title = "Send Contact Request?";
                         String message = "Do you want to send contact request to ";
@@ -256,8 +256,7 @@ public class FindContactsFragment extends Fragment {
                                                 }
                                             }).show();
                                 }
-                            }
-                            else{
+                            } else {
                                 alertDialog = new AlertDialog.Builder(v.getContext())
                                         .setTitle(title)
                                         .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)

@@ -69,9 +69,6 @@
             android:label="@string/title_activity_create_slot"
             android:noHistory="true" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.AddRemoveContacts"
-            android:label="@string/title_activity_find_contact" />
-        <activity
             android:name="com.lh.leonard.amplifiedscheduler.RecipientsForSlot"
             android:label="Add Contacts For Schedule"
             android:theme="@android:style/Theme.Dialog" />

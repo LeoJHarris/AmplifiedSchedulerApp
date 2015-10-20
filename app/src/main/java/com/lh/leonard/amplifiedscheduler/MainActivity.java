@@ -75,14 +75,14 @@ public class MainActivity extends Activity {
                 String[] NameSplit = NameArray.split(",");
 
                 Toast.makeText(this,
-                        "Successfully Registered Account For " + NameSplit[0] + " " + NameSplit[1],
+                        "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1],
                         Toast.LENGTH_LONG).show();
             } else if (extras.getString("loggedoutperson") != null) {
                 String NameArray = extras.getString("loggedoutperson");
                 String[] NameSplit = NameArray.split(",");
 
                 Toast.makeText(this,
-                        "Successfully Logged Out " + NameSplit[0] + " " + NameSplit[1],
+                        "Successfully logged out " + NameSplit[0] + " " + NameSplit[1],
                         Toast.LENGTH_LONG).show();
                 loggedOutPersons = true;
             } else if (extras.getString("loggedoutpersonError") != null) {
@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
                 String[] NameSplit = NameArray.split(",");
 
                 Toast.makeText(this,
-                        "Error Occurred: Logged Out " + NameSplit[0] + " " + NameSplit[1],
+                        "Error occurred: Logged out " + NameSplit[0] + " " + NameSplit[1],
                         Toast.LENGTH_LONG).show();
                 loggedOutPersons = true;
             }

@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_column="0"
         android:background="@color/white"
-        android:padding="10dp"
         android:queryHint="Search Slots"
         android:searchIcon="@drawable/ic_searchicon"
         android:visibility="gone" />
@@ -25,11 +24,12 @@
         android:id="@+id/rv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/searchViewSlots"
         android:visibility="gone" />
 
     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
         android:id="@+id/textViewTextNoSlotAvaliable"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@color/black"

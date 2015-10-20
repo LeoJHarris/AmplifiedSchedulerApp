@@ -152,8 +152,6 @@ public class ParticipantsActivity extends Activity {
                 }
                 ));
                 progressBar.setVisibility(View.GONE);
-                TableRow rowSearchView = (TableRow) findViewById(R.id.rowSearchView);
-                rowSearchView.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.VISIBLE);
 
             } else {
