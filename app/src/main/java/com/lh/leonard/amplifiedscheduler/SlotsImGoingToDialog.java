@@ -187,10 +187,10 @@ public class SlotsImGoingToDialog extends Activity {
                 if (slotSelected.getStart() != null) {
 
                     if (slotSelected.getEnd() == null) {
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart());
+                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart());
 
                     } else {
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart() + " - " + slotSelected.getEnd());
+                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart() + " - " + slotSelected.getEnd());
                     }
                 }
             }
@@ -211,7 +211,7 @@ public class SlotsImGoingToDialog extends Activity {
             }
 
             if (person.fname != null) {
-                organizer.setText(person.getFname() + " " + person.getLname() + " created this event");
+                organizer.setText(person.getFname() + " " + person.getLname() + " created this schedule");
             }
 
             if (slotSelected.getMaxattendees() != 0) {
@@ -272,7 +272,7 @@ public class SlotsImGoingToDialog extends Activity {
         protected void onPostExecute(Void result) {
 
             if (removed) {
-                Toast.makeText(getApplicationContext(), "Event Removed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "schedule removed", Toast.LENGTH_SHORT).show();
             }
             finish();
         }

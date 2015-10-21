@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TableRow;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -47,11 +46,11 @@ public class ParticipantsActivity extends Activity {
 
         textViewTextNoSlotAvaliable = (AutoResizeTextView) findViewById(R.id.textViewTextNoSlotAvaliable);
 
-        this.setTitle("People Going");
+        this.setTitle("People going"); // TODO SHOULD ADD THE SUBJECT IN TITLE
 
         SearchView searchView = (SearchView) findViewById(R.id.searchViewSlots);
 
-        searchView.setQueryHint("Search People Going");
+        searchView.setQueryHint("Search people going");
         textViewTextNoSlotAvaliable.setTypeface(regularFont);
 
         person = (Person) userLoggedIn.getProperty("persons");
@@ -156,7 +155,7 @@ public class ParticipantsActivity extends Activity {
 
             } else {
                 progressBar.setVisibility(View.GONE);
-                textViewTextNoSlotAvaliable.setText("You Currently have no Participants");
+                textViewTextNoSlotAvaliable.setText("No one is currently going to this schedule");
                 textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
             }
         }

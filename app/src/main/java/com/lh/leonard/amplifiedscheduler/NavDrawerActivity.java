@@ -288,12 +288,13 @@ public class NavDrawerActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
 
-            int ICONS[] = {R.drawable.ic_home, R.drawable.ic_updateaccount, R.drawable.ic_createslot, resourceIntPersonsRequestingMe
+            int ICONS[] = {R.drawable.ic_home, R.drawable.ic_createslot
                     , R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
-                    resourceIntPendingResponseEvents, R.drawable.ic_logout};
+                    resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-            String TITLES[] = {"Home", "Update Account", "Create Event", "Manage Contacts" + valPersonsRequestingMe,
-                    "My Events" + valMyCreatedEvents, "Going To Events" + valGoingToEvents, "Event Invites" + valResponseEvents, "Log Out"};
+            String TITLES[] = {"Home", "Create schedule", "My schedules " + valMyCreatedEvents, "Going to schedules " +
+                    valGoingToEvents, "Invited schedules " + valResponseEvents, "Manage contacts" +
+                    valPersonsRequestingMe, "Update account", "Sign out"};
 
             NAME = personLoggedIn.getFullname();
             EMAIL = userLoggedIn.getEmail();

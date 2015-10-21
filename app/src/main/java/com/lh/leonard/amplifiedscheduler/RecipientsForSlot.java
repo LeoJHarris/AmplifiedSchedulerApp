@@ -128,24 +128,24 @@ public class RecipientsForSlot extends Activity {
                                 contactPersonsId.remove(position);
                                 view.setBackgroundResource(0);
                                 Toast.makeText(getApplicationContext(), myContactsPersonsList.get(position).getFname() + " " +
-                                        myContactsPersonsList.get(position).getLname() + " Removed From Slot", Toast.LENGTH_SHORT).show();
+                                        myContactsPersonsList.get(position).getLname() + " removed from schedule", Toast.LENGTH_SHORT).show();
 
                             } else {
                                 addPersonsForSlot.add(myContactsPersonsList.get(position));
                                 contactPersonsId.add(myContactsPersonsList.get(position).getObjectId());
                                 view.setBackgroundColor(Color.RED);
                                 Toast.makeText(getApplicationContext(), myContactsPersonsList.get(position).getFname() + " " +
-                                        myContactsPersonsList.get(position).getLname() + " Added For Slot", Toast.LENGTH_SHORT).show();
+                                        myContactsPersonsList.get(position).getLname() + " added for schedule", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             addPersonsForSlot.add(myContactsPersonsList.get(position));
                             contactPersonsId.add(myContactsPersonsList.get(position).getObjectId());
                             view.setBackgroundColor(Color.RED);
                             Toast.makeText(getApplicationContext(), myContactsPersonsList.get(position).getFname() + " " +
-                                    myContactsPersonsList.get(position).getLname() + " Added For Slot", Toast.LENGTH_SHORT).show();
+                                    myContactsPersonsList.get(position).getLname() + " added for schedule", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "Hi", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Hi", Toast.LENGTH_LONG).show(); // TODO WHATS THIS???
                     }
                 }
 

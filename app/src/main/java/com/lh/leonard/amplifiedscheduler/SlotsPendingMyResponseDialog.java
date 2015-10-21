@@ -69,9 +69,6 @@ public class SlotsPendingMyResponseDialog extends Activity {
         // buttonCantGo.setTypeface(regularFont);
         //   buttonGoing.setTypeface(regularFont);
 
-        Backendless.Data.mapTableToClass("Slot", Slot.class);
-        Backendless.Data.mapTableToClass("Person", Person.class);
-
         person = (Person) userLoggedIn.getProperty("persons");
 
         new LoadMyContacts().execute();
@@ -190,7 +187,7 @@ public class SlotsPendingMyResponseDialog extends Activity {
 
             if (slotSelected.getOwnername() != null) {
                 textViewOrganiser = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotOrganizer);
-                textViewOrganiser.setText(slotSelected.getOwnername() + " created this event");
+                textViewOrganiser.setText(slotSelected.getOwnername() + " created this schedule");
             }
 
             if (slotSelected.getMaxattendees() != 0) {

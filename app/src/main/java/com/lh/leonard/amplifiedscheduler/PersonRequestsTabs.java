@@ -74,7 +74,7 @@ public class PersonRequestsTabs extends Fragment {
         textViewTextNoRequestingUsers = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoRequestingUsers);
         textViewTextNoRequestingUsers.setTypeface(regularFont);
 
-        searchView.setQueryHint("Search Requesting Contacts");
+        searchView.setQueryHint("Search requesting contacts");
 
         new ParseURL().execute();
 

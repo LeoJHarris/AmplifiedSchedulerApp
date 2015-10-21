@@ -53,7 +53,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
-        getActivity().setTitle("Event Invites");
+        getActivity().setTitle("Invited Schedules");
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
@@ -162,7 +162,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                         public void onItemLongClick(View view, final int position) {
 
                             dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Event to go to?")
+                                    .setTitle("Going to " + slot.get(position).getSubject() + "?")
                                     .setMessage("Do you want to go to " + slot.get(position).getSubject())
                                     .setIcon(R.drawable.ic_questionmark)
                                     .setPositiveButton("Going", new DialogInterface.OnClickListener() {
@@ -171,7 +171,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
 
                                             dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Accepting invited event " + slot.get(position).getSubject() + " ...", true);
+                                                    "Accepting invited schedule " + slot.get(position).getSubject() + " ...", true);
                                             ringProgressDialog.setCancelable(false);
                                             new GoingToEvent(position).execute();
 
@@ -182,7 +182,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                                         public void onClick(DialogInterface dialog, int whichButton) {
                                             dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Declining invited event" + slot.get(position).getSubject() + " ...", true);
+                                                    "Declining invited schedule" + slot.get(position).getSubject() + " ...", true);
                                             ringProgressDialog.setCancelable(false);
                                             new NotGoingToEvent(position).execute();
                                         }
@@ -243,7 +243,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                 }
             }
 
-            sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - EVENTHUB101: " + person.getFullname() + " has indicated he/she is not to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
+            sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - Amplified Schedule: " + person.getFullname() + " has indicated he/she is not to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
 
             person.pendingResponseSlot.remove(pos);
             eventRemoved = slot.get(positionInList).getSubject();
@@ -320,7 +320,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                     }
                 }
 
-                sendsmss(slot.get(position).getPhone(), "Automated TXT - EVENTHUB101: " + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
+                sendsmss(slot.get(position).getPhone(), "Automated TXT - Amplified Schedule" + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
 
                 person.pendingResponseSlot.remove(pos);
 

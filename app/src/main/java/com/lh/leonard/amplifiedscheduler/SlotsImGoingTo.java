@@ -53,7 +53,7 @@ public class SlotsImGoingTo extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
-        getActivity().setTitle("Going To Events");
+        getActivity().setTitle("Schedules Going To");
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
@@ -156,16 +156,16 @@ public class SlotsImGoingTo extends Fragment {
                         public void onItemLongClick(View view, final int position) {
 
                             dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Not Going To Event?")
+                                    .setTitle("Not going to " + slot.get(position).getSubject() + "?")
                                     .setMessage("Do you want to remove " + slot.get(position).getSubject())
                                     .setIcon(R.drawable.ic_questionmark)
-                                    .setPositiveButton("Remove Event", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton("Remove schedule", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
 
                                             dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Remove event " + slot.get(position).getSubject() + " ...", true);
+                                                    "Remove schedule " + slot.get(position).getSubject() + " ...", true);
                                             ringProgressDialog.setCancelable(false);
                                             new RemoveEvent(position).execute();
 
@@ -229,7 +229,7 @@ public class SlotsImGoingTo extends Fragment {
                 }
             }
 
-            sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - EVENTHUB101: " + person.getFullname() + "  has indicated he/she is no longer going to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
+            sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - Amplified Scheduler: " + person.getFullname() + "  has indicated he/she is no longer going to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
 
 
             person1.getGoingToSlot().remove(pos);
