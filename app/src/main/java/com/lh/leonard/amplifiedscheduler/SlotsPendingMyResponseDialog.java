@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -18,7 +18,6 @@ import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SlotsPendingMyResponseDialog extends Activity {
@@ -33,8 +32,9 @@ public class SlotsPendingMyResponseDialog extends Activity {
     AutoResizeTextView textViewMyEventSpacesAvaliable;
     AutoResizeTextView textViewOrganiser;
     Integer position;
-    Button buttonCantGo;
-    Button buttonGoing;
+    ProgressBar progressBar;
+    //Button buttonCantGo;
+    //  Button buttonGoing;
     Person person;
     BackendlessCollection<Slot> slots;
     SpannableString content;
@@ -57,8 +57,8 @@ public class SlotsPendingMyResponseDialog extends Activity {
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotLocation);
         textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
         textViewOrganiser = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotOrganizer);
-        buttonGoing = (Button) findViewById(R.id.buttonRequestSlotGoing);
-        buttonCantGo = (Button) findViewById(R.id.buttonRequestSlotCantGo);
+        // buttonGoing = (Button) findViewById(R.id.buttonRequestSlotGoing);
+        //  buttonCantGo = (Button) findViewById(R.id.buttonRequestSlotCantGo);
 
         textViewSubject.setTypeface(regularFont);
         textViewMessage.setTypeface(regularFont);
@@ -66,8 +66,8 @@ public class SlotsPendingMyResponseDialog extends Activity {
         textViewLocation.setTypeface(regularFont);
         textViewMyEventSpacesAvaliable.setTypeface(regularFont);
         textViewOrganiser.setTypeface(regularFont);
-        buttonCantGo.setTypeface(regularFont);
-        buttonGoing.setTypeface(regularFont);
+        // buttonCantGo.setTypeface(regularFont);
+        //   buttonGoing.setTypeface(regularFont);
 
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
@@ -76,22 +76,22 @@ public class SlotsPendingMyResponseDialog extends Activity {
 
         new LoadMyContacts().execute();
 
-        buttonCantGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        buttonCantGo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
 
-            }
-        });
-
-        buttonGoing.setOnClickListener(new View.OnClickListener() {
-                                           @Override
-                                           public void onClick(View v) {
-
-                                               new AddToMyEvents().execute();
-
-                                           }
-                                       }
-        );
+//        buttonGoing.setOnClickListener(new View.OnClickListener() {
+//                                           @Override
+//                                           public void onClick(View v) {
+//
+//                                               new AddToMyEvents().execute();
+//
+//                                           }
+//                                       }
+//        );
 
         textViewLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,11 +165,11 @@ public class SlotsPendingMyResponseDialog extends Activity {
                 if (slotSelected.getStart() != null) {
 
                     if (slotSelected.getEnd() == null) {
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart());
+                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart());
 
                     } else {
 
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart() + " - " + slotSelected.getEnd());
+                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart() + " - " + slotSelected.getEnd());
                     }
                 }
             }
@@ -205,53 +205,64 @@ public class SlotsPendingMyResponseDialog extends Activity {
             } else {
                 textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
             }
+
+            progressBar = (ProgressBar) findViewById(R.id.progressBarRequestSlotsDialog);
+            progressBar.setVisibility(View.GONE);
+
+            textViewMyEventSpacesAvaliable.setVisibility(View.VISIBLE);
+            textViewSubject.setVisibility(View.VISIBLE);
+            textViewMessage.setVisibility(View.VISIBLE);
+            textViewLocation.setVisibility(View.VISIBLE);
+            textViewDateAndTime.setVisibility(View.VISIBLE);
+            // buttonCancelSlot.setVisibility(View.VISIBLE);
+            // buttonMySlotParticipantsSlot.setVisibility(View.VISIBLE);
         }
     }
 
-    private class AddToMyEvents extends AsyncTask<Void, Integer, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            //  progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            //   progressBar.setVisibility(View.VISIBLE);
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-
-            ArrayList<String> relationPropsPerson = new ArrayList<String>();
-            relationPropsPerson.add("goingToSlot");
-            Backendless.Persistence.of(Person.class).loadRelations(person, relationPropsPerson);
-
-            // person.getGoingToSlot().add(slotSelected);
-            //  Backendless.Persistence.save(person);
-
-
-            ArrayList<String> relationProps = new ArrayList<String>();
-            relationProps.add("attendees");
-            Backendless.Persistence.of(Slot.class).loadRelations(slotSelected, relationProps);
-
-
-            slotSelected.getAttendees().add(person);
-
-            Backendless.Persistence.of(Slot.class).save(slotSelected);
-
-            //Still have to remove from my list requesting
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void params) {
-
-
-        }
-    }
+//    private class AddToMyEvents extends AsyncTask<Void, Integer, Void> {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            //  progressBar = (ProgressBar) findViewById(R.id.progressBar);
+//            //   progressBar.setVisibility(View.VISIBLE);
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected void onProgressUpdate(Integer... values) {
+//            super.onProgressUpdate(values);
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//
+//            ArrayList<String> relationPropsPerson = new ArrayList<String>();
+//            relationPropsPerson.add("goingToSlot");
+//            Backendless.Persistence.of(Person.class).loadRelations(person, relationPropsPerson);
+//
+//            // person.getGoingToSlot().add(slotSelected);
+//            //  Backendless.Persistence.save(person);
+//
+//
+//            ArrayList<String> relationProps = new ArrayList<String>();
+//            relationProps.add("attendees");
+//            Backendless.Persistence.of(Slot.class).loadRelations(slotSelected, relationProps);
+//
+//
+//            slotSelected.getAttendees().add(person);
+//
+//            Backendless.Persistence.of(Slot.class).save(slotSelected);
+//
+//            //Still have to remove from my list requesting
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void params) {
+//
+//
+//        }
+//    }
 }

@@ -51,11 +51,8 @@ public class NavDrawerActivity extends AppCompatActivity {
     String NAME;
     String EMAIL;
     int PROFILE = R.drawable.ic_currentcontact;
-
     private Toolbar toolbar;                              // Declaring the Toolbar Object
-
     FragmentManager fragmentManager;
-
     RecyclerView mRecyclerView = null;                           // Declaring RecyclerView
     RecyclerView.Adapter mAdapter = null;                        // Declaring Adapter For Recycler View
     RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
@@ -73,7 +70,6 @@ public class NavDrawerActivity extends AppCompatActivity {
         if (extras != null) {
             updateNavDrawer = extras.getBoolean("refresh");
         }
-
 
         // Set up a home fragment with some welcome in.
         Fragment home = new HomeFragment();

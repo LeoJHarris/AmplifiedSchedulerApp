@@ -51,7 +51,8 @@
             android:label="@string/title_activity_user_logged_in" />
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.MyCreatedSlotsDialog"
-            android:label="" />
+            android:label="My Schedule"
+            android:noHistory="true" />
 
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.MapsActivity"
@@ -63,7 +64,7 @@
             android:label="@string/title_activity_forgot_password_reset" />
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.SlotsImGoingToDialog"
-            android:label="@string/title_activity_slots_im_going_to_dialog" />
+            android:label="Schedule Going To" />
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.CreateSlot"
             android:label="@string/title_activity_create_slot"
@@ -75,16 +76,16 @@
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.AddRemoveContactsTabbed"
             android:label="Amplified Scheduler Home"
-            android:screenOrientation="portrait"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.NavDrawerActivity"
-            android:screenOrientation="portrait"
-            android:label="Amplified Scheduler" />
+            android:label="Amplified Scheduler"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.SlotsPendingMyResponseDialog"
-            android:label="@string/title_activity_slots_pending_my_request_dialog" />
+            android:label="Invited Schedule" />
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.JustMapActivity"
             android:label="JustMaps" />

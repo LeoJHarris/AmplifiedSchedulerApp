@@ -59,8 +59,8 @@ public class UnseenSlotsDialog extends Activity {
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotLocation);
         textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
         textViewOrganiser = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotOrganizer);
-        buttonGoing = (Button) findViewById(R.id.buttonRequestSlotGoing);
-        buttonCantGo = (Button) findViewById(R.id.buttonRequestSlotCantGo);
+      //  buttonGoing = (Button) findViewById(R.id.buttonRequestSlotGoing);
+       // buttonCantGo = (Button) findViewById(R.id.buttonRequestSlotCantGo);
 
         textViewSubject.setTypeface(regularFont);
         textViewMessage.setTypeface(regularFont);
@@ -68,8 +68,8 @@ public class UnseenSlotsDialog extends Activity {
         textViewLocation.setTypeface(regularFont);
         textViewMyEventSpacesAvaliable.setTypeface(regularFont);
         textViewOrganiser.setTypeface(regularFont);
-        buttonCantGo.setTypeface(regularFont);
-        buttonGoing.setTypeface(regularFont);
+      //  buttonCantGo.setTypeface(regularFont);
+      //  buttonGoing.setTypeface(regularFont);
 
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);

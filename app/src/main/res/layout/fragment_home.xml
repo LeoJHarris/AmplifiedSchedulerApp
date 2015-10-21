@@ -48,8 +48,8 @@
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingBottom="30dp">
+            android:layout_marginTop="30dp"
+            android:gravity="center">
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewWelcomeLabel"
@@ -64,6 +64,7 @@
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
             android:gravity="center">
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView

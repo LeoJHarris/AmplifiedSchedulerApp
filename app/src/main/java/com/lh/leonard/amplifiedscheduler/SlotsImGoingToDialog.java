@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -35,10 +37,12 @@ public class SlotsImGoingToDialog extends Activity {
     AutoResizeTextView textViewLocation;
     AutoResizeTextView textViewMyEventSpacesAvaliable;
     AutoResizeTextView organizer;
-   // Button buttonCantGo;
+    // Button buttonCantGo;
     Integer position;
     BackendlessCollection<Slot> slots;
     SpannableString content;
+    ProgressBar progressBar;
+    Button buttonMySlotParticipantsSlot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,8 @@ public class SlotsImGoingToDialog extends Activity {
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewGoingToSlotDateAndTime);
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewGoingToSlotLocation);
         textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
-      //  buttonCantGo = (Button) findViewById(R.id.buttonGoingToSlotCantGo);
+        //  buttonCantGo = (Button) findViewById(R.id.buttonGoingToSlotCantGo);
+        buttonMySlotParticipantsSlot = (Button) findViewById(R.id.buttonMySlotParticipantsSlot);
 
         organizer.setTypeface(regularFont);
         textViewSubject.setTypeface(regularFont);
@@ -67,7 +72,8 @@ public class SlotsImGoingToDialog extends Activity {
         textViewDateAndTime.setTypeface(regularFont);
         textViewLocation.setTypeface(regularFont);
         textViewMyEventSpacesAvaliable.setTypeface(regularFont);
-       // buttonCantGo.setTypeface(regularFont);
+        // buttonCantGo.setTypeface(regularFont);
+        buttonMySlotParticipantsSlot.setTypeface(regularFont);
 
         person = (Person) userLoggedIn.getProperty("persons");
 
@@ -106,6 +112,19 @@ public class SlotsImGoingToDialog extends Activity {
                 startActivity(mapIntent);
             }
         });
+
+        buttonMySlotParticipantsSlot.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+
+                                                                Intent participantsIntent = new Intent(SlotsImGoingToDialog.this, ParticipantsActivity.class);
+
+                                                                participantsIntent.putExtra("eventid", slotSelected.getObjectId());
+
+                                                                startActivity(participantsIntent);
+                                                            }
+                                                        }
+        );
     }
 
     private class LoadSlotsImGoingTo extends AsyncTask<Void, Integer, List<Address>> {
@@ -208,6 +227,18 @@ public class SlotsImGoingToDialog extends Activity {
             } else {
                 textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
             }
+            progressBar = (ProgressBar) findViewById(R.id.progressBarSlotsGoingToDialog);
+            progressBar.setVisibility(View.GONE);
+
+            textViewMyEventSpacesAvaliable.setVisibility(View.VISIBLE);
+            textViewSubject.setVisibility(View.VISIBLE);
+            textViewMessage.setVisibility(View.VISIBLE);
+            textViewLocation.setVisibility(View.VISIBLE);
+            textViewDateAndTime.setVisibility(View.VISIBLE);
+            // buttonCancelSlot.setVisibility(View.VISIBLE);
+            //buttonMySlotParticipantsSlot.setVisibility(View.VISIBLE);
+            buttonMySlotParticipantsSlot.setVisibility(View.VISIBLE);
+
         }
     }
 

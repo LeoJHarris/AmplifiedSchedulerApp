@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment {
 
         final AutoResizeTextView homeLogo = (AutoResizeTextView) v.findViewById(R.id.textViewHomeLogo);
 
-       // final AutoResizeTextView textViewAppStatement = (AutoResizeTextView) v.findViewById(R.id.textViewAppStatement);
+        // final AutoResizeTextView textViewAppStatement = (AutoResizeTextView) v.findViewById(R.id.textViewAppStatement);
 
         final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
 
         homeLogo.setTypeface(fontWelcome);
         welcomeLabel.setTypeface(regularFont);
-    //    textViewAppStatement.setTypeface(fontWelcome);
+        //    textViewAppStatement.setTypeface(fontWelcome);
 
         welcomeLabel.setText("Welcome! " + personLoggedIn.getFullname());
 
@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment {
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
-                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications - Tap To See"));
+                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications"));
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
 //                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {

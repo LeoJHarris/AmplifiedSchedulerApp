@@ -1,110 +1,86 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cv"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp"
-    card_view:cardCornerRadius="4dp">
+    android:fillViewport="true">
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/dialogInfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:background="@drawable/gradient_color_bg"
+        android:paddingBottom="10dp">
 
-        <RelativeLayout
+        <ProgressBar
+            android:id="@+id/progressBarRequestSlotsDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewRequestSlotSubject"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/gradient_color_bg"
-            android:paddingTop="20dp">
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewRequestSlotSubject"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:gravity="center"
-                android:padding="10dp"
-                android:textColor="@android:color/white"
-                android:textSize="40sp"
-                android:textStyle="bold" />
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewRequestSlotMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewRequestSlotSubject"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textSize="30sp" />
 
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewRequestSlotMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewRequestSlotSubject"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:textSize="30sp" />
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewRequestSlotDateAndTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewRequestSlotMessage"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textSize="30sp" />
 
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewRequestSlotDateAndTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewRequestSlotMessage"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:textSize="30sp" />
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewRequestSlotLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewRequestSlotDateAndTime"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textSize="30sp" />
 
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewRequestSlotLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewRequestSlotDateAndTime"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:textSize="30sp" />
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewMyEventSpacesAvaliable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewRequestSlotLocation"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textSize="30sp" />
 
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewMyEventSpacesAvaliable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewRequestSlotLocation"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:textSize="30sp" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewRequestSlotOrganizer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewMyEventSpacesAvaliable"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:textSize="30sp" />
-
-            <Button
-                android:id="@+id/buttonRequestSlotGoing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewRequestSlotOrganizer"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/button_default_bg"
-                android:padding="10dp"
-                android:text="Going"
-                android:textSize="30sp" />
-
-            <Button
-                android:id="@+id/buttonRequestSlotCantGo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/buttonRequestSlotGoing"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/button_default_bg"
-                android:padding="10dp"
-                android:text="Can't Go"
-                android:textSize="30sp" />
-
-        </RelativeLayout>
-    </ScrollView>
-</android.support.v7.widget.CardView>
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewRequestSlotOrganizer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewMyEventSpacesAvaliable"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textSize="30sp" />
+    </RelativeLayout>
+</ScrollView>

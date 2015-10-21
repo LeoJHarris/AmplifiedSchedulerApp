@@ -55,7 +55,7 @@ public class MyCreatedSlots extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
-        getActivity().setTitle("My Events");
+        getActivity().setTitle("My Schedules");
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
@@ -159,10 +159,10 @@ public class MyCreatedSlots extends Fragment {
 
 
                             dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Cancel Event?")
-                                    .setMessage("Do you want cancel " + slot.get(position).getSubject())
+                                    .setTitle("Cancel Schedule?")
+                                    .setMessage("Do you want cancel your " + slot.get(position).getSubject() + " Schedule")
                                     .setIcon(R.drawable.ic_questionmark)
-                                    .setPositiveButton("Cancel Event", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton("Yup Cancel", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
 
@@ -173,7 +173,7 @@ public class MyCreatedSlots extends Fragment {
                                             new CancelEvent(position).execute();
                                         }
                                     })
-                                    .setNegativeButton("Keep Event", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton("Nope Keep", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
                                             dialog.dismiss();
@@ -298,7 +298,7 @@ public class MyCreatedSlots extends Fragment {
     @JavascriptInterface
     public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
 
-        String messageSubString = "Automated TXT - EVENTHUB101: Event" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
+        String messageSubString = "Automated TXT - Amplified Schedule: Schedule" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }

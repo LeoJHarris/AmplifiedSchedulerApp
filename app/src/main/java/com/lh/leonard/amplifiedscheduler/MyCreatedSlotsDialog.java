@@ -7,12 +7,13 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -34,12 +35,15 @@ public class MyCreatedSlotsDialog extends Activity {
     AutoResizeTextView textViewLocation;
     AutoResizeTextView textViewMyEventSpacesAvaliable;
     Integer position;
-    Button buttonCancelSlot;
+    // Button buttonCancelSlot;
+    List<Person> personsToSms;
+    BackendlessCollection<Person> personsToSmsCollection;
     Button buttonMySlotParticipantsSlot;
     Person person;
     BackendlessCollection<Slot> slots;
     SpannableString content;
     ProgressBar progressBar;
+    String eventRemoved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,7 @@ public class MyCreatedSlotsDialog extends Activity {
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewMySlotDateAndTime);
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewMySlotLocation);
         textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
-        buttonCancelSlot = (Button) findViewById(R.id.buttonMySlotCancelSlot);
+        //buttonCancelSlot = (Button) findViewById(R.id.buttonMySlotCancelSlot);
         buttonMySlotParticipantsSlot = (Button) findViewById(R.id.buttonMySlotParticipantsSlot);
 
         textViewSubject.setTypeface(regularFont);
@@ -66,7 +70,7 @@ public class MyCreatedSlotsDialog extends Activity {
         textViewDateAndTime.setTypeface(regularFont);
         textViewLocation.setTypeface(regularFont);
         textViewMyEventSpacesAvaliable.setTypeface(regularFont);
-        buttonCancelSlot.setTypeface(regularFont);
+        // buttonCancelSlot.setTypeface(regularFont);
         buttonMySlotParticipantsSlot.setTypeface(regularFont);
 
         Backendless.Data.mapTableToClass("Slot", Slot.class);
@@ -76,13 +80,13 @@ public class MyCreatedSlotsDialog extends Activity {
 
         new LoadMyContacts().execute();
 
-        buttonCancelSlot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(v.getContext(), "Please long hold on events themselves to remove events on previous page", Toast.LENGTH_LONG).show();
-            }
-        });
+//        buttonCancelSlot.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                new CancelEvent().execute();
+//            }
+//        });
 
         buttonMySlotParticipantsSlot.setOnClickListener(new View.OnClickListener() {
                                                             @Override
@@ -171,19 +175,15 @@ public class MyCreatedSlotsDialog extends Activity {
                 if (slotSelected.getStart() != null) {
 
                     if (slotSelected.getEnd() == null) {
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart());
+                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart());
 
                     } else {
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart() + " - " + slotSelected.getEnd());
+                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart() + " - " + slotSelected.getEnd());
                     }
                 }
             }
 
             if (slotSelected.getLocation() != null) {
-
-
-                System.out.println(slotSelected.getLocation().getName());
-
 
                 for (int i = 0; i < addresses.size(); i++) {
                     Address address = (Address) addresses.get(i);
@@ -226,7 +226,7 @@ public class MyCreatedSlotsDialog extends Activity {
             textViewMessage.setVisibility(View.VISIBLE);
             textViewLocation.setVisibility(View.VISIBLE);
             textViewDateAndTime.setVisibility(View.VISIBLE);
-            buttonCancelSlot.setVisibility(View.VISIBLE);
+            // buttonCancelSlot.setVisibility(View.VISIBLE);
             buttonMySlotParticipantsSlot.setVisibility(View.VISIBLE);
         }
     }
@@ -260,5 +260,82 @@ public class MyCreatedSlotsDialog extends Activity {
 
 
         }
+    }
+
+    private class CancelEvent extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+
+            StringBuilder whereClause = new StringBuilder();
+            whereClause.append("Slot[attendees]");
+            whereClause.append(".objectId='").append(slotSelected.getObjectId()).append("'");
+
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            dataQuery.setWhereClause(whereClause.toString());
+
+            personsToSmsCollection = Backendless.Data.of(Person.class).find(dataQuery);
+            personsToSms = personsToSmsCollection.getData();
+
+            String fullnamePersonLoggedIn = person.getFullname();
+            String dateofslot = slotSelected.getDateofslot();
+            String subject = slotSelected.getSubject();
+            String placeofSlot = slotSelected.getPlace();
+
+            for (Person pId : personsToSms) {
+
+                sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
+            }
+
+
+            // Deleting process
+
+            List<String> relations = new ArrayList<String>();
+            relations.add("myCreatedSlot");
+            Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relations);
+
+            int pos = 0;
+
+            for (int i = 0; i < person1.myCreatedSlot.size(); i++) {
+
+                if (person1.myCreatedSlot.get(i).getObjectId().equals(slotSelected.getObjectId())) {
+                    pos = i;
+                    break;
+                }
+            }
+
+            eventRemoved = slotSelected.getSubject();
+            //  Backendless.Geo.removePoint(slotSelected.getLocation());
+
+            Long result = Backendless.Persistence.of(Slot.class).remove(slotSelected); // TODO toast "'result' events removed"
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            finish();
+        }
+    }
+
+    @JavascriptInterface
+    public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
+
+        String messageSubString = "Automated TXT - Amplified Schedule: Schedule" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }
 }
