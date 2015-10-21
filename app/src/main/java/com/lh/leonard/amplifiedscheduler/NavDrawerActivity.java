@@ -120,22 +120,22 @@ public class NavDrawerActivity extends AppCompatActivity {
                 fragment = new HomeFragment();
                 break;
             case 2:
-                fragment = new UpdateAccount();
-                break;
-            case 3:
                 intent = new Intent(NavDrawerActivity.this, CreateSlot.class);
                 break;
-            case 4:
-                intent = new Intent(NavDrawerActivity.this, AddRemoveContactsTabbed.class);
-                break;
-            case 5:
+            case 3:
                 fragment = new MyCreatedSlots();
                 break;
-            case 6:
+            case 4:
                 fragment = new SlotsImGoingTo();
                 break;
-            case 7:
+            case 5:
                 fragment = new SlotsAwaitingMyResponse();
+                break;
+            case 6:
+                intent = new Intent(NavDrawerActivity.this, AddRemoveContactsTabbed.class);
+                break;
+            case 7:
+                fragment = new UpdateAccount();
                 break;
             case 8:
                 Backendless.UserService.logout(new AsyncCallback<Void>() {

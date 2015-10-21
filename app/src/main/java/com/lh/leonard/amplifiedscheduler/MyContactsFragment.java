@@ -51,6 +51,7 @@ public class MyContactsFragment extends Fragment {
     LinearLayoutManager llm;
     String removedFullName;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.my_contacts_tab1, container, false);
@@ -69,7 +70,6 @@ public class MyContactsFragment extends Fragment {
         textViewTextNoContacts = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoContacts);
         textViewTextNoContacts.setTypeface(regularFont);
         searchView = (SearchView) v.findViewById(R.id.searchViewMyContacts);
-        progressBarMyContacts = (ProgressBar) v.findViewById(R.id.progressBarMyContacts);
         searchView.setQueryHint("Search Contacts");
 
         new ParseURL().execute();
@@ -203,7 +203,7 @@ public class MyContactsFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-
+            progressBarMyContacts.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
