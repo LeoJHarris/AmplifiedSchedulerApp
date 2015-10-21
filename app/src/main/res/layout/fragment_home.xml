@@ -3,60 +3,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
-    tools:context="com.lh.leonard.eventhub101.HomeFragment">
+    android:padding="10dp"
+    tools:context="com.lh.leonard.amplifiedscheduler.HomeFragment">
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:padding="2dp">
+        android:gravity="center">
 
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center">
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewHomeLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="EventHub101"
+                android:text="Amplified Scheduler"
                 android:textColor="@color/white"
-                android:textSize="100sp"
+                android:textSize="80sp"
                 android:textStyle="bold" />
         </TableRow>
+
+        <!--<TableRow-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:paddingBottom="30dp">-->
+
+        <!--<com.lh.leonard.amplifiedscheduler.AutoResizeTextView-->
+        <!--android:id="@+id/textViewAppStatement"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:text="Scheduling "-->
+        <!--android:textAllCaps="true"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="40sp"-->
+        <!--android:textStyle="italic" />-->
+        <!--</TableRow>-->
 
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingBottom="30dp">
+            android:layout_marginTop="30dp"
+            android:gravity="center">
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
-                android:id="@+id/textViewAppStatement"
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/textViewWelcomeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Your Hub For All Events"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="40sp"
-                android:textStyle="italic" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp">
-
-            <com.lh.leonard.eventhub101.AutoResizeTextView
-                android:id="@+id/textViewWelcomeLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="40sp"
                 android:textStyle="bold" />
@@ -65,10 +64,10 @@
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="50dp">
+            android:layout_marginTop="40dp"
+            android:gravity="center">
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewNotificationNumberHome"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

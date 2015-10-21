@@ -7,22 +7,21 @@
     android:padding="10dp">
 
     <TableRow
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center">
 
-        <com.lh.leonard.eventhub101.AutoResizeTextView
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewheaderSlotAppMain"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:gravity="center"
-            android:text="EventHub101"
+            android:text="Amplified Scheduler"
             android:textColor="@color/white"
-            android:textSize="90sp"
+            android:textSize="80sp"
+            android:layout_marginBottom="10dp"
             android:textStyle="bold" />
     </TableRow>
 
@@ -30,15 +29,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical">
-
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
+            android:paddingBottom="5dp">
 
             <EditText
                 android:id="@+id/emailSignIn"
@@ -50,15 +48,13 @@
                 android:inputType="textEmailAddress"
                 android:padding="10dp"
                 android:textColorHint="#cccccc"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
+            android:layout_centerInParent="true">
 
             <EditText
                 android:id="@+id/passwordSignIn"
@@ -71,7 +67,7 @@
                 android:padding="10dp"
                 android:password="true"
                 android:textColorHint="#cccccc"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </TableRow>
 
 
@@ -89,28 +85,27 @@
                 android:padding="10dp"
                 android:text="Sign In"
                 android:textColor="@color/black"
-                android:textSize="40sp" />
+                android:textSize="25sp" />
         </TableRow>
     </LinearLayout>
 
     <TableRow android:gravity="center">
 
-        <com.lh.leonard.eventhub101.AutoResizeTextView
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/buttonForgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clickable="true"
             android:gravity="center"
-            android:paddingTop="30dp"
             android:text="Forgot Password?"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </TableRow>
 
     <TableRow android:gravity="center">
 
-        <com.lh.leonard.eventhub101.AutoResizeTextView
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/buttonRegistration"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -119,13 +114,13 @@
             android:paddingTop="20dp"
             android:text="Create Account"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </TableRow>
 
     <TableRow android:gravity="center">
 
-        <com.lh.leonard.eventhub101.AutoResizeTextView
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewMadeByMeMain"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -134,7 +129,7 @@
             android:paddingTop="20dp"
             android:text="App Designed And Made By Leonard Harris"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="15dp"
             android:textStyle="bold" />
     </TableRow>
 

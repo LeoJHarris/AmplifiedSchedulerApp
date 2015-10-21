@@ -5,7 +5,7 @@
     android:orientation="vertical"
     tools:context=".AddRemoveContactsTabbed">
 
-    <com.lh.leonard.eventhub101.SlidingTabLayout
+    <com.lh.leonard.amplifiedscheduler.SlidingTabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

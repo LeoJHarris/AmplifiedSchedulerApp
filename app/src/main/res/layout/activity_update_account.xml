@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
     android:orientation="vertical"
-    tools:context="com.lh.leonard.eventhub101.NavDrawerActivity">
+    tools:context="com.lh.leonard.amplifiedscheduler.NavDrawerActivity">
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/editTextNoticeUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -31,7 +31,7 @@
                 android:paddingTop="20dp"
                 android:textSize="20sp" />
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelFnameUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -54,7 +54,7 @@
                 android:inputType="text"
                 android:textSize="25sp" />
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabeLnameUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -78,7 +78,7 @@
                 android:textSize="25sp" />
 
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelTextPasswordUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -100,7 +100,7 @@
                 android:inputType="textPassword"
                 android:textSize="25sp" />
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelPasswordConfirmUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -123,7 +123,7 @@
                 android:textSize="25sp" />
 
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelEmailUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -147,7 +147,7 @@
                 android:textSize="25sp" />
 
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelPhoneUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -171,7 +171,7 @@
                 android:textSize="25sp" />
 
 
-            <com.lh.leonard.eventhub101.AutoResizeTextView
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelUpdateCountry"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

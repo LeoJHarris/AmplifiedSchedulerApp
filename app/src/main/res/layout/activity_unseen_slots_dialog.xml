@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/gradient_color_bg"
-    tools:context="com.lh.leonard.eventhub101.SlotsAwaitingMyResponse">
+    tools:context="com.lh.leonard.amplifiedscheduler.SlotsAwaitingMyResponse">
 
     <TableRow
         android:layout_width="wrap_content"
