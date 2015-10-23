@@ -206,6 +206,7 @@ public class SlotsImGoingToDialog extends Activity {
                     content = new SpannableString("Where: " + addressText);
                     content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                     textViewLocation.setText(content); //TODO Button to get Location else just Text
+                    break;
 
                 }
             }

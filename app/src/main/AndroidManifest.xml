@@ -51,8 +51,7 @@
             android:label="@string/title_activity_user_logged_in" />
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.MyCreatedSlotsDialog"
-            android:label="My Schedule"
-            android:noHistory="true" />
+            android:label="My Schedule" />
 
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.MapsActivity"
