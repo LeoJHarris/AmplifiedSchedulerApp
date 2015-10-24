@@ -36,7 +36,7 @@
 
         <activity
             android:name="com.lh.leonard.amplifiedscheduler.MainActivity"
-            android:label="EventHub101">
+            android:label="Amplified Scheduler">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
