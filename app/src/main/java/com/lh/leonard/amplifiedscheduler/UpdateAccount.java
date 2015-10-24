@@ -72,7 +72,7 @@ public class UpdateAccount extends Fragment {
         phoneIconDraw = getResources().getDrawable(R.drawable.ic_phone);
 
         emailGoodIconDraw = getResources().getDrawable(R.drawable.ic_email_good);
-        userGoodProfileDraw = getResources().getDrawable(R.drawable.ic_country_good);
+        userGoodProfileDraw = getResources().getDrawable(R.drawable.ic_profile_good);
         passwordGoodIconDraw = getResources().getDrawable(R.drawable.ic_password_good);
         countryGoodIconDraw = getResources().getDrawable(R.drawable.ic_country_good);
         phoneGoodIconDraw = getResources().getDrawable(R.drawable.ic_phone_good);

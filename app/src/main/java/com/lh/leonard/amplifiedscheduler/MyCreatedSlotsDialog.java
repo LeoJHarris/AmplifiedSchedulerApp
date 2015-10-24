@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.io.IOException;
@@ -151,6 +152,7 @@ public class MyCreatedSlotsDialog extends Activity {
             List<Address> addresses = null;
 
             try {
+
                 // Getting a maximum of 3 Address that matches the input text
                 addresses = geocoder.getFromLocation(slotSelected.getLocation().getLatitude(), slotSelected.getLocation().getLongitude(), 1);
             } catch (IOException e) {
@@ -194,6 +196,7 @@ public class MyCreatedSlotsDialog extends Activity {
                     content = new SpannableString("Where: " + addressText);
                     content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                     textViewLocation.setText(content); //TODO Button to get Location else just Text
+                    break;
 
                 }
             }

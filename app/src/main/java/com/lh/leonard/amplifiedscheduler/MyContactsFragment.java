@@ -161,7 +161,7 @@ public class MyContactsFragment extends Fragment {
 
                                             dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Removing " + myContactsList.get(position).getFullname() + " from your contact ...", true);
+                                                    "Removing " + myContactsList.get(position).getFullname() + " from your contacts ...", true);
                                             ringProgressDialog.setCancelable(false);
                                             new RemoveContact(position).execute();
                                         }
