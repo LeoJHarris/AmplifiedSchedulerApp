@@ -163,6 +163,9 @@ public class FindContactsFragment extends Fragment {
 
                         // view.setBackgroundColor(getResources().getColor(R.color.red));
 
+                        statusOnPerson = 0;
+
+
                         String title = "Send Contact Request?";
                         String message = "Do you want to send contact request to ";
                         String messageToAppend = "";
@@ -224,7 +227,6 @@ public class FindContactsFragment extends Fragment {
                             }
                         }
                         if (statusOnPerson != 2) {
-
 
                             if (alertDialog != null) {
 
@@ -439,20 +441,20 @@ public class FindContactsFragment extends Fragment {
 
                     List<String> relations = new ArrayList<String>();
                     relations.add("personsImRequesting");
-                    Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+                    Person person5 = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
 
                     int pos = 0;
 
-                    for (int i = 0; i < person.personsImRequesting.size(); i++) {
+                    for (int i = 0; i < person5.personsImRequesting.size(); i++) {
 
-                        if (person.personsImRequesting.get(i).getObjectId().equals(personsFoundQuery.get(position).getObjectId())) {
+                        if (person5.personsImRequesting.get(i).getObjectId().equals(personsFoundQuery.get(position).getObjectId())) {
                             pos = i;
                             break;
                         }
                     }
 
-                    person.personsImRequesting.remove(pos);
-                    Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person);
+                    person5.personsImRequesting.remove(pos);
+                    Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person5);
 
                     // Remove from other
                     List<String> relations1 = new ArrayList<String>();

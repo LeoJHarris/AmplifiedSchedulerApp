@@ -42,6 +42,8 @@ public class MainActivity extends Activity {
         final Typeface fontWelcome = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Amatic-Bold.ttf");
 
 
+        //Backendless.Events.dispatch()
+
         buttonSignInMain.setTypeface(regularFont);
         buttonSignIn.setTypeface(regularFont);
         editTextEmailMain.setTypeface(regularFont);
@@ -130,6 +132,10 @@ public class MainActivity extends Activity {
                 entered = true;
                 EditText emailField = (EditText) findViewById(R.id.emailSignIn);
                 EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
+
+                //temp
+                emailField.setText("leojharris@hotmail.com");
+                passwordField.setText("testing");
 
                 if (new Validator().isValidEmail(emailField.getText())) {
                     if (new Validator().isPasswordValid(passwordField.getText())) {

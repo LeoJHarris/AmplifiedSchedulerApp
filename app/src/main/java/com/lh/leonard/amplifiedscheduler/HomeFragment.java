@@ -42,8 +42,6 @@ public class HomeFragment extends Fragment {
 
         getActivity().setTitle("Home");
 
-
-        Backendless.Data.mapTableToClass("Contact", Contact.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");

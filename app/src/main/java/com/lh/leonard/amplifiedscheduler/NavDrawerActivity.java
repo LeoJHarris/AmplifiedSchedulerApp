@@ -66,6 +66,8 @@ public class NavDrawerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_drawer);
 
+        Backendless.Data.mapTableToClass("Person", Person.class);
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             updateNavDrawer = extras.getBoolean("refresh");
@@ -80,7 +82,6 @@ public class NavDrawerActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
-        Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
