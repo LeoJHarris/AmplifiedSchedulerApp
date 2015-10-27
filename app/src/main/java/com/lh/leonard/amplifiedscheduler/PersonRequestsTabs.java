@@ -166,7 +166,7 @@ public class PersonRequestsTabs extends Fragment {
                                             added = true;
                                             dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Adding " + personsRequestsList.get(position).getFullname() + " to your contact ...", true);
+                                                    "Adding " + personsRequestsList.get(position).getFullname() + " to your contacts ...", true);
                                             ringProgressDialog.setCancelable(false);
                                             new YesRequest(position).execute();
                                         }
@@ -344,8 +344,6 @@ public class PersonRequestsTabs extends Fragment {
                 List<String> relations = new ArrayList<String>();
                 relations.add("personsRequestingMe");
                 Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
-                System.out.println("Loaded object. Name - " + person.getFname() + ", relations - " + person.personsRequestingMe.size());
-
                 int pos = 0;
 
                 for (int i = 0; i < person.personsRequestingMe.size(); i++) {
