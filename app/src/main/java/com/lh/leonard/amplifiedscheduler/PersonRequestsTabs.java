@@ -358,14 +358,11 @@ public class PersonRequestsTabs extends Fragment {
 
                 person.personsRequestingMe.remove(pos);
                 Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person);
-                System.out.println("Received updated object. Name - " + updatedPersonLoggedIn.fname + ", relations - " + updatedPersonLoggedIn.personsRequestingMe.size());
 
                 // Remove from other
                 List<String> relations1 = new ArrayList<String>();
                 relations1.add("personsImRequesting");
                 Person person1 = Backendless.Data.of(Person.class).findById(personsRequestsList.get(positionInList).getObjectId(), relations1);
-                System.out.println("Loaded object. Name - " + person1.getFname() + ", relations - " + person1.personsImRequesting.size());
-
 
                 for (int i = 0; i < person1.personsImRequesting.size(); i++) {
 
@@ -406,7 +403,6 @@ public class PersonRequestsTabs extends Fragment {
                 ringProgressDialog.dismiss();
                 searchView.setVisibility(View.GONE);
                 rvRequest.setVisibility(View.GONE);
-                progressBarRequesting.setVisibility(View.GONE);
                 textViewTextNoRequestingUsers.setVisibility(View.VISIBLE);
             }
             Toast.makeText(v.getContext(), removedFullname + " rejected as contact", Toast.LENGTH_SHORT).show();
