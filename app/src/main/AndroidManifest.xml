@@ -29,7 +29,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/AmplifiedIcon"
+        android:icon="@drawable/appicon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <service android:name="com.backendless.AndroidService" />
