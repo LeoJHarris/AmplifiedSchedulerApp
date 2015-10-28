@@ -3,8 +3,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
     android:gravity="center"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:orientation="vertical">
 
     <TableRow
         android:layout_width="match_parent"
@@ -15,13 +14,11 @@
             android:id="@+id/textViewheaderSlotAppMain"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:gravity="center"
+            android:padding="10dp"
             android:text="Amplified Scheduler"
             android:textColor="@color/white"
             android:textSize="75sp"
-            android:layout_marginBottom="10dp"
             android:textStyle="bold" />
     </TableRow>
 
@@ -30,7 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:paddingBottom="20dp">
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TableRow
             android:layout_width="match_parent"
