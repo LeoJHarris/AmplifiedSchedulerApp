@@ -27,9 +27,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        AutoResizeTextView textViewheaderSlotAppMain = (AutoResizeTextView) findViewById(R.id.textViewheaderSlotAppMain);
+        setContentView(R.layout.activity_main);
         EditText editTextEmailMain = (EditText) findViewById(R.id.emailSignIn);
         EditText editTextPasswordMain = (EditText) findViewById(R.id.passwordSignIn);
         Button buttonSignInMain = (Button) findViewById(R.id.buttonSignIn);
@@ -48,7 +47,6 @@ public class MainActivity extends Activity {
         buttonSignIn.setTypeface(regularFont);
         editTextEmailMain.setTypeface(regularFont);
         editTextPasswordMain.setTypeface(regularFont);
-        textViewheaderSlotAppMain.setTypeface(fontWelcome);
         buttonForgotPassword.setTypeface(regularFont);
         buttonRegistration.setTypeface(regularFont);
         textViewMadeByMeMain.setTypeface(regularFont);
