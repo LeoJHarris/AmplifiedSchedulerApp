@@ -34,7 +34,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         EditText editTextEmailMain = (EditText) findViewById(R.id.emailSignIn);
         EditText editTextPasswordMain = (EditText) findViewById(R.id.passwordSignIn);
-        Button buttonSignInMain = (Button) findViewById(R.id.buttonSignIn);
         Button buttonSignIn = (Button) findViewById(R.id.buttonSignIn);
         AutoResizeTextView buttonForgotPassword = (AutoResizeTextView) findViewById(R.id.buttonForgotPassword);
         AutoResizeTextView buttonRegistration = (AutoResizeTextView) findViewById(R.id.buttonRegistration);
@@ -47,7 +46,6 @@ public class MainActivity extends Activity {
 
         //Backendless.Events.dispatch()
 
-        buttonSignInMain.setTypeface(regularFont);
         buttonSignIn.setTypeface(regularFont);
         editTextEmailMain.setTypeface(regularFont);
         editTextPasswordMain.setTypeface(regularFont);
@@ -65,8 +63,23 @@ public class MainActivity extends Activity {
         if (width == 320 && height == 480) {
             imageViewMainLogo.requestLayout();
             imageViewMainLogo.getLayoutParams().height = 110;
-            editTextEmailMain.setEms(15);
-            editTextPasswordMain.setEms(15);
+            editTextEmailMain.setTextSize(12);
+            editTextPasswordMain.setTextSize(12);
+            buttonForgotPassword.setTextSize(12);
+            buttonRegistration.setTextSize(12);
+            buttonSignIn.setTextSize(12);
+            textViewMadeByMeMain.setTextSize(10);
+        }
+        // 2.7" QVGA
+        else if (width == 240 && height == 320) {
+            imageViewMainLogo.requestLayout();
+            imageViewMainLogo.getLayoutParams().height = 80;
+            editTextEmailMain.setTextSize(15);
+            editTextPasswordMain.setTextSize(15);
+            buttonForgotPassword.setTextSize(15);
+            buttonRegistration.setTextSize(15);
+            textViewMadeByMeMain.setTextSize(15);
+            buttonSignIn.setTextSize(15);
         }
 
         if (Backendless.UserService.CurrentUser() != null) {
@@ -119,7 +132,6 @@ public class MainActivity extends Activity {
         final Button loginButton = (Button) findViewById(R.id.buttonSignIn);
 
         final TextView passwordRecoveryButton = (TextView) findViewById(R.id.buttonForgotPassword);
-
 
         final TextView registerButton = (TextView) findViewById(R.id.buttonRegistration);
 
