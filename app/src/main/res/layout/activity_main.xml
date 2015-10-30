@@ -5,7 +5,9 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <!--smaller then 600dp handsets hand held-->
+    <!--smaller then 600dp handsets hand held
+
+    -->
 
     <LinearLayout
         android:id="@+id/LLHeader"
@@ -15,7 +17,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/imageViewMainLogo"
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:layout_margin="25dp"
