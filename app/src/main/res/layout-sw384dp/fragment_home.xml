@@ -1,0 +1,44 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_color_bg"
+    android:padding="10dp"
+    tools:context="com.lh.leonard.amplifiedscheduler.HomeFragment">
+
+    <!--nexus 4-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/imageViewMainLogo"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:src="@drawable/main_textlogo_384" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewWelcomeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageViewMainLogo"
+            android:layout_marginBottom="70dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewNotificationNumberHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewWelcomeLabel"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</FrameLayout>
