@@ -160,20 +160,20 @@ public class MyCreatedSlots extends Fragment {
 
                             dialog = new AlertDialog.Builder(v.getContext())
                                     .setTitle("Cancel Schedule?")
-                                    .setMessage("Do you want cancel your " + slot.get(position).getSubject() + " Schedule")
+                                    .setMessage("Do you want cancel your " + slot.get(position).getSubject() + " schedule?")
                                     .setIcon(R.drawable.ic_questionmark)
-                                    .setPositiveButton("Yup Cancel", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton("Yup, Cancel", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
 
                                             dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Cancelling Event: " + slot.get(position).getSubject() + " ...", true);
+                                                    "Cancelling Schedule: " + slot.get(position).getSubject() + " ...", true);
                                             ringProgressDialog.setCancelable(false);
                                             new CancelEvent(position).execute();
                                         }
                                     })
-                                    .setNegativeButton("Nope Keep", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton("Nope, Keep", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
                                             dialog.dismiss();

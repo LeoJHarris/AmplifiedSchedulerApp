@@ -6,26 +6,17 @@
     android:padding="10dp"
     tools:context="com.lh.leonard.amplifiedscheduler.HomeFragment">
 
-    <TableLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center">
 
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewHomeLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Amplified Scheduler"
-                android:textColor="@color/white"
-                android:textSize="75sp"
-                android:textStyle="bold" />
-        </TableRow>
+        <ImageView
+            android:id="@+id/imageViewMainLogo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="25dp"
+            android:src="@drawable/main_textlogo_320" />
 
         <!--<TableRow-->
         <!--android:layout_width="wrap_content"-->
@@ -45,36 +36,27 @@
         <!--android:textStyle="italic" />-->
         <!--</TableRow>-->
 
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
-            android:gravity="center">
 
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewWelcomeLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-        </TableRow>
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewWelcomeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageViewMainLogo"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="40dp"
-            android:gravity="center">
 
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewNotificationNumberHome"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="50sp"
-                android:textStyle="bold" />
-        </TableRow>
-    </TableLayout>
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewNotificationNumberHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewWelcomeLabel"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 </FrameLayout>
