@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TableRow;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -39,8 +38,6 @@ public class FindContactsFragment extends Fragment {
     String nameQuerySearch;
     List<Person> personsFoundQuery;
     private ProgressBar progressBarFindContacts;
-    TableRow tableRowProgressFindContacts;
-    TableRow tableRowRecyclerViewFindContacts;
     RecyclerView rv;
     LinearLayoutManager llm;
     View v;
@@ -67,8 +64,6 @@ public class FindContactsFragment extends Fragment {
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 
         searchViewFindContacts = (SearchView) v.findViewById(R.id.searchViewFindContacts);
-        tableRowProgressFindContacts = (TableRow) v.findViewById(R.id.tableRowProgressFindContacts);
-        tableRowRecyclerViewFindContacts = (TableRow) v.findViewById(R.id.tableRowRecyclerViewFindContacts);
         progressBarFindContacts = (ProgressBar) v.findViewById(R.id.progressBarFindContacts);
 
         rv = (RecyclerView) v.findViewById(R.id.rv);
@@ -386,9 +381,7 @@ public class FindContactsFragment extends Fragment {
 
                 ));
 
-                tableRowProgressFindContacts.setVisibility(View.GONE);
                 progressBarFindContacts.setVisibility(View.GONE);
-                tableRowRecyclerViewFindContacts.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.VISIBLE);
             }
         }

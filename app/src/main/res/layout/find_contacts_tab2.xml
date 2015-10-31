@@ -1,52 +1,30 @@
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp">
 
-        <SearchView
-            android:id="@+id/searchViewFindContacts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:searchIcon="@drawable/ic_searchicon" />
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/tableRowProgressFindContacts"
+    <SearchView
+        android:id="@+id/searchViewFindContacts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:padding="10dp"
+        android:searchIcon="@drawable/ic_searchicon" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBarFindContacts"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="gone" />
 
-        <ProgressBar
-            android:id="@+id/progressBarFindContacts"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/tableRowRecyclerViewFindContacts"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:visibility="gone">
-
-        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/rv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <!--android:clickable="true"-->
-        <!--android:focusable="true"-->
-        <!--android:focusableInTouchMode="true"-->
-    </TableRow>
-
-</TableLayout>
+        android:visibility="gone" />
+</RelativeLayout>
