@@ -230,7 +230,7 @@ public class CreateSlot extends AppCompatActivity implements
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateSlot.this);
 
                 // set the dialog title
-                builder.setTitle("Add contacts for Event")
+                builder.setTitle("Add contacts for Schedule")
 
                         // specify the list array, the items to be selected by default (null for none),
                         // and the listener through which to receive call backs when items are selected
@@ -359,9 +359,9 @@ public class CreateSlot extends AppCompatActivity implements
                             }
                             if (locationString.equals("Please Set Place")) {
                                 if ((emptys.trim().equals(""))) {
-                                    emptys += "Event Place";
+                                    emptys += "Schedule Place";
                                 } else {
-                                    emptys += ", Event Place";
+                                    emptys += ", Schedule Place";
                                 }
                             }
 
@@ -400,10 +400,10 @@ public class CreateSlot extends AppCompatActivity implements
                             new ParseURL().execute();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "Add contacts for events", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Add contacts for schedule", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Add contacts for event", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Add contacts for schedule", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -656,7 +656,7 @@ public class CreateSlot extends AppCompatActivity implements
 
         @Override
         protected void onPreExecute() {
-            ringProgressDialog = ProgressDialog.show(CreateSlot.this, "Please wait ...", "Sending event ...", true);
+            ringProgressDialog = ProgressDialog.show(CreateSlot.this, "Please wait ...", "Sending schedule ...", true);
             ringProgressDialog.setCancelable(false);
             super.onPreExecute();
         }
@@ -751,7 +751,7 @@ public class CreateSlot extends AppCompatActivity implements
 
             ringProgressDialog.dismiss();
 
-            Toast.makeText(CreateSlot.this, "Event Sent", Toast.LENGTH_LONG).show();
+            Toast.makeText(CreateSlot.this, "Schedule Sent", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -772,12 +772,12 @@ public class CreateSlot extends AppCompatActivity implements
                 dots = "...";
             }
             String messageSubString = message.substring(0, lengthToSubString);
-            messageSubString = "EVENTHUB101: event invite. Host: " + fullnameLoggedin +
+            messageSubString = "Amplified Scheduler: Invited Schedule. Host: " + fullnameLoggedin +
                     ". " + subject + ". Message: " + messageSubString + dots + " When: " + date + " at " + time;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         } else {
-            String messageSubString = "EVENTHUB101: event invite. Host: " + fullnameLoggedin +
+            String messageSubString = "Amplified Scheduler: Invited Schedule. Host: " + fullnameLoggedin +
                     ". " + subject + " no message included " + " when: " + date + " at " + time;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);

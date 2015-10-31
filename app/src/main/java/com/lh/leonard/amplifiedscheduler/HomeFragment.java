@@ -50,8 +50,6 @@ public class HomeFragment extends Fragment {
 
         final AutoResizeTextView textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
 
-        final AutoResizeTextView homeLogo = (AutoResizeTextView) v.findViewById(R.id.textViewHomeLogo);
-
         // final AutoResizeTextView textViewAppStatement = (AutoResizeTextView) v.findViewById(R.id.textViewAppStatement);
 
         final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
@@ -62,7 +60,6 @@ public class HomeFragment extends Fragment {
 
         textViewNotificationNumberHome.setTypeface(regularFont);
 
-        homeLogo.setTypeface(fontWelcome);
         welcomeLabel.setTypeface(regularFont);
         //    textViewAppStatement.setTypeface(fontWelcome);
 

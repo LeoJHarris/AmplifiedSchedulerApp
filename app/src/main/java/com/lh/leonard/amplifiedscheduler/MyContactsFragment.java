@@ -105,8 +105,6 @@ public class MyContactsFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-
-            progressBarMyContacts.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
@@ -203,7 +201,6 @@ public class MyContactsFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            progressBarMyContacts.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
@@ -274,9 +271,6 @@ public class MyContactsFragment extends Fragment {
                 ringProgressDialog.dismiss();
             } else {
                 ringProgressDialog.dismiss();
-                searchView.setVisibility(View.GONE);
-                rvMyContacts.setVisibility(View.GONE);
-                progressBarMyContacts.setVisibility(View.GONE);
                 textViewTextNoContacts.setVisibility(View.VISIBLE);
             }
             Toast.makeText(v.getContext(), removedFullName + " removed as contact", Toast.LENGTH_SHORT).show();

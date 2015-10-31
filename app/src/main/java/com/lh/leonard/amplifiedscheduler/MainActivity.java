@@ -3,12 +3,15 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,16 +30,15 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        AutoResizeTextView textViewheaderSlotAppMain = (AutoResizeTextView) findViewById(R.id.textViewheaderSlotAppMain);
+        setContentView(R.layout.activity_main);
         EditText editTextEmailMain = (EditText) findViewById(R.id.emailSignIn);
         EditText editTextPasswordMain = (EditText) findViewById(R.id.passwordSignIn);
-        Button buttonSignInMain = (Button) findViewById(R.id.buttonSignIn);
         Button buttonSignIn = (Button) findViewById(R.id.buttonSignIn);
         AutoResizeTextView buttonForgotPassword = (AutoResizeTextView) findViewById(R.id.buttonForgotPassword);
         AutoResizeTextView buttonRegistration = (AutoResizeTextView) findViewById(R.id.buttonRegistration);
         AutoResizeTextView textViewMadeByMeMain = (AutoResizeTextView) findViewById(R.id.textViewMadeByMeMain);
+        ImageView imageViewMainLogo = (ImageView) findViewById(R.id.imageViewMainLogo);
 
         final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
         final Typeface fontWelcome = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Amatic-Bold.ttf");
@@ -44,14 +46,41 @@ public class MainActivity extends Activity {
 
         //Backendless.Events.dispatch()
 
-        buttonSignInMain.setTypeface(regularFont);
         buttonSignIn.setTypeface(regularFont);
         editTextEmailMain.setTypeface(regularFont);
         editTextPasswordMain.setTypeface(regularFont);
-        textViewheaderSlotAppMain.setTypeface(fontWelcome);
         buttonForgotPassword.setTypeface(regularFont);
         buttonRegistration.setTypeface(regularFont);
         textViewMadeByMeMain.setTypeface(regularFont);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        //Fame
+        if (width == 320 && height == 480) {
+            imageViewMainLogo.requestLayout();
+            imageViewMainLogo.getLayoutParams().height = 110;
+            editTextEmailMain.setTextSize(12);
+            editTextPasswordMain.setTextSize(12);
+            buttonForgotPassword.setTextSize(12);
+            buttonRegistration.setTextSize(12);
+            buttonSignIn.setTextSize(12);
+            textViewMadeByMeMain.setTextSize(10);
+        }
+        // 2.7" QVGA
+        else if (width == 240 && height == 320) {
+            imageViewMainLogo.requestLayout();
+            imageViewMainLogo.getLayoutParams().height = 80;
+            editTextEmailMain.setTextSize(15);
+            editTextPasswordMain.setTextSize(15);
+            buttonForgotPassword.setTextSize(15);
+            buttonRegistration.setTextSize(15);
+            textViewMadeByMeMain.setTextSize(15);
+            buttonSignIn.setTextSize(15);
+        }
 
         if (Backendless.UserService.CurrentUser() != null) {
             BackendlessUser user = Backendless.UserService.CurrentUser();
@@ -104,7 +133,6 @@ public class MainActivity extends Activity {
 
         final TextView passwordRecoveryButton = (TextView) findViewById(R.id.buttonForgotPassword);
 
-
         final TextView registerButton = (TextView) findViewById(R.id.buttonRegistration);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -134,8 +162,8 @@ public class MainActivity extends Activity {
                 EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
 
                 //temp
-                emailField.setText("leojharris@hotmail.com");
-                passwordField.setText("testing");
+                // emailField.setText("leojharris@hotmail.com");
+                // passwordField.setText("testing");
 
                 if (new Validator().isValidEmail(emailField.getText())) {
                     if (new Validator().isPasswordValid(passwordField.getText())) {
