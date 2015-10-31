@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -26,12 +28,17 @@ import com.backendless.persistence.QueryOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by hp1 on 21-01-2015.
  */
 public class FindContactsFragment extends Fragment {
 
+    Timer timer;
+    Boolean gettingContacts = false;
+    RelativeLayout RLProgressBar;
     List<Person> person;
     Person personLoggedIn;
     BackendlessUser loggedInUser = Backendless.UserService.CurrentUser();
@@ -65,6 +72,7 @@ public class FindContactsFragment extends Fragment {
 
         searchViewFindContacts = (SearchView) v.findViewById(R.id.searchViewFindContacts);
         progressBarFindContacts = (ProgressBar) v.findViewById(R.id.progressBarFindContacts);
+        RLProgressBar = (RelativeLayout) v.findViewById(R.id.RLProgressBar);
 
         rv = (RecyclerView) v.findViewById(R.id.rv);
         llm = new LinearLayoutManager(v.getContext());
@@ -73,19 +81,22 @@ public class FindContactsFragment extends Fragment {
 
 
         searchViewFindContacts.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                                                          public boolean onQueryTextChange(String text) {
+                                                          public boolean onQueryTextChange(final String text) {
 
                                                               if (!text.equals("")) {
 
+                                                                  rv.setVisibility(View.GONE);
+                                                                  progressBarFindContacts.setVisibility(View.VISIBLE);
+                                                                  RLProgressBar.setVisibility(View.VISIBLE);
+
                                                                   nameQuerySearch = text;
-                                                                  new ParseURL().execute();
-                                                              }
-                                                              if (adapter != null) {
-                                                                  if (TextUtils.isEmpty(text)) {
-                                                                      adapter.getFilter().filter("");
-                                                                  } else {
-                                                                      adapter.getFilter().filter(text.toString());
+                                                                  if (timer != null) {
+                                                                      timer.cancel();
                                                                   }
+                                                                  timer = new Timer();
+                                                                  callAsynchronousTask();
+                                                              } else {
+                                                                  rv.setAdapter(null);
                                                               }
 
                                                               return true;
@@ -100,11 +111,29 @@ public class FindContactsFragment extends Fragment {
         return v;
     }
 
+    public void callAsynchronousTask() {
+        final Handler handler = new Handler();
+        TimerTask doAsynchronousTask = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            new ParseURL().execute();
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(doAsynchronousTask, 3000); //execute in every 50000 ms
+    }
+
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
-            progressBarFindContacts.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
@@ -159,7 +188,6 @@ public class FindContactsFragment extends Fragment {
                         // view.setBackgroundColor(getResources().getColor(R.color.red));
 
                         statusOnPerson = 0;
-
 
                         String title = "Send Contact Request?";
                         String message = "Do you want to send contact request to ";
@@ -221,6 +249,8 @@ public class FindContactsFragment extends Fragment {
                                 }
                             }
                         }
+
+                        //TODO Should be setting alertDialog to null, creates a new dialog everytime this is called
                         if (statusOnPerson != 2) {
 
                             if (alertDialog != null) {
@@ -381,7 +411,17 @@ public class FindContactsFragment extends Fragment {
 
                 ));
 
+                if (adapter != null) {
+                    if (TextUtils.isEmpty(nameQuerySearch)) {
+                        adapter.getFilter().filter("");
+
+                    } else {
+                        adapter.getFilter().filter(nameQuerySearch.toString());
+                    }
+                }
+
                 progressBarFindContacts.setVisibility(View.GONE);
+                RLProgressBar.setVisibility(View.GONE);
                 rv.setVisibility(View.VISIBLE);
             }
         }
