@@ -230,7 +230,7 @@ public class CreateSlot extends AppCompatActivity implements
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateSlot.this);
 
                 // set the dialog title
-                builder.setTitle("Add contacts for Schedule")
+                builder.setTitle("Invite contacts for schedule")
 
                         // specify the list array, the items to be selected by default (null for none),
                         // and the listener through which to receive call backs when items are selected
@@ -352,16 +352,16 @@ public class CreateSlot extends AppCompatActivity implements
 
                             if (subject.trim().equals("")) {
                                 if ((emptys.trim().equals(""))) {
-                                    emptys += "Subject";
+                                    emptys += "Name";
                                 } else {
-                                    emptys += ", Subject";
+                                    emptys += ", Name";
                                 }
                             }
-                            if (locationString.equals("Please Set Place")) {
+                            if (locationString.equals("Please Set Location")) {
                                 if ((emptys.trim().equals(""))) {
-                                    emptys += "Schedule Place";
+                                    emptys += "Place";
                                 } else {
-                                    emptys += ", Schedule Place";
+                                    emptys += ", Place";
                                 }
                             }
 
@@ -393,17 +393,17 @@ public class CreateSlot extends AppCompatActivity implements
 //                                    emptys += ", Message";
 //                                }
 //                            }
-                            Toast.makeText(getApplicationContext(), "Please input: " + emptys, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Please fill: " + emptys, Toast.LENGTH_SHORT).show();
                         } else {
 
 
                             new ParseURL().execute();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "Add contacts for schedule", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Please invite contacts for schedule", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Add contacts for schedule", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please invite contacts for schedule", Toast.LENGTH_LONG).show();
                 }
             }
         });
