@@ -360,5 +360,3 @@ public class NavDrawerActivity extends AppCompatActivity {
         }
     }
 }
-
-
