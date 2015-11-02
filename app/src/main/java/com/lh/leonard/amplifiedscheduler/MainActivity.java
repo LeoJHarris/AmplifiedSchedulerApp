@@ -63,23 +63,23 @@ public class MainActivity extends Activity {
         if (width == 320 && height == 480) {
             imageViewMainLogo.requestLayout();
             imageViewMainLogo.getLayoutParams().height = 110;
-            editTextEmailMain.setTextSize(12);
-            editTextPasswordMain.setTextSize(12);
-            buttonForgotPassword.setTextSize(12);
-            buttonRegistration.setTextSize(12);
-            buttonSignIn.setTextSize(12);
-            textViewMadeByMeMain.setTextSize(10);
+            editTextEmailMain.setTextSize(18);
+            editTextPasswordMain.setTextSize(18);
+            buttonForgotPassword.setTextSize(18);
+            buttonRegistration.setTextSize(18);
+            buttonSignIn.setTextSize(18);
+            textViewMadeByMeMain.setTextSize(18);
         }
         // 2.7" QVGA
         else if (width == 240 && height == 320) {
             imageViewMainLogo.requestLayout();
             imageViewMainLogo.getLayoutParams().height = 80;
-            editTextEmailMain.setTextSize(15);
-            editTextPasswordMain.setTextSize(15);
-            buttonForgotPassword.setTextSize(15);
-            buttonRegistration.setTextSize(15);
-            textViewMadeByMeMain.setTextSize(15);
-            buttonSignIn.setTextSize(15);
+            editTextEmailMain.setTextSize(12);
+            editTextPasswordMain.setTextSize(12);
+            buttonForgotPassword.setTextSize(12);
+            buttonRegistration.setTextSize(12);
+            textViewMadeByMeMain.setTextSize(12);
+            buttonSignIn.setTextSize(12);
         }
 
         if (Backendless.UserService.CurrentUser() != null) {
