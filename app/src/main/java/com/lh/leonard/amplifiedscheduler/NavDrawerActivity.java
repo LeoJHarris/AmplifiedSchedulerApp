@@ -139,12 +139,11 @@ public class NavDrawerActivity extends AppCompatActivity {
                 fragment = new UpdateAccount();
                 break;
             case 8:
+                
+                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                ringProgressDialog.setCancelable(false);
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
-
                     public void handleResponse(Void response) {
-
-                        ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
-                        ringProgressDialog.setCancelable(false);
                         Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
                         logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
                         startActivity(logOutIntent);
@@ -200,7 +199,6 @@ public class NavDrawerActivity extends AppCompatActivity {
             if (Drawer.isDrawerOpen(mRecyclerView)) {
                 Drawer.closeDrawer(mRecyclerView);
             } else {
-
 
                 new AlertDialog.Builder(NavDrawerActivity.this)
                         .setTitle("Logging out").setMessage("You are about to logout out").
