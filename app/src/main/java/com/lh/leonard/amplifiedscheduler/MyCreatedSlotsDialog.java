@@ -152,7 +152,6 @@ public class MyCreatedSlotsDialog extends Activity {
             List<Address> addresses = null;
 
             try {
-
                 // Getting a maximum of 3 Address that matches the input text
                 addresses = geocoder.getFromLocation(slotSelected.getLocation().getLatitude(), slotSelected.getLocation().getLongitude(), 1);
             } catch (IOException e) {
@@ -185,22 +184,6 @@ public class MyCreatedSlotsDialog extends Activity {
                 }
             }
 
-            if (slotSelected.getLocation() != null) {
-
-                for (int i = 0; i < addresses.size(); i++) {
-                    Address address = (Address) addresses.get(i);
-                    String addressText = String.format("%s, %s",
-                            address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                            address.getCountryName());
-
-                    content = new SpannableString("Where: " + addressText);
-                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                    textViewLocation.setText(content); //TODO Button to get Location else just Text
-                    break;
-
-                }
-            }
-
 //            if (person.fname != null) {
 //                textViewOrganiser = (TextView) findViewById(R.id.textViewMySlotOrganiser);
 //                textViewOrganiser.setText(person.getFname() + " " + person.getLname() + " created this event/slot");
@@ -219,6 +202,22 @@ public class MyCreatedSlotsDialog extends Activity {
 
             } else {
                 textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
+            }
+
+            if (slotSelected.getLocation() != null) {
+
+                for (int i = 0; i < addresses.size(); i++) {
+                    Address address = (Address) addresses.get(i);
+                    String addressText = String.format("%s, %s",
+                            address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                            address.getCountryName());
+
+                    content = new SpannableString("Where: " + addressText);
+                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                    textViewLocation.setText(content); //TODO Button to get Location else just Text
+                    break;
+
+                }
             }
 
             progressBar = (ProgressBar) findViewById(R.id.progressBarMyCreatedSlotsDialog);
