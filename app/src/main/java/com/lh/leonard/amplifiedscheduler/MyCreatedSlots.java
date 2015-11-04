@@ -257,8 +257,9 @@ public class MyCreatedSlots extends Fragment {
             }
 
             eventRemoved = slot.get(positionInList).getSubject();
-            Backendless.Geo.removePoint(slot.get(positionInList).getLocation());
-
+            if (slot.get(positionInList).getLocation() != null) {
+                Backendless.Geo.removePoint(slot.get(positionInList).getLocation());
+            }
 
             Long result = Backendless.Persistence.of(Slot.class).remove(slot.get(positionInList)); // TODO toast "'result' events removed"
 
