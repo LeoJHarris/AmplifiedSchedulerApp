@@ -7,8 +7,6 @@
         android:id="@+id/searchViewSlots"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_column="0"
-        android:background="@color/white"
         android:queryHint="Search Slots"
         android:searchIcon="@drawable/ic_searchicon"
         android:visibility="gone" />
