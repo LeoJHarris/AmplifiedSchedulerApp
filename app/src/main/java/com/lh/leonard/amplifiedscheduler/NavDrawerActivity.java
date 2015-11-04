@@ -190,9 +190,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-
         Fragment HomeFragment = getFragmentManager().findFragmentByTag("home_tag");
-
 
         if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
 
