@@ -289,8 +289,8 @@ public class NavDrawerActivity extends AppCompatActivity {
                     , R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
                     resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-            String TITLES[] = {"Home", "Create schedule", "My schedules " + valMyCreatedEvents, "Going to schedules " +
-                    valGoingToEvents, "Invited schedules " + valResponseEvents, "Manage contacts" +
+            String TITLES[] = {"Home", "Create event", "My events " + valMyCreatedEvents, "Going to events " +
+                    valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
                     valPersonsRequestingMe, "Update account", "Sign out"};
 
             NAME = personLoggedIn.getFullname();

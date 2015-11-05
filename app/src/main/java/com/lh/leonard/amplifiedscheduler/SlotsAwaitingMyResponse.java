@@ -53,7 +53,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
-        getActivity().setTitle("Invited Schedules");
+        getActivity().setTitle("Invited Events");
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");

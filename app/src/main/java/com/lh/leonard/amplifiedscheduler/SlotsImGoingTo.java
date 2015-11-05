@@ -53,7 +53,7 @@ public class SlotsImGoingTo extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
-        getActivity().setTitle("Schedules Going To");
+        getActivity().setTitle("Events Going To");
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
