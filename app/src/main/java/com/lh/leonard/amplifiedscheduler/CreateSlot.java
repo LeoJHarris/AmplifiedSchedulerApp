@@ -275,12 +275,15 @@ public class CreateSlot extends AppCompatActivity implements
 
                                 addedContactsForSlot = new ArrayList<Person>();
 
-                                String[] selectedContacts = selectedIndex.split(",");
+                                String[] selectedContacts = selectedIndex.split(", ");
 
                                 for (int j = 0; j < selectedContacts.length - 1; j++) {
 
                                     if (selectedContacts[j] != " ") {
-                                        addedContactsForSlot.add(myContactsPersonsList.get(Integer.parseInt(selectedContacts[j])));
+                                        // get rid of the white space at selectedContacts[j] i.e. " 1"
+
+
+                                        addedContactsForSlot.add(myContactsPersonsList.get(Integer.parseInt(selectedContacts[j].replaceAll("\\s+", ""))));
                                     }
                                 }
                                 if (!(addedContactsForSlot.isEmpty())) {
@@ -473,8 +476,8 @@ public class CreateSlot extends AppCompatActivity implements
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Toast.makeText(getApplicationContext(), "An automated SMS will" + (isChecked ? "" : " not") + " be sent to invited contacts",
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "An automated SMS will" + (isChecked ? "" : " not") + " be sent to invited contacts",
+//                            Toast.LENGTH_SHORT).show();
                     if (isChecked) {
                         sendSMS = true;
                     } else {

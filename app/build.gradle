@@ -8,7 +8,7 @@ android {
         applicationId "com.lh.leonard.amplifiedscheduler"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 12
+        versionCode 13
         versionName "1.4"
     }
     buildTypes {
