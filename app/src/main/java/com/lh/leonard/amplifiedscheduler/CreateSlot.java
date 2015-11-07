@@ -798,12 +798,12 @@ public class CreateSlot extends AppCompatActivity implements
             }
             String messageSubString = message.substring(0, lengthToSubString);
             messageSubString = "Amplified Scheduler: Invited Event. Host: " + fullnameLoggedin +
-                    ". " + subject + ". Message: " + messageSubString + dots + " When: " + date + " at " + time;
+                    ". " + subject + " - " + messageSubString + dots + " When: " + date + " at " + time;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         } else {
             String messageSubString = "Amplified Scheduler: Invited Event. Host: " + fullnameLoggedin +
-                    ". " + subject + " no message included " + " when: " + date + " at " + time;
+                    ". " + subject + " - no message included " + " when: " + date + " at " + time;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         }

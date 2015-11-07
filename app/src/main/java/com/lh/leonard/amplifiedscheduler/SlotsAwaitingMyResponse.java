@@ -310,6 +310,10 @@ public class SlotsAwaitingMyResponse extends Fragment {
                 relations.add("pendingResponseSlot");
                 Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
 
+                List<String> relationsSlot = new ArrayList<String>();
+                relations.add("attendees");
+                Slot slotAddAttendee = Backendless.Data.of(Slot.class).findById(slot.get(position), relationsSlot);
+
                 int pos = 0;
 
                 for (int i = 0; i < person.pendingResponseSlot.size(); i++) {
@@ -320,7 +324,8 @@ public class SlotsAwaitingMyResponse extends Fragment {
                     }
                 }
 
-                sendsmss(slot.get(position).getPhone(), "Automated TXT - Amplified Schedule" + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
+
+               sendsmss(slot.get(position).getPhone(), "Automated TXT - Amplified Schedule" + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
 
                 person.pendingResponseSlot.remove(pos);
 
@@ -331,6 +336,10 @@ public class SlotsAwaitingMyResponse extends Fragment {
                 Person p = Backendless.Data.of(Person.class).findById(personLoggedIn);
 
                 p.addSlotGoingToSlot(slot.get(position));
+
+                slotAddAttendee.addAttendee(person);
+
+                Backendless.Data.of(Slot.class).save(slotAddAttendee);
 
                 slot.remove(position);
                 personLoggedIn = Backendless.Data.of(Person.class).save(p);

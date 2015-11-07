@@ -212,7 +212,7 @@ public class SlotsImGoingToDialog extends Activity {
             }
 
             if (person.fname != null) {
-                organizer.setText(person.getFname() + " " + person.getLname() + " created this event");
+                organizer.setText(slotSelected.getOwnername()+ " created this event");
             }
 
             if (slotSelected.getMaxattendees() != 0) {
