@@ -62,12 +62,12 @@ public class MainActivity extends Activity {
         //Fame
         if (width == 320 && height == 480) {
             imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 130;
-            editTextEmailMain.setTextSize(22);
-            editTextPasswordMain.setTextSize(22);
-            buttonForgotPassword.setTextSize(22);
-            buttonRegistration.setTextSize(22);
-            buttonSignIn.setTextSize(22);
+            imageViewMainLogo.getLayoutParams().height = 110;
+            editTextEmailMain.setTextSize(21);
+            editTextPasswordMain.setTextSize(21);
+            buttonForgotPassword.setTextSize(21);
+            buttonRegistration.setTextSize(21);
+            buttonSignIn.setTextSize(21);
             textViewMadeByMeMain.setTextSize(14);
         }
         // 2.7" QVGA
