@@ -182,6 +182,7 @@ public class MyContactsFragment extends Fragment {
                     ));
                     progressBarMyContacts.setVisibility(View.GONE);
                     rvMyContacts.setVisibility(View.VISIBLE);
+                    searchView.setVisibility(View.VISIBLE);
                 } else {
                     progressBarMyContacts.setVisibility(View.GONE);
                     textViewTextNoContacts.setVisibility(View.VISIBLE);
@@ -270,6 +271,8 @@ public class MyContactsFragment extends Fragment {
                 rvMyContacts.setAdapter(adapter);
                 ringProgressDialog.dismiss();
             } else {
+                searchView.setVisibility(View.GONE);
+                rvMyContacts.setVisibility(View.GONE);
                 ringProgressDialog.dismiss();
                 textViewTextNoContacts.setVisibility(View.VISIBLE);
             }

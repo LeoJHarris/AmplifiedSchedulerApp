@@ -55,7 +55,7 @@ public class MyCreatedSlots extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
-        getActivity().setTitle("My Schedules");
+        getActivity().setTitle("My Events");
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
@@ -159,8 +159,8 @@ public class MyCreatedSlots extends Fragment {
 
 
                             dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Cancel Schedule?")
-                                    .setMessage("Do you want cancel your " + slot.get(position).getSubject() + " schedule?")
+                                    .setTitle("Cancel Events?")
+                                    .setMessage("Do you want cancel your " + slot.get(position).getSubject() + " event?")
                                     .setIcon(R.drawable.ic_questionmark)
                                     .setPositiveButton("Yup, Cancel", new DialogInterface.OnClickListener() {
 
@@ -168,7 +168,7 @@ public class MyCreatedSlots extends Fragment {
 
                                             dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Cancelling Schedule: " + slot.get(position).getSubject() + " ...", true);
+                                                    "Cancelling Event: " + slot.get(position).getSubject() + " ...", true);
                                             ringProgressDialog.setCancelable(false);
                                             new CancelEvent(position).execute();
                                         }
@@ -257,11 +257,13 @@ public class MyCreatedSlots extends Fragment {
             }
 
             eventRemoved = slot.get(positionInList).getSubject();
-            Backendless.Geo.removePoint(slot.get(positionInList).getLocation());
-            slot.remove(positionInList);
+            if (slot.get(positionInList).getLocation() != null) {
+                Backendless.Geo.removePoint(slot.get(positionInList).getLocation());
+            }
 
             Long result = Backendless.Persistence.of(Slot.class).remove(slot.get(positionInList)); // TODO toast "'result' events removed"
 
+            slot.remove(positionInList);
             return null;
         }
 
@@ -298,7 +300,7 @@ public class MyCreatedSlots extends Fragment {
     @JavascriptInterface
     public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
 
-        String messageSubString = "Automated TXT - Amplified Schedule: Schedule" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
+        String messageSubString = "Automated TXT - Amplified Schedule: Event" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }

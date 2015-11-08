@@ -336,7 +336,7 @@ public class MyCreatedSlotsDialog extends Activity {
     @JavascriptInterface
     public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
 
-        String messageSubString = "Automated TXT - Amplified Scheduler: Schedule" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
+        String messageSubString = "Automated TXT - Amplified Scheduler: Event" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }

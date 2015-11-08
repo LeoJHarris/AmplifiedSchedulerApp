@@ -1,5 +1,6 @@
 package com.lh.leonard.amplifiedscheduler;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -23,7 +24,7 @@ public class RegistrationActivity extends ActionBarActivity {
 
     Drawable tickIconDraw;
     Drawable crossIconDraw;
-
+    ProgressDialog ringProgressDialog;
     Drawable emailIconDraw;
     Drawable userProfileIconDraw;
     Drawable passwordIconDraw;
@@ -149,6 +150,9 @@ public class RegistrationActivity extends ActionBarActivity {
                             if (validator.isPasswordValid(passwordConfirm)) {
 
                                 if (validator.isValidEmail(email)) {
+
+                                    ringProgressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait ...", "Signing in ...", true);
+                                    ringProgressDialog.setCancelable(false);
 
                                     BackendlessUser user = new BackendlessUser();
 

@@ -139,12 +139,11 @@ public class NavDrawerActivity extends AppCompatActivity {
                 fragment = new UpdateAccount();
                 break;
             case 8:
+                
+                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                ringProgressDialog.setCancelable(false);
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
-
                     public void handleResponse(Void response) {
-
-                        ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
-                        ringProgressDialog.setCancelable(false);
                         Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
                         logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
                         startActivity(logOutIntent);
@@ -191,16 +190,13 @@ public class NavDrawerActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-
         Fragment HomeFragment = getFragmentManager().findFragmentByTag("home_tag");
-
 
         if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
 
             if (Drawer.isDrawerOpen(mRecyclerView)) {
                 Drawer.closeDrawer(mRecyclerView);
             } else {
-
 
                 new AlertDialog.Builder(NavDrawerActivity.this)
                         .setTitle("Logging out").setMessage("You are about to logout out").
@@ -293,8 +289,8 @@ public class NavDrawerActivity extends AppCompatActivity {
                     , R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
                     resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-            String TITLES[] = {"Home", "Create schedule", "My schedules " + valMyCreatedEvents, "Going to schedules " +
-                    valGoingToEvents, "Invited schedules " + valResponseEvents, "Manage contacts" +
+            String TITLES[] = {"Home", "Create event", "My events " + valMyCreatedEvents, "Going to events " +
+                    valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
                     valPersonsRequestingMe, "Update account", "Sign out"};
 
             NAME = personLoggedIn.getFullname();
