@@ -410,7 +410,6 @@ public class FindContactsFragment extends Fragment {
                             }
                         }
 
-
                         @Override
                         public void onItemLongClick(View view, int position) {
                             // ...
