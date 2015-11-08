@@ -212,7 +212,7 @@ public class SlotsImGoingToDialog extends Activity {
             }
 
             if (person.fname != null) {
-                organizer.setText(person.getFname() + " " + person.getLname() + " created this schedule");
+                organizer.setText(slotSelected.getOwnername()+ " created this event");
             }
 
             if (slotSelected.getMaxattendees() != 0) {
@@ -273,7 +273,7 @@ public class SlotsImGoingToDialog extends Activity {
         protected void onPostExecute(Void result) {
 
             if (removed) {
-                Toast.makeText(getApplicationContext(), "schedule removed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "event removed", Toast.LENGTH_SHORT).show();
             }
             finish();
         }

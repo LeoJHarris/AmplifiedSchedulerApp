@@ -4,6 +4,7 @@ import com.backendless.geo.GeoPoint;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class Slot {
     public GeoPoint location;
     public String phone;
     public List<Person> invitedpersons;
-public String place;
+    public String place;
 
     public void setInvitedpersons(List<Person> invitedpersons) {
         this.invitedpersons = invitedpersons;
@@ -81,6 +82,11 @@ public String place;
             return "";
         }
     }
+    public void addAttendee(Person person) {
+        if (attendees == null)
+            attendees = new ArrayList<Person>();
+        attendees.add(person);
+    }
 
     public void setAttendees(List<Person> attendees) {
         this.attendees = attendees;
@@ -116,11 +122,9 @@ public String place;
 
     public String getSubject() {
 
-        if (subject != null)
-        {
+        if (subject != null) {
             return subject;
-        }
-        else{
+        } else {
             return "";
         }
     }

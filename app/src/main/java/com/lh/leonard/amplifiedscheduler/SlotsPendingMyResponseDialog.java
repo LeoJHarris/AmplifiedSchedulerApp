@@ -188,7 +188,7 @@ public class SlotsPendingMyResponseDialog extends Activity {
 
             if (slotSelected.getOwnername() != null) {
                 textViewOrganiser = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotOrganizer);
-                textViewOrganiser.setText(slotSelected.getOwnername() + " created this schedule");
+                textViewOrganiser.setText(slotSelected.getOwnername() + " created this event");
             }
 
             if (slotSelected.getMaxattendees() != 0) {

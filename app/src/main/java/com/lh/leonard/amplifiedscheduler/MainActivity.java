@@ -63,12 +63,12 @@ public class MainActivity extends Activity {
         if (width == 320 && height == 480) {
             imageViewMainLogo.requestLayout();
             imageViewMainLogo.getLayoutParams().height = 110;
-            editTextEmailMain.setTextSize(18);
-            editTextPasswordMain.setTextSize(18);
-            buttonForgotPassword.setTextSize(18);
-            buttonRegistration.setTextSize(18);
-            buttonSignIn.setTextSize(18);
-            textViewMadeByMeMain.setTextSize(18);
+            editTextEmailMain.setTextSize(21);
+            editTextPasswordMain.setTextSize(21);
+            buttonForgotPassword.setTextSize(21);
+            buttonRegistration.setTextSize(21);
+            buttonSignIn.setTextSize(21);
+            textViewMadeByMeMain.setTextSize(14);
         }
         // 2.7" QVGA
         else if (width == 240 && height == 320) {

@@ -33,7 +33,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_row="0"
                     android:gravity="center"
-                    android:text="Create Schedule"
+                    android:text="New Event"
                     android:textColor="@color/white"
                     android:textSize="40sp" />
 
@@ -61,7 +61,7 @@
                         android:layout_marginTop="0dp"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:hint="Schedule name"
+                        android:hint="Enter title"
                         android:inputType="text"
                         android:textSize="25sp" />
 
@@ -311,23 +311,25 @@
 
             </LinearLayout>
 
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:paddingBottom="@dimen/activity_vertical_margin"-->
-            <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
-            <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
-            <!--android:paddingTop="@dimen/activity_vertical_margin">-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
 
-            <!--<Switch-->
-            <!--android:id="@+id/switch2"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="New Switch" />-->
+                <Switch
+                    android:id="@+id/switchAutomatedSMS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="0"
+                    android:text="Send automated SMS"
+                    android:textSize="25sp" />
 
-            <!--</LinearLayout>-->
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -340,7 +342,7 @@
 
                 <Button
                     android:id="@+id/recipientsForSlot"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/button_default_bg"
@@ -359,12 +361,10 @@
 
                 <Button
                     android:id="@+id/buttonSendSlot"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:background="@drawable/button_default_bg"
                     android:drawableRight="@drawable/ic_cross"
-                    android:padding="10dp"
                     android:text="Send Event"
                     android:textColor="@color/red"
                     android:textSize="25sp" />

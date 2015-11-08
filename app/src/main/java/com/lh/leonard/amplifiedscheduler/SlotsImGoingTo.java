@@ -53,7 +53,7 @@ public class SlotsImGoingTo extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
-        getActivity().setTitle("Schedules Going To");
+        getActivity().setTitle("Events Going To");
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
@@ -219,6 +219,10 @@ public class SlotsImGoingTo extends Fragment {
             relations.add("goingToSlot");
             Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relations);
 
+            List<String> relationsSlot = new ArrayList<String>();
+            relations.add("attendees");
+            Slot slotAddAttendee = Backendless.Data.of(Slot.class).findById(slot.get(positionInList), relationsSlot);
+
             int pos = 0;
 
             for (int i = 0; i < person1.getGoingToSlot().size(); i++) {
@@ -229,10 +233,24 @@ public class SlotsImGoingTo extends Fragment {
                 }
             }
 
+            int posAttendees = 0;
+
+            for (int i = 0; i < person1.getGoingToSlot().size(); i++) {
+
+                if (slotAddAttendee.getAttendees().get(i).getObjectId().equals(slot.get(positionInList).getObjectId())) {
+                    posAttendees = i;
+                    break;
+                }
+            }
+
             sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - Amplified Scheduler: " + person.getFullname() + "  has indicated he/she is no longer going to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
 
+            slotAddAttendee.getAttendees().remove(posAttendees);
+
+            Backendless.Data.of(Slot.class).save(slotAddAttendee);
 
             person1.getGoingToSlot().remove(pos);
+
             eventRemoved = slot.get(positionInList).getSubject();
             slot.remove(positionInList);
             Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person1);
