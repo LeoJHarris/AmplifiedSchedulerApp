@@ -156,7 +156,8 @@ public class FindContactsFragment extends Fragment {
         protected Void doInBackground(Void... params) {
 
             Backendless.Data.mapTableToClass("Person", Person.class);
-            String whereClause = "lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%'";
+            String whereClause = "lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%' AND" +
+                    " objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause);
             List<String> relations1 = new ArrayList<String>();
@@ -432,6 +433,7 @@ public class FindContactsFragment extends Fragment {
 
                     progressBarFindContacts.setVisibility(View.GONE);
                     RLProgressBar.setVisibility(View.GONE);
+                    editHintSearchContacts.setVisibility(View.GONE);
                     rv.setVisibility(View.VISIBLE);
                 } else {
                     progressBarFindContacts.setVisibility(View.GONE);

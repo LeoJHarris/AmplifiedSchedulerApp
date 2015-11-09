@@ -20,6 +20,9 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends Activity {
 
 
@@ -44,7 +47,10 @@ public class MainActivity extends Activity {
         final Typeface fontWelcome = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Amatic-Bold.ttf");
 
 
-        //Backendless.Events.dispatch()
+      //  HashMap args = new HashMap();
+       // args.put( "weather", "sunny" );
+
+        //Backendless.Events.dispatch("AddAsContacts", args);
 
         buttonSignIn.setTypeface(regularFont);
         editTextEmailMain.setTypeface(regularFont);
@@ -162,8 +168,8 @@ public class MainActivity extends Activity {
                 EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
 
                 //temp
-                // emailField.setText("leojharris@hotmail.com");
-                // passwordField.setText("testing");
+                 emailField.setText("leojharris@hotmail.com");
+                 passwordField.setText("testing");
 
                 if (new Validator().isValidEmail(emailField.getText())) {
                     if (new Validator().isPasswordValid(passwordField.getText())) {

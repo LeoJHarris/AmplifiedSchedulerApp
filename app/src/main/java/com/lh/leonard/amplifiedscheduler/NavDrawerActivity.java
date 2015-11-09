@@ -67,6 +67,7 @@ public class NavDrawerActivity extends AppCompatActivity {
         setContentView(R.layout.nav_drawer);
 
         Backendless.Data.mapTableToClass("Person", Person.class);
+        Backendless.Persistence.mapTableToClass("Person", Person.class);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -82,9 +83,14 @@ public class NavDrawerActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
-        Backendless.Data.mapTableToClass("Person", Person.class);
-        personLoggedIn = (Person) userLoggedIn.getProperty("persons");
-
+        if (userLoggedIn.getProperty("persons") != null) {
+            personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+        } else {
+            BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
+            Backendless.Data.mapTableToClass("Person", Person.class);
+            Backendless.Persistence.mapTableToClass("Person", Person.class);
+            personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+        }
         new GetNavInfo().execute();
 
     }
@@ -139,7 +145,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                 fragment = new UpdateAccount();
                 break;
             case 8:
-                
+
                 ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
                 ringProgressDialog.setCancelable(false);
                 Backendless.UserService.logout(new AsyncCallback<Void>() {

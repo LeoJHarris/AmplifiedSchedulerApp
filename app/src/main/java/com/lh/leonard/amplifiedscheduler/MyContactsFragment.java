@@ -228,6 +228,7 @@ public class MyContactsFragment extends Fragment {
                 }
             }
 
+            removedFullName = person.contacts.get(pos).getFullname();
             person.contacts.remove(pos);
             Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person);
 
@@ -243,7 +244,7 @@ public class MyContactsFragment extends Fragment {
                     break;
                 }
             }
-            removedFullName = person1.contacts.get(pos).getFullname();
+
             person1.contacts.remove(pos);
             Person updatedPersonOther = Backendless.Data.of(Person.class).save(person1);
             myContactsList.remove(positionInList);
@@ -276,7 +277,7 @@ public class MyContactsFragment extends Fragment {
                 ringProgressDialog.dismiss();
                 textViewTextNoContacts.setVisibility(View.VISIBLE);
             }
-            Toast.makeText(v.getContext(), removedFullName + " removed as contact", Toast.LENGTH_SHORT).show();
+            Toast.makeText(v.getContext(), removedFullName + " was removed from contacts", Toast.LENGTH_SHORT).show();
         }
     }
 }
