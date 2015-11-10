@@ -103,7 +103,6 @@ public class ParticipantsActivity extends Activity {
             Bundle data = getIntent().getExtras();
             String id = data.getString("eventid");
 
-
             StringBuilder whereClause = new StringBuilder();
             whereClause.append("Slot[attendees]");
             whereClause.append(".objectId='").append(id).append("'");

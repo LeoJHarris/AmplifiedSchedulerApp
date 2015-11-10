@@ -1,6 +1,7 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -19,6 +20,7 @@ import com.backendless.BackendlessUser;
 
 public class UpdateAccount extends Fragment {
 
+    ProgressDialog ringProgressDialog;
     View v;
     Person personLoggedIn;
     EditText editTextUpdateFNameReg; // TODO set hints to user info
@@ -94,7 +96,7 @@ public class UpdateAccount extends Fragment {
                 new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
-       // final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+        // final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
         editTextUpdateFNameReg = (EditText) v.findViewById(R.id.editTextUpdateFName);
         editTextUpdateLNameReg = (EditText) v.findViewById(R.id.editTextUpdateLName);
@@ -138,6 +140,9 @@ public class UpdateAccount extends Fragment {
         updateDetailsBtn.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
+
+                                                    ringProgressDialog = ProgressDialog.show(v.getContext(), "Please wait ...", "Updating account ...", true);
+                                                    ringProgressDialog.setCancelable(false);
 
                                                     email = editTextUpdateEmail.getText().toString();
                                                     fname = editTextUpdateFNameReg.getText().toString();
@@ -331,6 +336,7 @@ public class UpdateAccount extends Fragment {
         @Override
         protected void onPostExecute(Boolean result) {
 
+            ringProgressDialog.dismiss();
             if (result) {
                 Toast.makeText(getActivity(), "Inputs Updated", Toast.LENGTH_SHORT).show();
             } else {

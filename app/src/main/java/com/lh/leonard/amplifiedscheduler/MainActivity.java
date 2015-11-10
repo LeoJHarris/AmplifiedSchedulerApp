@@ -189,7 +189,7 @@ public class MainActivity extends Activity {
                     if (new Validator().isPasswordValid(passwordField.getText())) {
 
                         ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
-                        ringProgressDialog.setCancelable(true);
+                        ringProgressDialog.setCancelable(false);
 
                         Backendless.Data.mapTableToClass("Person", Person.class);
                         Backendless.Data.mapTableToClass("Slot", Slot.class);

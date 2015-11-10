@@ -52,8 +52,6 @@ public class FindContactsFragment extends Fragment {
     SearchView searchViewFindContacts;
     int val;
     ContactsAdapter adapter;
-    Boolean alreadyRequesting = false;
-    Boolean alreadyContact = false;
     int statusOnPerson = 0;
     String dialogMessage;
     ProgressDialog ringProgressDialog;
@@ -476,7 +474,7 @@ public class FindContactsFragment extends Fragment {
                 if (statusOnPerson == 0) {
 
 
-                    Person p = Backendless.Data.of(Person.class).findById(personLoggedIn);
+                    Person p = Backendless.Data.of(Person.class).findById(personLoggedIn); // TODO FAILS IF NO INTERNET
 
                     Person p2 = Backendless.Data.of(Person.class).findById(personsFoundQuery.get(position));
 

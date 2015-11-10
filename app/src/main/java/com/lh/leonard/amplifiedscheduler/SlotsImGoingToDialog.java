@@ -78,8 +78,16 @@ public class SlotsImGoingToDialog extends Activity {
         // buttonCantGo.setTypeface(regularFont);
         buttonMySlotParticipantsSlot.setTypeface(RobotoCondensedLight);
 
-        person = (Person) userLoggedIn.getProperty("persons");
-
+        if(userLoggedIn.getProperty("persons") != null) {
+            person = (Person) userLoggedIn.getProperty("persons");
+        }
+        else{
+            Backendless.Data.mapTableToClass("Slot", Slot.class);
+            Backendless.Data.mapTableToClass("Person", Person.class);
+            Backendless.Persistence.mapTableToClass("Slot", Slot.class);
+            Backendless.Persistence.mapTableToClass("Person", Person.class);
+            person = (Person) userLoggedIn.getProperty("persons");
+        }
         new LoadSlotsImGoingTo().execute();
 
 //        buttonCantGo.setOnClickListener(new View.OnClickListener() {
