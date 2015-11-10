@@ -65,10 +65,9 @@ public class HomeFragment extends Fragment {
         //Fame
         if (width == 320 && height == 480) {
             imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 160;
+            imageViewMainLogo.getLayoutParams().height = 140;
             welcomeLabel.setTextSize(22);
-            welcomeLabel.setPadding(0, 7, 0, 15);
-
+            welcomeLabel.setPadding(0, 20, 0, 35);
             textViewNotificationNumberHome.setTextSize(22);
         }
         // 2.7" QVGA
@@ -79,7 +78,6 @@ public class HomeFragment extends Fragment {
             welcomeLabel.setPadding(0, 7, 0, 10);
             textViewNotificationNumberHome.setTextSize(18);
         }
-
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");

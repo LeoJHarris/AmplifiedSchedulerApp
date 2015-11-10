@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="15dp">
 
     <!--7" tablets-->
 
@@ -18,7 +18,7 @@
             android:id="@+id/imageViewMainLogo"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="15dp"
             android:src="@drawable/main_textlogo_360" />
 
     </LinearLayout>

@@ -49,8 +49,6 @@ public class SlotsPendingMyResponseDialog extends Activity {
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 
-
-
         textViewSubject = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotSubject);
         textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotMessage);
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotDateAndTime);

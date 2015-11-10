@@ -28,7 +28,7 @@
             android:layout_marginTop="40dp"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="40sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewNotificationNumberHome"

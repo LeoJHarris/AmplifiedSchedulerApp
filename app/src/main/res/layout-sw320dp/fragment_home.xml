@@ -41,6 +41,6 @@
             android:layout_below="@+id/textViewWelcomeLabel"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="22sp" />
+            android:textSize="25sp" />
     </RelativeLayout>
 </FrameLayout>

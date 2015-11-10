@@ -24,7 +24,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:textColor="@android:color/white"
-            android:textSize="40sp"
+            android:textSize="35sp"
             android:visibility="gone"/>
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -36,7 +36,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewGoingToSlotDateAndTime"
@@ -47,7 +47,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewGoingToSlotLocation"
@@ -58,7 +58,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewMyEventSpacesAvaliable"
@@ -69,7 +69,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewGoingToSlotOrganizer"
@@ -80,7 +80,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
 
         <LinearLayout
             android:id="@+id/LinearLayout"
@@ -97,10 +97,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/button_default_bg"
-                android:text="Persons Going"
-                android:textSize="30sp"
+                android:text="People Going"
+                android:textSize="22sp"
                 android:visibility="gone" />
         </LinearLayout>
-
     </RelativeLayout>
 </ScrollView>
