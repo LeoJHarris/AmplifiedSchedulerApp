@@ -54,7 +54,7 @@ public class SlotsImGoingToDialog extends Activity {
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 
-        final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
+       // final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
 
         textViewSubject = (AutoResizeTextView) findViewById(R.id.textViewGoingToSlotSubject);
 
@@ -66,14 +66,14 @@ public class SlotsImGoingToDialog extends Activity {
         //  buttonCantGo = (Button) findViewById(R.id.buttonGoingToSlotCantGo);
         buttonMySlotParticipantsSlot = (Button) findViewById(R.id.buttonMySlotParticipantsSlot);
 
-        organizer.setTypeface(regularFont);
-        textViewSubject.setTypeface(regularFont);
-        textViewMessage.setTypeface(regularFont);
-        textViewDateAndTime.setTypeface(regularFont);
-        textViewLocation.setTypeface(regularFont);
-        textViewMyEventSpacesAvaliable.setTypeface(regularFont);
-        // buttonCantGo.setTypeface(regularFont);
-        buttonMySlotParticipantsSlot.setTypeface(regularFont);
+//        organizer.setTypeface(regularFont);
+//        textViewSubject.setTypeface(regularFont);
+//        textViewMessage.setTypeface(regularFont);
+//        textViewDateAndTime.setTypeface(regularFont);
+//        textViewLocation.setTypeface(regularFont);
+//        textViewMyEventSpacesAvaliable.setTypeface(regularFont);
+//         buttonCantGo.setTypeface(regularFont);
+//        buttonMySlotParticipantsSlot.setTypeface(regularFont);
 
         person = (Person) userLoggedIn.getProperty("persons");
 

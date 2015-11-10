@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -67,7 +66,7 @@ public class FindContactsFragment extends Fragment {
 
         personLoggedIn = (Person) loggedInUser.getProperty("persons");
 
-        final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+        //final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Data.mapTableToClass("Slot", Slot.class);
@@ -79,7 +78,7 @@ public class FindContactsFragment extends Fragment {
         progressBarFindContacts = (ProgressBar) v.findViewById(R.id.progressBarFindContacts);
         RLProgressBar = (RelativeLayout) v.findViewById(R.id.RLProgressBar);
 
-        editHintSearchContacts.setTypeface(regularFont);
+        //  editHintSearchContacts.setTypeface(regularFont);
 
         rv = (RecyclerView) v.findViewById(R.id.rv);
         llm = new LinearLayoutManager(v.getContext());

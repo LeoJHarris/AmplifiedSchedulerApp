@@ -154,7 +154,7 @@ public class CreateSlot extends AppCompatActivity implements
         tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
         crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
 
-        final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
+       // final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
 
         aSwitch = (Switch) findViewById(R.id.switchAutomatedSMS);
         editTextNumberAttendeesAvaliable = (EditText) findViewById(R.id.numberPickerAttendees);
@@ -176,24 +176,24 @@ public class CreateSlot extends AppCompatActivity implements
         btnClickSetEndTime = (Button) findViewById(R.id.btnClickSetEndTime);
         // btnGetLocationGeoPoint = (ImageButton) findViewById(R.id.btnGetLocationGeoPoint);
 
-        recipientsForSlotBtn.setTypeface(regularFont);
-        slotsDate.setTypeface(regularFont);
-        // checkBoxAppointmentRequired.setTypeface(regularFont);
-        btnSlotDate.setTypeface(regularFont);
-        slotSubjectEditText.setTypeface(regularFont);
-        slotMessageEditText.setTypeface(regularFont);
-        mAddressTextView.setTypeface(regularFont);
-        mAttTextView.setTypeface(regularFont);
-        slotStartTime.setTypeface(regularFont);
-        slotEndTime.setTypeface(regularFont);
-        mAutocompleteTextView.setTypeface(regularFont);
-        textViewHeaderCreateSlot.setTypeface(regularFont);
-        tvSpaces.setTypeface(regularFont);
-        //checkBoxString.setTypeface(regularFont);
-        buttonSendSlot.setTypeface(regularFont);
-        btnClickSetStartTime.setTypeface(regularFont);
-        btnClickSetEndTime.setTypeface(regularFont);
-        aSwitch.setTypeface(regularFont);
+//        recipientsForSlotBtn.setTypeface(regularFont);
+//        slotsDate.setTypeface(regularFont);
+//        // checkBoxAppointmentRequired.setTypeface(regularFont);
+//        btnSlotDate.setTypeface(regularFont);
+//        slotSubjectEditText.setTypeface(regularFont);
+//        slotMessageEditText.setTypeface(regularFont);
+//        mAddressTextView.setTypeface(regularFont);
+//        mAttTextView.setTypeface(regularFont);
+//        slotStartTime.setTypeface(regularFont);
+//        slotEndTime.setTypeface(regularFont);
+//        mAutocompleteTextView.setTypeface(regularFont);
+//        textViewHeaderCreateSlot.setTypeface(regularFont);
+//        tvSpaces.setTypeface(regularFont);
+//        //checkBoxString.setTypeface(regularFont);
+//        buttonSendSlot.setTypeface(regularFont);
+//        btnClickSetStartTime.setTypeface(regularFont);
+//        btnClickSetEndTime.setTypeface(regularFont);
+//        aSwitch.setTypeface(regularFont);
 
         aSwitch.setChecked(true);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);

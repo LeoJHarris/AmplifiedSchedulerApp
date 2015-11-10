@@ -61,9 +61,9 @@ public class MyCreatedSlots extends Fragment {
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
-        final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+       // final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
         textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
-        textViewTextNoSlotAvaliable.setTypeface(regularFont);
+       // textViewTextNoSlotAvaliable.setTypeface(regularFont);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         new ParseURL().execute();
         searchViewSlots = (SearchView) v.findViewById(R.id.searchViewSlots);

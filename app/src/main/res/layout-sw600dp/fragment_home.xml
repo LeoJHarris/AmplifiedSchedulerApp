@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/imageViewMainLogo"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:src="@drawable/main_textlogo_384" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -28,8 +28,8 @@
             android:layout_marginTop="40dp"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textSize="20sp"
+            android:textStyle="italic" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewNotificationNumberHome"
@@ -38,7 +38,7 @@
             android:layout_below="@+id/textViewWelcomeLabel"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="50sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </RelativeLayout>
 </FrameLayout>

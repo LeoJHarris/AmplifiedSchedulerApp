@@ -4,12 +4,14 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -27,7 +29,7 @@ public class HomeFragment extends Fragment {
     Person personLoggedIn;
     BackendlessCollection<Person> persons;
     AutoResizeTextView textViewNotificationNumberHome;
-    Typeface fontHomeName;
+    //  Typeface fontHomeName;
 
 
     @Override
@@ -38,7 +40,7 @@ public class HomeFragment extends Fragment {
 
         textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
 
-        textViewNotificationNumberHome.setText("fetching  notifications");
+        textViewNotificationNumberHome.setText("Fetching  notifications");
 
         getActivity().setTitle("Home");
 
@@ -46,24 +48,52 @@ public class HomeFragment extends Fragment {
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
-        final AutoResizeTextView welcomeLabel = (AutoResizeTextView) v.findViewById(R.id.textViewWelcomeLabel);
 
-        final AutoResizeTextView textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
+        AutoResizeTextView welcomeLabel = (AutoResizeTextView) v.findViewById(R.id.textViewWelcomeLabel);
+
+        AutoResizeTextView textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
+        ImageView imageViewMainLogo = (ImageView) v.findViewById(R.id.imageViewMainLogo);
+
+
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        //Fame
+        if (width == 320 && height == 480) {
+            imageViewMainLogo.requestLayout();
+            imageViewMainLogo.getLayoutParams().height = 160;
+            welcomeLabel.setTextSize(22);
+            welcomeLabel.setPadding(0, 7, 0, 15);
+
+            textViewNotificationNumberHome.setTextSize(22);
+        }
+        // 2.7" QVGA
+        else if (width == 240 && height == 320) {
+            imageViewMainLogo.requestLayout();
+            imageViewMainLogo.getLayoutParams().height = 100;
+            welcomeLabel.setTextSize(18);
+            welcomeLabel.setPadding(0, 7, 0, 10);
+            textViewNotificationNumberHome.setTextSize(18);
+        }
+
 
         // final AutoResizeTextView textViewAppStatement = (AutoResizeTextView) v.findViewById(R.id.textViewAppStatement);
 
-        final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+        //  final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
-        final Typeface fontWelcome = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/Amatic-Bold.ttf");
+        // final Typeface fontWelcome = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/Amatic-Bold.ttf");
 
-        fontHomeName = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/SEASRN__.ttf");
+        // fontHomeName = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/SEASRN__.ttf");
 
-        textViewNotificationNumberHome.setTypeface(regularFont);
+        //  textViewNotificationNumberHome.setTypeface(regularFont);
 
-        welcomeLabel.setTypeface(regularFont);
+        // welcomeLabel.setTypeface(regularFont);
         //    textViewAppStatement.setTypeface(fontWelcome);
 
-        welcomeLabel.setText("Welcome! " + personLoggedIn.getFullname());
+        welcomeLabel.setText("Welcome " + personLoggedIn.getFullname() + "!");
 
         new ParseURL().execute();
         return v;
@@ -135,7 +165,16 @@ public class HomeFragment extends Fragment {
                 });
 
             } else {
-                textViewNotificationNumberHome.setText("No New Notifications");
+                textViewNotificationNumberHome.setText("No new notifications - tap to refresh");
+                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent n = new Intent(getActivity(), NavDrawerActivity.class);
+                        n.putExtra("refresh", false);
+                        startActivity(n);
+                    }
+                });
             }
             // Toast.makeText(getContext(), "Check", Toast.LENGTH_SHORT).show();
             //  new ParseURL().execute();

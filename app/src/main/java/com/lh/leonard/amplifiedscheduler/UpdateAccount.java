@@ -94,7 +94,7 @@ public class UpdateAccount extends Fragment {
                 new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
-        final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+       // final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
         editTextUpdateFNameReg = (EditText) v.findViewById(R.id.editTextUpdateFName);
         editTextUpdateLNameReg = (EditText) v.findViewById(R.id.editTextUpdateLName);
@@ -112,25 +112,25 @@ public class UpdateAccount extends Fragment {
         final AutoResizeTextView txtLabelPhoneUpdate = (AutoResizeTextView) v.findViewById(R.id.txtLabelPhoneUpdate);
         AutoResizeTextView editTextNoticeUpdate = (AutoResizeTextView) v.findViewById(R.id.editTextNoticeUpdate);
 
-        editTextNoticeUpdate.setTypeface(regularFont);
+       // editTextNoticeUpdate.setTypeface(regularFont);
 
         Button updateDetailsBtn = (Button) v.findViewById(R.id.buttonUpdateUser);
 
-        editTextUpdateFNameReg.setTypeface(regularFont);
-        editTextUpdateLNameReg.setTypeface(regularFont);
-        editTextUpdatePhoneReg.setTypeface(regularFont);
-        editTextUpdateEmail.setTypeface(regularFont);
-        ediTextUpdatePassword.setTypeface(regularFont);
-        editTextUpdatePasswordConfirmReg.setTypeface(regularFont);
-        updateDetailsBtn.setTypeface(regularFont);
-        txtLabelCountryUpdate.setTypeface(regularFont);
-        txtLabelEmailUpdate.setTypeface(regularFont);
-        txtLabelFnameUpdate.setTypeface(regularFont);
-        txtLabeLnameUpdate.setTypeface(regularFont);
-        txtLabelPasswordConfirmUpdate.setTypeface(regularFont);
-        txtLabelPhoneUpdate.setTypeface(regularFont);
-        txtLabelTextPasswordUpdate.setTypeface(regularFont);
-        textViewCountry.setTypeface(regularFont);
+//        editTextUpdateFNameReg.setTypeface(regularFont);
+//        editTextUpdateLNameReg.setTypeface(regularFont);
+//        editTextUpdatePhoneReg.setTypeface(regularFont);
+//        editTextUpdateEmail.setTypeface(regularFont);
+//        ediTextUpdatePassword.setTypeface(regularFont);
+//        editTextUpdatePasswordConfirmReg.setTypeface(regularFont);
+//        updateDetailsBtn.setTypeface(regularFont);
+//        txtLabelCountryUpdate.setTypeface(regularFont);
+//        txtLabelEmailUpdate.setTypeface(regularFont);
+//        txtLabelFnameUpdate.setTypeface(regularFont);
+//        txtLabeLnameUpdate.setTypeface(regularFont);
+//        txtLabelPasswordConfirmUpdate.setTypeface(regularFont);
+//        txtLabelPhoneUpdate.setTypeface(regularFont);
+//        txtLabelTextPasswordUpdate.setTypeface(regularFont);
+//        textViewCountry.setTypeface(regularFont);
 
 
         updateDetailsBtn.setOnClickListener(new View.OnClickListener() {

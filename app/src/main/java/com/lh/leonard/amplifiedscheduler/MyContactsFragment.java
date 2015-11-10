@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -63,12 +62,12 @@ public class MyContactsFragment extends Fragment {
 
         personLoggedIn = (Person) loggedInUser.getProperty("persons");
 
-        final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+        //     final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
         rvMyContacts = (RecyclerView) v.findViewById(R.id.rvMyContactsFragment);
         progressBarMyContacts = (ProgressBar) v.findViewById(R.id.progressBarMyContacts);
         textViewTextNoContacts = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoContacts);
-        textViewTextNoContacts.setTypeface(regularFont);
+        //textViewTextNoContacts.setTypeface(regularFont);
         searchView = (SearchView) v.findViewById(R.id.searchViewMyContacts);
         searchView.setQueryHint("Search Contacts");
 
@@ -263,7 +262,7 @@ public class MyContactsFragment extends Fragment {
 
                 rvMyContacts.setLayoutManager(llm);
 
-                rvMyContacts.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
+                //  rvMyContacts.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
                 Resources r = getResources();
 

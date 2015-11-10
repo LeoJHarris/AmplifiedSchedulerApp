@@ -28,14 +28,12 @@
     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
         android:id="@+id/textViewTextNoContacts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchViewFindContacts"
         android:gravity="center"
-        android:padding="10dp"
         android:text="You currently have no contacts"
-        android:textAllCaps="true"
-        android:textColor="@android:color/white"
-        android:textSize="30sp"
+        android:textSize="18sp"
+        android:textStyle="italic"
         android:visibility="gone" />
 
 </RelativeLayout>

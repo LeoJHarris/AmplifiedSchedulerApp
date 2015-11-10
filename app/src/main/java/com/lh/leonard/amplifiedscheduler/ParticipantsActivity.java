@@ -42,7 +42,7 @@ public class ParticipantsActivity extends Activity {
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
-        final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
+       // final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
 
         textViewTextNoSlotAvaliable = (AutoResizeTextView) findViewById(R.id.textViewTextNoSlotAvaliable);
 
@@ -51,7 +51,7 @@ public class ParticipantsActivity extends Activity {
         SearchView searchView = (SearchView) findViewById(R.id.searchViewSlots);
 
         searchView.setQueryHint("Search people going");
-        textViewTextNoSlotAvaliable.setTypeface(regularFont);
+       // textViewTextNoSlotAvaliable.setTypeface(regularFont);
 
         person = (Person) userLoggedIn.getProperty("persons");
 

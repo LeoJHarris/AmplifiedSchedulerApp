@@ -12,7 +12,6 @@
  - fame
  -->
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,7 +20,7 @@
         <ImageView
             android:id="@+id/imageViewMainLogo"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="190dp"
             android:src="@drawable/main_textlogo_320" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -29,12 +28,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageViewMainLogo"
-            android:layout_marginBottom="50dp"
-            android:layout_marginTop="30dp"
             android:gravity="center"
+            android:paddingBottom="50dp"
+            android:paddingTop="25dp"
             android:textColor="@color/white"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textSize="25sp"
+            android:textStyle="italic" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewNotificationNumberHome"
@@ -43,7 +42,7 @@
             android:layout_below="@+id/textViewWelcomeLabel"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="40sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
     </RelativeLayout>
 </FrameLayout>

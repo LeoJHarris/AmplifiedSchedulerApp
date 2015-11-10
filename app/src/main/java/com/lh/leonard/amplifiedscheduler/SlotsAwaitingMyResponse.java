@@ -60,9 +60,9 @@ public class SlotsAwaitingMyResponse extends Fragment {
 
         textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
 
-        final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+      //  final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
-        textViewTextNoSlotAvaliable.setTypeface(regularFont);
+       // textViewTextNoSlotAvaliable.setTypeface(regularFont);
 
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 

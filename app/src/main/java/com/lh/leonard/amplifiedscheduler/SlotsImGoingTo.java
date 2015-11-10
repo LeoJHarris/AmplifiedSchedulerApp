@@ -58,10 +58,10 @@ public class SlotsImGoingTo extends Fragment {
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 
-        final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+       // final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
         textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
-        textViewTextNoSlotAvaliable.setTypeface(regularFont);
+       // textViewTextNoSlotAvaliable.setTypeface(regularFont);
 
         person = (Person) userLoggedIn.getProperty("persons");
 
