@@ -23,19 +23,17 @@
                 android:background="@color/black"
                 android:gravity="center"
                 android:paddingBottom="10dp"
-                android:paddingTop="5dp">
+                android:paddingTop="10dp">
 
                 <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                     android:id="@+id/textViewHeaderRegister"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_column="0"
                     android:layout_gravity="center_horizontal"
-                    android:layout_row="0"
                     android:gravity="center"
                     android:text="Sign Up"
                     android:textColor="@color/white"
-                    android:textSize="40sp" />
+                    android:textSize="28sp" />
 
             </LinearLayout>
 
@@ -45,9 +43,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
                 android:text="First Name:"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/editTextFNameReg"
@@ -55,12 +52,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_user_profile"
                 android:ems="10"
                 android:hint="Tap To Enter First Name"
                 android:inputType="text"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabeLnameReg"
@@ -68,9 +64,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
                 android:text="Last Name:"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
 
             <EditText
@@ -79,12 +74,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_user_profile"
                 android:ems="10"
                 android:hint="Tap To Enter Last Name"
                 android:inputType="text"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -95,7 +89,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_weight="1"
                 android:text="Password:"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/editTextPassword"
@@ -103,11 +97,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_password"
                 android:hint="Tap To Enter Password"
                 android:inputType="textPassword"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelPasswordConfirmReg"
@@ -115,9 +108,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
                 android:text="Confirm Password:"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/editTextPasswordConfirmReg"
@@ -125,11 +117,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_password"
                 android:hint="Tap To Enter Password"
                 android:inputType="textPassword"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -138,9 +129,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
                 android:text="Email (User Identity For Login):"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/editTextEmail"
@@ -148,12 +138,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_email"
                 android:ems="10"
                 android:hint="Tap To Enter Email Address"
                 android:inputType="textEmailAddress"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -162,9 +151,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
                 android:text="Phone Number (For Event Notifications Via SMS):"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/editTextPhoneReg"
@@ -172,12 +160,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_phone"
                 android:hint="Tap To Enter Phone Number"
                 android:inputType="phone"
                 android:numeric="integer"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -186,9 +173,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
                 android:text="Your Country (Helps For Finding Users):"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
             <AutoCompleteTextView
                 android:id="@+id/autocomplete_country"
@@ -196,22 +182,20 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_country"
                 android:hint="Tap To Enter Your Country"
                 android:inputType="text"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/buttonRegisterUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:layout_weight="1"
                 android:background="@drawable/button_default_bg"
                 android:padding="10dp"
                 android:text="Sign Up"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
     </ScrollView>

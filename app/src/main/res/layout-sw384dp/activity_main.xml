@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/imageViewMainLogo"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="200dp"
             android:layout_margin="25dp"
             android:paddingTop="10dp"
             android:src="@drawable/main_textlogo_384" />
@@ -31,8 +31,7 @@
         android:layout_below="@id/LLHeader"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="20dp">
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/emailSignIn"
@@ -42,9 +41,9 @@
             android:drawableLeft="@drawable/ic_email"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:padding="15dp"
+            android:padding="10dp"
             android:textColorHint="#cccccc"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/passwordSignIn"
@@ -54,10 +53,10 @@
             android:drawableLeft="@drawable/ic_password"
             android:hint="Password"
             android:inputType="textPassword"
-            android:padding="15dp"
+            android:padding="10dp"
             android:password="true"
             android:textColorHint="#cccccc"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/buttonSignIn"
@@ -66,8 +65,7 @@
             android:background="@drawable/button_default_bg"
             android:padding="7dp"
             android:text="Sign In"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -84,11 +82,10 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:gravity="center"
-            android:paddingTop="5dp"
+            android:paddingTop="20dp"
             android:text="Forgot Password?"
             android:textColor="@color/white"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -109,8 +106,7 @@
             android:paddingTop="20dp"
             android:text="Create Account"
             android:textColor="@color/white"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -129,7 +125,7 @@
             android:paddingTop="20dp"
             android:text="App Designed And Made By Leonard Harris"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="15sp"
+            android:textStyle="italic" />
     </LinearLayout>
 </RelativeLayout>

@@ -26,17 +26,17 @@
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/editHintSearchContacts"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/searchViewFindContacts"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:hint="Search users by email address first or last name."
             android:paddingBottom="4dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:textSize="20sp" />
+            android:textSize="18sp"
+            android:textStyle="italic" />
     </RelativeLayout>
-
 
     <RelativeLayout
         android:id="@+id/RLProgressBar"

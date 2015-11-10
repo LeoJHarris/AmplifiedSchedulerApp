@@ -24,10 +24,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageViewMainLogo"
+            android:layout_marginBottom="70dp"
+            android:layout_marginTop="40dp"
             android:gravity="center"
-            android:paddingBottom="20dp"
             android:textColor="@color/white"
-            android:textSize="30sp"
+            android:textSize="35sp"
             android:textStyle="bold" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -37,7 +38,7 @@
             android:layout_below="@+id/textViewWelcomeLabel"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="50sp"
-            android:textStyle="bold" />
+            android:textSize="40sp"
+            android:textStyle="italic" />
     </RelativeLayout>
 </FrameLayout>

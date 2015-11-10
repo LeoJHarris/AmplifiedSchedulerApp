@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.Display;
@@ -40,18 +39,21 @@ public class MainActivity extends Activity {
         AutoResizeTextView textViewMadeByMeMain = (AutoResizeTextView) findViewById(R.id.textViewMadeByMeMain);
         ImageView imageViewMainLogo = (ImageView) findViewById(R.id.imageViewMainLogo);
 
-        final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
-        final Typeface fontWelcome = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Amatic-Bold.ttf");
+        //    final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
+        //  final Typeface fontWelcome = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Amatic-Bold.ttf");
 
 
-        //Backendless.Events.dispatch()
+        //  HashMap args = new HashMap();
+        // args.put( "weather", "sunny" );
 
-        buttonSignIn.setTypeface(regularFont);
-        editTextEmailMain.setTypeface(regularFont);
-        editTextPasswordMain.setTypeface(regularFont);
-        buttonForgotPassword.setTypeface(regularFont);
-        buttonRegistration.setTypeface(regularFont);
-        textViewMadeByMeMain.setTypeface(regularFont);
+        //Backendless.Events.dispatch("AddAsContacts", args);
+
+//        buttonSignIn.setTypeface(regularFont);
+//        editTextEmailMain.setTypeface(regularFont);
+//        editTextPasswordMain.setTypeface(regularFont);
+//        buttonForgotPassword.setTypeface(regularFont);
+//        buttonRegistration.setTypeface(regularFont);
+//        textViewMadeByMeMain.setTypeface(regularFont);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -62,19 +64,25 @@ public class MainActivity extends Activity {
         //Fame
         if (width == 320 && height == 480) {
             imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 110;
-            editTextEmailMain.setTextSize(21);
-            editTextPasswordMain.setTextSize(21);
-            buttonForgotPassword.setTextSize(21);
-            buttonRegistration.setTextSize(21);
-            buttonSignIn.setTextSize(21);
+            imageViewMainLogo.getLayoutParams().height = 160;
+            editTextEmailMain.setTextSize(14);
+            editTextEmailMain.setPadding(4, 4, 4, 4);
+            editTextPasswordMain.setPadding(4,4,4,4);
+            buttonSignIn.setPadding(4,4,4,4);
+            editTextPasswordMain.setTextSize(14);
+            buttonForgotPassword.setTextSize(14);
+            buttonRegistration.setTextSize(14);
             textViewMadeByMeMain.setTextSize(14);
+            buttonSignIn.setTextSize(14);
         }
         // 2.7" QVGA
         else if (width == 240 && height == 320) {
             imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 80;
+            imageViewMainLogo.getLayoutParams().height = 90;
             editTextEmailMain.setTextSize(12);
+            editTextEmailMain.setPadding(2, 2, 2, 2);
+            editTextPasswordMain.setPadding(2,2,2,2);
+            buttonSignIn.setPadding(2,2,2,2);
             editTextPasswordMain.setTextSize(12);
             buttonForgotPassword.setTextSize(12);
             buttonRegistration.setTextSize(12);
@@ -162,8 +170,8 @@ public class MainActivity extends Activity {
                 EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
 
                 //temp
-                // emailField.setText("leojharris@hotmail.com");
-                // passwordField.setText("testing");
+               // emailField.setText("leojharris@hotmail.com");
+               // passwordField.setText("testing");
 
                 if (new Validator().isValidEmail(emailField.getText())) {
                     if (new Validator().isPasswordValid(passwordField.getText())) {

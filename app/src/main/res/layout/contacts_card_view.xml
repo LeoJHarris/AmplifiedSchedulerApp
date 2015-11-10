@@ -16,10 +16,10 @@
             android:layout_height="wrap_content"
             android:background="@color/black"
             android:gravity="center_vertical"
-            android:padding="10dp"
+            android:padding="7dp"
             android:text="contact det"
             android:textColor="@android:color/white"
-            android:textSize="30sp" />
+            android:textSize="18sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/person_email"
@@ -29,10 +29,10 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
-            android:padding="5dp"
+            android:padding="3dp"
             android:text="Name"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="12sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/person_country"
@@ -42,10 +42,10 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
-            android:padding="5dp"
+            android:padding="3dp"
             android:text="Surname"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="12sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/person_facebook"
@@ -55,10 +55,10 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="60dp"
             android:layout_marginTop="10dp"
-            android:padding="5dp"
+            android:padding="3dp"
             android:text="tets"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="12sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/person_last_activity"
@@ -68,10 +68,10 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="60dp"
             android:layout_marginTop="10dp"
-            android:padding="5dp"
+            android:padding="3dp"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="12sp" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

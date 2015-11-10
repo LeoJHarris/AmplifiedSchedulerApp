@@ -20,7 +20,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
 
     Resources resources;
     private List<Slot> listSlots;
-    Typeface regularFont;
+    //Typeface regularFont;
 
     private List<Slot> orig;
 
@@ -33,7 +33,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
     @Override
     public SlotViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
-        regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+      //  regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
         SlotViewHolder pvh = new SlotViewHolder(v);
         return pvh;
     }
@@ -69,10 +69,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
         slotViewHolder.slotMessage.setText("Message: " + messageSubString);
 
         // slotViewHolder.slotAvaliability.setTypeface(regularFont);
-        slotViewHolder.slotFullName.setTypeface(regularFont);
-        slotViewHolder.slotTitle.setTypeface(regularFont);
-        slotViewHolder.slotMessage.setTypeface(regularFont);
-        slotViewHolder.slotDate.setTypeface(regularFont);
+//        slotViewHolder.slotFullName.setTypeface(regularFont);
+//        slotViewHolder.slotTitle.setTypeface(regularFont);
+//        slotViewHolder.slotMessage.setTypeface(regularFont);
+//        slotViewHolder.slotDate.setTypeface(regularFont);
 
         //personViewHolder.personPhoto.setImageResource(listTeachers.get(i).getPhoto());
     }

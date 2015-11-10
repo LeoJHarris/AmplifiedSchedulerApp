@@ -5,8 +5,8 @@ package com.lh.leonard.amplifiedscheduler;
  */
 public class Defaults {
 
-    public static final String APPLICATION_ID = "85CE55C4-8D6F-4B4C-FF91-A013820CEE00";
-    public static final String SECRET_KEY = "B512A39E-660A-A40D-FFF3-3F36E89E4900";
+    public static final String APPLICATION_ID = "E9C78AF2-BDC4-C5FA-FF3F-DA79004B9200";
+    public static final String SECRET_KEY = "E6B5DC99-BE1D-5D2D-FF57-DA6B45E83B00";
     public static final String VERSION = "v1";
 
 }

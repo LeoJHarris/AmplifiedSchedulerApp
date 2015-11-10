@@ -20,7 +20,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
     Resources resources;
     private List<Person> listSlots;
-    Typeface regularFont;
+   // Typeface regularFont;
     private List<Person> orig;
 
     public ContactsAdapter(List<Person> list, Resources R) {
@@ -33,7 +33,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.contacts_card_view, viewGroup, false);
 
-        regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+     //   regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
         ContactViewHolder pvh = new ContactViewHolder(v);
         return pvh;
@@ -54,11 +54,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         }
         slotViewHolder.personCountry.setText("Last Activity: " + listSlots.get(i).getUpdated());
 
-        slotViewHolder.personCountry.setTypeface(regularFont);
-        slotViewHolder.personsFacebook.setTypeface(regularFont);
-        slotViewHolder.personLatestActivity.setTypeface(regularFont);
-        slotViewHolder.personsFullName.setTypeface(regularFont);
-        slotViewHolder.personEmail.setTypeface(regularFont);
+//        slotViewHolder.personCountry.setTypeface(regularFont);
+//        slotViewHolder.personsFacebook.setTypeface(regularFont);
+//        slotViewHolder.personLatestActivity.setTypeface(regularFont);
+//        slotViewHolder.personsFullName.setTypeface(regularFont);
+//        slotViewHolder.personEmail.setTypeface(regularFont);
 
         //personViewHolder.personPhoto.setImageResource(listTeachers.get(i).getPhoto());
     }
