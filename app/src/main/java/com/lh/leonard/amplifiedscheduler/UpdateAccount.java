@@ -1,6 +1,7 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -19,6 +20,7 @@ import com.backendless.BackendlessUser;
 
 public class UpdateAccount extends Fragment {
 
+    ProgressDialog ringProgressDialog;
     View v;
     Person personLoggedIn;
     EditText editTextUpdateFNameReg; // TODO set hints to user info
@@ -94,7 +96,7 @@ public class UpdateAccount extends Fragment {
                 new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
-       // final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+        // final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
 
         editTextUpdateFNameReg = (EditText) v.findViewById(R.id.editTextUpdateFName);
         editTextUpdateLNameReg = (EditText) v.findViewById(R.id.editTextUpdateLName);
@@ -112,30 +114,35 @@ public class UpdateAccount extends Fragment {
         final AutoResizeTextView txtLabelPhoneUpdate = (AutoResizeTextView) v.findViewById(R.id.txtLabelPhoneUpdate);
         AutoResizeTextView editTextNoticeUpdate = (AutoResizeTextView) v.findViewById(R.id.editTextNoticeUpdate);
 
-       // editTextNoticeUpdate.setTypeface(regularFont);
+        final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
         Button updateDetailsBtn = (Button) v.findViewById(R.id.buttonUpdateUser);
 
-//        editTextUpdateFNameReg.setTypeface(regularFont);
-//        editTextUpdateLNameReg.setTypeface(regularFont);
-//        editTextUpdatePhoneReg.setTypeface(regularFont);
-//        editTextUpdateEmail.setTypeface(regularFont);
-//        ediTextUpdatePassword.setTypeface(regularFont);
-//        editTextUpdatePasswordConfirmReg.setTypeface(regularFont);
-//        updateDetailsBtn.setTypeface(regularFont);
-//        txtLabelCountryUpdate.setTypeface(regularFont);
-//        txtLabelEmailUpdate.setTypeface(regularFont);
-//        txtLabelFnameUpdate.setTypeface(regularFont);
-//        txtLabeLnameUpdate.setTypeface(regularFont);
-//        txtLabelPasswordConfirmUpdate.setTypeface(regularFont);
-//        txtLabelPhoneUpdate.setTypeface(regularFont);
-//        txtLabelTextPasswordUpdate.setTypeface(regularFont);
-//        textViewCountry.setTypeface(regularFont);
-
+        editTextUpdateFNameReg.setTypeface(RobotoCondensedLight);
+        editTextUpdateLNameReg.setTypeface(RobotoCondensedLight);
+        editTextUpdatePhoneReg.setTypeface(RobotoCondensedLight);
+        editTextUpdateEmail.setTypeface(RobotoCondensedLight);
+        ediTextUpdatePassword.setTypeface(RobotoCondensedLight);
+        editTextUpdatePasswordConfirmReg.setTypeface(RobotoCondensedLight);
+        updateDetailsBtn.setTypeface(RobotoCondensedLight);
+        txtLabelCountryUpdate.setTypeface(RobotoCondensedLight);
+        txtLabelEmailUpdate.setTypeface(RobotoCondensedLight);
+        txtLabelFnameUpdate.setTypeface(RobotoCondensedLight);
+        txtLabeLnameUpdate.setTypeface(RobotoCondensedLight);
+        txtLabelPasswordConfirmUpdate.setTypeface(RobotoCondensedLight);
+        txtLabelPhoneUpdate.setTypeface(RobotoCondensedLight);
+        txtLabelTextPasswordUpdate.setTypeface(RobotoCondensedLight);
+        textViewCountry.setTypeface(RobotoCondensedLight);
 
         updateDetailsBtn.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
+
+                                                    ringProgressDialog = ProgressDialog.show(v.getContext(), "Please wait ...", "Updating account ...", true);
+                                                    ringProgressDialog.setCancelable(false);
 
                                                     email = editTextUpdateEmail.getText().toString();
                                                     fname = editTextUpdateFNameReg.getText().toString();
@@ -329,6 +336,7 @@ public class UpdateAccount extends Fragment {
         @Override
         protected void onPostExecute(Boolean result) {
 
+            ringProgressDialog.dismiss();
             if (result) {
                 Toast.makeText(getActivity(), "Inputs Updated", Toast.LENGTH_SHORT).show();
             } else {

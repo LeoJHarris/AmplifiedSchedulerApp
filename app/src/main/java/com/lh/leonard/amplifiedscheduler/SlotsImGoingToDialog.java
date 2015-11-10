@@ -54,7 +54,10 @@ public class SlotsImGoingToDialog extends Activity {
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 
-       // final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
+        final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
         textViewSubject = (AutoResizeTextView) findViewById(R.id.textViewGoingToSlotSubject);
 
@@ -66,17 +69,25 @@ public class SlotsImGoingToDialog extends Activity {
         //  buttonCantGo = (Button) findViewById(R.id.buttonGoingToSlotCantGo);
         buttonMySlotParticipantsSlot = (Button) findViewById(R.id.buttonMySlotParticipantsSlot);
 
-//        organizer.setTypeface(regularFont);
-//        textViewSubject.setTypeface(regularFont);
-//        textViewMessage.setTypeface(regularFont);
-//        textViewDateAndTime.setTypeface(regularFont);
-//        textViewLocation.setTypeface(regularFont);
-//        textViewMyEventSpacesAvaliable.setTypeface(regularFont);
-//         buttonCantGo.setTypeface(regularFont);
-//        buttonMySlotParticipantsSlot.setTypeface(regularFont);
+        organizer.setTypeface(RobotoCondensedLight);
+        textViewSubject.setTypeface(RobotoCondensedLight);
+        textViewMessage.setTypeface(RobotoCondensedLight);
+        textViewDateAndTime.setTypeface(RobotoCondensedLight);
+        textViewLocation.setTypeface(RobotoCondensedLight);
+        textViewMyEventSpacesAvaliable.setTypeface(RobotoCondensedLight);
+        // buttonCantGo.setTypeface(regularFont);
+        buttonMySlotParticipantsSlot.setTypeface(RobotoCondensedLight);
 
-        person = (Person) userLoggedIn.getProperty("persons");
-
+        if(userLoggedIn.getProperty("persons") != null) {
+            person = (Person) userLoggedIn.getProperty("persons");
+        }
+        else{
+            Backendless.Data.mapTableToClass("Slot", Slot.class);
+            Backendless.Data.mapTableToClass("Person", Person.class);
+            Backendless.Persistence.mapTableToClass("Slot", Slot.class);
+            Backendless.Persistence.mapTableToClass("Person", Person.class);
+            person = (Person) userLoggedIn.getProperty("persons");
+        }
         new LoadSlotsImGoingTo().execute();
 
 //        buttonCantGo.setOnClickListener(new View.OnClickListener() {

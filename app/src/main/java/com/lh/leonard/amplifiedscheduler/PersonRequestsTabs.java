@@ -68,11 +68,14 @@ public class PersonRequestsTabs extends Fragment {
         rvRequest = (RecyclerView) v.findViewById(R.id.rvRequests);
         llm = new LinearLayoutManager(v.getContext());
 
-       // final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+        final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
         searchView = (SearchView) v.findViewById(R.id.searchViewContactRequest);
         textViewTextNoRequestingUsers = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoRequestingUsers);
-        //textViewTextNoRequestingUsers.setTypeface(regularFont);
+        textViewTextNoRequestingUsers.setTypeface(RobotoCondensedLightItalic);
 
         searchView.setQueryHint("Search requesting contacts");
 

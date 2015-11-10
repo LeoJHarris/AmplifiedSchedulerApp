@@ -42,7 +42,10 @@ public class ParticipantsActivity extends Activity {
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
-       // final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
+        final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
         textViewTextNoSlotAvaliable = (AutoResizeTextView) findViewById(R.id.textViewTextNoSlotAvaliable);
 
@@ -51,7 +54,7 @@ public class ParticipantsActivity extends Activity {
         SearchView searchView = (SearchView) findViewById(R.id.searchViewSlots);
 
         searchView.setQueryHint("Search people going");
-       // textViewTextNoSlotAvaliable.setTypeface(regularFont);
+        textViewTextNoSlotAvaliable.setTypeface(RobotoCondensedLight);
 
         person = (Person) userLoggedIn.getProperty("persons");
 
@@ -99,7 +102,6 @@ public class ParticipantsActivity extends Activity {
 
             Bundle data = getIntent().getExtras();
             String id = data.getString("eventid");
-
 
             StringBuilder whereClause = new StringBuilder();
             whereClause.append("Slot[attendees]");

@@ -37,7 +37,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="First Name:"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/editTextUpdateFName"
@@ -49,7 +49,7 @@
                 android:ems="10"
                 android:hint="Tap To Enter First Name"
                 android:inputType="text"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabeLnameUpdate"
@@ -58,7 +58,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Last Name:"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/editTextUpdateLName"
@@ -70,7 +70,7 @@
                 android:ems="10"
                 android:hint="Tap To Enter Last Name"
                 android:inputType="text"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -80,7 +80,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Password:"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/ediTextUpdatePassword"
@@ -91,7 +91,7 @@
                 android:drawableLeft="@drawable/ic_password"
                 android:hint="Tap To Enter New Password"
                 android:inputType="textPassword"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelPasswordConfirmUpdate"
@@ -100,7 +100,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Confirm Password:"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/editTextUpdatePasswordConfirm"
@@ -111,7 +111,7 @@
                 android:drawableLeft="@drawable/ic_password"
                 android:hint="Tap To Enter New Password"
                 android:inputType="textPassword"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -121,7 +121,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Email (User Identity For Login):"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/editTextUpdateEmail"
@@ -133,7 +133,7 @@
                 android:ems="10"
                 android:hint="Tap To Enter New Email"
                 android:inputType="textEmailAddress"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -143,7 +143,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Phone Number (Event Notifications Via SMS):"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/editTextUpdatePhone"
@@ -155,7 +155,7 @@
                 android:hint="Tap To Enter New Phone Number"
                 android:inputType="phone"
                 android:numeric="integer"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -165,7 +165,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Your Country (Helps For Finding Users):"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <AutoCompleteTextView
                 android:id="@+id/autocomplete_countryUpdate"
@@ -176,7 +176,7 @@
                 android:drawableLeft="@drawable/ic_country"
                 android:hint="Tap To Enter Your New Country"
                 android:inputType="text"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <Button
                 android:id="@+id/buttonUpdateUser"
@@ -186,7 +186,7 @@
                 android:background="@drawable/button_default_bg"
                 android:padding="10dp"
                 android:text="Update Details"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

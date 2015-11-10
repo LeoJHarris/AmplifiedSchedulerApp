@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
@@ -39,21 +42,30 @@ public class MainActivity extends Activity {
         AutoResizeTextView textViewMadeByMeMain = (AutoResizeTextView) findViewById(R.id.textViewMadeByMeMain);
         ImageView imageViewMainLogo = (ImageView) findViewById(R.id.imageViewMainLogo);
 
-        //    final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
-        //  final Typeface fontWelcome = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Amatic-Bold.ttf");
-
+        final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
         //  HashMap args = new HashMap();
         // args.put( "weather", "sunny" );
 
         //Backendless.Events.dispatch("AddAsContacts", args);
 
-//        buttonSignIn.setTypeface(regularFont);
-//        editTextEmailMain.setTypeface(regularFont);
-//        editTextPasswordMain.setTypeface(regularFont);
-//        buttonForgotPassword.setTypeface(regularFont);
-//        buttonRegistration.setTypeface(regularFont);
-//        textViewMadeByMeMain.setTypeface(regularFont);
+        SpannableString forgotPassword = new SpannableString(buttonForgotPassword.getText());
+        forgotPassword.setSpan(new UnderlineSpan(), 0, forgotPassword.length(), 0);
+        buttonForgotPassword.setText(forgotPassword);
+
+        SpannableString signup = new SpannableString(buttonRegistration.getText());
+        signup.setSpan(new UnderlineSpan(), 0, signup.length(), 0);
+        buttonRegistration.setText(signup);
+
+        buttonSignIn.setTypeface(RobotoCondensedLight);
+        editTextEmailMain.setTypeface(RobotoCondensedLight);
+        editTextPasswordMain.setTypeface(RobotoCondensedLight);
+        buttonForgotPassword.setTypeface(RobotoCondensedLight);
+        buttonRegistration.setTypeface(RobotoCondensedLight);
+        textViewMadeByMeMain.setTypeface(RobotoCondensedLightItalic);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -64,11 +76,11 @@ public class MainActivity extends Activity {
         //Fame
         if (width == 320 && height == 480) {
             imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 160;
+            imageViewMainLogo.getLayoutParams().height = 140;
             editTextEmailMain.setTextSize(14);
             editTextEmailMain.setPadding(4, 4, 4, 4);
-            editTextPasswordMain.setPadding(4,4,4,4);
-            buttonSignIn.setPadding(4,4,4,4);
+            editTextPasswordMain.setPadding(4, 4, 4, 4);
+            buttonSignIn.setPadding(4, 4, 4, 4);
             editTextPasswordMain.setTextSize(14);
             buttonForgotPassword.setTextSize(14);
             buttonRegistration.setTextSize(14);
@@ -81,8 +93,8 @@ public class MainActivity extends Activity {
             imageViewMainLogo.getLayoutParams().height = 90;
             editTextEmailMain.setTextSize(12);
             editTextEmailMain.setPadding(2, 2, 2, 2);
-            editTextPasswordMain.setPadding(2,2,2,2);
-            buttonSignIn.setPadding(2,2,2,2);
+            editTextPasswordMain.setPadding(2, 2, 2, 2);
+            buttonSignIn.setPadding(2, 2, 2, 2);
             editTextPasswordMain.setTextSize(12);
             buttonForgotPassword.setTextSize(12);
             buttonRegistration.setTextSize(12);
@@ -170,14 +182,14 @@ public class MainActivity extends Activity {
                 EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
 
                 //temp
-               // emailField.setText("leojharris@hotmail.com");
-               // passwordField.setText("testing");
+                //emailField.setText("leojharris@hotmail.com");
+                // passwordField.setText("testing");
 
                 if (new Validator().isValidEmail(emailField.getText())) {
                     if (new Validator().isPasswordValid(passwordField.getText())) {
 
                         ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
-                        ringProgressDialog.setCancelable(true);
+                        ringProgressDialog.setCancelable(false);
 
                         Backendless.Data.mapTableToClass("Person", Person.class);
                         Backendless.Data.mapTableToClass("Slot", Slot.class);
@@ -185,7 +197,6 @@ public class MainActivity extends Activity {
                         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 
                         Backendless.UserService.login(emailField.getText().toString(), passwordField.getText().toString(), new AsyncCallback<BackendlessUser>() {
-
 
                             public void handleResponse(BackendlessUser user) {
                                 // user has been logged

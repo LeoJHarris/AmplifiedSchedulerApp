@@ -24,8 +24,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:textColor="@android:color/white"
-            android:textSize="40sp"
-            android:textStyle="bold"
+            android:textSize="35sp"
             android:visibility="gone" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -37,7 +36,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewRequestSlotDateAndTime"
@@ -48,7 +47,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewRequestSlotLocation"
@@ -59,7 +58,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewMyEventSpacesAvaliable"
@@ -70,7 +69,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewRequestSlotOrganizer"
@@ -81,6 +80,6 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
     </RelativeLayout>
 </ScrollView>

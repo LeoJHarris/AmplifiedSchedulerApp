@@ -20,8 +20,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
 
     Resources resources;
     private List<Slot> listSlots;
-    //Typeface regularFont;
-
+    Typeface RobotoBlack;
+    Typeface RobotoCondensedLightItalic;
+    Typeface RobotoCondensedLight;
+    Typeface RobotoCondensedBold;
     private List<Slot> orig;
 
     public RVAdapter(List<Slot> list, Resources R) {
@@ -33,7 +35,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
     @Override
     public SlotViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
-      //  regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+        RobotoBlack = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/Roboto-Black.ttf");
+        RobotoCondensedLightItalic = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        RobotoCondensedLight = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        RobotoCondensedBold = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
         SlotViewHolder pvh = new SlotViewHolder(v);
         return pvh;
     }
@@ -68,11 +73,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
         messageSubString += "...";
         slotViewHolder.slotMessage.setText("Message: " + messageSubString);
 
-        // slotViewHolder.slotAvaliability.setTypeface(regularFont);
-//        slotViewHolder.slotFullName.setTypeface(regularFont);
-//        slotViewHolder.slotTitle.setTypeface(regularFont);
-//        slotViewHolder.slotMessage.setTypeface(regularFont);
-//        slotViewHolder.slotDate.setTypeface(regularFont);
+       // slotViewHolder.slotAvaliability.setTypeface(RobotoCondensedLight);
+        slotViewHolder.slotFullName.setTypeface(RobotoCondensedLight);
+        slotViewHolder.slotTitle.setTypeface(RobotoCondensedLight);
+        slotViewHolder.slotMessage.setTypeface(RobotoCondensedLight);
+        slotViewHolder.slotDate.setTypeface(RobotoCondensedLight);
 
         //personViewHolder.personPhoto.setImageResource(listTeachers.get(i).getPhoto());
     }

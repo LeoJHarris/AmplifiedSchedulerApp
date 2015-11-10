@@ -23,7 +23,7 @@
                 android:background="@color/black"
                 android:gravity="center"
                 android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:paddingTop="15dp">
 
                 <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                     android:id="@+id/textViewHeaderRegister"
@@ -33,7 +33,7 @@
                     android:gravity="center"
                     android:text="Sign Up"
                     android:textColor="@color/white"
-                    android:textSize="28sp" />
+                    android:textSize="30sp" />
 
             </LinearLayout>
 
@@ -44,7 +44,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="First Name:"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/editTextFNameReg"
@@ -56,7 +56,7 @@
                 android:ems="10"
                 android:hint="Tap To Enter First Name"
                 android:inputType="text"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabeLnameReg"
@@ -65,7 +65,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Last Name:"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
 
             <EditText
@@ -78,7 +78,7 @@
                 android:ems="10"
                 android:hint="Tap To Enter Last Name"
                 android:inputType="text"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -89,7 +89,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_weight="1"
                 android:text="Password:"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/editTextPassword"
@@ -100,7 +100,7 @@
                 android:drawableLeft="@drawable/ic_password"
                 android:hint="Tap To Enter Password"
                 android:inputType="textPassword"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelPasswordConfirmReg"
@@ -109,7 +109,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Confirm Password:"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/editTextPasswordConfirmReg"
@@ -120,7 +120,7 @@
                 android:drawableLeft="@drawable/ic_password"
                 android:hint="Tap To Enter Password"
                 android:inputType="textPassword"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -130,7 +130,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Email (User Identity For Login):"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/editTextEmail"
@@ -142,7 +142,7 @@
                 android:ems="10"
                 android:hint="Tap To Enter Email Address"
                 android:inputType="textEmailAddress"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -152,7 +152,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Phone Number (For Event Notifications Via SMS):"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/editTextPhoneReg"
@@ -164,7 +164,7 @@
                 android:hint="Tap To Enter Phone Number"
                 android:inputType="phone"
                 android:numeric="integer"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -174,7 +174,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Your Country (Helps For Finding Users):"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <AutoCompleteTextView
                 android:id="@+id/autocomplete_country"
@@ -185,7 +185,7 @@
                 android:drawableLeft="@drawable/ic_country"
                 android:hint="Tap To Enter Your Country"
                 android:inputType="text"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
             <Button
                 android:id="@+id/buttonRegisterUser"
@@ -195,7 +195,7 @@
                 android:background="@drawable/button_default_bg"
                 android:padding="10dp"
                 android:text="Sign Up"
-                android:textSize="15sp" />
+                android:textSize="22sp" />
 
         </LinearLayout>
     </ScrollView>
