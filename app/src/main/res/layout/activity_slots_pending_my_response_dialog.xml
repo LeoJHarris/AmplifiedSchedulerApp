@@ -25,7 +25,6 @@
             android:padding="10dp"
             android:textColor="@android:color/white"
             android:textSize="40sp"
-            android:textStyle="bold"
             android:visibility="gone" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView

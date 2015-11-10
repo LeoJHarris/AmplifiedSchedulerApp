@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Display;
@@ -80,18 +81,15 @@ public class HomeFragment extends Fragment {
         }
 
 
-        // final AutoResizeTextView textViewAppStatement = (AutoResizeTextView) v.findViewById(R.id.textViewAppStatement);
+        final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+       // final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "RobotoCondensed-Light.ttf");
 
-        //  final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+        textViewNotificationNumberHome.setTypeface(RobotoCondensedLight);
 
-        // final Typeface fontWelcome = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/Amatic-Bold.ttf");
-
-        // fontHomeName = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/SEASRN__.ttf");
-
-        //  textViewNotificationNumberHome.setTypeface(regularFont);
-
-        // welcomeLabel.setTypeface(regularFont);
-        //    textViewAppStatement.setTypeface(fontWelcome);
+        welcomeLabel.setTypeface(RobotoCondensedLightItalic);
 
         welcomeLabel.setText("Welcome " + personLoggedIn.getFullname() + "!");
 

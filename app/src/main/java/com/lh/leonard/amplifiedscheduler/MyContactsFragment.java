@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -62,12 +63,15 @@ public class MyContactsFragment extends Fragment {
 
         personLoggedIn = (Person) loggedInUser.getProperty("persons");
 
-        //     final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+        final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
         rvMyContacts = (RecyclerView) v.findViewById(R.id.rvMyContactsFragment);
         progressBarMyContacts = (ProgressBar) v.findViewById(R.id.progressBarMyContacts);
         textViewTextNoContacts = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoContacts);
-        //textViewTextNoContacts.setTypeface(regularFont);
+        textViewTextNoContacts.setTypeface(RobotoCondensedLightItalic);
         searchView = (SearchView) v.findViewById(R.id.searchViewMyContacts);
         searchView.setQueryHint("Search Contacts");
 

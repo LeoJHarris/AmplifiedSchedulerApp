@@ -31,7 +31,6 @@
             android:gravity="center_vertical"
             android:padding="3dp"
             android:text="Name"
-            android:textColor="@color/black"
             android:textSize="12sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -44,7 +43,6 @@
             android:gravity="center_vertical"
             android:padding="3dp"
             android:text="Surname"
-            android:textColor="@color/black"
             android:textSize="12sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -57,7 +55,6 @@
             android:layout_marginTop="10dp"
             android:padding="3dp"
             android:text="tets"
-            android:textColor="@color/black"
             android:textSize="12sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -70,7 +67,6 @@
             android:layout_marginTop="10dp"
             android:padding="3dp"
             android:text=""
-            android:textColor="@color/black"
             android:textSize="12sp" />
 
     </RelativeLayout>

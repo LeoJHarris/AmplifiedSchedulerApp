@@ -20,7 +20,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
     Resources resources;
     private List<Person> listSlots;
-   // Typeface regularFont;
+    Typeface RobotoBlack;
+    Typeface RobotoCondensedLightItalic;
+    Typeface RobotoCondensedLight;
+    Typeface RobotoCondensedBold;
     private List<Person> orig;
 
     public ContactsAdapter(List<Person> list, Resources R) {
@@ -32,9 +35,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.contacts_card_view, viewGroup, false);
-
-     //   regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
-
+        RobotoBlack = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/Roboto-Black.ttf");
+        RobotoCondensedLightItalic = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        RobotoCondensedLight = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        RobotoCondensedBold = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
         ContactViewHolder pvh = new ContactViewHolder(v);
         return pvh;
     }
@@ -54,11 +58,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         }
         slotViewHolder.personCountry.setText("Last Activity: " + listSlots.get(i).getUpdated());
 
-//        slotViewHolder.personCountry.setTypeface(regularFont);
-//        slotViewHolder.personsFacebook.setTypeface(regularFont);
-//        slotViewHolder.personLatestActivity.setTypeface(regularFont);
-//        slotViewHolder.personsFullName.setTypeface(regularFont);
-//        slotViewHolder.personEmail.setTypeface(regularFont);
+        slotViewHolder.personCountry.setTypeface(RobotoCondensedLight);
+        slotViewHolder.personsFacebook.setTypeface(RobotoCondensedLight);
+        slotViewHolder.personLatestActivity.setTypeface(RobotoCondensedLight);
+        slotViewHolder.personsFullName.setTypeface(RobotoCondensedLight);
+        slotViewHolder.personEmail.setTypeface(RobotoCondensedLight);
 
         //personViewHolder.personPhoto.setImageResource(listTeachers.get(i).getPhoto());
     }

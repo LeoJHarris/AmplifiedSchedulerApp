@@ -129,7 +129,6 @@
             android:text="App Designed And Made By Leonard Harris"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:textStyle="italic"
             />
     </LinearLayout>
 </RelativeLayout>

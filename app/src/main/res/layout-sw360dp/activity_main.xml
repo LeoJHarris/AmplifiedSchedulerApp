@@ -107,8 +107,7 @@
             android:paddingTop="20dp"
             android:text="Create Account"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -127,7 +126,6 @@
             android:paddingTop="30dp"
             android:text="App Designed And Made By Leonard Harris"
             android:textColor="@color/white"
-            android:textSize="13sp"
-            android:textStyle="italic" />
+            android:textSize="13sp" />
     </LinearLayout>
 </RelativeLayout>

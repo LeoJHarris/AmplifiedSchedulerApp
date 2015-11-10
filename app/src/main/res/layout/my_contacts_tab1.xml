@@ -32,8 +32,7 @@
         android:layout_below="@+id/searchViewFindContacts"
         android:gravity="center"
         android:text="You currently have no contacts"
-        android:textSize="18sp"
-        android:textStyle="italic"
+        android:textSize="23sp"
         android:visibility="gone" />
 
 </RelativeLayout>

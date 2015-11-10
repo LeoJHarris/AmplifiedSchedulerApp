@@ -56,7 +56,10 @@ public class MyCreatedSlotsDialog extends Activity {
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 
-        //final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
+        final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
         textViewSubject = (AutoResizeTextView) findViewById(R.id.textViewMySlotSubject);
         textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewMySlotMessage);
@@ -66,13 +69,13 @@ public class MyCreatedSlotsDialog extends Activity {
         //buttonCancelSlot = (Button) findViewById(R.id.buttonMySlotCancelSlot);
         buttonMySlotParticipantsSlot = (Button) findViewById(R.id.buttonMySlotParticipantsSlot);
 
-//        textViewSubject.setTypeface(regularFont);
-//        textViewMessage.setTypeface(regularFont);
-//        textViewDateAndTime.setTypeface(regularFont);
-//        textViewLocation.setTypeface(regularFont);
-//        textViewMyEventSpacesAvaliable.setTypeface(regularFont);
-//        // buttonCancelSlot.setTypeface(regularFont);
-//        buttonMySlotParticipantsSlot.setTypeface(regularFont);
+        textViewSubject.setTypeface(RobotoCondensedLight);
+        textViewMessage.setTypeface(RobotoCondensedLight);
+        textViewDateAndTime.setTypeface(RobotoCondensedLight);
+        textViewLocation.setTypeface(RobotoCondensedLight);
+        textViewMyEventSpacesAvaliable.setTypeface(RobotoCondensedLight);
+        // buttonCancelSlot.setTypeface(regularFont);
+        buttonMySlotParticipantsSlot.setTypeface(RobotoCondensedLight);
 
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);

@@ -35,7 +35,7 @@
                     android:gravity="center"
                     android:text="New Event"
                     android:textColor="@color/white"
-                    android:textSize="28sp" />
+                    android:textSize="30sp" />
 
             </LinearLayout>
 
@@ -63,7 +63,7 @@
                         android:ems="10"
                         android:hint="Enter title"
                         android:inputType="text"
-                        android:textSize="15sp" />
+                        android:textSize="22sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -92,7 +92,7 @@
                         android:ems="10"
                         android:hint="Message"
                         android:inputType="textMultiLine"
-                        android:textSize="15sp" />
+                        android:textSize="22sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -120,7 +120,7 @@
                         android:ems="10"
                         android:hint="Place or address"
                         android:inputType="textMultiLine"
-                        android:textSize="15sp" />
+                        android:textSize="22sp" />
 
                     <ImageView
                         android:id="@+id/poweredBy"
@@ -159,7 +159,7 @@
                         android:ems="10"
                         android:hint="Please Set Location"
                         android:inputType="text"
-                        android:textSize="15sp" />
+                        android:textSize="22sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -188,7 +188,7 @@
                         android:layout_weight="1"
                         android:autoLink="web"
                         android:ems="10"
-                        android:textSize="15sp"
+                        android:textSize="22sp"
                         android:visibility="gone" />
 
                 </LinearLayout>
@@ -211,7 +211,7 @@
                     android:background="@drawable/button_default_bg"
                     android:onClick="setDate"
                     android:text="Date"
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
 
                 <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                     android:id="@+id/textViewDate"
@@ -220,7 +220,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:text="Set Date"
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
 
             </LinearLayout>
 
@@ -240,7 +240,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_default_bg"
                     android:text="Start Time"
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
 
                 <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                     android:id="@+id/outputStartTime"
@@ -249,7 +249,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:text="Set Start Time"
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
 
             </LinearLayout>
 
@@ -269,7 +269,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_default_bg"
                     android:text="End Time"
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
 
                 <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                     android:id="@+id/outputEndTime"
@@ -278,7 +278,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:text="Set End Time"
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
 
             </LinearLayout>
 
@@ -297,7 +297,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:text="Allocated Spaces (if applicable): "
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
 
                 <EditText
                     android:id="@+id/numberPickerAttendees"
@@ -307,7 +307,7 @@
                     android:hint=""
                     android:inputType="number"
                     android:numeric="integer"
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
 
             </LinearLayout>
 
@@ -327,7 +327,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_weight="0"
                     android:text="Send automated SMS"
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
 
             </LinearLayout>
 
@@ -347,7 +347,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_default_bg"
                     android:text="Invite Contacts"
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -367,7 +367,7 @@
                     android:drawableRight="@drawable/ic_cross"
                     android:text="Send Event"
                     android:textColor="@color/red"
-                    android:textSize="15sp" />
+                    android:textSize="22sp" />
             </LinearLayout>
 
         </LinearLayout>

@@ -32,8 +32,7 @@
             android:paddingBottom="50dp"
             android:paddingTop="25dp"
             android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="italic" />
+            android:textSize="25sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewNotificationNumberHome"
@@ -42,7 +41,6 @@
             android:layout_below="@+id/textViewWelcomeLabel"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textSize="22sp" />
     </RelativeLayout>
 </FrameLayout>

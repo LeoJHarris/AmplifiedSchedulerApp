@@ -49,7 +49,10 @@ public class RegistrationActivity extends ActionBarActivity {
 
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
-        //final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
+        final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
         final Button registerButton = (Button) findViewById(R.id.buttonRegisterUser);
 
@@ -103,22 +106,23 @@ public class RegistrationActivity extends ActionBarActivity {
         lnameField.setText("");
         phoneField.setText("");
         textViewCountry.setText("");
-//        emailField.setTypeface(regularFont);
-//        textViewCountry.setTypeface(regularFont);
-//        passwordField.setTypeface(regularFont);
-//        passwordConfirmField.setTypeface(regularFont);
-//        fnameField.setTypeface(regularFont);
-//        lnameField.setTypeface(regularFont);
-//        phoneField.setTypeface(regularFont);
-//        registerButton.setTypeface(regularFont);
-//        textViewHeaderReg.setTypeface(regularFont);
-//        txtLabelCountryReg.setTypeface(regularFont);
-//        txtLabelEmailReg.setTypeface(regularFont);
-//        txtLabelFnameReg.setTypeface(regularFont);
-//        txtLabeLnameReg.setTypeface(regularFont);
-//        txtLabelPasswordConfirmReg.setTypeface(regularFont);
-//        txtLabelPhone.setTypeface(regularFont);
-//        txtLabelTextPasswordReg.setTypeface(regularFont);
+
+        emailField.setTypeface(RobotoCondensedLight);
+        textViewCountry.setTypeface(RobotoCondensedLight);
+        passwordField.setTypeface(RobotoCondensedLight);
+        passwordConfirmField.setTypeface(RobotoCondensedLight);
+        fnameField.setTypeface(RobotoCondensedLight);
+        lnameField.setTypeface(RobotoCondensedLight);
+        phoneField.setTypeface(RobotoCondensedLight);
+        registerButton.setTypeface(RobotoCondensedLight);
+        textViewHeaderReg.setTypeface(RobotoCondensedLight);
+        txtLabelCountryReg.setTypeface(RobotoCondensedLight);
+        txtLabelEmailReg.setTypeface(RobotoCondensedLight);
+        txtLabelFnameReg.setTypeface(RobotoCondensedLight);
+        txtLabeLnameReg.setTypeface(RobotoCondensedLight);
+        txtLabelPasswordConfirmReg.setTypeface(RobotoCondensedLight);
+        txtLabelPhone.setTypeface(RobotoCondensedLight);
+        txtLabelTextPasswordReg.setTypeface(RobotoCondensedLight);
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 

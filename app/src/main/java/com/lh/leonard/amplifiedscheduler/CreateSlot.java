@@ -154,8 +154,6 @@ public class CreateSlot extends AppCompatActivity implements
         tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
         crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
 
-       // final Typeface regularFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/GoodDog.otf");
-
         aSwitch = (Switch) findViewById(R.id.switchAutomatedSMS);
         editTextNumberAttendeesAvaliable = (EditText) findViewById(R.id.numberPickerAttendees);
         recipientsForSlotBtn = (Button) findViewById(R.id.recipientsForSlot);
@@ -176,24 +174,32 @@ public class CreateSlot extends AppCompatActivity implements
         btnClickSetEndTime = (Button) findViewById(R.id.btnClickSetEndTime);
         // btnGetLocationGeoPoint = (ImageButton) findViewById(R.id.btnGetLocationGeoPoint);
 
-//        recipientsForSlotBtn.setTypeface(regularFont);
-//        slotsDate.setTypeface(regularFont);
-//        // checkBoxAppointmentRequired.setTypeface(regularFont);
-//        btnSlotDate.setTypeface(regularFont);
-//        slotSubjectEditText.setTypeface(regularFont);
-//        slotMessageEditText.setTypeface(regularFont);
-//        mAddressTextView.setTypeface(regularFont);
-//        mAttTextView.setTypeface(regularFont);
-//        slotStartTime.setTypeface(regularFont);
-//        slotEndTime.setTypeface(regularFont);
-//        mAutocompleteTextView.setTypeface(regularFont);
-//        textViewHeaderCreateSlot.setTypeface(regularFont);
-//        tvSpaces.setTypeface(regularFont);
-//        //checkBoxString.setTypeface(regularFont);
-//        buttonSendSlot.setTypeface(regularFont);
-//        btnClickSetStartTime.setTypeface(regularFont);
-//        btnClickSetEndTime.setTypeface(regularFont);
-//        aSwitch.setTypeface(regularFont);
+
+        final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+        // final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "RobotoCondensed-Light.ttf");
+
+
+        recipientsForSlotBtn.setTypeface(RobotoCondensedLight);
+        slotsDate.setTypeface(RobotoCondensedLight);
+        // checkBoxAppointmentRequired.setTypeface(regularFont);
+        btnSlotDate.setTypeface(RobotoCondensedLight);
+        slotSubjectEditText.setTypeface(RobotoCondensedLight);
+        slotMessageEditText.setTypeface(RobotoCondensedLight);
+        mAddressTextView.setTypeface(RobotoCondensedLight);
+        mAttTextView.setTypeface(RobotoCondensedLight);
+        slotStartTime.setTypeface(RobotoCondensedLight);
+        slotEndTime.setTypeface(RobotoCondensedLight);
+        mAutocompleteTextView.setTypeface(RobotoCondensedLight);
+        textViewHeaderCreateSlot.setTypeface(RobotoCondensedBold);
+        tvSpaces.setTypeface(RobotoCondensedLight);
+        //checkBoxString.setTypeface(regularFont);
+        buttonSendSlot.setTypeface(RobotoCondensedLight);
+        btnClickSetStartTime.setTypeface(RobotoCondensedLight);
+        btnClickSetEndTime.setTypeface(RobotoCondensedLight);
+        aSwitch.setTypeface(RobotoCondensedLight);
 
         aSwitch.setChecked(true);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);

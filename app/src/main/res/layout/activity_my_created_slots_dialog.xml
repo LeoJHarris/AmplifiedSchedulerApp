@@ -25,7 +25,6 @@
             android:padding="10dp"
             android:textColor="@android:color/white"
             android:textSize="40sp"
-            android:textStyle="bold"
             android:visibility="gone" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -37,7 +36,6 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textColor="@color/black"
             android:textSize="30sp"
             android:visibility="gone" />
 
@@ -50,7 +48,6 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textColor="@color/black"
             android:textSize="30sp"
             android:visibility="gone" />
 
@@ -63,7 +60,6 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textColor="@color/black"
             android:textSize="30sp"
             android:visibility="gone" />
 
@@ -76,7 +72,6 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textColor="@color/black"
             android:textSize="30sp"
             android:visibility="gone" />
 
@@ -97,8 +92,7 @@
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/button_default_bg"
                 android:text="Persons Going"
-                android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="30sp"
                 android:visibility="gone" />
         </LinearLayout>
 

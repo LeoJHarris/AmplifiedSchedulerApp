@@ -128,7 +128,6 @@
             android:paddingTop="20dp"
             android:text="App Designed And Made By Leonard Harris"
             android:textColor="@color/white"
-            android:textSize="15sp"
-            android:textStyle="italic" />
+            android:textSize="15sp" />
     </LinearLayout>
 </RelativeLayout>
