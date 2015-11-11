@@ -86,7 +86,7 @@
             android:id="@+id/LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/textViewMyEventSpacesAvaliable"
+            android:layout_below="@id/textViewGoingToSlotOrganizer"
             android:layout_margin="10px"
             android:gravity="center_horizontal|bottom"
             android:orientation="vertical">
