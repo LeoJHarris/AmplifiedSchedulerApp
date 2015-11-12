@@ -2,18 +2,23 @@ package com.lh.leonard.amplifiedscheduler;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.Display;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,25 +27,55 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
+import se.simbio.encryption.Encryption;
+
 public class MainActivity extends Activity {
 
-
+    private String username, password;
+    private EditText editTextUsername, editTextPassword;
+    private CheckBox saveLoginCheckBox;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+    private Boolean saveLogin;
+    private LinearLayout LLHeader, LLForGotPassword, LLSignUp, LLJustLogo, LLMadeByMeMain;
+    private RelativeLayout LLFormSignIn;
+    Encryption encryption;
     ProgressDialog ringProgressDialog;
     Boolean loggedOutPersons = false;
-    Boolean entered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        EditText editTextEmailMain = (EditText) findViewById(R.id.emailSignIn);
-        EditText editTextPasswordMain = (EditText) findViewById(R.id.passwordSignIn);
+
+        encryption = Encryption.getDefault("Key", "Salt", new byte[16]);
+
+        LLSignUp = (LinearLayout) findViewById(R.id.LLSignUp);
+        LLForGotPassword = (LinearLayout) findViewById(R.id.LLForGotPassword);
+        LLHeader = (LinearLayout) findViewById(R.id.LLHeader);
+        LLJustLogo = (LinearLayout) findViewById(R.id.LLJustLogo);
+        LLMadeByMeMain = (LinearLayout) findViewById(R.id.LLMadeByMeMain);
+        LLFormSignIn = (RelativeLayout) findViewById(R.id.LLFormSignIn);
+
+        editTextUsername = (EditText) findViewById(R.id.emailSignIn);
+        editTextPassword = (EditText) findViewById(R.id.passwordSignIn);
         Button buttonSignIn = (Button) findViewById(R.id.buttonSignIn);
         AutoResizeTextView buttonForgotPassword = (AutoResizeTextView) findViewById(R.id.buttonForgotPassword);
         AutoResizeTextView buttonRegistration = (AutoResizeTextView) findViewById(R.id.buttonRegistration);
         AutoResizeTextView textViewMadeByMeMain = (AutoResizeTextView) findViewById(R.id.textViewMadeByMeMain);
         ImageView imageViewMainLogo = (ImageView) findViewById(R.id.imageViewMainLogo);
+        saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+
+        saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (saveLogin == true) {
+
+            editTextPassword.setText(encryption.decryptOrNull(loginPreferences.getString("password", "")));
+            editTextUsername.setText(loginPreferences.getString("username", ""));
+            saveLoginCheckBox.setChecked(true);
+        }
+
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
@@ -52,20 +87,14 @@ public class MainActivity extends Activity {
 
         //Backendless.Events.dispatch("AddAsContacts", args);
 
-        SpannableString forgotPassword = new SpannableString(buttonForgotPassword.getText());
-        forgotPassword.setSpan(new UnderlineSpan(), 0, forgotPassword.length(), 0);
-        buttonForgotPassword.setText(forgotPassword);
-
-        SpannableString signup = new SpannableString(buttonRegistration.getText());
-        signup.setSpan(new UnderlineSpan(), 0, signup.length(), 0);
-        buttonRegistration.setText(signup);
-
         buttonSignIn.setTypeface(RobotoCondensedLight);
-        editTextEmailMain.setTypeface(RobotoCondensedLight);
-        editTextPasswordMain.setTypeface(RobotoCondensedLight);
+        editTextUsername.setTypeface(RobotoCondensedLight);
+        editTextPassword.setTypeface(RobotoCondensedLight);
         buttonForgotPassword.setTypeface(RobotoCondensedLight);
         buttonRegistration.setTypeface(RobotoCondensedLight);
         textViewMadeByMeMain.setTypeface(RobotoCondensedLightItalic);
+        saveLoginCheckBox.setTypeface(RobotoCondensedLight);
+
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -76,31 +105,42 @@ public class MainActivity extends Activity {
         //Fame
         if (width == 320 && height == 480) {
             imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 140;
-            editTextEmailMain.setTextSize(14);
-            editTextEmailMain.setPadding(4, 4, 4, 4);
-            editTextPasswordMain.setPadding(4, 4, 4, 4);
+            imageViewMainLogo.getLayoutParams().height = 80;
+            editTextUsername.setTextSize(18);
+            editTextUsername.setPadding(4, 4, 4, 4);
+            editTextPassword.setPadding(4, 4, 4, 4);
             buttonSignIn.setPadding(4, 4, 4, 4);
-            editTextPasswordMain.setTextSize(14);
-            buttonForgotPassword.setTextSize(14);
-            buttonRegistration.setTextSize(14);
-            textViewMadeByMeMain.setTextSize(14);
-            buttonSignIn.setTextSize(14);
+            editTextPassword.setTextSize(18);
+            buttonForgotPassword.setTextSize(18);
+            buttonRegistration.setTextSize(18);
+            textViewMadeByMeMain.setTextSize(18);
+            buttonSignIn.setTextSize(18);
+            saveLoginCheckBox.setTextSize(18);
         }
         // 2.7" QVGA
         else if (width == 240 && height == 320) {
             imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 90;
-            editTextEmailMain.setTextSize(12);
-            editTextEmailMain.setPadding(2, 2, 2, 2);
-            editTextPasswordMain.setPadding(2, 2, 2, 2);
-            buttonSignIn.setPadding(2, 2, 2, 2);
-            editTextPasswordMain.setTextSize(12);
-            buttonForgotPassword.setTextSize(12);
-            buttonRegistration.setTextSize(12);
-            textViewMadeByMeMain.setTextSize(12);
-            buttonSignIn.setTextSize(12);
+            imageViewMainLogo.getLayoutParams().height = 40;
+            editTextUsername.setTextSize(18);
+            imageViewMainLogo.setPadding(0, 10, 0, 0);
+            editTextUsername.setPadding(7, 7, 7, 7);
+            editTextPassword.setPadding(7, 7, 7, 7);
+            buttonSignIn.setPadding(1, 1, 1, 1);
+            editTextPassword.setTextSize(18);
+            saveLoginCheckBox.setTextSize(18);
+            buttonForgotPassword.setTextSize(18);
+            buttonRegistration.setTextSize(18);
+            textViewMadeByMeMain.setTextSize(18);
+            buttonSignIn.setTextSize(18);
         }
+
+        SpannableString forgotPassword = new SpannableString(buttonForgotPassword.getText());
+        forgotPassword.setSpan(new UnderlineSpan(), 0, forgotPassword.length(), 0);
+        buttonForgotPassword.setText(forgotPassword);
+
+        SpannableString signup = new SpannableString(buttonRegistration.getText());
+        signup.setSpan(new UnderlineSpan(), 0, signup.length(), 0);
+        buttonRegistration.setText(signup);
 
         if (Backendless.UserService.CurrentUser() != null) {
             BackendlessUser user = Backendless.UserService.CurrentUser();
@@ -173,17 +213,11 @@ public class MainActivity extends Activity {
 
         //TODO Threading when users registers, show spinner.
 
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                entered = true;
                 EditText emailField = (EditText) findViewById(R.id.emailSignIn);
                 EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
-
-                //temp
-                //emailField.setText("leojharris@hotmail.com");
-                // passwordField.setText("testing");
 
                 if (new Validator().isValidEmail(emailField.getText())) {
                     if (new Validator().isPasswordValid(passwordField.getText())) {
@@ -201,8 +235,21 @@ public class MainActivity extends Activity {
                             public void handleResponse(BackendlessUser user) {
                                 // user has been logged
 
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
+                                username = editTextUsername.getText().toString();
+                                password = editTextPassword.getText().toString();
 
-                                entered = false;
+                                if (saveLoginCheckBox.isChecked()) {
+                                    loginPrefsEditor.putBoolean("saveLogin", true);
+                                    loginPrefsEditor.putString("username", username);
+                                    loginPrefsEditor.putString("password", encryption.encryptOrNull(password));
+                                    loginPrefsEditor.commit();
+                                } else {
+                                    loginPrefsEditor.clear();
+                                    loginPrefsEditor.commit();
+                                }
+
                                 Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
                                 startActivity(loggedInIntent);
                             }
@@ -212,44 +259,28 @@ public class MainActivity extends Activity {
                                 System.out.println(fault.getMessage());
                                 System.out.println(fault.getCode());
                                 if (ringProgressDialog != null) {
-                                    entered = false;
                                     ringProgressDialog.dismiss();
                                 }
                                 Toast.makeText(getApplicationContext(), "Unable to sign in. Please check internet connection & credentials are correct.", Toast.LENGTH_LONG).show();
                             }
                         });
                     } else {
-                        entered = false;
                         Toast.makeText(getApplicationContext(), "That password is incorrect. Try again or click 'forgot password' to receive a new password.", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    entered = false;
                     Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com.", Toast.LENGTH_LONG).show();
                 }
             }
         });
-    }
-
-    public void sendSmsByManager() {
-        try {
-            // Get the default instance of the SmsManager
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage("+64278720215",
-                    null,
-                    "Heooolll",
-                    null,
-                    null);
-            Toast.makeText(getApplicationContext(), "Your sms has successfully sent!",
-                    Toast.LENGTH_LONG).show();
-        } catch (Exception ex) {
-            Toast.makeText(getApplicationContext(), "Your sms has failed...",
-                    Toast.LENGTH_LONG).show();
-            ex.printStackTrace();
-        }
+        LLJustLogo.setVisibility(View.GONE);
+        LLForGotPassword.setVisibility(View.VISIBLE);
+        LLFormSignIn.setVisibility(View.VISIBLE);
+        LLHeader.setVisibility(View.VISIBLE);
+        LLSignUp.setVisibility(View.VISIBLE);
+        LLMadeByMeMain.setVisibility(View.VISIBLE);
     }
 
     public class Validator {
-
 
         private boolean isPasswordValid(CharSequence password) {
             // At least Length 5
@@ -259,7 +290,6 @@ public class MainActivity extends Activity {
         private boolean isValidEmail(CharSequence target) {
             if (target == null)
                 return false;
-
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
     }

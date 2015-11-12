@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
+    android:gravity="center"
     tools:context="com.lh.leonard.amplifiedscheduler.CreateSlot">
 
     <ScrollView
@@ -325,7 +326,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_weight="0"
+                    android:layout_weight="1"
                     android:text="Send automated SMS"
                     android:textSize="22sp" />
 

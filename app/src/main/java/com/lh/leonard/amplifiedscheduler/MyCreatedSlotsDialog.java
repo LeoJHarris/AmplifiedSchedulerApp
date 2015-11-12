@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.io.IOException;
@@ -208,21 +207,21 @@ public class MyCreatedSlotsDialog extends Activity {
             }
 
             if (slotSelected.getLocation() != null) {
+                if (addresses != null) {
+                    for (int i = 0; i < addresses.size(); i++) {
+                        Address address = (Address) addresses.get(i);
+                        String addressText = String.format("%s, %s",
+                                address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                                address.getCountryName());
 
-                for (int i = 0; i < addresses.size(); i++) {
-                    Address address = (Address) addresses.get(i);
-                    String addressText = String.format("%s, %s",
-                            address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                            address.getCountryName());
+                        content = new SpannableString("Where: " + addressText);
+                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                        textViewLocation.setText(content); //TODO Button to get Location else just Text
+                        break;
 
-                    content = new SpannableString("Where: " + addressText);
-                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                    textViewLocation.setText(content); //TODO Button to get Location else just Text
-                    break;
-
+                    }
                 }
             }
-
             progressBar = (ProgressBar) findViewById(R.id.progressBarMyCreatedSlotsDialog);
             progressBar.setVisibility(View.GONE);
 

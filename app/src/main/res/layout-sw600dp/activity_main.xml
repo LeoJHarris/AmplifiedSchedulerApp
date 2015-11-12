@@ -2,127 +2,171 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
+    android:gravity="center"
     android:orientation="vertical"
     android:padding="15dp">
 
     <!--7" tablets-->
 
     <LinearLayout
-        android:id="@+id/LLHeader"
+        android:id="@+id/LLJustLogo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageViewMainLogo"
+            android:id="@+id/imageJustLogo"
             android:layout_width="match_parent"
             android:layout_height="150dp"
+            android:src="@drawable/main_textlogo_320" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/LLHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imageViewMainLogo"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:layout_marginBottom="15dp"
             android:src="@drawable/main_textlogo_360" />
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/LLFormSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/LLHeader"
-        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/emailSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_top_bg"
+            android:drawableLeft="@drawable/ic_email"
+            android:hint="Email"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:padding="7dp"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/passwordSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emailSignIn"
+            android:background="@drawable/edittext_top_bg"
+            android:drawableLeft="@drawable/ic_password"
+            android:hint="Password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:padding="7dp"
+            android:password="true"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/passwordSignIn"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/buttonSignIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/button_default_bg"
+                android:padding="7dp"
+                android:text="Sign In"
+                android:textSize="20sp" />
+
+            <CheckBox
+                android:id="@+id/saveLoginCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignBaseline="@id/buttonSignIn"
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:background="@drawable/button_default_bg"
+                android:text="Remember me"
+                android:textColor="@color/material_grey_800"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/LLForGotPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LLFormSignIn"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <EditText
-        android:id="@+id/emailSignIn"
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/buttonForgotPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingTop="25dp"
+            android:text="Forgot Password?"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLSignUp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/edittext_top_bg"
-        android:drawableLeft="@drawable/ic_email"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:padding="7dp"
-        android:textColorHint="#cccccc"
-        android:textSize="20sp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LLForGotPassword"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <EditText
-        android:id="@+id/passwordSignIn"
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/buttonRegistration"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingTop="25dp"
+            android:text="Create Account"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLMadeByMeMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/edittext_top_bg"
-        android:drawableLeft="@drawable/ic_password"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:padding="7dp"
-        android:password="true"
-        android:textColorHint="#cccccc"
-        android:textSize="20sp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LLSignUp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <Button
-        android:id="@+id/buttonSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/button_default_bg"
-        android:padding="7dp"
-        android:text="Sign In"
-        android:textSize="25sp" />
-</LinearLayout>
-
-<LinearLayout
-android:id="@+id/LLForGotPassword"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_below="@id/LLFormSignIn"
-android:gravity="center"
-android:orientation="vertical">
-
-<com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-    android:id="@+id/buttonForgotPassword"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:gravity="center"
-    android:paddingTop="25dp"
-    android:text="Forgot Password?"
-    android:textColor="@color/white"
-    android:textSize="20sp" />
-
-</LinearLayout>
-
-<LinearLayout
-android:id="@+id/LLSignUp"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_below="@id/LLForGotPassword"
-android:gravity="center"
-android:orientation="vertical">
-
-<com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-    android:id="@+id/buttonRegistration"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:gravity="center"
-    android:paddingTop="25dp"
-    android:text="Create Account"
-    android:textColor="@color/white"
-    android:textSize="20sp" />
-</LinearLayout>
-
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_below="@id/LLSignUp"
-android:gravity="center"
-android:orientation="vertical">
-
-<com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-    android:id="@+id/textViewMadeByMeMain"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="true"
-    android:gravity="center"
-    android:paddingTop="35dp"
-    android:text="App Designed And Made By Leonard Harris"
-    android:textColor="@color/white"
-    android:textSize="15sp" />
-</LinearLayout></RelativeLayout>
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewMadeByMeMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingTop="35dp"
+            android:text="App Designed And Made By Leonard Harris"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
+</RelativeLayout>
