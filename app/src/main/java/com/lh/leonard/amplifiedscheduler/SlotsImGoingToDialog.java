@@ -78,10 +78,9 @@ public class SlotsImGoingToDialog extends Activity {
         // buttonCantGo.setTypeface(regularFont);
         buttonMySlotParticipantsSlot.setTypeface(RobotoCondensedLight);
 
-        if(userLoggedIn.getProperty("persons") != null) {
+        if (userLoggedIn.getProperty("persons") != null) {
             person = (Person) userLoggedIn.getProperty("persons");
-        }
-        else{
+        } else {
             Backendless.Data.mapTableToClass("Slot", Slot.class);
             Backendless.Data.mapTableToClass("Person", Person.class);
             Backendless.Persistence.mapTableToClass("Slot", Slot.class);
@@ -207,23 +206,24 @@ public class SlotsImGoingToDialog extends Activity {
             }
 
             if (slotSelected.getLocation() != null) {
+                if (addresses != null) {
+                    for (int i = 0; i < addresses.size(); i++) {
+                        Address address = (Address) addresses.get(i);
+                        String addressText = String.format("%s, %s",
+                                address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                                address.getCountryName());
 
-                for (int i = 0; i < addresses.size(); i++) {
-                    Address address = (Address) addresses.get(i);
-                    String addressText = String.format("%s, %s",
-                            address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                            address.getCountryName());
+                        content = new SpannableString("Where: " + addressText);
+                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                        textViewLocation.setText(content); //TODO Button to get Location else just Text
+                        break;
 
-                    content = new SpannableString("Where: " + addressText);
-                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                    textViewLocation.setText(content); //TODO Button to get Location else just Text
-                    break;
-
+                    }
                 }
             }
 
             if (person.fname != null) {
-                organizer.setText(slotSelected.getOwnername()+ " created this event");
+                organizer.setText(slotSelected.getOwnername() + " created this event");
             }
 
             if (slotSelected.getMaxattendees() != 0) {

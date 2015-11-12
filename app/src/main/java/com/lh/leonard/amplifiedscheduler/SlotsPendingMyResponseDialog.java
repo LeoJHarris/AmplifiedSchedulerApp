@@ -176,17 +176,19 @@ public class SlotsPendingMyResponseDialog extends Activity {
             }
 
             if (slotSelected.getLocation() != null) {
-                for (int i = 0; i < addresses.size(); i++) {
-                    Address address = (Address) addresses.get(i);
-                    String addressText = String.format("%s, %s",
-                            address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                            address.getCountryName());
+                if (addresses != null) {
+                    for (int i = 0; i < addresses.size(); i++) {
+                        Address address = (Address) addresses.get(i);
+                        String addressText = String.format("%s, %s",
+                                address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                                address.getCountryName());
 
-                    content = new SpannableString("Where: " + addressText);
-                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                    textViewLocation.setText(content); //TODO Button to get Location else just Text
-                    break;
+                        content = new SpannableString("Where: " + addressText);
+                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                        textViewLocation.setText(content); //TODO Button to get Location else just Text
+                        break;
 
+                    }
                 }
             }
 
