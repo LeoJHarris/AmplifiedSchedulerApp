@@ -51,7 +51,6 @@ public class UserLoggedIn extends Activity implements View.OnClickListener, Adap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_logged_in);
 
-        Backendless.Data.mapTableToClass("Contact", Contact.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
         new ParseURL().execute();

@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+       >
 
         <ImageView
             android:id="@+id/imageViewMainLogo"
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/LLHeader"
         android:orientation="vertical"
-        android:visibility="gone">
+       >
 
         <EditText
             android:id="@+id/emailSignIn"
@@ -113,7 +113,7 @@
         android:layout_below="@id/LLFormSignIn"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+       >
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/buttonForgotPassword"
@@ -135,7 +135,7 @@
         android:layout_below="@id/LLForGotPassword"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+       >
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/buttonRegistration"
@@ -156,7 +156,7 @@
         android:layout_below="@id/LLSignUp"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+       >
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewMadeByMeMain"

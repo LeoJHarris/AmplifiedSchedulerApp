@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lh.leonard.amplifiedscheduler">
+    package="com.lh.leonard.amplifiedscheduler" >
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -31,13 +31,13 @@
         android:allowBackup="true"
         android:icon="@drawable/appicon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <service android:name="com.backendless.AndroidService" />
 
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.MainActivity"
+            android:name=".MainActivity"
             android:label="Amplified Scheduler"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,53 +45,51 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.RegistrationActivity"
+            android:name=".RegistrationActivity"
             android:label="@string/title_activity_registration"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.UserLoggedIn"
+            android:name=".UserLoggedIn"
             android:label="@string/title_activity_user_logged_in" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.MyCreatedSlotsDialog"
+            android:name=".MyCreatedSlotsDialog"
             android:label="My Schedule" />
-
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.MapsActivity"
+            android:name=".MapsActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Dialog" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.ForgotPasswordReset"
+            android:name=".ForgotPasswordReset"
             android:label="@string/title_activity_forgot_password_reset" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.SlotsImGoingToDialog"
+            android:name=".SlotsImGoingToDialog"
             android:label="Schedule Going To" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.CreateSlot"
+            android:name=".CreateSlot"
             android:label="@string/title_activity_create_slot"
             android:noHistory="true" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.RecipientsForSlot"
+            android:name=".RecipientsForSlot"
             android:label="Add Contacts For Schedule"
             android:theme="@android:style/Theme.Dialog" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.AddRemoveContactsTabbed"
+            android:name=".AddRemoveContactsTabbed"
             android:label="Amplified Scheduler Home"
             android:noHistory="true"
             android:screenOrientation="portrait" />
-
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.NavDrawerActivity"
+            android:name=".NavDrawerActivity"
             android:label="Amplified Scheduler"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.SlotsPendingMyResponseDialog"
+            android:name=".SlotsPendingMyResponseDialog"
             android:label="Invited Schedule" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.JustMapActivity"
+            android:name=".JustMapActivity"
             android:label="JustMaps" />
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.ParticipantsActivity"
+            android:name=".ParticipantsActivity"
             android:theme="@android:style/Theme.Dialog" />
 
         <meta-data
@@ -99,8 +97,13 @@
             android:value="AIzaSyCie9wDjjfgkNxs2eFpRQf5v8oBY0mhLME" />
 
         <activity
-            android:name="com.lh.leonard.amplifiedscheduler.UnseenSlotsDialog"
-            android:label="@string/title_activity_unseen_slots_dialog"></activity>
+            android:name=".UnseenSlotsDialog"
+            android:label="@string/title_activity_unseen_slots_dialog" />
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/title_activity_splash"
+            android:theme="@style/AppTheme" >
+        </activity>
     </application>
 
 </manifest>

@@ -31,7 +31,6 @@ import java.util.List;
 
 public class SlotsAwaitingMyResponse extends Fragment {
 
-    Contact contact;
     Person personLoggedIn;
     RecyclerView rv;
     List<Slot> slot;

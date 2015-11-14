@@ -21,7 +21,6 @@ import java.util.List;
 
 public class ParticipantsActivity extends Activity {
 
-    Contact contact;
     Person person;
     List<Person> slot;
     private ProgressBar progressBar;

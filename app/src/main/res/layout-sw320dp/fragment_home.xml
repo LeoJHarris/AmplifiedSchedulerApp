@@ -5,6 +5,7 @@
     android:background="@drawable/gradient_color_bg"
     android:orientation="vertical"
     android:padding="10dp"
+    android:gravity="center"
     tools:context="com.lh.leonard.amplifiedscheduler.HomeFragment">
 
     <!--smaller then 600dp handsets hand held

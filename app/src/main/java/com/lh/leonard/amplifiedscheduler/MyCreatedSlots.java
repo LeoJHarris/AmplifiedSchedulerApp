@@ -31,7 +31,6 @@ import java.util.List;
 
 public class MyCreatedSlots extends Fragment {
 
-    Contact contact;
     Person personLoggedIn;
     List<Slot> slot;
     List<Person> personsToSms;

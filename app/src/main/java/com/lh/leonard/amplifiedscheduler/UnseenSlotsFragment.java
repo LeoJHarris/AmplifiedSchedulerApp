@@ -36,7 +36,6 @@ public class UnseenSlotsFragment extends Fragment {
     //  ArrayList<Slot> listSlots = new ArrayList<>();
     SearchView searchViewSlots;
     RVAdapter adapter;
-    Contact contact;
     Person person;
     private ProgressBar progressBar;
     List<Slot> slot;
@@ -59,8 +58,7 @@ public class UnseenSlotsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.slots_display, container, false);
-
-
+        
         Bundle extras = getActivity().getIntent().getExtras();
         if (extras != null) {
             if (extras.getString("objectid") != null) {
