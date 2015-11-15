@@ -118,9 +118,6 @@ public class ParticipantsActivity extends Activity {
         @Override
         protected void onPostExecute(Void result) {
 
-            // progressBar.setVisibility(View.INVISIBLE);
-
-
             if (!slot.isEmpty()) {
 
                 RecyclerView rv = (RecyclerView) findViewById(R.id.rv);

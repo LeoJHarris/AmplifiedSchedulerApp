@@ -207,7 +207,14 @@ public class CreateSlot extends AppCompatActivity implements
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
-        personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+        if (userLoggedIn.getProperty("persons") != null) {
+            personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+        } else {
+            BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
+            Backendless.Data.mapTableToClass("Person", Person.class);
+            Backendless.Persistence.mapTableToClass("Person", Person.class);
+            personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+        }
 
         dateView = (TextView) findViewById(R.id.textViewDate);
         calendar = Calendar.getInstance();
@@ -467,10 +474,11 @@ public class CreateSlot extends AppCompatActivity implements
 
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    String string = mAutocompleteTextView.getText().toString();
+                    String string = mAddressTextView.getText().toString();
                     if ((!(string.equals("")))) {
                         mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
                         mAutocompleteTextView.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
+
                     } else {
                         mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     }

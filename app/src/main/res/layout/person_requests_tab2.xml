@@ -28,6 +28,7 @@
     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
         android:id="@+id/textViewTextNoRequestingUsers"
         android:layout_width="match_parent"
+        android:layout_margin="20dp"
         android:layout_height="match_parent"
         android:layout_below="@+id/searchViewFindContacts"
         android:gravity="center"

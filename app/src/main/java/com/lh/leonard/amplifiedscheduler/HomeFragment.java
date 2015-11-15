@@ -83,13 +83,13 @@ public class HomeFragment extends Fragment {
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
-       // final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "RobotoCondensed-Light.ttf");
+        // final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "RobotoCondensed-Light.ttf");
 
         textViewNotificationNumberHome.setTypeface(RobotoCondensedLight);
 
         welcomeLabel.setTypeface(RobotoCondensedLightItalic);
 
-        welcomeLabel.setText("Welcome " + personLoggedIn.getFullname() + "!");
+        welcomeLabel.setText("Welcome " + userLoggedIn.getProperty("Fname") + " " + userLoggedIn.getProperty("Lname") + "!");
 
         new ParseURL().execute();
         return v;

@@ -31,7 +31,8 @@ public class NavDrawerActivity extends AppCompatActivity {
 
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     ProgressDialog ringProgressDialog;
-
+    String Fname;
+    String Lname;
     Person personLoggedIn;
 
     int resourceIntPendingResponseEvents;
@@ -65,6 +66,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_drawer);
+
 
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
@@ -146,12 +148,15 @@ public class NavDrawerActivity extends AppCompatActivity {
                 break;
             case 8:
 
-                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                Fname = (String) userLoggedIn.getProperty("Fname");
+                Lname = (String) userLoggedIn.getProperty("Lname");
+
+                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + Fname + " " + Lname + " ...", true);
                 ringProgressDialog.setCancelable(false);
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
                     public void handleResponse(Void response) {
                         Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
+                        logOutIntent.putExtra("loggedoutperson", Fname + "," + Lname);
                         startActivity(logOutIntent);
                     }
 
@@ -207,7 +212,10 @@ public class NavDrawerActivity extends AppCompatActivity {
                         .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                                Fname = (String) userLoggedIn.getProperty("Fname");
+                                Lname = (String) userLoggedIn.getProperty("Lname");
+
+                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + Fname + " " + Lname + " ...", true);
                                 ringProgressDialog.setCancelable(false);
 
                                 Backendless.UserService.logout(new AsyncCallback<Void>() {
@@ -216,7 +224,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                                     public void handleResponse(Void aVoid) {
 
                                         Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
+                                        logOutIntent.putExtra("loggedoutperson", Fname + "," + Lname);
                                         ringProgressDialog.dismiss();
                                         startActivity(logOutIntent);
                                     }
@@ -243,7 +251,10 @@ public class NavDrawerActivity extends AppCompatActivity {
                         .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                                Fname = (String) userLoggedIn.getProperty("Fname");
+                                Lname = (String) userLoggedIn.getProperty("Lname");
+
+                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + Fname + " " + Lname + " ...", true);
                                 ringProgressDialog.setCancelable(false);
 
                                 Backendless.UserService.logout(new AsyncCallback<Void>() {
@@ -252,7 +263,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                                     public void handleResponse(Void aVoid) {
 
                                         Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
+                                        logOutIntent.putExtra("loggedoutperson", Fname + "," + Lname);
                                         ringProgressDialog.dismiss();
                                         startActivity(logOutIntent);
                                     }
@@ -332,7 +343,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                     valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
                     valPersonsRequestingMe, "Update account", "Sign out"};
 
-            NAME = personLoggedIn.getFullname();
+            NAME = (String) userLoggedIn.getProperty("Fname") + userLoggedIn.getProperty("Lname");
             EMAIL = userLoggedIn.getEmail();
 
             mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
