@@ -123,9 +123,11 @@ public class MainActivity extends Activity {
             editTextPassword = (EditText) findViewById(R.id.passwordSignIn);
             saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
 
-            editTextPassword.setText(passwordDecrypted);
-            editTextUsername.setText(usernameDecrypted);
-            saveLoginCheckBox.setChecked(true);
+            if (saveLogin) {
+                saveLoginCheckBox.setChecked(true);
+                editTextPassword.setText(passwordDecrypted);
+                editTextUsername.setText(usernameDecrypted);
+            }
 
 
             Button buttonSignIn = (Button) findViewById(R.id.buttonSignIn);
@@ -164,15 +166,15 @@ public class MainActivity extends Activity {
                 imageViewMainLogo.requestLayout();
                 imageViewMainLogo.getLayoutParams().height = 80;
                 editTextUsername.setTextSize(18);
-                editTextUsername.setPadding(4, 4, 4, 4);
-                editTextPassword.setPadding(4, 4, 4, 4);
-                buttonSignIn.setPadding(4, 4, 4, 4);
+                editTextUsername.setPadding(6,6,6,6);
+                editTextPassword.setPadding(6,6,6,6);
+                buttonSignIn.setPadding(6,6,6,6);
                 editTextPassword.setTextSize(18);
                 buttonForgotPassword.setTextSize(18);
                 buttonRegistration.setTextSize(18);
-                textViewMadeByMeMain.setTextSize(18);
+                textViewMadeByMeMain.setTextSize(15);
                 buttonSignIn.setTextSize(18);
-                saveLoginCheckBox.setTextSize(18);
+                saveLoginCheckBox.setTextSize(15);
             }
             // 2.7" QVGA
             else if (width == 240 && height == 320) {
@@ -187,10 +189,22 @@ public class MainActivity extends Activity {
                 saveLoginCheckBox.setTextSize(18);
                 buttonForgotPassword.setTextSize(18);
                 buttonRegistration.setTextSize(18);
-                textViewMadeByMeMain.setTextSize(18);
+                textViewMadeByMeMain.setTextSize(15);
                 buttonSignIn.setTextSize(18);
             }
-
+            else if (width == 240 && height == 432) {
+                editTextUsername.setTextSize(18);
+                imageViewMainLogo.setPadding(0, 10, 0, 0);
+                editTextUsername.setPadding(7, 7, 7, 7);
+                editTextPassword.setPadding(7, 7, 7, 7);
+                buttonSignIn.setPadding(1, 1, 1, 1);
+                editTextPassword.setTextSize(18);
+                saveLoginCheckBox.setTextSize(18);
+                buttonForgotPassword.setTextSize(18);
+                buttonRegistration.setTextSize(18);
+                textViewMadeByMeMain.setTextSize(15);
+                buttonSignIn.setTextSize(18);
+            }
             SpannableString forgotPassword = new SpannableString(buttonForgotPassword.getText());
             forgotPassword.setSpan(new UnderlineSpan(), 0, forgotPassword.length(), 0);
             buttonForgotPassword.setText(forgotPassword);
@@ -279,7 +293,7 @@ public class MainActivity extends Activity {
                         if (new Validator().isPasswordValid(passwordField.getText())) {
 
                             ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
-                            ringProgressDialog.setCancelable(false);
+                            ringProgressDialog.setCancelable(true);
 
                             Backendless.Data.mapTableToClass("Person", Person.class);
                             Backendless.Data.mapTableToClass("Slot", Slot.class);

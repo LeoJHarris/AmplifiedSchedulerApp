@@ -10,12 +10,13 @@
     - Nexus one
     - fame
     -->
-    <LinearLayout
-        android:id="@+id/LLMainContent"
-        android:layout_width="match_parent"
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
+
 
         <LinearLayout
             android:id="@+id/LLHeader"
@@ -90,7 +91,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_weight="1"
                     android:text="Remember me"
-                    android:textColor="@color/material_grey_800"
+                    android:textColor="@color/white"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -140,24 +141,24 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/LLMadeByMeMain"
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/LLMadeByMeMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal|bottom"
+        android:orientation="vertical">
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewMadeByMeMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/LLSignUp"
-            android:layout_marginTop="20dp"
+            android:clickable="true"
             android:gravity="center"
-            android:orientation="vertical">
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewMadeByMeMain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="App Designed And Made By Leonard Harris"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-        </LinearLayout>
+            android:text="App Designed And Made By Leonard Harris"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
     </LinearLayout>
 </RelativeLayout>

@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment {
                 // relationProps.add("goingToSlot");
                 // relationProps.add("myCreatedSlot");
                 relationProps.add("pendingResponseSlot");
-                Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
+                Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps); //TODO no internet fails
             }
             return null;
         }
