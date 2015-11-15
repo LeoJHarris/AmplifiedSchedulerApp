@@ -223,7 +223,7 @@ public class FindContactsFragment extends Fragment {
                             } else {
                                 SIZE = personsFoundQuery.get(position).personsRequestingMe.size();
                             }
-                            for (int p = 0; 0 < SIZE; p++) {
+                            for (int p = 0; p < SIZE; p++) {
                                 // 1 -- don't want to request the other person? or do
                                 if (p < personsFoundQuery.get(position).personsRequestingMe.size()) {
                                     if (personsFoundQuery.get(position).personsRequestingMe.get(p).objectId.equals(personLoggedIn.getObjectId())) // check

@@ -297,7 +297,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="Allocated Spaces (if applicable): "
+                    android:text="Spaces (if applicable): "
                     android:textSize="22sp" />
 
                 <EditText

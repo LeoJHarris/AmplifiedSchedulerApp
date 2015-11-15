@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
+    android:gravity="center"
     android:padding="10dp"
     tools:context="com.lh.leonard.amplifiedscheduler.HomeFragment">
 
@@ -16,7 +17,7 @@
         <ImageView
             android:id="@+id/imageViewMainLogo"
             android:layout_width="match_parent"
-            android:layout_height="210dp"
+            android:layout_height="160dp"
             android:src="@drawable/main_textlogo_384" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView

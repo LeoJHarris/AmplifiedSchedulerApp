@@ -57,9 +57,8 @@ public class MyContactsFragment extends Fragment {
         v = inflater.inflate(R.layout.my_contacts_tab1, container, false);
 
         Backendless.Data.mapTableToClass("Person", Person.class);
-        Backendless.Data.mapTableToClass("Contact", Contact.class);
+
         Backendless.Persistence.mapTableToClass("Person", Person.class);
-        Backendless.Persistence.mapTableToClass("Contact", Contact.class);
 
         personLoggedIn = (Person) loggedInUser.getProperty("persons");
 

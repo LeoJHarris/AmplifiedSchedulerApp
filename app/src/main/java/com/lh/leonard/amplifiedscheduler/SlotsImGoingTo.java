@@ -31,7 +31,6 @@ import java.util.List;
 
 public class SlotsImGoingTo extends Fragment {
 
-    Contact contact;
     Person person;
     List<Slot> slot;
     BackendlessCollection<Person> persons;

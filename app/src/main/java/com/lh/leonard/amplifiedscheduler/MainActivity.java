@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -17,8 +18,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,253 +30,32 @@ import se.simbio.encryption.Encryption;
 
 public class MainActivity extends Activity {
 
-    private String username, password;
+    private String username, password, usernameDecrypted, passwordDecrypted;
+
     private EditText editTextUsername, editTextPassword;
     private CheckBox saveLoginCheckBox;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private Boolean saveLogin;
-    private LinearLayout LLHeader, LLForGotPassword, LLSignUp, LLJustLogo, LLMadeByMeMain;
-    private RelativeLayout LLFormSignIn;
-    Encryption encryption;
+
     ProgressDialog ringProgressDialog;
     Boolean loggedOutPersons = false;
+    Encryption encryption;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.splash);
 
         encryption = Encryption.getDefault("Key", "Salt", new byte[16]);
 
-        LLSignUp = (LinearLayout) findViewById(R.id.LLSignUp);
-        LLForGotPassword = (LinearLayout) findViewById(R.id.LLForGotPassword);
-        LLHeader = (LinearLayout) findViewById(R.id.LLHeader);
-        LLJustLogo = (LinearLayout) findViewById(R.id.LLJustLogo);
-        LLMadeByMeMain = (LinearLayout) findViewById(R.id.LLMadeByMeMain);
-        LLFormSignIn = (RelativeLayout) findViewById(R.id.LLFormSignIn);
-
-        editTextUsername = (EditText) findViewById(R.id.emailSignIn);
-        editTextPassword = (EditText) findViewById(R.id.passwordSignIn);
-        Button buttonSignIn = (Button) findViewById(R.id.buttonSignIn);
-        AutoResizeTextView buttonForgotPassword = (AutoResizeTextView) findViewById(R.id.buttonForgotPassword);
-        AutoResizeTextView buttonRegistration = (AutoResizeTextView) findViewById(R.id.buttonRegistration);
-        AutoResizeTextView textViewMadeByMeMain = (AutoResizeTextView) findViewById(R.id.textViewMadeByMeMain);
-        ImageView imageViewMainLogo = (ImageView) findViewById(R.id.imageViewMainLogo);
-        saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        loginPrefsEditor = loginPreferences.edit();
-
-        saveLogin = loginPreferences.getBoolean("saveLogin", false);
-        if (saveLogin == true) {
-
-            editTextPassword.setText(encryption.decryptOrNull(loginPreferences.getString("password", "")));
-            editTextUsername.setText(loginPreferences.getString("username", ""));
-            saveLoginCheckBox.setChecked(true);
-        }
-
-
-        final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
-        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
-        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
-        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
-
-        //  HashMap args = new HashMap();
-        // args.put( "weather", "sunny" );
-
-        //Backendless.Events.dispatch("AddAsContacts", args);
-
-        buttonSignIn.setTypeface(RobotoCondensedLight);
-        editTextUsername.setTypeface(RobotoCondensedLight);
-        editTextPassword.setTypeface(RobotoCondensedLight);
-        buttonForgotPassword.setTypeface(RobotoCondensedLight);
-        buttonRegistration.setTypeface(RobotoCondensedLight);
-        textViewMadeByMeMain.setTypeface(RobotoCondensedLightItalic);
-        saveLoginCheckBox.setTypeface(RobotoCondensedLight);
-
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-
-        //Fame
-        if (width == 320 && height == 480) {
-            imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 80;
-            editTextUsername.setTextSize(18);
-            editTextUsername.setPadding(4, 4, 4, 4);
-            editTextPassword.setPadding(4, 4, 4, 4);
-            buttonSignIn.setPadding(4, 4, 4, 4);
-            editTextPassword.setTextSize(18);
-            buttonForgotPassword.setTextSize(18);
-            buttonRegistration.setTextSize(18);
-            textViewMadeByMeMain.setTextSize(18);
-            buttonSignIn.setTextSize(18);
-            saveLoginCheckBox.setTextSize(18);
-        }
-        // 2.7" QVGA
-        else if (width == 240 && height == 320) {
-            imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 40;
-            editTextUsername.setTextSize(18);
-            imageViewMainLogo.setPadding(0, 10, 0, 0);
-            editTextUsername.setPadding(7, 7, 7, 7);
-            editTextPassword.setPadding(7, 7, 7, 7);
-            buttonSignIn.setPadding(1, 1, 1, 1);
-            editTextPassword.setTextSize(18);
-            saveLoginCheckBox.setTextSize(18);
-            buttonForgotPassword.setTextSize(18);
-            buttonRegistration.setTextSize(18);
-            textViewMadeByMeMain.setTextSize(18);
-            buttonSignIn.setTextSize(18);
-        }
-
-        SpannableString forgotPassword = new SpannableString(buttonForgotPassword.getText());
-        forgotPassword.setSpan(new UnderlineSpan(), 0, forgotPassword.length(), 0);
-        buttonForgotPassword.setText(forgotPassword);
-
-        SpannableString signup = new SpannableString(buttonRegistration.getText());
-        signup.setSpan(new UnderlineSpan(), 0, signup.length(), 0);
-        buttonRegistration.setText(signup);
-
-        if (Backendless.UserService.CurrentUser() != null) {
-            BackendlessUser user = Backendless.UserService.CurrentUser();
-            final Person personLoggedOut = (Person) user.getProperty("loggedoutperson");
-
-            Backendless.UserService.logout(new AsyncCallback<Void>() {
-                public void handleResponse(Void response) {
-                    Toast.makeText(getApplicationContext(), personLoggedOut.getFname() + "," + personLoggedOut.getFname(), Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-
-                }
-            });
-        }
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            if (extras.getString("nameRegistered") != null) {
-
-                String NameArray = extras.getString("nameRegistered");
-                String[] NameSplit = NameArray.split(",");
-
-                Toast.makeText(this,
-                        "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1],
-                        Toast.LENGTH_LONG).show();
-            } else if (extras.getString("loggedoutperson") != null) {
-                String NameArray = extras.getString("loggedoutperson");
-                String[] NameSplit = NameArray.split(",");
-
-                Toast.makeText(this,
-                        "Successfully logged out " + NameSplit[0] + " " + NameSplit[1],
-                        Toast.LENGTH_LONG).show();
-                loggedOutPersons = true;
-            } else if (extras.getString("loggedoutpersonError") != null) {
-                String NameArray = extras.getString("loggedoutperson");
-                String[] NameSplit = NameArray.split(",");
-
-                Toast.makeText(this,
-                        "Error occurred: Logged out " + NameSplit[0] + " " + NameSplit[1],
-                        Toast.LENGTH_LONG).show();
-                loggedOutPersons = true;
-            }
-        }
-
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
-        final Button loginButton = (Button) findViewById(R.id.buttonSignIn);
 
-        final TextView passwordRecoveryButton = (TextView) findViewById(R.id.buttonForgotPassword);
+        new Decrypt().execute();
 
-        final TextView registerButton = (TextView) findViewById(R.id.buttonRegistration);
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                Intent registerIntent = new Intent(MainActivity.this, RegistrationActivity.class);
-                startActivity(registerIntent);
-            }
-        });
-
-        passwordRecoveryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent recoveryPasswordIntent = new Intent(MainActivity.this, ForgotPasswordReset.class);
-                startActivity(recoveryPasswordIntent);
-            }
-        });
-
-        //TODO Threading when users registers, show spinner.
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                EditText emailField = (EditText) findViewById(R.id.emailSignIn);
-                EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
-
-                if (new Validator().isValidEmail(emailField.getText())) {
-                    if (new Validator().isPasswordValid(passwordField.getText())) {
-
-                        ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
-                        ringProgressDialog.setCancelable(false);
-
-                        Backendless.Data.mapTableToClass("Person", Person.class);
-                        Backendless.Data.mapTableToClass("Slot", Slot.class);
-                        Backendless.Persistence.mapTableToClass("Person", Person.class);
-                        Backendless.Persistence.mapTableToClass("Slot", Slot.class);
-
-                        Backendless.UserService.login(emailField.getText().toString(), passwordField.getText().toString(), new AsyncCallback<BackendlessUser>() {
-
-                            public void handleResponse(BackendlessUser user) {
-                                // user has been logged
-
-                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
-                                username = editTextUsername.getText().toString();
-                                password = editTextPassword.getText().toString();
-
-                                if (saveLoginCheckBox.isChecked()) {
-                                    loginPrefsEditor.putBoolean("saveLogin", true);
-                                    loginPrefsEditor.putString("username", username);
-                                    loginPrefsEditor.putString("password", encryption.encryptOrNull(password));
-                                    loginPrefsEditor.commit();
-                                } else {
-                                    loginPrefsEditor.clear();
-                                    loginPrefsEditor.commit();
-                                }
-
-                                Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
-                                startActivity(loggedInIntent);
-                            }
-
-                            public void handleFault(BackendlessFault fault) {
-                                // login failed, to get the error code call fault.getCode()
-                                System.out.println(fault.getMessage());
-                                System.out.println(fault.getCode());
-                                if (ringProgressDialog != null) {
-                                    ringProgressDialog.dismiss();
-                                }
-                                Toast.makeText(getApplicationContext(), "Unable to sign in. Please check internet connection & credentials are correct.", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getApplicationContext(), "That password is incorrect. Try again or click 'forgot password' to receive a new password.", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        LLJustLogo.setVisibility(View.GONE);
-        LLForGotPassword.setVisibility(View.VISIBLE);
-        LLFormSignIn.setVisibility(View.VISIBLE);
-        LLHeader.setVisibility(View.VISIBLE);
-        LLSignUp.setVisibility(View.VISIBLE);
-        LLMadeByMeMain.setVisibility(View.VISIBLE);
     }
 
     public class Validator {
@@ -303,5 +81,267 @@ public class MainActivity extends Activity {
             super.onBackPressed();
         }
     }
-}
 
+    private class Decrypt extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+            loginPrefsEditor = loginPreferences.edit();
+
+            saveLogin = loginPreferences.getBoolean("saveLogin", false);
+            if (saveLogin)
+
+            {
+
+                passwordDecrypted = encryption.decryptOrNull(loginPreferences.getString("password", ""));
+                usernameDecrypted = loginPreferences.getString("username", "");
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+
+            MainActivity.this.setContentView(R.layout.activity_main);
+
+            editTextUsername = (EditText) findViewById(R.id.emailSignIn);
+            editTextPassword = (EditText) findViewById(R.id.passwordSignIn);
+            saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
+
+            if (saveLogin) {
+                saveLoginCheckBox.setChecked(true);
+                editTextPassword.setText(passwordDecrypted);
+                editTextUsername.setText(usernameDecrypted);
+            }
+
+
+            Button buttonSignIn = (Button) findViewById(R.id.buttonSignIn);
+            AutoResizeTextView buttonForgotPassword = (AutoResizeTextView) findViewById(R.id.buttonForgotPassword);
+            AutoResizeTextView buttonRegistration = (AutoResizeTextView) findViewById(R.id.buttonRegistration);
+            AutoResizeTextView textViewMadeByMeMain = (AutoResizeTextView) findViewById(R.id.textViewMadeByMeMain);
+            ImageView imageViewMainLogo = (ImageView) findViewById(R.id.imageViewMainLogo);
+
+            final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+            final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+            final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+            final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+
+            //  HashMap args = new HashMap();
+            // args.put( "weather", "sunny" );
+
+            //Backendless.Events.dispatch("AddAsContacts", args);
+
+            buttonSignIn.setTypeface(RobotoCondensedLight);
+            editTextUsername.setTypeface(RobotoCondensedLight);
+            editTextPassword.setTypeface(RobotoCondensedLight);
+            buttonForgotPassword.setTypeface(RobotoCondensedLight);
+            buttonRegistration.setTypeface(RobotoCondensedLight);
+            textViewMadeByMeMain.setTypeface(RobotoCondensedLightItalic);
+            saveLoginCheckBox.setTypeface(RobotoCondensedLight);
+
+
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+
+            //Fame
+            if (width == 320 && height == 480) {
+                imageViewMainLogo.requestLayout();
+                imageViewMainLogo.getLayoutParams().height = 80;
+                editTextUsername.setTextSize(18);
+                editTextUsername.setPadding(6,6,6,6);
+                editTextPassword.setPadding(6,6,6,6);
+                buttonSignIn.setPadding(6,6,6,6);
+                editTextPassword.setTextSize(18);
+                buttonForgotPassword.setTextSize(18);
+                buttonRegistration.setTextSize(18);
+                textViewMadeByMeMain.setTextSize(15);
+                buttonSignIn.setTextSize(18);
+                saveLoginCheckBox.setTextSize(15);
+            }
+            // 2.7" QVGA
+            else if (width == 240 && height == 320) {
+                imageViewMainLogo.requestLayout();
+                imageViewMainLogo.getLayoutParams().height = 40;
+                editTextUsername.setTextSize(18);
+                imageViewMainLogo.setPadding(0, 10, 0, 0);
+                editTextUsername.setPadding(7, 7, 7, 7);
+                editTextPassword.setPadding(7, 7, 7, 7);
+                buttonSignIn.setPadding(1, 1, 1, 1);
+                editTextPassword.setTextSize(18);
+                saveLoginCheckBox.setTextSize(18);
+                buttonForgotPassword.setTextSize(18);
+                buttonRegistration.setTextSize(18);
+                textViewMadeByMeMain.setTextSize(15);
+                buttonSignIn.setTextSize(18);
+            }
+            else if (width == 240 && height == 432) {
+                editTextUsername.setTextSize(18);
+                imageViewMainLogo.setPadding(0, 10, 0, 0);
+                editTextUsername.setPadding(7, 7, 7, 7);
+                editTextPassword.setPadding(7, 7, 7, 7);
+                buttonSignIn.setPadding(1, 1, 1, 1);
+                editTextPassword.setTextSize(18);
+                saveLoginCheckBox.setTextSize(18);
+                buttonForgotPassword.setTextSize(18);
+                buttonRegistration.setTextSize(18);
+                textViewMadeByMeMain.setTextSize(15);
+                buttonSignIn.setTextSize(18);
+            }
+            SpannableString forgotPassword = new SpannableString(buttonForgotPassword.getText());
+            forgotPassword.setSpan(new UnderlineSpan(), 0, forgotPassword.length(), 0);
+            buttonForgotPassword.setText(forgotPassword);
+
+            SpannableString signup = new SpannableString(buttonRegistration.getText());
+            signup.setSpan(new UnderlineSpan(), 0, signup.length(), 0);
+            buttonRegistration.setText(signup);
+
+            if (Backendless.UserService.CurrentUser() != null) {
+                BackendlessUser user = Backendless.UserService.CurrentUser();
+                final Person personLoggedOut = (Person) user.getProperty("loggedoutperson");
+
+                Backendless.UserService.logout(new AsyncCallback<Void>() {
+                    public void handleResponse(Void response) {
+                        Toast.makeText(getApplicationContext(), personLoggedOut.getFname() + "," + personLoggedOut.getFname(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+
+                    }
+                });
+            }
+
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                if (extras.getString("nameRegistered") != null) {
+
+                    String NameArray = extras.getString("nameRegistered");
+                    String[] NameSplit = NameArray.split(",");
+
+                    Toast.makeText(getApplication(),
+                            "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1],
+                            Toast.LENGTH_LONG).show();
+                } else if (extras.getString("loggedoutperson") != null) {
+                    String NameArray = extras.getString("loggedoutperson");
+                    String[] NameSplit = NameArray.split(",");
+
+                    Toast.makeText(getApplication(),
+                            "Successfully logged out " + NameSplit[0] + " " + NameSplit[1],
+                            Toast.LENGTH_LONG).show();
+                    loggedOutPersons = true;
+                } else if (extras.getString("loggedoutpersonError") != null) {
+                    String NameArray = extras.getString("loggedoutperson");
+                    String[] NameSplit = NameArray.split(",");
+
+                    Toast.makeText(getApplication(),
+                            "Error occurred: Logged out " + NameSplit[0] + " " + NameSplit[1],
+                            Toast.LENGTH_LONG).show();
+                    loggedOutPersons = true;
+                }
+            }
+
+
+            final Button loginButton = (Button) findViewById(R.id.buttonSignIn);
+
+            final TextView passwordRecoveryButton = (TextView) findViewById(R.id.buttonForgotPassword);
+
+            final TextView registerButton = (TextView) findViewById(R.id.buttonRegistration);
+
+            registerButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    Intent registerIntent = new Intent(MainActivity.this, RegistrationActivity.class);
+                    startActivity(registerIntent);
+                }
+            });
+
+            passwordRecoveryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent recoveryPasswordIntent = new Intent(MainActivity.this, ForgotPasswordReset.class);
+                    startActivity(recoveryPasswordIntent);
+                }
+            });
+
+            //TODO Threading when users registers, show spinner.
+
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    EditText emailField = (EditText) findViewById(R.id.emailSignIn);
+                    EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
+
+                    if (new Validator().isValidEmail(emailField.getText())) {
+                        if (new Validator().isPasswordValid(passwordField.getText())) {
+
+                            ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
+                            ringProgressDialog.setCancelable(true);
+
+                            Backendless.Data.mapTableToClass("Person", Person.class);
+                            Backendless.Data.mapTableToClass("Slot", Slot.class);
+                            Backendless.Persistence.mapTableToClass("Person", Person.class);
+                            Backendless.Persistence.mapTableToClass("Slot", Slot.class);
+
+                            Backendless.UserService.login(emailField.getText().toString(), passwordField.getText().toString(), new AsyncCallback<BackendlessUser>() {
+
+                                public void handleResponse(BackendlessUser user) {
+                                    // user has been logged
+
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
+                                    username = editTextUsername.getText().toString();
+                                    password = editTextPassword.getText().toString();
+
+                                    if (saveLoginCheckBox.isChecked()) {
+                                        loginPrefsEditor.putBoolean("saveLogin", true);
+                                        loginPrefsEditor.putString("username", username);
+                                        loginPrefsEditor.putString("password", encryption.encryptOrNull(password));
+                                        loginPrefsEditor.commit();
+                                    } else {
+                                        loginPrefsEditor.clear();
+                                        loginPrefsEditor.commit();
+                                    }
+
+                                    Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
+                                    startActivity(loggedInIntent);
+                                }
+
+                                public void handleFault(BackendlessFault fault) {
+                                    // login failed, to get the error code call fault.getCode()
+                                    System.out.println(fault.getMessage());
+                                    System.out.println(fault.getCode());
+                                    if (ringProgressDialog != null) {
+                                        ringProgressDialog.dismiss();
+                                    }
+                                    Toast.makeText(getApplicationContext(), "Unable to sign in. Please check internet connection & credentials are correct.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getApplicationContext(), "That password is incorrect. Try again or click 'forgot password' to receive a new password.", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+    }
+}

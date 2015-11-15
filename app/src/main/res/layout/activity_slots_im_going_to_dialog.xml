@@ -87,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/textViewGoingToSlotOrganizer"
-            android:layout_margin="10px"
+            android:layout_margin="10dp"
             android:gravity="center_horizontal|bottom"
             android:orientation="vertical">
 

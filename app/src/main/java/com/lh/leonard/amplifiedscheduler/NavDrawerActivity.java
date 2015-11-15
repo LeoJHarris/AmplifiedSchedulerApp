@@ -200,7 +200,40 @@ public class NavDrawerActivity extends AppCompatActivity {
 
         if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
 
-            if (Drawer.isDrawerOpen(mRecyclerView)) {
+            if (Drawer == null && mRecyclerView == null) {
+                new AlertDialog.Builder(NavDrawerActivity.this)
+                        .setTitle("Logging out").setMessage("You are about to logout out").
+                        setIcon(R.drawable.ic_xclamationmark)
+                        .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                                ringProgressDialog.setCancelable(false);
+
+                                Backendless.UserService.logout(new AsyncCallback<Void>() {
+
+                                    @Override
+                                    public void handleResponse(Void aVoid) {
+
+                                        Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
+                                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
+                                        ringProgressDialog.dismiss();
+                                        startActivity(logOutIntent);
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault backendlessFault) {
+                                        ringProgressDialog.dismiss();
+                                    }
+                                });
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        }
+                ).show();
+            } else if (Drawer.isDrawerOpen(mRecyclerView)) {
                 Drawer.closeDrawer(mRecyclerView);
             } else {
 

@@ -5,6 +5,7 @@
     android:background="@drawable/gradient_color_bg"
     android:orientation="vertical"
     android:padding="10dp"
+    android:gravity="center"
     tools:context="com.lh.leonard.amplifiedscheduler.HomeFragment">
 
     <!--smaller then 600dp handsets hand held
@@ -20,7 +21,7 @@
         <ImageView
             android:id="@+id/imageViewMainLogo"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
+            android:layout_height="130dp"
             android:src="@drawable/main_textlogo_320" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
