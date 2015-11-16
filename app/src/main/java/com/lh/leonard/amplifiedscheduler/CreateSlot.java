@@ -253,6 +253,8 @@ public class CreateSlot extends AppCompatActivity implements
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateSlot.this);
 
+                mSelectedItems = new ArrayList<Integer>(); // TODO temporary
+
                 // set the dialog title
                 builder.setTitle("Invite contacts for event")
 
@@ -296,8 +298,6 @@ public class CreateSlot extends AppCompatActivity implements
                                 addedContactsForSlot = new ArrayList<Person>();
 
                                 String[] selectedContacts = selectedIndex.split(", ");
-
-                                System.out.println(selectedContacts.length);
 
                                 for (int j = 0; j < selectedContacts.length; j++) {
 
@@ -867,7 +867,7 @@ public class CreateSlot extends AppCompatActivity implements
             myContactsPersonsList = myContactPersons.getData();
 
             // where we will store or remove selected items
-            mSelectedItems = new ArrayList<Integer>();
+            //  mSelectedItems = new ArrayList<Integer>();
 
             testArray = new String[myContactsPersonsList.size()];
             int i = 0;

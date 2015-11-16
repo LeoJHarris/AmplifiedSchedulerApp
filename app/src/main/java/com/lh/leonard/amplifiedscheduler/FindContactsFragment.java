@@ -475,8 +475,8 @@ public class FindContactsFragment extends Fragment {
 
 
                     Person p = Backendless.Data.of(Person.class).findById(personLoggedIn); // TODO FAILS IF NO INTERNET
-
                     Person p2 = Backendless.Data.of(Person.class).findById(personsFoundQuery.get(position));
+
 
                     //   p.setObjectId(personLoggedIn.objectId);
                     // p2.setObjectId(personsFoundQuery.get(position).getObjectId());

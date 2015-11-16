@@ -11,16 +11,12 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Leonard on 17/07/2015.
  */
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> implements Filterable {
-
-
-    Date date;
 
     Resources resources;
     private List<Slot> listSlots;
@@ -51,9 +47,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
     @Override
     public void onBindViewHolder(SlotViewHolder slotViewHolder, int i) {
 
-            slotViewHolder.slotTitle.setText(listSlots.get(i).getSubject());
-            slotViewHolder.slotDate.setText("Date: " + listSlots.get(i).getDateofslot().toString());
-            slotViewHolder.slotFullName.setText("From: " + listSlots.get(i).getOwnername().toString());
+        slotViewHolder.slotTitle.setText(listSlots.get(i).getSubject());
+        slotViewHolder.slotDate.setText("Date: " + listSlots.get(i).getDateofslot().toString());
+        slotViewHolder.slotFullName.setText("From: " + listSlots.get(i).getOwnername().toString());
 
 //        if (listSlots.get(i).getMaxattendees() != 0) {
 //            Integer spacesAvaliable = listSlots.get(i).getMaxattendees();
@@ -68,24 +64,22 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
 //            slotViewHolder.slotAvaliability.setText("Unlimited Spaces");
 //        }
 
-            int lengthToSubString;
-            int lengthMessage = listSlots.get(i).getMessage().length();
-            if (lengthMessage < 50) {
-                lengthToSubString = lengthMessage;
-            } else {
-                lengthToSubString = 50;
-            }
-            String messageSubString = listSlots.get(i).getMessage().substring(0, lengthToSubString);
-            messageSubString += "...";
-            slotViewHolder.slotMessage.setText("Message: " + messageSubString);
+        int lengthToSubString;
+        int lengthMessage = listSlots.get(i).getMessage().length();
+        if (lengthMessage < 50) {
+            lengthToSubString = lengthMessage;
+        } else {
+            lengthToSubString = 50;
+        }
+        String messageSubString = listSlots.get(i).getMessage().substring(0, lengthToSubString);
+        messageSubString += "...";
+        slotViewHolder.slotMessage.setText("Message: " + messageSubString);
 
-            // slotViewHolder.slotAvaliability.setTypeface(RobotoCondensedLight);
-            slotViewHolder.slotFullName.setTypeface(RobotoCondensedLight);
-            slotViewHolder.slotTitle.setTypeface(RobotoCondensedLight);
-            slotViewHolder.slotMessage.setTypeface(RobotoCondensedLight);
-            slotViewHolder.slotDate.setTypeface(RobotoCondensedLight);
-
-
+        // slotViewHolder.slotAvaliability.setTypeface(RobotoCondensedLight);
+        slotViewHolder.slotFullName.setTypeface(RobotoCondensedLight);
+        slotViewHolder.slotTitle.setTypeface(RobotoCondensedLight);
+        slotViewHolder.slotMessage.setTypeface(RobotoCondensedLight);
+        slotViewHolder.slotDate.setTypeface(RobotoCondensedLight);
 
 
         //personViewHolder.personPhoto.setImageResource(listTeachers.get(i).getPhoto());
