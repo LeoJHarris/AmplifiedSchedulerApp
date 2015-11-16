@@ -42,20 +42,31 @@ public class MainActivity extends Activity {
     Boolean loggedOutPersons = false;
     Encryption encryption;
 
+    Bundle extras;
+
+    Boolean useBackButton = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
+        extras = getIntent().getExtras();
+
+        if (extras != null) {
+            if (extras.getString("loggedoutperson") != null) {
+                Toast.makeText(getApplicationContext(), "Just fetching your sign in credentials", Toast.LENGTH_LONG).show();
+                useBackButton = true;
+
+            }
+        }
+
         encryption = Encryption.getDefault("Key", "Salt", new byte[16]);
 
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
-
         new Decrypt().execute();
-
-
     }
 
     public class Validator {
@@ -77,6 +88,8 @@ public class MainActivity extends Activity {
 
         if (loggedOutPersons) {
             this.finishAffinity();
+        } else if (useBackButton) {
+            Toast.makeText(getApplicationContext(), "Almost ready, please wait", Toast.LENGTH_SHORT).show();
         } else {
             super.onBackPressed();
         }
@@ -101,14 +114,10 @@ public class MainActivity extends Activity {
             loginPrefsEditor = loginPreferences.edit();
 
             saveLogin = loginPreferences.getBoolean("saveLogin", false);
-            if (saveLogin)
-
-            {
-
+            if (saveLogin) {
                 passwordDecrypted = encryption.decryptOrNull(loginPreferences.getString("password", ""));
                 usernameDecrypted = loginPreferences.getString("username", "");
             }
-
 
             return null;
         }
@@ -118,6 +127,37 @@ public class MainActivity extends Activity {
 
 
             MainActivity.this.setContentView(R.layout.activity_main);
+
+            useBackButton = false;
+
+            if (extras != null) {
+                if (extras.getString("nameRegistered") != null) {
+
+                    String NameArray = extras.getString("nameRegistered");
+                    String[] NameSplit = NameArray.split(",");
+
+                    Toast.makeText(getApplication(),
+                            "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1],
+                            Toast.LENGTH_LONG).show();
+                } else if (extras.getString("loggedoutperson") != null) {
+                    String NameArray = extras.getString("loggedoutperson");
+                    String[] NameSplit = NameArray.split(",");
+
+                    Toast.makeText(getApplication(),
+                            "Successfully logged out " + NameSplit[0] + " " + NameSplit[1],
+                            Toast.LENGTH_LONG).show();
+                    loggedOutPersons = true;
+                } else if (extras.getString("loggedoutpersonError") != null) {
+                    String NameArray = extras.getString("loggedoutperson");
+                    String[] NameSplit = NameArray.split(",");
+
+                    Toast.makeText(getApplication(),
+                            "Error occurred: Logged out " + NameSplit[0] + " " + NameSplit[1],
+                            Toast.LENGTH_LONG).show();
+                    loggedOutPersons = true;
+                }
+            }
+
 
             editTextUsername = (EditText) findViewById(R.id.emailSignIn);
             editTextPassword = (EditText) findViewById(R.id.passwordSignIn);
@@ -166,9 +206,9 @@ public class MainActivity extends Activity {
                 imageViewMainLogo.requestLayout();
                 imageViewMainLogo.getLayoutParams().height = 80;
                 editTextUsername.setTextSize(18);
-                editTextUsername.setPadding(6,6,6,6);
-                editTextPassword.setPadding(6,6,6,6);
-                buttonSignIn.setPadding(6,6,6,6);
+                editTextUsername.setPadding(6, 6, 6, 6);
+                editTextPassword.setPadding(6, 6, 6, 6);
+                buttonSignIn.setPadding(6, 6, 6, 6);
                 editTextPassword.setTextSize(18);
                 buttonForgotPassword.setTextSize(18);
                 buttonRegistration.setTextSize(18);
@@ -191,8 +231,7 @@ public class MainActivity extends Activity {
                 buttonRegistration.setTextSize(18);
                 textViewMadeByMeMain.setTextSize(15);
                 buttonSignIn.setTextSize(18);
-            }
-            else if (width == 240 && height == 432) {
+            } else if (width == 240 && height == 432) {
                 editTextUsername.setTextSize(18);
                 imageViewMainLogo.setPadding(0, 10, 0, 0);
                 editTextUsername.setPadding(7, 7, 7, 7);
@@ -227,35 +266,6 @@ public class MainActivity extends Activity {
 
                     }
                 });
-            }
-
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                if (extras.getString("nameRegistered") != null) {
-
-                    String NameArray = extras.getString("nameRegistered");
-                    String[] NameSplit = NameArray.split(",");
-
-                    Toast.makeText(getApplication(),
-                            "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1],
-                            Toast.LENGTH_LONG).show();
-                } else if (extras.getString("loggedoutperson") != null) {
-                    String NameArray = extras.getString("loggedoutperson");
-                    String[] NameSplit = NameArray.split(",");
-
-                    Toast.makeText(getApplication(),
-                            "Successfully logged out " + NameSplit[0] + " " + NameSplit[1],
-                            Toast.LENGTH_LONG).show();
-                    loggedOutPersons = true;
-                } else if (extras.getString("loggedoutpersonError") != null) {
-                    String NameArray = extras.getString("loggedoutperson");
-                    String[] NameSplit = NameArray.split(",");
-
-                    Toast.makeText(getApplication(),
-                            "Error occurred: Logged out " + NameSplit[0] + " " + NameSplit[1],
-                            Toast.LENGTH_LONG).show();
-                    loggedOutPersons = true;
-                }
             }
 
 

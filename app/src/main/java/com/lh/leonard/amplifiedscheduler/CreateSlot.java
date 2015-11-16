@@ -46,6 +46,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,10 @@ public class CreateSlot extends AppCompatActivity implements
     Place place;
     private Calendar calendar;
     private TextView dateView;
+    Calendar c = Calendar.getInstance();
     private int year, month, day;
+
+
     CheckBox checkBoxAppointmentRequired;
     Boolean appointmentBoolean = false;
     static final int TIME_DIALOG_ID = 1111;
@@ -259,6 +263,9 @@ public class CreateSlot extends AppCompatActivity implements
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 
+                                //TODO set so when dialog opens again it has all contacts ticked that were intially ticked mSelectedItems has the list
+
+
                                 if (isChecked) {
                                     // if the user checked the item, add it to the selected items
                                     mSelectedItems.add(which);
@@ -290,23 +297,24 @@ public class CreateSlot extends AppCompatActivity implements
 
                                 String[] selectedContacts = selectedIndex.split(", ");
 
-                                for (int j = 0; j < selectedContacts.length - 1; j++) {
+                                System.out.println(selectedContacts.length);
+
+                                for (int j = 0; j < selectedContacts.length; j++) {
 
                                     if (selectedContacts[j] != " ") {
-                                        // get rid of the white space at selectedContacts[j] i.e. " 1"
 
 
                                         addedContactsForSlot.add(myContactsPersonsList.get(Integer.parseInt(selectedContacts[j].replaceAll("\\s+", ""))));
                                     }
                                 }
                                 if (!(addedContactsForSlot.isEmpty())) {
-                                    recipientsForSlotBtn.setText("Contact(s) added");
+                                    recipientsForSlotBtn.setText("Contacts added");
                                     recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
                                     recipientsForSlotBtn.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
 
                                     contactsAdded = true;
 
-                                    Toast.makeText(CreateSlot.this, "Contact(s) Added", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(CreateSlot.this, "Contacts Added", Toast.LENGTH_SHORT).show();
 
                                     if (dateSet && subjectSet && startTimeSet) {
                                         buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
@@ -546,10 +554,18 @@ public class CreateSlot extends AppCompatActivity implements
     protected Dialog onCreateDialog(int id) {
         // TODO Auto-generated method stub
         if (id == 999) {
+
+            year = c.get(Calendar.YEAR);
+            month = c.get(Calendar.MONTH);
+            day = c.get(Calendar.DAY_OF_MONTH);
+
             return new DatePickerDialog(this, myDateListener, year, month, day);
         }
         switch (id) {
             case TIME_DIALOG_ID:
+
+                Date date = new Date();
+                Toast.makeText(CreateSlot.this, String.valueOf(date.getTime()), Toast.LENGTH_SHORT).show();
 
                 // set time picker as current time
                 return new TimePickerDialog(this, timePickerListener, hour, minute,

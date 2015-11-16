@@ -19,8 +19,6 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.BackendlessCallback;
 
-import java.util.HashMap;
-
 
 public class RegistrationActivity extends ActionBarActivity {
 
@@ -161,17 +159,6 @@ public class RegistrationActivity extends ActionBarActivity {
                                     ringProgressDialog.setCancelable(false);
 
                                     BackendlessUser user = new BackendlessUser();
-
-                                    HashMap<String, Object> hashMap = new HashMap<String, Object>();
-
-                                    hashMap.put("Country", county.toString());
-                                    hashMap.put("Fname", county.toString());
-                                    hashMap.put("Lname", county.toString());
-                                    // hashMap.put("Fullname", county.toString());
-                                    hashMap.put("Country", county.toString());
-                                    hashMap.put("Phone", phone.toString());
-
-                                    user.setProperties(hashMap);
 
                                     user.setEmail(email.toString());
                                     user.setPassword(password.toString());

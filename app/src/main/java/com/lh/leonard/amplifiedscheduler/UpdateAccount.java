@@ -292,22 +292,18 @@ public class UpdateAccount extends Fragment {
             }
             if (!(fname.equals(""))) {
                 p.setFname(fname);
-                user.setProperty("Fname", fname);
                 firstNameChange = true;
                 inputSet = true;
             }
             if (!(lname.equals(""))) {
                 p.setLname(lname);
-                user.setProperty("Lname", lname);
                 lastNameChange = true;
                 inputSet = true;
             }
             if (!(phone.equals(""))) {
                 p.setPhone(phone.toString());
-                user.setProperty("Phone", phone);
                 inputSet = true;
             }
-
             if ((!(password.equals(""))) && (!(passwordConfirm.equals("")))) {
 
                 if (password.equals(passwordConfirm)) {
@@ -321,9 +317,9 @@ public class UpdateAccount extends Fragment {
                 p.setFullname(fname + " " + lname);
             } else {
                 if (fname != "") {
-                    p.setFullname(fname + " " + user.getProperty("Lname"));
+                    p.setFullname(fname + " " + p.getLname());
                 } else {
-                    p.setFullname(user.getProperty("Fname") + " " + lname);
+                    p.setFullname(p.getFname() + " " + lname);
                 }
             }
             if (inputSet) {
@@ -346,10 +342,12 @@ public class UpdateAccount extends Fragment {
             } else {
                 Toast.makeText(getActivity(), "No Inputs Submitted", Toast.LENGTH_SHORT).show();
             }
+
         }
     }
 
     public class Validator {
+
 
         private boolean isPasswordValid(CharSequence password) {
             return password.toString().length() > 4;

@@ -24,6 +24,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NavDrawerActivity extends AppCompatActivity {
@@ -31,8 +32,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     ProgressDialog ringProgressDialog;
-    String Fname;
-    String Lname;
+
     Person personLoggedIn;
 
     int resourceIntPendingResponseEvents;
@@ -42,6 +42,9 @@ public class NavDrawerActivity extends AppCompatActivity {
     String valPersonsRequestingMe = "";
     String valGoingToEvents = "";
     String valMyCreatedEvents = "";
+
+
+    Date date = new Date();
 
     //First We Declare Titles And Icons For Our Navigation Drawer List View
     //This Icons And Titles Are holded in an Array as you can see
@@ -67,9 +70,10 @@ public class NavDrawerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_drawer);
 
-
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
+
+        date.getTime();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -148,15 +152,12 @@ public class NavDrawerActivity extends AppCompatActivity {
                 break;
             case 8:
 
-                Fname = (String) userLoggedIn.getProperty("Fname");
-                Lname = (String) userLoggedIn.getProperty("Lname");
-
-                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + Fname + " " + Lname + " ...", true);
+                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
                 ringProgressDialog.setCancelable(false);
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
                     public void handleResponse(Void response) {
                         Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                        logOutIntent.putExtra("loggedoutperson", Fname + "," + Lname);
+                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
                         startActivity(logOutIntent);
                     }
 
@@ -212,10 +213,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                         .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                Fname = (String) userLoggedIn.getProperty("Fname");
-                                Lname = (String) userLoggedIn.getProperty("Lname");
-
-                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + Fname + " " + Lname + " ...", true);
+                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
                                 ringProgressDialog.setCancelable(false);
 
                                 Backendless.UserService.logout(new AsyncCallback<Void>() {
@@ -224,7 +222,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                                     public void handleResponse(Void aVoid) {
 
                                         Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                                        logOutIntent.putExtra("loggedoutperson", Fname + "," + Lname);
+                                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
                                         ringProgressDialog.dismiss();
                                         startActivity(logOutIntent);
                                     }
@@ -251,10 +249,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                         .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                Fname = (String) userLoggedIn.getProperty("Fname");
-                                Lname = (String) userLoggedIn.getProperty("Lname");
-
-                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + Fname + " " + Lname + " ...", true);
+                                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
                                 ringProgressDialog.setCancelable(false);
 
                                 Backendless.UserService.logout(new AsyncCallback<Void>() {
@@ -263,7 +258,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                                     public void handleResponse(Void aVoid) {
 
                                         Intent logOutIntent = new Intent(NavDrawerActivity.this, MainActivity.class);
-                                        logOutIntent.putExtra("loggedoutperson", Fname + "," + Lname);
+                                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
                                         ringProgressDialog.dismiss();
                                         startActivity(logOutIntent);
                                     }
@@ -309,10 +304,32 @@ public class NavDrawerActivity extends AppCompatActivity {
             relations.add("pendingResponseSlot");
             Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
 
+
             int sizePendingResponseEvents = person.getPendingResponseSlot().size();
             int sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
             int sizeGoingToEvents = person.getGoingToSlot().size();
             int sizeMyCreatedEvents = person.getMyCreatedSlot().size();
+
+            for (int j = 0; j < sizeGoingToEvents; j++) {
+                if (person.getGoingToSlot().get(j).parseDateString().compareTo(date) < 0) {
+                    person.getGoingToSlot().remove(j);
+                }
+            }
+
+            for (int j = 0; j < sizePendingResponseEvents; j++) {
+                if (person.getPendingResponseSlot().get(j).parseDateString().compareTo(date) < 0) {
+                    person.getPendingResponseSlot().remove(j);
+                }
+            }
+            for (int j = 0; j < sizeMyCreatedEvents; j++) {
+                if (person.getMyCreatedSlot().get(j).parseDateString().compareTo(date) < 0) {
+                    person.getMyCreatedSlot().remove(j);
+                }
+            }
+
+            sizePendingResponseEvents = person.getPendingResponseSlot().size();
+            sizeGoingToEvents = person.getGoingToSlot().size();
+            sizeMyCreatedEvents = person.getMyCreatedSlot().size();
 
             valResponseEvents = " " + String.valueOf(sizePendingResponseEvents);
             valPersonsRequestingMe = " " + String.valueOf(sizePersonsRequestingMe);
@@ -343,7 +360,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                     valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
                     valPersonsRequestingMe, "Update account", "Sign out"};
 
-            NAME = (String) userLoggedIn.getProperty("Fname") + userLoggedIn.getProperty("Lname");
+            NAME = personLoggedIn.getFullname();
             EMAIL = userLoggedIn.getEmail();
 
             mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)

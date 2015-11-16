@@ -27,6 +27,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SlotsAwaitingMyResponse extends Fragment {
@@ -47,12 +48,16 @@ public class SlotsAwaitingMyResponse extends Fragment {
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     View v;
 
+    Date date = new Date();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
         getActivity().setTitle("Invited Events");
+        
+        date.getTime();
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
@@ -123,7 +128,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
 
             for (int j = 0; j < slot.size(); j++) {
                 if (slot.get(j).getMaxattendees() != 0) {
-                    if (slot.get(j).attendees.size() >= slot.get(j).getMaxattendees()) {
+                    if (slot.get(j).attendees.size() >= slot.get(j).getMaxattendees() || slot.get(j).parseDateString().compareTo(date) < 0) {
                         slot.remove(j);
                     }
                 }
@@ -328,7 +333,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                 }
 
 
-               sendsmss(slot.get(position).getPhone(), "Automated TXT - Amplified Schedule" + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
+                sendsmss(slot.get(position).getPhone(), "Automated TXT - Amplified Schedule" + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
 
                 person.pendingResponseSlot.remove(pos);
 

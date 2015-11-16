@@ -27,6 +27,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SlotsImGoingTo extends Fragment {
@@ -47,12 +48,16 @@ public class SlotsImGoingTo extends Fragment {
     RecyclerView rv;
     LinearLayoutManager llm;
 
+    Date date = new Date();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
         getActivity().setTitle("Events Going To");
+
+        date.getTime();
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
@@ -120,6 +125,12 @@ public class SlotsImGoingTo extends Fragment {
 
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
             slot = slots.getData();
+
+            for (int j = 0; j < slot.size(); j++) {
+                if (slot.get(j).parseDateString().compareTo(date) < 0) {
+                    slot.remove(j);
+                }
+            }
 
             return null;
         }

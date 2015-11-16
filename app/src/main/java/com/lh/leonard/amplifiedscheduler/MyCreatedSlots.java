@@ -27,6 +27,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MyCreatedSlots extends Fragment {
@@ -49,12 +50,16 @@ public class MyCreatedSlots extends Fragment {
     LinearLayoutManager llm;
     String eventRemoved;
 
+    Date date = new Date();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.slots_display, container, false);
 
         getActivity().setTitle("My Events");
+
+        date.getTime();
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
@@ -65,6 +70,7 @@ public class MyCreatedSlots extends Fragment {
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+
 
         textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
         textViewTextNoSlotAvaliable.setTypeface(RobotoCondensedLightItalic);
@@ -121,7 +127,16 @@ public class MyCreatedSlots extends Fragment {
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
             slot = slots.getData();
 
-            return null;
+           for(int j = 0; j < slot.size(); j++) {
+                if (slot.get(j).parseDateString().compareTo(date) < 0) {
+
+                    Backendless.Geo.removePoint(slot.get(j).getLocation());
+                    Backendless.Persistence.of(Slot.class).remove(slot.get(j));
+                    slot.remove(j);
+                }
+            }
+
+        return null;
         }
 
         @Override
@@ -139,6 +154,7 @@ public class MyCreatedSlots extends Fragment {
                     rv.setLayoutManager(llm);
 
                     Resources r = getResources();
+
 
                     adapter = new RVAdapter(slot, r);
 

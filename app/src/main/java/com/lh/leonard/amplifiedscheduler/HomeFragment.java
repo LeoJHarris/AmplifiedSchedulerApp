@@ -19,6 +19,7 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -31,13 +32,15 @@ public class HomeFragment extends Fragment {
     BackendlessCollection<Person> persons;
     AutoResizeTextView textViewNotificationNumberHome;
     //  Typeface fontHomeName;
-
+    Date date = new Date();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+
+        date.getTime();
 
         textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
 
@@ -89,7 +92,7 @@ public class HomeFragment extends Fragment {
 
         welcomeLabel.setTypeface(RobotoCondensedLightItalic);
 
-        welcomeLabel.setText("Welcome " + userLoggedIn.getProperty("Fname") + " " + userLoggedIn.getProperty("Lname") + "!");
+        welcomeLabel.setText("Welcome " + personLoggedIn.getFullname() + "!");
 
         new ParseURL().execute();
         return v;
@@ -132,6 +135,13 @@ public class HomeFragment extends Fragment {
 
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
+
+            for (int j = 0; j < invitedEvents; j++) {
+                if (personLoggedIn.getPendingResponseSlot().get(j).parseDateString().compareTo(date) < 0) {
+                    personLoggedIn.getPendingResponseSlot().remove(j);
+                }
+            }
+            personLoggedIn.getPendingResponseSlot().size();
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
