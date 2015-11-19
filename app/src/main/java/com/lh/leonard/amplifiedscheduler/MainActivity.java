@@ -26,6 +26,9 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import se.simbio.encryption.Encryption;
 
 public class MainActivity extends Activity {
@@ -52,6 +55,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
+        Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
+
+        new DoStuff().execute();
+
         extras = getIntent().getExtras();
 
         if (extras != null) {
@@ -64,7 +71,6 @@ public class MainActivity extends Activity {
 
         encryption = Encryption.getDefault("Key", "Salt", new byte[16]);
 
-        Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
         new Decrypt().execute();
     }
@@ -354,4 +360,34 @@ public class MainActivity extends Activity {
             });
         }
     }
+
+
+    private class DoStuff extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+        }
+    }
+
+
 }

@@ -25,7 +25,9 @@ import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hp1 on 21-01-2015.
@@ -38,8 +40,6 @@ public class PersonRequestsTabs extends Fragment {
     BackendlessUser loggedInUser = Backendless.UserService.CurrentUser();
     BackendlessCollection<Person> personRequestsBackendlessCollection;
 
-    List<Person> personsFoundQuery;
-
     RecyclerView rvRequest;
     LinearLayoutManager llm;
     View v;
@@ -49,7 +49,6 @@ public class PersonRequestsTabs extends Fragment {
     List<Person> personsRequestsList;
     private ProgressBar progressBarRequesting;
     AutoResizeTextView textViewTextNoRequestingUsers;
-    Boolean added = false;
     ProgressDialog ringProgressDialog;
     AlertDialog alertDialog;
 
@@ -166,7 +165,6 @@ public class PersonRequestsTabs extends Fragment {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
 
-                                            added = true;
                                             dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
                                                     "Adding " + personsRequestsList.get(position).getFullname() + " to your contacts ...", true);
@@ -177,7 +175,7 @@ public class PersonRequestsTabs extends Fragment {
                                     .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
-                                            added = false;
+
                                             dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
                                                     "Removing " + personsRequestsList.get(position).getFullname() + " from your contact requests ...", true);
@@ -205,6 +203,7 @@ public class PersonRequestsTabs extends Fragment {
 
                     progressBarRequesting.setVisibility(View.GONE);
                     rvRequest.setVisibility(View.VISIBLE);
+                    searchView.setVisibility(View.VISIBLE);
                 } else {
                     progressBarRequesting.setVisibility(View.GONE);
                     textViewTextNoRequestingUsers.setVisibility(View.VISIBLE);
@@ -238,50 +237,27 @@ public class PersonRequestsTabs extends Fragment {
 
             if (personsRequestsList.get(position) != null) {
 
-                //Remove from me
+                //Accept contact Request
+                Map<String, String> args = new HashMap<>();
 
-                List<String> relations = new ArrayList<String>();
-                relations.add("personsRequestingMe");
-                Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+                args.put("id", "acceptContactRequest");
 
-                int pos = 0;
+                args.put("loggedinperson", personLoggedIn.getObjectId());
 
-                for (int i = 0; i < person.personsRequestingMe.size(); i++) {
+                args.put("otherperson", personsRequestsList.get(position).getObjectId());
 
-                    if (person.personsRequestingMe.get(i).getObjectId().equals(personsRequestsList.get(position).getObjectId())) {
-                        pos = i;
-                        break;
-                    }
-                }
-
-                person.personsRequestingMe.remove(pos);
-                Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person);
-
-                // Remove from other
-                List<String> relations1 = new ArrayList<String>();
-                relations1.add("personsImRequesting");
-                Person person1 = Backendless.Data.of(Person.class).findById(personsRequestsList.get(position).getObjectId(), relations1);
-
-                for (int i = 0; i < person1.personsImRequesting.size(); i++) {
-
-                    if (person1.personsImRequesting.get(i).getObjectId().equals(personLoggedIn.getObjectId())) {
-                        pos = i;
-                        break;
-                    }
-                }
-
-                person1.personsImRequesting.remove(pos);
-                Person updatedPersonOther = Backendless.Data.of(Person.class).save(person1);
-
-                updatedPersonLoggedIn.addContact(updatedPersonOther);
-                personLoggedIn = Backendless.Data.of(Person.class).save(updatedPersonLoggedIn);
-
-                updatedPersonOther.addContact(updatedPersonLoggedIn);
-                Backendless.Data.of(Person.class).save(updatedPersonLoggedIn);
-                removedFullname = personsRequestsList.get(position).getFullname();
-                personsRequestsList.remove(position);
+                Backendless.Events.dispatch("ManageContact", args);
 
             }
+
+            List<String> relationsForLoggedInPerson = new ArrayList<String>();
+            relationsForLoggedInPerson.add("personsImRequesting");
+            relationsForLoggedInPerson.add("personsRequestingMe");
+            relationsForLoggedInPerson.add("contacts");
+
+            personLoggedIn = Backendless.Persistence.of(Person.class).findById(personLoggedIn.getObjectId(), relationsForLoggedInPerson);
+
+
             return null;
         }
 
@@ -296,21 +272,21 @@ public class PersonRequestsTabs extends Fragment {
 
                 rvRequest.setLayoutManager(llm);
 
-                rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
+                //   rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
                 Resources r = getResources();
 
-                adapterRequest = new ContactsAdapter(personsFoundQuery, r);
+                adapterRequest = new ContactsAdapter(personsRequestsList, r);
 
                 rvRequest.setAdapter(adapterRequest);
-                ringProgressDialog.dismiss();
             } else {
-                ringProgressDialog.dismiss();
+
                 searchView.setVisibility(View.GONE);
                 rvRequest.setVisibility(View.GONE);
                 progressBarRequesting.setVisibility(View.GONE);
                 textViewTextNoRequestingUsers.setVisibility(View.VISIBLE);
             }
+            ringProgressDialog.dismiss();
             Toast.makeText(v.getContext(), removedFullname + " added as a contact", Toast.LENGTH_SHORT).show();
         }
     }
@@ -342,41 +318,28 @@ public class PersonRequestsTabs extends Fragment {
 
             if (personsRequestsList.get(positionInList) != null) {
 
-                //Remove from me
+                //Decline contact Request
+                Map<String, String> args = new HashMap<>();
 
-                List<String> relations = new ArrayList<String>();
-                relations.add("personsRequestingMe");
-                Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
-                int pos = 0;
+                removedFullname = personsRequestsList.get(positionInList).getFullname();
 
-                for (int i = 0; i < person.personsRequestingMe.size(); i++) {
+                args.put("id", "declineRequest");
 
-                    if (person.personsRequestingMe.get(i).getObjectId().equals(personsRequestsList.get(positionInList).getObjectId())) {
-                        pos = i;
-                        break;
-                    }
-                }
+                args.put("loggedinperson", personLoggedIn.getObjectId());
 
-                person.personsRequestingMe.remove(pos);
-                Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person);
+                args.put("otherperson", personsRequestsList.get(positionInList).getObjectId());
 
-                // Remove from other
-                List<String> relations1 = new ArrayList<String>();
-                relations1.add("personsImRequesting");
-                Person person1 = Backendless.Data.of(Person.class).findById(personsRequestsList.get(positionInList).getObjectId(), relations1);
-
-                for (int i = 0; i < person1.personsImRequesting.size(); i++) {
-
-                    if (person1.personsImRequesting.get(i).getObjectId().equals(personLoggedIn.getObjectId())) {
-                        pos = i;
-                        break;
-                    }
-                }
-
-                person1.personsImRequesting.remove(pos);
-                Person updatedPersonOther = Backendless.Data.of(Person.class).save(person1);
                 personsRequestsList.remove(positionInList);
+
+                Backendless.Events.dispatch("ManageContact", args);
+
             }
+            List<String> relationsForLoggedInPerson = new ArrayList<String>();
+            relationsForLoggedInPerson.add("personsImRequesting");
+            relationsForLoggedInPerson.add("personsRequestingMe");
+            relationsForLoggedInPerson.add("contacts");
+
+            personLoggedIn = Backendless.Persistence.of(Person.class).findById(personLoggedIn.getObjectId(), relationsForLoggedInPerson);
 
             return null;
         }
@@ -392,20 +355,19 @@ public class PersonRequestsTabs extends Fragment {
 
                 rvRequest.setLayoutManager(llm);
 
-                rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
+                // rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
                 Resources r = getResources();
 
-                adapterRequest = new ContactsAdapter(personsFoundQuery, r);
+                adapterRequest = new ContactsAdapter(personsRequestsList, r);
 
                 rvRequest.setAdapter(adapterRequest);
-                ringProgressDialog.dismiss();
             } else {
-                ringProgressDialog.dismiss();
                 searchView.setVisibility(View.GONE);
                 rvRequest.setVisibility(View.GONE);
                 textViewTextNoRequestingUsers.setVisibility(View.VISIBLE);
             }
+            ringProgressDialog.dismiss();
             Toast.makeText(v.getContext(), removedFullname + " rejected as contact", Toast.LENGTH_SHORT).show();
         }
     }

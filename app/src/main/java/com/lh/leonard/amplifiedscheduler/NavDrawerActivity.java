@@ -89,6 +89,8 @@ public class NavDrawerActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
+
+        // Need to be fixed
         if (userLoggedIn.getProperty("persons") != null) {
             personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         } else {
