@@ -2,6 +2,7 @@ package com.lh.leonard.amplifiedscheduler;
 
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
@@ -13,6 +14,7 @@ public class AddRemoveContactsTabbed extends AppCompatActivity {
     SlidingTabLayout tabs;
     CharSequence Titles[] = {"My Contacts", "Contact Requests", "Search Users"};
     int Numboftabs = 3;
+    int pageSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,5 +43,24 @@ public class AddRemoveContactsTabbed extends AppCompatActivity {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
+
+        ViewPager.SimpleOnPageChangeListener pageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                pageSelected = position;
+
+                Fragment fragment = ((ViewPagerAdapter) pager.getAdapter()).getFragment(position);
+
+               // (position == 1 || position == 0)
+
+                if (fragment != null) {
+                    fragment.onResume();
+                }
+            }
+        };
+        tabs.setOnPageChangeListener(pageChangeListener);
+        pager.setCurrentItem(pageSelected);
+        pager.setAdapter(adapter3); //Set your FragmentPagerAdapter
     }
 }

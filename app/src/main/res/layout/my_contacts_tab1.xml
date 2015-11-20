@@ -29,7 +29,7 @@
         android:id="@+id/textViewTextNoContacts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchViewFindContacts"
+        android:layout_margin="20dp"
         android:gravity="center"
         android:text="You currently have no contacts"
         android:textSize="23sp"

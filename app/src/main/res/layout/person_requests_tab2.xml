@@ -22,17 +22,16 @@
         android:id="@+id/rvRequests"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/searchViewMyContacts"
+        android:layout_below="@+id/searchViewContactRequest"
         android:visibility="gone" />
 
     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
         android:id="@+id/textViewTextNoRequestingUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchViewFindContacts"
+        android:layout_margin="20dp"
         android:gravity="center"
         android:hint="You currently have no contact request"
         android:textSize="23sp"
-        android:textColor="@color/black"
         android:visibility="gone" />
 </RelativeLayout>

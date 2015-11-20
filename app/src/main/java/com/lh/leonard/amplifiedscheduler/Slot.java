@@ -203,4 +203,17 @@ public class Slot {
         return result;
     }
 
+
+    protected Date parseDateString() {
+
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date result = null;
+        try {
+            result = df.parse(dateofslot);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }

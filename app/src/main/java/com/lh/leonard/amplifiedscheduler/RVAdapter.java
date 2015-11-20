@@ -30,6 +30,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
 
         resources = R;
         listSlots = list;
+
     }
 
     @Override
@@ -45,6 +46,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
 
     @Override
     public void onBindViewHolder(SlotViewHolder slotViewHolder, int i) {
+
         slotViewHolder.slotTitle.setText(listSlots.get(i).getSubject());
         slotViewHolder.slotDate.setText("Date: " + listSlots.get(i).getDateofslot().toString());
         slotViewHolder.slotFullName.setText("From: " + listSlots.get(i).getOwnername().toString());
@@ -73,11 +75,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
         messageSubString += "...";
         slotViewHolder.slotMessage.setText("Message: " + messageSubString);
 
-       // slotViewHolder.slotAvaliability.setTypeface(RobotoCondensedLight);
+        // slotViewHolder.slotAvaliability.setTypeface(RobotoCondensedLight);
         slotViewHolder.slotFullName.setTypeface(RobotoCondensedLight);
         slotViewHolder.slotTitle.setTypeface(RobotoCondensedLight);
         slotViewHolder.slotMessage.setTypeface(RobotoCondensedLight);
         slotViewHolder.slotDate.setTypeface(RobotoCondensedLight);
+
 
         //personViewHolder.personPhoto.setImageResource(listTeachers.get(i).getPhoto());
     }

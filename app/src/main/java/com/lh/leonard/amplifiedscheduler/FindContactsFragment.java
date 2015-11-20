@@ -28,7 +28,9 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -57,6 +59,7 @@ public class FindContactsFragment extends Fragment {
     ProgressDialog ringProgressDialog;
     String postMessage;
     AlertDialog alertDialog;
+    Boolean refreshed = false;
     AutoResizeTextView editHintSearchContacts;
 
     @Override
@@ -90,6 +93,8 @@ public class FindContactsFragment extends Fragment {
 
         searchViewFindContacts.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                                                           public boolean onQueryTextChange(final String text) {
+
+                                                              refreshed = false;
 
                                                               if (!text.equals("")) {
 
@@ -170,7 +175,12 @@ public class FindContactsFragment extends Fragment {
             dataQuery.setQueryOptions(q);
             BackendlessCollection<Person> result = Backendless.Persistence.of(Person.class).find(dataQuery);
 
+
             personsFoundQuery = result.getData();
+
+            if (refreshed) {
+                personsFoundQuery.clear();
+            }
 
             return null;
         }
@@ -189,7 +199,7 @@ public class FindContactsFragment extends Fragment {
 
                     Resources r = getResources();
 
-                    adapter = new ContactsAdapter(personsFoundQuery, r);
+                    adapter = new ContactsAdapter(personsFoundQuery);
 
                     rv.setAdapter(adapter);
 
@@ -420,13 +430,11 @@ public class FindContactsFragment extends Fragment {
                             //TODO Yes: get the ownerObjectId and remove from database
                         }
                     }
-
                     ));
 
                     if (adapter != null) {
                         if (TextUtils.isEmpty(nameQuerySearch)) {
                             adapter.getFilter().filter("");
-
                         } else {
                             adapter.getFilter().filter(nameQuerySearch.toString());
                         }
@@ -440,8 +448,16 @@ public class FindContactsFragment extends Fragment {
                     progressBarFindContacts.setVisibility(View.GONE);
                     RLProgressBar.setVisibility(View.GONE);
                     rv.setVisibility(View.GONE);
+
+                    if (refreshed) {
+                        editHintSearchContacts.setText("Search users by first or last name.");
+
+                    } else {
+                        editHintSearchContacts.setText("No users found. Try searing users by email address, first or last name.");
+                    }
                     editHintSearchContacts.setVisibility(View.VISIBLE);
-                    editHintSearchContacts.setText("No users found. Try searing users by email address, first or last name.");
+
+
                 }
             }
         }
@@ -470,190 +486,86 @@ public class FindContactsFragment extends Fragment {
         protected Void doInBackground(Void... params) {
             if (isAdded()) {
 
-                // Just add for requesting
+                // Send Contact invite
                 if (statusOnPerson == 0) {
 
+                    Map<String, String> args = new HashMap<>();
 
-                    Person p = Backendless.Data.of(Person.class).findById(personLoggedIn); // TODO FAILS IF NO INTERNET
+                    args.put("id", "sendContactInvite");
 
-                    Person p2 = Backendless.Data.of(Person.class).findById(personsFoundQuery.get(position));
+                    args.put("loggedinperson", personLoggedIn.getObjectId());
 
-                    //   p.setObjectId(personLoggedIn.objectId);
-                    // p2.setObjectId(personsFoundQuery.get(position).getObjectId());
+                    args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
-                    p.addPersonImRequesting(p2);
-                    p2.addPersonRequestingMe(p);
-
-                    personLoggedIn = Backendless.Data.of(Person.class).save(p);
-                    Backendless.Data.of(Person.class).save(p2);
-
+                    Backendless.Events.dispatch("ManageContact", args);
                 }
-                // remove other im requesting
+                // Cancel contact request
                 else if (statusOnPerson == 1) {
 
-                    List<String> relations = new ArrayList<String>();
-                    relations.add("personsImRequesting");
-                    Person person5 = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+                    Map<String, String> args = new HashMap<>();
 
-                    int pos = 0;
+                    args.put("id", "cancelContactInvite");
 
-                    for (int i = 0; i < person5.personsImRequesting.size(); i++) {
+                    args.put("loggedinperson", personLoggedIn.getObjectId());
 
-                        if (person5.personsImRequesting.get(i).getObjectId().equals(personsFoundQuery.get(position).getObjectId())) {
-                            pos = i;
-                            break;
-                        }
-                    }
+                    args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
-                    person5.personsImRequesting.remove(pos);
-                    Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person5);
-
-                    // Remove from other
-                    List<String> relations1 = new ArrayList<String>();
-                    relations1.add("personsRequestingMe");
-                    Person person1 = Backendless.Data.of(Person.class).findById(personsFoundQuery.get(position).getObjectId(), relations1);
-
-                    for (int i = 0; i < person1.personsRequestingMe.size(); i++) {
-
-                        if (person1.personsRequestingMe.get(i).getObjectId().equals(personLoggedIn.getObjectId())) {
-                            pos = i;
-                            break;
-                        }
-                    }
-
-                    person1.personsRequestingMe.remove(pos);
-                    Person updatedPersonOther = Backendless.Data.of(Person.class).save(person1);
-
+                    Backendless.Events.dispatch("ManageContact", args);
                 }
                 // Accept his contact request
                 else if (statusOnPerson == 2) {
-                    List<String> relations = new ArrayList<String>();
-                    relations.add("personsRequestingMe");
-                    Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+                    //Accept contact Request
+                    Map<String, String> args = new HashMap<>();
 
-                    int pos = 0;
+                    args.put("id", "acceptContactRequest");
 
-                    for (int i = 0; i < person.personsRequestingMe.size(); i++) {
+                    args.put("loggedinperson", personLoggedIn.getObjectId());
 
-                        if (person.personsRequestingMe.get(i).getObjectId().equals(personsFoundQuery.get(position).getObjectId())) {
-                            pos = i;
-                            break;
-                        }
-                    }
+                    args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
-                    person.personsRequestingMe.remove(pos);
-                    Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person);
-
-                    // Remove from other
-                    List<String> relations1 = new ArrayList<String>();
-                    relations1.add("personsImRequesting");
-                    Person person1 = Backendless.Data.of(Person.class).findById(personsFoundQuery.get(position).getObjectId(), relations1);
-
-                    for (int i = 0; i < person1.personsImRequesting.size(); i++) {
-
-                        if (person1.personsImRequesting.get(i).getObjectId().equals(personLoggedIn.getObjectId())) {
-                            pos = i;
-                            break;
-                        }
-                    }
-
-                    person1.personsImRequesting.remove(pos);
-                    Person updatedPersonOther = Backendless.Data.of(Person.class).save(person1);
-
-                    updatedPersonLoggedIn.addContact(updatedPersonOther);
-                    personLoggedIn = Backendless.Data.of(Person.class).save(updatedPersonLoggedIn);
-
-                    updatedPersonOther.addContact(updatedPersonLoggedIn);
-                    Backendless.Data.of(Person.class).save(updatedPersonLoggedIn);
-
+                    Backendless.Events.dispatch("ManageContact", args);
                 }
-                // already contacts remove?
+                // Remove contact
                 else if (statusOnPerson == 3) {
-                    List<String> relations = new ArrayList<String>();
-                    relations.add("contacts");
-                    Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+                    Map<String, String> args = new HashMap<>();
 
-                    int pos = 0;
+                    args.put("id", "removeContact");
 
-                    for (int i = 0; i < person.contacts.size(); i++) {
+                    args.put("loggedinperson", personLoggedIn.getObjectId());
 
-                        if (person.contacts.get(i).getObjectId().equals(personsFoundQuery.get(position).getObjectId())) {
-                            pos = i;
-                            break;
-                        }
-                    }
+                    args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
-                    person.contacts.remove(pos);
-                    Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person);
-
-                    // Remove from other
-                    List<String> relations1 = new ArrayList<String>();
-                    relations1.add("contacts");
-                    Person person1 = Backendless.Data.of(Person.class).findById(personsFoundQuery.get(position).getObjectId(), relations1);
-
-                    for (int i = 0; i < person1.contacts.size(); i++) {
-
-                        if (person1.contacts.get(i).getObjectId().equals(personLoggedIn.getObjectId())) {
-                            pos = i;
-                            break;
-                        }
-                    }
-
-                    person1.contacts.remove(pos);
-                    Person updatedPersonOther = Backendless.Data.of(Person.class).save(person1);
+                    Backendless.Events.dispatch("ManageContact", args);
 
                 } else if (statusOnPerson == 4) {
 
-                    List<String> relations = new ArrayList<String>();
-                    relations.add("personsRequestingMe");
-                    Person person4 = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+                    //Decline contact Request
+                    Map<String, String> args = new HashMap<>();
 
-                    int pos = 0;
+                    args.put("id", "declineRequest");
 
-                    for (int i = 0; i < person4.personsRequestingMe.size(); i++) {
+                    args.put("loggedinperson", personLoggedIn.getObjectId());
 
-                        if (person4.personsRequestingMe.get(i).getObjectId().equals(personsFoundQuery.get(position).getObjectId())) {
-                            pos = i;
-                            break;
-                        }
-                    }
+                    args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
-                    person4.personsRequestingMe.remove(pos);
-                    Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person4);
-
-                    // Remove from other
-                    List<String> relations1 = new ArrayList<String>();
-                    relations1.add("personsImRequesting");
-                    Person person3 = Backendless.Data.of(Person.class).findById(personsFoundQuery.get(position).getObjectId(), relations1);
-
-                    for (int i = 0; i < person3.personsImRequesting.size(); i++) {
-
-                        if (person3.personsImRequesting.get(i).getObjectId().equals(personLoggedIn.getObjectId())) {
-                            pos = i;
-                            break;
-                        }
-                    }
-
-                    person3.personsImRequesting.remove(pos);
-                    Person updatedPersonOther = Backendless.Data.of(Person.class).save(person3);
-
+                    Backendless.Events.dispatch("ManageContact", args);
                 }
-
 
                 Backendless.Data.mapTableToClass("Person", Person.class);
                 String whereClause = "lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%'";
                 BackendlessDataQuery dataQuery = new BackendlessDataQuery();
                 dataQuery.setWhereClause(whereClause);
-                List<String> relations1 = new ArrayList<String>();
 
                 QueryOptions q = new QueryOptions();
                 q.addRelated("personsImRequesting");
                 q.addRelated("personsRequestingMe");
                 q.addRelated("contacts");
                 dataQuery.setQueryOptions(q);
-                BackendlessCollection<Person> result = Backendless.Persistence.of(Person.class).find(dataQuery);
+                BackendlessCollection<Person> result = Backendless.Data.of(Person.class).find(dataQuery);
 
+                personsFoundQuery.clear();
                 personsFoundQuery = result.getData();
+
             }
 
             return null;
@@ -668,17 +580,34 @@ public class FindContactsFragment extends Fragment {
 
             rv.setLayoutManager(llm);
 
-            rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
+            //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-            Resources r = getResources();
+            //Resources r = getResources();
 
-            adapter = new ContactsAdapter(personsFoundQuery, r);
+            adapter = new ContactsAdapter(personsFoundQuery);
 
             rv.setAdapter(adapter);
-
             ringProgressDialog.dismiss();
-
             Toast.makeText(v.getContext(), postMessage, Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onResume() {
+
+        searchViewFindContacts.setQuery("", false);
+        rv.setAdapter(null);
+        progressBarFindContacts.setVisibility(View.GONE);
+        editHintSearchContacts.setText("Search users by first or last name.");
+        editHintSearchContacts.setVisibility(View.VISIBLE);
+        timer = null;
+        refreshed = true;
+        nameQuerySearch = "";
+        if (personsFoundQuery != null) {
+            personsFoundQuery.clear();
+        }
+
+        super.onResume();
+    }
+
 }

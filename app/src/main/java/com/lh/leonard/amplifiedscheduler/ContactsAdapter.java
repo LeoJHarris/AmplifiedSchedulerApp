@@ -2,6 +2,8 @@ package com.lh.leonard.amplifiedscheduler;
 
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +20,8 @@ import java.util.List;
  */
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactViewHolder> implements Filterable {
 
+    int ICON;
+
     Resources resources;
     private List<Person> listSlots;
     Typeface RobotoBlack;
@@ -25,11 +29,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     Typeface RobotoCondensedLight;
     Typeface RobotoCondensedBold;
     private List<Person> orig;
+    Drawable drawable;
 
-    public ContactsAdapter(List<Person> list, Resources R) {
 
-        resources = R;
+    public ContactsAdapter(List<Person> list) {
+
+
         listSlots = list;
+
     }
 
     @Override
@@ -40,11 +47,16 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         RobotoCondensedLight = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         RobotoCondensedBold = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
         ContactViewHolder pvh = new ContactViewHolder(v);
+        drawable = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_friend_requested);
+
         return pvh;
     }
 
     @Override
     public void onBindViewHolder(ContactViewHolder slotViewHolder, int i) {
+
+
+        slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
 
         slotViewHolder.personsFullName.setText(listSlots.get(i).getFname() + " " + listSlots.get(i).getLname());
         slotViewHolder.personEmail.setText("Country: " + listSlots.get(i).getCountry());

@@ -24,6 +24,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NavDrawerActivity extends AppCompatActivity {
@@ -41,6 +42,9 @@ public class NavDrawerActivity extends AppCompatActivity {
     String valPersonsRequestingMe = "";
     String valGoingToEvents = "";
     String valMyCreatedEvents = "";
+
+
+    Date date = new Date();
 
     //First We Declare Titles And Icons For Our Navigation Drawer List View
     //This Icons And Titles Are holded in an Array as you can see
@@ -69,6 +73,8 @@ public class NavDrawerActivity extends AppCompatActivity {
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 
+        date.getTime();
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             updateNavDrawer = extras.getBoolean("refresh");
@@ -83,6 +89,8 @@ public class NavDrawerActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
+
+        // Need to be fixed
         if (userLoggedIn.getProperty("persons") != null) {
             personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         } else {
@@ -92,9 +100,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         }
         new GetNavInfo().execute();
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -298,10 +304,32 @@ public class NavDrawerActivity extends AppCompatActivity {
             relations.add("pendingResponseSlot");
             Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
 
+
             int sizePendingResponseEvents = person.getPendingResponseSlot().size();
             int sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
             int sizeGoingToEvents = person.getGoingToSlot().size();
             int sizeMyCreatedEvents = person.getMyCreatedSlot().size();
+
+            for (int j = 0; j < sizeGoingToEvents; j++) {
+                if (person.getGoingToSlot().get(j).parseDateString().compareTo(date) < 0) {
+                    person.getGoingToSlot().remove(j);
+                }
+            }
+
+            for (int j = 0; j < sizePendingResponseEvents; j++) {
+                if (person.getPendingResponseSlot().get(j).parseDateString().compareTo(date) < 0) {
+                    person.getPendingResponseSlot().remove(j);
+                }
+            }
+            for (int j = 0; j < sizeMyCreatedEvents; j++) {
+                if (person.getMyCreatedSlot().get(j).parseDateString().compareTo(date) < 0) {
+                    person.getMyCreatedSlot().remove(j);
+                }
+            }
+
+            sizePendingResponseEvents = person.getPendingResponseSlot().size();
+            sizeGoingToEvents = person.getGoingToSlot().size();
+            sizeMyCreatedEvents = person.getMyCreatedSlot().size();
 
             valResponseEvents = " " + String.valueOf(sizePendingResponseEvents);
             valPersonsRequestingMe = " " + String.valueOf(sizePersonsRequestingMe);
