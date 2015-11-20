@@ -28,7 +28,6 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -234,12 +233,6 @@ public class MyContactsFragment extends Fragment {
             myContactsList.remove(positionInList);
 
             Backendless.Events.dispatch("ManageContact", args);
-
-            List<String> relationsForLoggedInPerson = new ArrayList<String>();
-            relationsForLoggedInPerson.add("contacts");
-
-            personLoggedIn = Backendless.Persistence.of(Person.class).findById(personLoggedIn.getObjectId(), relationsForLoggedInPerson);
-
 
             return null;
         }
