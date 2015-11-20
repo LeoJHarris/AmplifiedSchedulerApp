@@ -69,6 +69,7 @@ public class MyContactsFragment extends Fragment {
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
+
         rvMyContacts = (RecyclerView) v.findViewById(R.id.rvMyContactsFragment);
         progressBarMyContacts = (ProgressBar) v.findViewById(R.id.progressBarMyContacts);
         textViewTextNoContacts = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoContacts);
@@ -110,6 +111,10 @@ public class MyContactsFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            searchView.setVisibility(View.GONE);
+            rvMyContacts.setVisibility(View.GONE);
+            textViewTextNoContacts.setVisibility(View.GONE);
+            progressBarMyContacts.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -266,6 +271,13 @@ public class MyContactsFragment extends Fragment {
             ringProgressDialog.dismiss();
             Toast.makeText(getContext(), removedFullName + " was removed from contacts", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onResume() {
+
+        new ParseURL().execute();
+        super.onResume();
     }
 }
 

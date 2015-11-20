@@ -72,6 +72,7 @@ public class PersonRequestsTabs extends Fragment {
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
+        progressBarRequesting = (ProgressBar) v.findViewById(R.id.progressBarPersonRequestTab);
         searchView = (SearchView) v.findViewById(R.id.searchViewContactRequest);
         textViewTextNoRequestingUsers = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoRequestingUsers);
         textViewTextNoRequestingUsers.setTypeface(RobotoCondensedLightItalic);
@@ -107,9 +108,11 @@ public class PersonRequestsTabs extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            progressBarRequesting = (ProgressBar) v.findViewById(R.id.progressBarPersonRequestTab);
-            progressBarRequesting.setVisibility(View.VISIBLE);
             super.onPreExecute();
+            searchView.setVisibility(View.GONE);
+            rvRequest.setVisibility(View.GONE);
+            textViewTextNoRequestingUsers.setVisibility(View.GONE);
+            progressBarRequesting.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -130,7 +133,6 @@ public class PersonRequestsTabs extends Fragment {
             personRequestsBackendlessCollection = Backendless.Data.of(Person.class).find(dataQuery);
 
             personsRequestsList = personRequestsBackendlessCollection.getData();
-
 
             return null;
         }
@@ -257,7 +259,6 @@ public class PersonRequestsTabs extends Fragment {
 
             personLoggedIn = Backendless.Persistence.of(Person.class).findById(personLoggedIn.getObjectId(), relationsForLoggedInPerson);
 
-
             return null;
         }
 
@@ -370,5 +371,14 @@ public class PersonRequestsTabs extends Fragment {
             ringProgressDialog.dismiss();
             Toast.makeText(v.getContext(), removedFullname + " rejected as contact", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onResume() {
+
+        new ParseURL().execute();
+
+
+        super.onResume();
     }
 }
