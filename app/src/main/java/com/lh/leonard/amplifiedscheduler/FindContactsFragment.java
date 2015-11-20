@@ -608,7 +608,7 @@ public class FindContactsFragment extends Fragment {
         searchViewFindContacts.setQuery("", false);
         rv.setAdapter(null);
         progressBarFindContacts.setVisibility(View.GONE);
-        editHintSearchContacts.setText("No users found. Try searing users by email address, first or last name.");
+        editHintSearchContacts.setText("Search users by first or last name.");
 
         editHintSearchContacts.setVisibility(View.VISIBLE);
 
