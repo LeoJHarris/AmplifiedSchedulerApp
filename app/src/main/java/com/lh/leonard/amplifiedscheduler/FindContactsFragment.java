@@ -498,7 +498,6 @@ public class FindContactsFragment extends Fragment {
                     args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
                     Backendless.Events.dispatch("ManageContact", args);
-
                 }
                 // Cancel contact request
                 else if (statusOnPerson == 1) {
@@ -512,7 +511,6 @@ public class FindContactsFragment extends Fragment {
                     args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
                     Backendless.Events.dispatch("ManageContact", args);
-
                 }
                 // Accept his contact request
                 else if (statusOnPerson == 2) {
@@ -526,7 +524,6 @@ public class FindContactsFragment extends Fragment {
                     args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
                     Backendless.Events.dispatch("ManageContact", args);
-
                 }
                 // Remove contact
                 else if (statusOnPerson == 3) {
@@ -541,7 +538,6 @@ public class FindContactsFragment extends Fragment {
                     Backendless.Events.dispatch("ManageContact", args);
 
                 } else if (statusOnPerson == 4) {
-
 
                     //Decline contact Request
                     Map<String, String> args = new HashMap<>();
@@ -560,11 +556,6 @@ public class FindContactsFragment extends Fragment {
                 BackendlessDataQuery dataQuery = new BackendlessDataQuery();
                 dataQuery.setWhereClause(whereClause);
 
-                List<String> relationsForLoggedInPerson = new ArrayList<>();
-                relationsForLoggedInPerson.add("personsImRequesting");
-                relationsForLoggedInPerson.add("personsRequestingMe");
-                relationsForLoggedInPerson.add("contacts");
-
                 QueryOptions q = new QueryOptions();
                 q.addRelated("personsImRequesting");
                 q.addRelated("personsRequestingMe");
@@ -574,7 +565,6 @@ public class FindContactsFragment extends Fragment {
 
                 personsFoundQuery.clear();
                 personsFoundQuery = result.getData();
-                personLoggedIn = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relationsForLoggedInPerson);
 
             }
 
@@ -609,9 +599,7 @@ public class FindContactsFragment extends Fragment {
         rv.setAdapter(null);
         progressBarFindContacts.setVisibility(View.GONE);
         editHintSearchContacts.setText("Search users by first or last name.");
-
         editHintSearchContacts.setVisibility(View.VISIBLE);
-
         timer = null;
         refreshed = true;
         nameQuerySearch = "";

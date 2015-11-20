@@ -25,12 +25,11 @@
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/editHintSearchContacts"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/searchViewFindContacts"
             android:gravity="center"
             android:hint="Search users by first or last name."
-            android:paddingBottom="4dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
