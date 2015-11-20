@@ -159,7 +159,6 @@ public class PersonRequestsTabs extends Fragment {
                             new AlertDialog.Builder(v.getContext())
                                     .setTitle("Accept Contact Request")
                                     .setMessage("Do you want to  accept " + personsRequestsList.get(position).getFullname() + " as a contact")
-                                    .setIcon(R.drawable.ic_questionmark)
                                     .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {

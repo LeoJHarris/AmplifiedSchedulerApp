@@ -157,22 +157,23 @@ public class MyContactsFragment extends Fragment {
                             dialog = new AlertDialog.Builder(v.getContext())
                                     .setTitle("Remove Contact?")
                                     .setMessage("Do you want to remove " + myContactsList.get(position).getFullname() + " as a contact")
-                                    .setIcon(R.drawable.ic_questionmark)
                                     .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
                                                     "Removing " + myContactsList.get(position).getFullname() + " from your contacts ...", true);
                                             ringProgressDialog.setCancelable(false);
                                             new RemoveContact(position).execute();
+                                            dialog.dismiss();
                                         }
                                     })
                                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
+                                            dialog.dismiss();
                                         }
                                     }).show();
+
                         }
 
                         @Override
@@ -187,6 +188,7 @@ public class MyContactsFragment extends Fragment {
                     progressBarMyContacts.setVisibility(View.GONE);
                     rvMyContacts.setVisibility(View.VISIBLE);
                     searchView.setVisibility(View.VISIBLE);
+                    dialog = null;
                 } else {
                     progressBarMyContacts.setVisibility(View.GONE);
                     textViewTextNoContacts.setVisibility(View.VISIBLE);

@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:queryHint="Search Slots"
+        android:textSize="20sp"
         android:searchIcon="@drawable/ic_searchicon"
         android:visibility="gone" />
 
