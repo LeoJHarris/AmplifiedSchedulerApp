@@ -100,9 +100,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         }
         new GetNavInfo().execute();
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

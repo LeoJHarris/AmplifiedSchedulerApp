@@ -199,7 +199,7 @@ public class FindContactsFragment extends Fragment {
 
                     Resources r = getResources();
 
-                    adapter = new ContactsAdapter(personsFoundQuery, r);
+                    adapter = new ContactsAdapter(personsFoundQuery);
 
                     rv.setAdapter(adapter);
 
@@ -582,9 +582,9 @@ public class FindContactsFragment extends Fragment {
 
             //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-            Resources r = getResources();
+            //Resources r = getResources();
 
-            adapter = new ContactsAdapter(personsFoundQuery, r);
+            adapter = new ContactsAdapter(personsFoundQuery);
 
             rv.setAdapter(adapter);
             ringProgressDialog.dismiss();

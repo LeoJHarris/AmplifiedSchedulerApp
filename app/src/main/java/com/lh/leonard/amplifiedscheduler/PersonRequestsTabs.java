@@ -146,9 +146,7 @@ public class PersonRequestsTabs extends Fragment {
 
                     rvRequest.setLayoutManager(llm);
 
-                    Resources r = getResources();
-
-                    adapterRequest = new ContactsAdapter(personsRequestsList, r);
+                    adapterRequest = new ContactsAdapter(personsRequestsList);
 
                     rvRequest.setAdapter(adapterRequest);
 
@@ -268,9 +266,7 @@ public class PersonRequestsTabs extends Fragment {
 
                 //   rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                Resources r = getResources();
-
-                adapterRequest = new ContactsAdapter(personsRequestsList, r);
+                adapterRequest = new ContactsAdapter(personsRequestsList);
 
                 rvRequest.setAdapter(adapterRequest);
             } else {
@@ -344,9 +340,7 @@ public class PersonRequestsTabs extends Fragment {
 
                 // rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                Resources r = getResources();
-
-                adapterRequest = new ContactsAdapter(personsRequestsList, r);
+                adapterRequest = new ContactsAdapter(personsRequestsList);
 
                 rvRequest.setAdapter(adapterRequest);
             } else {

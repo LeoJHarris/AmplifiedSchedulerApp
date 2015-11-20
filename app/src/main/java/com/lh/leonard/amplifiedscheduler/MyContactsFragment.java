@@ -52,7 +52,6 @@ public class MyContactsFragment extends Fragment {
     LinearLayoutManager llm;
     String removedFullName;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.my_contacts_tab1, container, false);
@@ -67,7 +66,6 @@ public class MyContactsFragment extends Fragment {
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
-
 
         rvMyContacts = (RecyclerView) v.findViewById(R.id.rvMyContactsFragment);
         progressBarMyContacts = (ProgressBar) v.findViewById(R.id.progressBarMyContacts);
@@ -149,8 +147,7 @@ public class MyContactsFragment extends Fragment {
                     llm = new LinearLayoutManager(v.getContext());
                     rvMyContacts.setLayoutManager(llm);
 
-                    Resources r = getResources();
-                    adapter = new ContactsAdapter(myContactsList, r);
+                    adapter = new ContactsAdapter(myContactsList);
                     rvMyContacts.setAdapter(adapter);
                     rvMyContacts.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rvMyContacts, new RecyclerItemClickListener.OnItemClickListener() {
 
@@ -252,7 +249,7 @@ public class MyContactsFragment extends Fragment {
 
                 Resources r = getResources();
 
-                adapter = new ContactsAdapter(myContactsList, r);
+                adapter = new ContactsAdapter(myContactsList);
 
                 rvMyContacts.setAdapter(adapter);
 
