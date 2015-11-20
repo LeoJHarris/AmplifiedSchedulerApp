@@ -29,12 +29,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/searchViewFindContacts"
             android:gravity="center"
-            android:hint="Search users by email address first or last name."
+            android:hint="No users found. Try searing users by email address, first or last name."
             android:paddingBottom="4dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:textSize="23sp" />
+            android:textSize="23sp"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
     <RelativeLayout

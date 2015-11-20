@@ -59,6 +59,7 @@ public class FindContactsFragment extends Fragment {
     ProgressDialog ringProgressDialog;
     String postMessage;
     AlertDialog alertDialog;
+    Boolean refreshed = false;
     AutoResizeTextView editHintSearchContacts;
 
     @Override
@@ -92,6 +93,8 @@ public class FindContactsFragment extends Fragment {
 
         searchViewFindContacts.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                                                           public boolean onQueryTextChange(final String text) {
+
+                                                              refreshed = false;
 
                                                               if (!text.equals("")) {
 
@@ -172,7 +175,12 @@ public class FindContactsFragment extends Fragment {
             dataQuery.setQueryOptions(q);
             BackendlessCollection<Person> result = Backendless.Persistence.of(Person.class).find(dataQuery);
 
+
             personsFoundQuery = result.getData();
+
+            if (refreshed) {
+                personsFoundQuery.clear();
+            }
 
             return null;
         }
@@ -422,13 +430,11 @@ public class FindContactsFragment extends Fragment {
                             //TODO Yes: get the ownerObjectId and remove from database
                         }
                     }
-
                     ));
 
                     if (adapter != null) {
                         if (TextUtils.isEmpty(nameQuerySearch)) {
                             adapter.getFilter().filter("");
-
                         } else {
                             adapter.getFilter().filter(nameQuerySearch.toString());
                         }
@@ -442,8 +448,16 @@ public class FindContactsFragment extends Fragment {
                     progressBarFindContacts.setVisibility(View.GONE);
                     RLProgressBar.setVisibility(View.GONE);
                     rv.setVisibility(View.GONE);
+
+                    if (refreshed) {
+                        editHintSearchContacts.setText("Search users by first or last name.");
+
+                    } else {
+                        editHintSearchContacts.setText("No users found. Try searing users by email address, first or last name.");
+                    }
                     editHintSearchContacts.setVisibility(View.VISIBLE);
-                    editHintSearchContacts.setText("No users found. Try searing users by email address, first or last name.");
+
+
                 }
             }
         }
@@ -587,4 +601,25 @@ public class FindContactsFragment extends Fragment {
             Toast.makeText(v.getContext(), postMessage, Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onResume() {
+
+        searchViewFindContacts.setQuery("", false);
+        rv.setAdapter(null);
+        progressBarFindContacts.setVisibility(View.GONE);
+        editHintSearchContacts.setText("No users found. Try searing users by email address, first or last name.");
+
+        editHintSearchContacts.setVisibility(View.VISIBLE);
+
+        timer = null;
+        refreshed = true;
+        nameQuerySearch = "";
+        if (personsFoundQuery != null) {
+            personsFoundQuery.clear();
+        }
+
+        super.onResume();
+    }
+
 }

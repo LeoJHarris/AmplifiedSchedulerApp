@@ -52,7 +52,9 @@ public class AddRemoveContactsTabbed extends AppCompatActivity {
 
                 Fragment fragment = ((ViewPagerAdapter) pager.getAdapter()).getFragment(position);
 
-                if ((position == 1 || position == 0) &&fragment != null){
+               // (position == 1 || position == 0)
+
+                if (fragment != null) {
                     fragment.onResume();
                 }
             }
