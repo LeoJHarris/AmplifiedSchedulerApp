@@ -248,6 +248,7 @@ public class FindContactsFragment extends Fragment {
                                 break;
                             }
                         }
+                        hashMapSTATUS.put(j, 0);
                     }
                 }
             }
@@ -260,7 +261,7 @@ public class FindContactsFragment extends Fragment {
 
             if (isAdded()) {
 
-                if (!personsFoundQuery.isEmpty()) {
+                if (!personsFoundQuery.isEmpty() && !refreshed) {
                     rv.setHasFixedSize(true);
 
                     rv.setLayoutManager(llm);

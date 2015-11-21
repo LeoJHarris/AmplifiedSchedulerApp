@@ -265,10 +265,69 @@ public class MyContactsFragment extends Fragment {
         }
     }
 
+    private class Test extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            searchView.setVisibility(View.GONE);
+            rvMyContacts.setVisibility(View.GONE);
+            textViewTextNoContacts.setVisibility(View.GONE);
+            progressBarMyContacts.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            Backendless.Persistence.mapTableToClass("Slot", Slot.class);
+            Backendless.Persistence.mapTableToClass("Person", Person.class);
+
+            StringBuilder whereClause = new StringBuilder();
+            whereClause.append("Person[contacts]");
+            whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            dataQuery.setWhereClause(whereClause.toString());
+            myContacts = Backendless.Persistence.of(Person.class).find(dataQuery);
+            myContactsList = myContacts.getData();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            if (isAdded()) {
+
+                if (!myContactsList.isEmpty()) {
+
+                    rvMyContacts.setHasFixedSize(true);
+                    llm = new LinearLayoutManager(v.getContext());
+                    rvMyContacts.setLayoutManager(llm);
+
+                    adapter = new ContactsAdapter(myContactsList, 0);
+                    rvMyContacts.setAdapter(adapter);
+
+                    progressBarMyContacts.setVisibility(View.GONE);
+                    rvMyContacts.setVisibility(View.VISIBLE);
+                    searchView.setVisibility(View.VISIBLE);
+                    dialog = null;
+                } else {
+                    progressBarMyContacts.setVisibility(View.GONE);
+                    textViewTextNoContacts.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
     @Override
     public void onResume() {
 
-        new ParseURL().execute();
+        new Test().execute();
         super.onResume();
     }
 }

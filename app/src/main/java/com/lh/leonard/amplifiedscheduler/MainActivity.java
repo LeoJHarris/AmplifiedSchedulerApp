@@ -26,9 +26,6 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import se.simbio.encryption.Encryption;
 
 public class MainActivity extends Activity {
@@ -69,7 +66,7 @@ public class MainActivity extends Activity {
             }
         }
 
-        encryption = Encryption.getDefault("Key", "Salt", new byte[16]);
+        encryption = Encryption.getDefault("Key", "Salt", new byte[16]);  // 16
 
 
         new Decrypt().execute();
@@ -377,7 +374,6 @@ public class MainActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... params) {
-
 
 
             return null;

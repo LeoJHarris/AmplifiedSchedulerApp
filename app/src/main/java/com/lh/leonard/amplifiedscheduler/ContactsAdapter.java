@@ -47,6 +47,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
         listSlots = list;
         this.hashMap = hashMap;
+        VAL = 10;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     public void onBindViewHolder(ContactViewHolder slotViewHolder, int i) {
 
         if (VAL == 0) {
-            slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRequesting, null);
+            slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
         } else if (VAL == 1) {
             slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
         } else {
