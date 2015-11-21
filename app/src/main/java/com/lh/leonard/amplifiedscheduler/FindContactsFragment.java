@@ -3,13 +3,14 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -61,10 +62,28 @@ public class FindContactsFragment extends Fragment {
     AlertDialog alertDialog;
     Boolean refreshed = false;
     AutoResizeTextView editHintSearchContacts;
+    HashMap<Integer, Integer> hashMapSTATUS = new HashMap<>();
+    String title;
+    String message;
+    String messageToAppend;
+    AutoResizeTextView fullname;
+    Drawable drawableRequesting;
+    Drawable drawableContacts;
+    Drawable drawableActionRequired;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.find_contacts_tab2, container, false);
+
+        final LayoutInflater factory = getActivity().getLayoutInflater();
+
+        final View textEntryView = factory.inflate(R.layout.contacts_card_view, null);
+
+        fullname = (AutoResizeTextView) textEntryView.findViewById(R.id.person_fullname);
+
+        drawableRequesting = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_friend_requested);
+        drawableActionRequired = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_actionrequiredcontactspng);
+        drawableContacts = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_currentcontact);
 
         personLoggedIn = (Person) loggedInUser.getProperty("persons");
 
@@ -182,6 +201,58 @@ public class FindContactsFragment extends Fragment {
                 personsFoundQuery.clear();
             }
 
+            hashMapSTATUS.clear();
+
+            int SIZE;
+            for (int j = 0; j < personsFoundQuery.size(); j++) {
+                // personsRequestingMe size is smaller
+                if (personsFoundQuery.get(j).personsRequestingMe.size() < personsFoundQuery.get(j).personsImRequesting.size()) {
+                    if (personsFoundQuery.get(j).personsImRequesting.size() < personsFoundQuery.get(j).contacts.size()) {
+                        SIZE = personsFoundQuery.get(j).contacts.size();
+
+                    } else {
+                        SIZE = personsFoundQuery.get(j).personsImRequesting.size();
+                    }
+                } else if (personsFoundQuery.get(j).personsRequestingMe.size() < personsFoundQuery.get(j).contacts.size()) {
+                    SIZE = personsFoundQuery.get(j).contacts.size();
+
+                } else {
+                    SIZE = personsFoundQuery.get(j).personsRequestingMe.size();
+                }
+                if (SIZE <= 0) {
+                    hashMapSTATUS.put(j, 0);
+                } else {
+                    for (int p = 0; p < SIZE; p++) {
+
+                        if (p < personsFoundQuery.get(j).personsRequestingMe.size()) {
+                            if (personsFoundQuery.get(j).personsRequestingMe.get(p).objectId.equals(personLoggedIn.getObjectId())) // check
+                            {
+                                hashMapSTATUS.put(j, 1);
+
+                                break;
+                            }
+                        }
+                        // 1 -- Accept his contact request
+                        if (p < personsFoundQuery.get(j).personsImRequesting.size()) {
+
+                            if (personsFoundQuery.get(j).personsImRequesting.get(p).objectId.equals(personLoggedIn.getObjectId())) {
+                                hashMapSTATUS.put(j, 2);
+
+                                break;
+                            }
+                        }
+                        if (p < personsFoundQuery.get(j).contacts.size()) {
+                            // already contacts remove?
+                            if (personsFoundQuery.get(j).contacts.get(p).objectId.equals(personLoggedIn.getObjectId())) {
+                                hashMapSTATUS.put(j, 3);
+                                break;
+                            }
+                        }
+                        hashMapSTATUS.put(j, 0);
+                    }
+                }
+            }
+
             return null;
         }
 
@@ -190,16 +261,14 @@ public class FindContactsFragment extends Fragment {
 
             if (isAdded()) {
 
-                if (!personsFoundQuery.isEmpty()) {
+                if (!personsFoundQuery.isEmpty() && !refreshed) {
                     rv.setHasFixedSize(true);
 
                     rv.setLayoutManager(llm);
 
                     //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                    Resources r = getResources();
-
-                    adapter = new ContactsAdapter(personsFoundQuery);
+                    adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS);
 
                     rv.setAdapter(adapter);
 
@@ -208,81 +277,70 @@ public class FindContactsFragment extends Fragment {
                         @Override
                         public void onItemClick(View view, final int position) {
 
-                            // view.setBackgroundColor(getResources().getColor(R.color.red));
+                            if (hashMapSTATUS != null) {
 
-                            statusOnPerson = 0;
+                                String title = "Send Contact Request?";
+                                String message = "Do you want to send contact request to ";
+                                String messageToAppend = "";
+                                dialogMessage = "Sending contact request to " + personsFoundQuery.get(position).getFullname() + " ...";
+                                postMessage = "Contact request sent to " + personsFoundQuery.get(position).getFullname();
 
-                            String title = "Send Contact Request?";
-                            String message = "Do you want to send contact request to ";
-                            String messageToAppend = "";
-                            dialogMessage = "Sending contact request to " + personsFoundQuery.get(position).getFullname() + " ...";
-                            postMessage = "Contact request sent to " + personsFoundQuery.get(position).getFullname();
 
-                            int SIZE;
-                            // personsRequestingMe size is smaller
-                            if (personsFoundQuery.get(position).personsRequestingMe.size() < personsFoundQuery.get(position).personsImRequesting.size()) {
-                                if (personsFoundQuery.get(position).personsImRequesting.size() < personsFoundQuery.get(position).contacts.size()) {
-                                    SIZE = personsFoundQuery.get(position).contacts.size();
-
-                                } else {
-                                    SIZE = personsFoundQuery.get(position).personsImRequesting.size();
+                                if (hashMapSTATUS.get(position) == 1) {
+                                    title = "Remove Requesting Contact?";
+                                    message = "Do you want to cancel your contact request to ";
+                                    messageToAppend = "";
+                                    dialogMessage = "Cancelling contact request to " + personsFoundQuery.get(position).getFullname() + " ...";
+                                    postMessage = "Cancelled contact request to " + personsFoundQuery.get(position).getFullname();
+                                } else if (hashMapSTATUS.get(position) == 2) {
+                                    title = "Accept Request?";
+                                    message = "Do you want to accept ";
+                                    messageToAppend = " as a contact?";
+                                    dialogMessage = "Adding " + personsFoundQuery.get(position).getFullname() + " to your contact ...";
+                                    postMessage = personsFoundQuery.get(position).getFullname() + " has been added to your contacts";
+                                } else if (hashMapSTATUS.get(position) == 3) {
+                                    title = "Remove Contact?";
+                                    message = "Do you want to remove ";
+                                    messageToAppend = " as a contact?";
+                                    dialogMessage = "Removing " + personsFoundQuery.get(position).getFullname() + " as contact ...";
+                                    postMessage = personsFoundQuery.get(position).getFullname() + " has been removed from your contacts";
                                 }
-                            } else if (personsFoundQuery.get(position).personsRequestingMe.size() < personsFoundQuery.get(position).contacts.size()) {
-                                SIZE = personsFoundQuery.get(position).contacts.size();
 
-                            } else {
-                                SIZE = personsFoundQuery.get(position).personsRequestingMe.size();
-                            }
-                            for (int p = 0; p < SIZE; p++) {
-                                // 1 -- don't want to request the other person? or do
-                                if (p < personsFoundQuery.get(position).personsRequestingMe.size()) {
-                                    if (personsFoundQuery.get(position).personsRequestingMe.get(p).objectId.equals(personLoggedIn.getObjectId())) // check
-                                    {
-                                        statusOnPerson = 1;
-                                        title = "Remove Requesting Contact?";
-                                        message = "Do you want to cancel your contact request to ";
-                                        messageToAppend = "";
-                                        dialogMessage = "Cancelling contact request to " + personsFoundQuery.get(position).getFullname() + " ...";
-                                        postMessage = "Cancelled contact request to " + personsFoundQuery.get(position).getFullname();
-                                        break;
-                                    }
-                                }
-                                // 1 -- Accept his contact request
-                                if (p < personsFoundQuery.get(position).personsImRequesting.size()) {
+                                if (hashMapSTATUS.get(position) != 2) {
 
-                                    if (personsFoundQuery.get(position).personsImRequesting.get(p).objectId.equals(personLoggedIn.getObjectId())) {
-                                        statusOnPerson = 2;
-                                        title = "Accept Request?";
-                                        message = "Do you want to accept ";
-                                        messageToAppend = " as a contact?";
-                                        dialogMessage = "Adding " + personsFoundQuery.get(position).getFullname() + " to your contact ...";
-                                        postMessage = personsFoundQuery.get(position).getFullname() + " has been added to your contacts";
-                                        break;
-                                    }
-                                }
-                                if (p < personsFoundQuery.get(position).contacts.size()) {
-                                    // already contacts remove?
-                                    if (personsFoundQuery.get(position).contacts.get(p).objectId.equals(personLoggedIn.getObjectId())) {
-                                        statusOnPerson = 3;
-                                        title = "Remove Contact?";
-                                        message = "Do you want to remove ";
-                                        messageToAppend = " as a contact?";
-                                        postMessage = personsFoundQuery.get(position).getFullname() + " has been removed from your contacts";
-                                        break;
-                                    }
-                                }
-                            }
+                                    if (alertDialog != null) {
 
-                            //TODO Should be setting alertDialog to null, creates a new dialog everytime this is called
-                            if (statusOnPerson != 2) {
+                                        if (!alertDialog.isShowing()) {
+                                            alertDialog = new AlertDialog.Builder(v.getContext())
+                                                    .setTitle(title)
+                                                    .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
+                                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                                if (alertDialog != null) {
+                                                        public void onClick(DialogInterface dialog, int whichButton) {
 
-                                    if (!alertDialog.isShowing()) {
+
+                                                            dialog.dismiss();
+                                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
+                                                            ringProgressDialog.setCancelable(false);
+                                                            new AddContact(position).execute();
+
+
+                                                            //TODO should set personLoggedInWithRequesting person
+                                                            //TODO for this activity, although may need to reload each tme
+
+                                                        }
+                                                    })
+                                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+
+                                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                                            dialog.dismiss();
+                                                        }
+                                                    }).show();
+                                        }
+                                    } else {
                                         alertDialog = new AlertDialog.Builder(v.getContext())
                                                 .setTitle(title)
                                                 .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
-                                                .setIcon(R.drawable.ic_questionmark)
                                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                                                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -305,51 +363,60 @@ public class FindContactsFragment extends Fragment {
                                                         dialog.dismiss();
                                                     }
                                                 }).show();
+
                                     }
                                 } else {
-                                    alertDialog = new AlertDialog.Builder(v.getContext())
-                                            .setTitle(title)
-                                            .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
-                                            .setIcon(R.drawable.ic_questionmark)
-                                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    if (alertDialog != null) {
 
+                                        if (!alertDialog.isShowing()) {
 
-                                                    dialog.dismiss();
-                                                    ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
-                                                    ringProgressDialog.setCancelable(false);
-                                                    new AddContact(position).execute();
+                                            alertDialog = new AlertDialog.Builder(v.getContext())
+                                                    .setTitle(title)
+                                                    .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
+                                                    .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
 
+                                                        public void onClick(DialogInterface dialog, int whichButton) {
 
-                                                    //TODO should set personLoggedInWithRequesting person
-                                                    //TODO for this activity, although may need to reload each tme
+                                                            hashMapSTATUS.put(position, 2);
+                                                            dialog.dismiss();
+                                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
+                                                            ringProgressDialog.setCancelable(false);
+                                                            new AddContact(position).execute();
 
-                                                }
-                                            })
-                                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                            //TODO should set personLoggedInWithRequesting person
+                                                            //TODO for this activity, although may need to reload each tme
 
-                                                public void onClick(DialogInterface dialog, int whichButton) {
-                                                    dialog.dismiss();
-                                                }
-                                            }).show();
+                                                        }
+                                                    })
+                                                    .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
 
-                                }
-                            } else {
+                                                        public void onClick(DialogInterface dialog, int whichButton) {
 
-                                if (alertDialog != null) {
+                                                            hashMapSTATUS.put(position, 2);
+                                                            dialog.dismiss();
+                                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
+                                                            ringProgressDialog.setCancelable(false);
+                                                            new AddContact(position).execute();
 
-                                    if (!alertDialog.isShowing()) {
+                                                        }
+                                                    }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 
+                                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                                            dialog.dismiss();
+
+                                                        }
+                                                    }).show();
+
+                                        }
+                                    } else {
                                         alertDialog = new AlertDialog.Builder(v.getContext())
                                                 .setTitle(title)
                                                 .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
-                                                .setIcon(R.drawable.ic_questionmark)
                                                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
 
                                                     public void onClick(DialogInterface dialog, int whichButton) {
 
-                                                        statusOnPerson = 2;
                                                         dialog.dismiss();
                                                         ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
                                                         ringProgressDialog.setCancelable(false);
@@ -364,7 +431,7 @@ public class FindContactsFragment extends Fragment {
 
                                                     public void onClick(DialogInterface dialog, int whichButton) {
 
-                                                        statusOnPerson = 4;
+                                                        hashMapSTATUS.put(position, 4);
                                                         dialog.dismiss();
                                                         ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
                                                         ringProgressDialog.setCancelable(false);
@@ -378,46 +445,7 @@ public class FindContactsFragment extends Fragment {
 
                                                     }
                                                 }).show();
-
                                     }
-                                } else {
-                                    alertDialog = new AlertDialog.Builder(v.getContext())
-                                            .setTitle(title)
-                                            .setMessage(message + personsFoundQuery.get(position).getFullname() + messageToAppend)
-                                            .setIcon(R.drawable.ic_questionmark)
-                                            .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-
-                                                public void onClick(DialogInterface dialog, int whichButton) {
-
-                                                    statusOnPerson = 2;
-                                                    dialog.dismiss();
-                                                    ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
-                                                    ringProgressDialog.setCancelable(false);
-                                                    new AddContact(position).execute();
-
-                                                    //TODO should set personLoggedInWithRequesting person
-                                                    //TODO for this activity, although may need to reload each tme
-
-                                                }
-                                            })
-                                            .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
-
-                                                public void onClick(DialogInterface dialog, int whichButton) {
-
-                                                    statusOnPerson = 4;
-                                                    dialog.dismiss();
-                                                    ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
-                                                    ringProgressDialog.setCancelable(false);
-                                                    new AddContact(position).execute();
-
-                                                }
-                                            }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-
-                                                public void onClick(DialogInterface dialog, int whichButton) {
-                                                    dialog.dismiss();
-
-                                                }
-                                            }).show();
                                 }
                             }
                         }
@@ -444,6 +472,7 @@ public class FindContactsFragment extends Fragment {
                     RLProgressBar.setVisibility(View.GONE);
                     editHintSearchContacts.setVisibility(View.GONE);
                     rv.setVisibility(View.VISIBLE);
+
                 } else {
                     progressBarFindContacts.setVisibility(View.GONE);
                     RLProgressBar.setVisibility(View.GONE);
@@ -487,7 +516,7 @@ public class FindContactsFragment extends Fragment {
             if (isAdded()) {
 
                 // Send Contact invite
-                if (statusOnPerson == 0) {
+                if (hashMapSTATUS.get(position) == 0) {
 
                     Map<String, String> args = new HashMap<>();
 
@@ -498,9 +527,11 @@ public class FindContactsFragment extends Fragment {
                     args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
                     Backendless.Events.dispatch("ManageContact", args);
+
+                    hashMapSTATUS.put(position, 1);
                 }
                 // Cancel contact request
-                else if (statusOnPerson == 1) {
+                else if (hashMapSTATUS.get(position) == 1) {
 
                     Map<String, String> args = new HashMap<>();
 
@@ -511,6 +542,7 @@ public class FindContactsFragment extends Fragment {
                     args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
                     Backendless.Events.dispatch("ManageContact", args);
+                    hashMapSTATUS.put(position, 0);
                 }
                 // Accept his contact request
                 else if (statusOnPerson == 2) {
@@ -524,9 +556,10 @@ public class FindContactsFragment extends Fragment {
                     args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
                     Backendless.Events.dispatch("ManageContact", args);
+                    hashMapSTATUS.put(position, 3);
                 }
                 // Remove contact
-                else if (statusOnPerson == 3) {
+                else if (hashMapSTATUS.get(position) == 3) {
                     Map<String, String> args = new HashMap<>();
 
                     args.put("id", "removeContact");
@@ -537,7 +570,10 @@ public class FindContactsFragment extends Fragment {
 
                     Backendless.Events.dispatch("ManageContact", args);
 
-                } else if (statusOnPerson == 4) {
+                    hashMapSTATUS.put(position, 0);
+
+                } else if (hashMapSTATUS.get(position) == 4) {
+
 
                     //Decline contact Request
                     Map<String, String> args = new HashMap<>();
@@ -549,6 +585,7 @@ public class FindContactsFragment extends Fragment {
                     args.put("otherperson", personsFoundQuery.get(position).getObjectId());
 
                     Backendless.Events.dispatch("ManageContact", args);
+                    hashMapSTATUS.put(position, 0);
                 }
 
                 Backendless.Data.mapTableToClass("Person", Person.class);
@@ -563,9 +600,7 @@ public class FindContactsFragment extends Fragment {
                 dataQuery.setQueryOptions(q);
                 BackendlessCollection<Person> result = Backendless.Data.of(Person.class).find(dataQuery);
 
-                personsFoundQuery.clear();
                 personsFoundQuery = result.getData();
-
             }
 
             return null;
@@ -584,9 +619,10 @@ public class FindContactsFragment extends Fragment {
 
             //Resources r = getResources();
 
-            adapter = new ContactsAdapter(personsFoundQuery);
+            adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS);
 
             rv.setAdapter(adapter);
+
             ringProgressDialog.dismiss();
             Toast.makeText(v.getContext(), postMessage, Toast.LENGTH_SHORT).show();
         }
@@ -595,6 +631,7 @@ public class FindContactsFragment extends Fragment {
     @Override
     public void onResume() {
 
+        hashMapSTATUS.clear();
         searchViewFindContacts.setQuery("", false);
         rv.setAdapter(null);
         progressBarFindContacts.setVisibility(View.GONE);

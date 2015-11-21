@@ -2,7 +2,6 @@ package com.lh.leonard.amplifiedscheduler;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -109,7 +108,7 @@ public class RecipientsForSlot extends Activity {
 
             llm.setOrientation(LinearLayoutManager.VERTICAL);
 
-            ContactsAdapter adapter = new ContactsAdapter(myContactsPersonsList);
+            ContactsAdapter adapter = new ContactsAdapter(myContactsPersonsList, 0);
 
             rv.setAdapter(adapter);
 

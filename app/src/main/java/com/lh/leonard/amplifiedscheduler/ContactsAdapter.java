@@ -13,6 +13,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,14 +30,24 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     Typeface RobotoCondensedLight;
     Typeface RobotoCondensedBold;
     private List<Person> orig;
-    Drawable drawable;
+    Drawable drawableRequesting;
+    Drawable drawableContacts;
+    Drawable drawableActionRequired;
+    HashMap<Integer, Integer> hashMap = new HashMap<>();
+    int VAL;
 
 
-    public ContactsAdapter(List<Person> list) {
-
+    public ContactsAdapter(List<Person> list, int val) {
 
         listSlots = list;
+        VAL = val;
+    }
 
+    public ContactsAdapter(List<Person> list, HashMap<Integer, Integer> hashMap) {
+
+        listSlots = list;
+        this.hashMap = hashMap;
+        VAL = 10;
     }
 
     @Override
@@ -47,7 +58,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         RobotoCondensedLight = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         RobotoCondensedBold = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
         ContactViewHolder pvh = new ContactViewHolder(v);
-        drawable = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_friend_requested);
+        drawableRequesting = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_friend_requested);
+        drawableActionRequired = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_actionrequiredcontactspng);
+        drawableContacts = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_currentcontact);
 
         return pvh;
     }
@@ -55,8 +68,27 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     @Override
     public void onBindViewHolder(ContactViewHolder slotViewHolder, int i) {
 
+        if (VAL == 0) {
+            slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
+        } else if (VAL == 1) {
+            slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
+        } else {
+            if (hashMap.get(i) != null) {
+                if (hashMap.get(i) == 1) {
+                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRequesting, null);
 
-        slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
+                } else if (hashMap.get(i) == 2) {
+                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
+
+                } else if (hashMap.get(i) == 3) {
+                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
+
+                } else if (hashMap.get(i) == 4) {
+                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
+
+                }
+            }
+        }
 
         slotViewHolder.personsFullName.setText(listSlots.get(i).getFname() + " " + listSlots.get(i).getLname());
         slotViewHolder.personEmail.setText("Country: " + listSlots.get(i).getCountry());

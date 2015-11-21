@@ -3,7 +3,6 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,6 +32,7 @@ import java.util.Map;
  */
 public class PersonRequestsTabs extends Fragment {
 
+    Boolean refresh;
     List<Person> person;
     String removedFullname;
     Person personLoggedIn;
@@ -49,7 +49,6 @@ public class PersonRequestsTabs extends Fragment {
     private ProgressBar progressBarRequesting;
     AutoResizeTextView textViewTextNoRequestingUsers;
     ProgressDialog ringProgressDialog;
-    AlertDialog alertDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,7 +76,6 @@ public class PersonRequestsTabs extends Fragment {
         textViewTextNoRequestingUsers.setTypeface(RobotoCondensedLightItalic);
 
         searchView.setQueryHint("Search requesting contacts");
-
         new ParseURL().execute();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -105,9 +103,12 @@ public class PersonRequestsTabs extends Fragment {
 
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
+        AlertDialog alertDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             searchView.setVisibility(View.GONE);
             rvRequest.setVisibility(View.GONE);
             textViewTextNoRequestingUsers.setVisibility(View.GONE);
@@ -139,6 +140,7 @@ public class PersonRequestsTabs extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
 
+            super.onPostExecute(result);
             if (isAdded()) {
 
                 if (!personsRequestsList.isEmpty()) {
@@ -146,7 +148,7 @@ public class PersonRequestsTabs extends Fragment {
 
                     rvRequest.setLayoutManager(llm);
 
-                    adapterRequest = new ContactsAdapter(personsRequestsList);
+                    adapterRequest = new ContactsAdapter(personsRequestsList, 1);
 
                     rvRequest.setAdapter(adapterRequest);
 
@@ -155,11 +157,9 @@ public class PersonRequestsTabs extends Fragment {
                         @Override
                         public void onItemClick(View view, final int position) {
 
-
-                            new AlertDialog.Builder(v.getContext())
+                            alertDialog = new AlertDialog.Builder(v.getContext())
                                     .setTitle("Accept Contact Request")
                                     .setMessage("Do you want to  accept " + personsRequestsList.get(position).getFullname() + " as a contact")
-                                    .setIcon(R.drawable.ic_questionmark)
                                     .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -184,10 +184,10 @@ public class PersonRequestsTabs extends Fragment {
                                         }
                                     }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    dialog.dismiss();
-                                }
-                            }).show();
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            dialog.dismiss();
+                                        }
+                                    }).show();
                         }
 
                         @Override
@@ -197,8 +197,10 @@ public class PersonRequestsTabs extends Fragment {
                             //TODO: Dialog show, remove slot. Remove from list clear adapter, give adapter now list
                             //TODO Yes: get the ownerObjectId and remove from database
                         }
+
                     }
                     ));
+
 
                     progressBarRequesting.setVisibility(View.GONE);
                     rvRequest.setVisibility(View.VISIBLE);
@@ -266,7 +268,7 @@ public class PersonRequestsTabs extends Fragment {
 
                 //   rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                adapterRequest = new ContactsAdapter(personsRequestsList);
+                adapterRequest = new ContactsAdapter(personsRequestsList, 1);
 
                 rvRequest.setAdapter(adapterRequest);
             } else {
@@ -340,7 +342,7 @@ public class PersonRequestsTabs extends Fragment {
 
                 // rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                adapterRequest = new ContactsAdapter(personsRequestsList);
+                adapterRequest = new ContactsAdapter(personsRequestsList, 1);
 
                 rvRequest.setAdapter(adapterRequest);
             } else {
@@ -353,10 +355,74 @@ public class PersonRequestsTabs extends Fragment {
         }
     }
 
+    private class Test extends AsyncTask<Void, Integer, Void> {
+
+        AlertDialog alertDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            searchView.setVisibility(View.GONE);
+            rvRequest.setVisibility(View.GONE);
+            textViewTextNoRequestingUsers.setVisibility(View.GONE);
+            progressBarRequesting.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            StringBuilder whereClause = new StringBuilder();
+            whereClause.append("Person[personsRequestingMe]");
+            whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
+
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            dataQuery.setWhereClause(whereClause.toString());
+
+            personRequestsBackendlessCollection = Backendless.Data.of(Person.class).find(dataQuery);
+
+            personsRequestsList = personRequestsBackendlessCollection.getData();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            super.onPostExecute(result);
+            if (isAdded()) {
+
+                if (!personsRequestsList.isEmpty()) {
+                    rvRequest.setHasFixedSize(true);
+
+                    rvRequest.setLayoutManager(llm);
+
+                    adapterRequest = new ContactsAdapter(personsRequestsList, 1);
+
+                    rvRequest.setAdapter(adapterRequest);
+
+                    progressBarRequesting.setVisibility(View.GONE);
+                    rvRequest.setVisibility(View.VISIBLE);
+                    searchView.setVisibility(View.VISIBLE);
+                } else {
+                    progressBarRequesting.setVisibility(View.GONE);
+                    textViewTextNoRequestingUsers.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
+
     @Override
     public void onResume() {
 
-        new ParseURL().execute();
+        refresh = true;
+        new Test().execute();
         super.onResume();
     }
 }
