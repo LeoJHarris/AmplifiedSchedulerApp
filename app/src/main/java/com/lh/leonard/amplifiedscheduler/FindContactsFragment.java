@@ -248,8 +248,6 @@ public class FindContactsFragment extends Fragment {
                                 break;
                             }
                         }
-
-                        hashMapSTATUS.put(j, 0);
                     }
                 }
             }
@@ -293,16 +291,17 @@ public class FindContactsFragment extends Fragment {
                                     messageToAppend = "";
                                     dialogMessage = "Cancelling contact request to " + personsFoundQuery.get(position).getFullname() + " ...";
                                     postMessage = "Cancelled contact request to " + personsFoundQuery.get(position).getFullname();
-                                } else if (hashMapSTATUS.get(position) == 1) {
+                                } else if (hashMapSTATUS.get(position) == 2) {
                                     title = "Accept Request?";
                                     message = "Do you want to accept ";
                                     messageToAppend = " as a contact?";
                                     dialogMessage = "Adding " + personsFoundQuery.get(position).getFullname() + " to your contact ...";
                                     postMessage = personsFoundQuery.get(position).getFullname() + " has been added to your contacts";
-                                } else if (hashMapSTATUS.get(position) == 1) {
+                                } else if (hashMapSTATUS.get(position) == 3) {
                                     title = "Remove Contact?";
                                     message = "Do you want to remove ";
                                     messageToAppend = " as a contact?";
+                                    dialogMessage = "Removing " + personsFoundQuery.get(position).getFullname() + " as contact ...";
                                     postMessage = personsFoundQuery.get(position).getFullname() + " has been removed from your contacts";
                                 }
 
@@ -393,7 +392,7 @@ public class FindContactsFragment extends Fragment {
 
                                                         public void onClick(DialogInterface dialog, int whichButton) {
 
-                                                            hashMapSTATUS.put(position, 4);
+                                                            hashMapSTATUS.put(position, 2);
                                                             dialog.dismiss();
                                                             ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
                                                             ringProgressDialog.setCancelable(false);
@@ -417,7 +416,6 @@ public class FindContactsFragment extends Fragment {
 
                                                     public void onClick(DialogInterface dialog, int whichButton) {
 
-                                                        hashMapSTATUS.put(position, 2);
                                                         dialog.dismiss();
                                                         ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...", dialogMessage, true);
                                                         ringProgressDialog.setCancelable(false);

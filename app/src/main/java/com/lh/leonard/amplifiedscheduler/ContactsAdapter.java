@@ -34,17 +34,16 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     Drawable drawableContacts;
     Drawable drawableActionRequired;
     HashMap<Integer, Integer> hashMap = new HashMap<>();
+    int VAL;
 
 
-    public ContactsAdapter(List<Person> list) {
-
+    public ContactsAdapter(List<Person> list, int val) {
 
         listSlots = list;
-
+        VAL = val;
     }
 
     public ContactsAdapter(List<Person> list, HashMap<Integer, Integer> hashMap) {
-
 
         listSlots = list;
         this.hashMap = hashMap;
@@ -68,16 +67,25 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     @Override
     public void onBindViewHolder(ContactViewHolder slotViewHolder, int i) {
 
-        if (hashMap.get(i) != null) {
-            if (hashMap.get(i) == 1) {
-                slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRequesting, null);
+        if (VAL == 0) {
+            slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRequesting, null);
+        } else if (VAL == 1) {
+            slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
+        } else {
+            if (hashMap.get(i) != null) {
+                if (hashMap.get(i) == 1) {
+                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRequesting, null);
 
-            } else if (hashMap.get(i) == 2) {
-                slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
+                } else if (hashMap.get(i) == 2) {
+                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
 
-            } else if (hashMap.get(i) == 3) {
-                slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
+                } else if (hashMap.get(i) == 3) {
+                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
 
+                } else if (hashMap.get(i) == 4) {
+                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
+
+                }
             }
         }
 

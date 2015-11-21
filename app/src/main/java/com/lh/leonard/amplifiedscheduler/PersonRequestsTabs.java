@@ -3,7 +3,6 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -146,7 +145,7 @@ public class PersonRequestsTabs extends Fragment {
 
                     rvRequest.setLayoutManager(llm);
 
-                    adapterRequest = new ContactsAdapter(personsRequestsList);
+                    adapterRequest = new ContactsAdapter(personsRequestsList, 1);
 
                     rvRequest.setAdapter(adapterRequest);
 
@@ -155,38 +154,43 @@ public class PersonRequestsTabs extends Fragment {
                         @Override
                         public void onItemClick(View view, final int position) {
 
+                            if (alertDialog != null) {
 
-                            new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Accept Contact Request")
-                                    .setMessage("Do you want to  accept " + personsRequestsList.get(position).getFullname() + " as a contact")
-                                    .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                                if (!alertDialog.isShowing()) {
+
+                                    new AlertDialog.Builder(v.getContext())
+                                            .setTitle("Accept Contact Request")
+                                            .setMessage("Do you want to  accept " + personsRequestsList.get(position).getFullname() + " as a contact")
+                                            .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+
+                                                    dialog.dismiss();
+                                                    ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
+                                                            "Adding " + personsRequestsList.get(position).getFullname() + " to your contacts ...", true);
+                                                    ringProgressDialog.setCancelable(false);
+                                                    new YesRequest(position).execute();
+                                                }
+                                            })
+                                            .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
+
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+
+                                                    dialog.dismiss();
+                                                    ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
+                                                            "Removing " + personsRequestsList.get(position).getFullname() + " from your contact requests ...", true);
+                                                    ringProgressDialog.setCancelable(false);
+                                                    new NoRequest(val, position).execute();
+
+                                                }
+                                            }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
-
                                             dialog.dismiss();
-                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Adding " + personsRequestsList.get(position).getFullname() + " to your contacts ...", true);
-                                            ringProgressDialog.setCancelable(false);
-                                            new YesRequest(position).execute();
                                         }
-                                    })
-                                    .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
-
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                                            dialog.dismiss();
-                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Removing " + personsRequestsList.get(position).getFullname() + " from your contact requests ...", true);
-                                            ringProgressDialog.setCancelable(false);
-                                            new NoRequest(val, position).execute();
-
-                                        }
-                                    }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    dialog.dismiss();
+                                    }).show();
                                 }
-                            }).show();
+                            }
                         }
 
                         @Override
@@ -265,7 +269,7 @@ public class PersonRequestsTabs extends Fragment {
 
                 //   rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                adapterRequest = new ContactsAdapter(personsRequestsList);
+                adapterRequest = new ContactsAdapter(personsRequestsList,1);
 
                 rvRequest.setAdapter(adapterRequest);
             } else {
@@ -339,7 +343,7 @@ public class PersonRequestsTabs extends Fragment {
 
                 // rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                adapterRequest = new ContactsAdapter(personsRequestsList);
+                adapterRequest = new ContactsAdapter(personsRequestsList,1);
 
                 rvRequest.setAdapter(adapterRequest);
             } else {

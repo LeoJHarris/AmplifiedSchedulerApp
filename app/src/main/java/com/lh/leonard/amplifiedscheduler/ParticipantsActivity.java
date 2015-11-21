@@ -1,7 +1,6 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -126,7 +125,7 @@ public class ParticipantsActivity extends Activity {
                 LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                 rv.setLayoutManager(llm);
 
-                adapter = new ContactsAdapter(slot);
+                adapter = new ContactsAdapter(slot, 0);
 
                 rv.setAdapter(adapter);
 

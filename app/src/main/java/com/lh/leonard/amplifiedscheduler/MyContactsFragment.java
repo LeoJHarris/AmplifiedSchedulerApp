@@ -147,7 +147,7 @@ public class MyContactsFragment extends Fragment {
                     llm = new LinearLayoutManager(v.getContext());
                     rvMyContacts.setLayoutManager(llm);
 
-                    adapter = new ContactsAdapter(myContactsList);
+                    adapter = new ContactsAdapter(myContactsList, 0);
                     rvMyContacts.setAdapter(adapter);
                     rvMyContacts.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rvMyContacts, new RecyclerItemClickListener.OnItemClickListener() {
 
@@ -251,7 +251,7 @@ public class MyContactsFragment extends Fragment {
 
                 Resources r = getResources();
 
-                adapter = new ContactsAdapter(myContactsList);
+                adapter = new ContactsAdapter(myContactsList, 0);
 
                 rvMyContacts.setAdapter(adapter);
 
