@@ -33,6 +33,8 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.google.android.gms.common.ConnectionResult;
@@ -753,20 +755,21 @@ public class CreateSlot extends AppCompatActivity implements
 
             hashMapEvent.put("location", place.getAddress());
 
-            Backendless.Events.dispatch("CreateEvent", hashMapEvent);
+          //  Backendless.Events.dispatch("CreateEvent", hashMapEvent);
 
-//
-//            Backendless.Events.dispatch("CreateEvent", hashMapEvent, new AsyncCallback<Map>() {
-//                @Override
-//                public void handleResponse(Map map) {
-//                    Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                @Override
-//                public void handleFault(BackendlessFault backendlessFault) {
-//                    Toast.makeText(getApplicationContext(), "Error: Could not create event", Toast.LENGTH_LONG).show();
-//                }
-//            });
+
+            Backendless.Events.dispatch("CreateEvent", hashMapEvent, new AsyncCallback<Map>() {
+                @Override
+                public void handleResponse(Map map) {
+
+                    Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    Toast.makeText(getApplicationContext(), "Error: Could not create event", Toast.LENGTH_LONG).show();
+                }
+            });
 
 
             //TODO reused code below here from multiple class Should make a class and method maybe
