@@ -3,7 +3,6 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +32,8 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.google.android.gms.common.ConnectionResult;
@@ -46,7 +47,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -564,8 +564,8 @@ public class CreateSlot extends AppCompatActivity implements
         switch (id) {
             case TIME_DIALOG_ID:
 
-                Date date = new Date();
-                Toast.makeText(CreateSlot.this, String.valueOf(date.getTime()), Toast.LENGTH_SHORT).show();
+                // Date date = new Date();
+                // Toast.makeText(CreateSlot.this, String.valueOf(date.getTime()), Toast.LENGTH_SHORT).show(); TODO check date is valid
 
                 // set time picker as current time
                 return new TimePickerDialog(this, timePickerListener, hour, minute,
@@ -706,12 +706,11 @@ public class CreateSlot extends AppCompatActivity implements
 
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
-        ProgressDialog ringProgressDialog;
 
         @Override
         protected void onPreExecute() {
-            ringProgressDialog = ProgressDialog.show(CreateSlot.this, "Please wait ...", "Sending event ...", true);
-            ringProgressDialog.setCancelable(false);
+//            ringProgressDialog = ProgressDialog.show(CreateSlot.this, "Please wait ...", "Sending event ...", true);
+//            ringProgressDialog.setCancelable(false);
             super.onPreExecute();
         }
 
@@ -727,69 +726,58 @@ public class CreateSlot extends AppCompatActivity implements
             //  String endDateTime = dateFormatSet.toString() + " " + justEndTime;
 
 
-            Slot slot = new Slot();
-            slot.setSubject(subject);
-            slot.setMessage(message);
-            slot.setMaxattendees(numberAttendeesAvaliable);
-            // slot.setAppointmentOnly(appointmentBoolean);
-            slot.setDateofslot(dateFormatSet.toString());
-            slot.setStart(justStartTime);
-            slot.setEnd(justEndTime);
-            slot.setMaxattendees(numberAttendeesAvaliable);
-            slot.setPhone(personLoggedIn.getPhone());
+            HashMap<String, Object> hashMapEvent = new HashMap<>();
+            hashMapEvent.put("subject", subject);
+            hashMapEvent.put("message", message);
+            hashMapEvent.put("date", dateFormatSet.toString());
+            hashMapEvent.put("starttime", justStartTime);
+            hashMapEvent.put("endtime", justEndTime);
+            hashMapEvent.put("attendees", numberAttendeesAvaliable);
+            hashMapEvent.put("phone", personLoggedIn.getPhone());
+            hashMapEvent.put("host", personLoggedIn.getFullname());
+            hashMapEvent.put("loggedinperson", personLoggedIn.getObjectId());
+
+            int o = 0;
+            for (Person pId : addedContactsForSlot) {
+
+                hashMapEvent.put(String.valueOf(o), pId.getObjectId());
+                o++;
+            }
+
+            hashMapEvent.put("size", o);
 
             LatLng latLngPlace = place.getLatLng();
 
-            GeoPoint geoPlace = new GeoPoint(latLngPlace.latitude, latLngPlace.longitude);
+            hashMapEvent.put("lat", latLngPlace.latitude);
+            hashMapEvent.put("long", latLngPlace.longitude);
 
-            Map<String, Object> locationMap = new HashMap<>();
-            locationMap.put("location", place.getAddress());
-            geoPlace.setMetadata(locationMap);
+            hashMapEvent.put("location", place.getAddress());
 
-            // slot.setPlace(place.getAddress().toString());
-            slot.setOwnername(personLoggedIn.getFullname());
-
-            // eventLocation has the data from the map activity
-            //  if (eventLocation != null) {
-
-            Map<String, Object> metaMap = new HashMap<>();
-            metaMap.put("slot", slot);
-            geoPlace.setMetadata(metaMap);
+            //  Backendless.Events.dispatch("CreateEvent", hashMapEvent);
 
 
-            slot.setLocation(geoPlace);
-            //  }
-            Slot savedSlot = Backendless.Data.save(slot);
+            Backendless.Events.dispatch("CreateEvent", hashMapEvent, new AsyncCallback<Map>() {
+                @Override
+                public void handleResponse(Map map) {
+
+                    Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    Toast.makeText(getApplicationContext(), "Error: Could not create event", Toast.LENGTH_LONG).show();
+                }
+            });
 
 
             //TODO reused code below here from multiple class Should make a class and method maybe
 
-            ArrayList<String> relationProps = new ArrayList();
-            relationProps.add("mycreatedslots");
-
-            Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
-
-            personLoggedIn.addSlotToMyCreatedSlot(savedSlot);
-
-            Backendless.Data.save(personLoggedIn);
-
             // For all the contacts add to their pending response slot
             for (Person pId : addedContactsForSlot) {
-
-                Person personContact = Backendless.Data.of(Person.class).findById(pId.objectId);
-                ArrayList<String> contactRelationProps = new ArrayList();
-                relationProps.add("pendingresponseslots");
-                //relationProps.add("unseenSlots");
 
                 if (sendSMS) {
                     sendsmss(pId.getPhone(), message, subject, dateFormatSet.toString(), justStartTime);
                 }
-
-                Backendless.Data.of(Person.class).loadRelations(personContact, contactRelationProps);
-                personContact.addSlotToPendingResponseSlot(savedSlot);
-                //personContact.addToUnseenEvents(savedSlot);
-
-                Backendless.Data.save(personContact);
             }
             return null;
         }
@@ -803,10 +791,7 @@ public class CreateSlot extends AppCompatActivity implements
             slotEndTime.setText("Set End Time");
             slotSubjectEditText.setText("");
             slotMessageEditText.setText("");
-
-            ringProgressDialog.dismiss();
-
-            Toast.makeText(CreateSlot.this, "Event Sent", Toast.LENGTH_LONG).show();
+            // ringProgressDialog.dismiss();
         }
     }
 

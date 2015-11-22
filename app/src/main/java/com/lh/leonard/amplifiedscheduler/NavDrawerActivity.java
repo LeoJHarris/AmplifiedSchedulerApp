@@ -204,6 +204,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
         Fragment HomeFragment = getFragmentManager().findFragmentByTag("home_tag");
 
+
         if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
 
             if (Drawer == null && mRecyclerView == null) {
@@ -277,8 +278,12 @@ public class NavDrawerActivity extends AppCompatActivity {
                 ).show();
             }
         } else {
-            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                fragmentManager.popBackStackImmediate();
+            if (Drawer.isDrawerOpen(mRecyclerView)) {
+                Drawer.closeDrawer(mRecyclerView);
+            } else {
+                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                    fragmentManager.popBackStackImmediate();
+                }
             }
         }
     }

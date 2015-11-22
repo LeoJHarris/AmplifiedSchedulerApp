@@ -131,6 +131,8 @@ public class FindContactsFragment extends Fragment {
                                                               } else {
                                                                   editHintSearchContacts.setText("Search users by email address first or last name.");
                                                                   editHintSearchContacts.setVisibility(View.VISIBLE);
+                                                                  progressBarFindContacts.setVisibility(View.GONE);
+                                                                  RLProgressBar.setVisibility(View.GONE);
                                                                   rv.setAdapter(null);
                                                               }
 
