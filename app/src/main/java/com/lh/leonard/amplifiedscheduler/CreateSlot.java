@@ -3,7 +3,6 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -707,12 +706,11 @@ public class CreateSlot extends AppCompatActivity implements
 
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
-        ProgressDialog ringProgressDialog;
 
         @Override
         protected void onPreExecute() {
-            ringProgressDialog = ProgressDialog.show(CreateSlot.this, "Please wait ...", "Sending event ...", true);
-            ringProgressDialog.setCancelable(false);
+//            ringProgressDialog = ProgressDialog.show(CreateSlot.this, "Please wait ...", "Sending event ...", true);
+//            ringProgressDialog.setCancelable(false);
             super.onPreExecute();
         }
 
@@ -755,7 +753,7 @@ public class CreateSlot extends AppCompatActivity implements
 
             hashMapEvent.put("location", place.getAddress());
 
-          //  Backendless.Events.dispatch("CreateEvent", hashMapEvent);
+            //  Backendless.Events.dispatch("CreateEvent", hashMapEvent);
 
 
             Backendless.Events.dispatch("CreateEvent", hashMapEvent, new AsyncCallback<Map>() {
@@ -793,7 +791,7 @@ public class CreateSlot extends AppCompatActivity implements
             slotEndTime.setText("Set End Time");
             slotSubjectEditText.setText("");
             slotMessageEditText.setText("");
-            ringProgressDialog.dismiss();
+            // ringProgressDialog.dismiss();
         }
     }
 
