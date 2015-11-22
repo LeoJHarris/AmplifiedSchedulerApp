@@ -128,7 +128,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
 
             for (int j = 0; j < slot.size(); j++) {
                 if (slot.get(j).getMaxattendees() != 0) {
-                    if (slot.get(j).attendees.size() >= slot.get(j).getMaxattendees() || slot.get(j).parseDateString().compareTo(date) < 0) {
+                    if (slot.get(j).attendees.size() >= slot.get(j).getMaxattendees() || slot.get(j).parseDateString().before(date)) {
                         slot.remove(j);
                     }
                 }

@@ -128,7 +128,7 @@ public class MyCreatedSlots extends Fragment {
             slot = slots.getData();
 
            for(int j = 0; j < slot.size(); j++) {
-                if (slot.get(j).parseDateString().compareTo(date) < 0) {
+                if (slot.get(j).parseDateString().before(date)) {
 
                     Backendless.Geo.removePoint(slot.get(j).getLocation());
                     Backendless.Persistence.of(Slot.class).remove(slot.get(j));

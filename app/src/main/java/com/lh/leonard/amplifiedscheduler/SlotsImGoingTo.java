@@ -127,7 +127,7 @@ public class SlotsImGoingTo extends Fragment {
             slot = slots.getData();
 
             for (int j = 0; j < slot.size(); j++) {
-                if (slot.get(j).parseDateString().compareTo(date) < 0) {
+                if (slot.get(j).parseDateString().before(date)) {
                     slot.remove(j);
                 }
             }
