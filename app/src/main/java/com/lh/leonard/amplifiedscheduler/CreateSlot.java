@@ -301,7 +301,7 @@ public class CreateSlot extends AppCompatActivity implements
 
                                 for (int j = 0; j < selectedContacts.length; j++) {
 
-                                    if (selectedContacts[j] != " ") {
+                                    if (selectedContacts[j] != " " && selectedContacts[j] != "") {
 
 
                                         addedContactsForSlot.add(myContactsPersonsList.get(Integer.parseInt(selectedContacts[j].replaceAll("\\s+", ""))));

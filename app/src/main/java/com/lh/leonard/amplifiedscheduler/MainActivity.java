@@ -54,7 +54,6 @@ public class MainActivity extends Activity {
 
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
-        new DoStuff().execute();
 
         extras = getIntent().getExtras();
 
@@ -128,7 +127,6 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(Void result) {
 
-
             MainActivity.this.setContentView(R.layout.activity_main);
 
             useBackButton = false;
@@ -161,7 +159,6 @@ public class MainActivity extends Activity {
                 }
             }
 
-
             editTextUsername = (EditText) findViewById(R.id.emailSignIn);
             editTextPassword = (EditText) findViewById(R.id.passwordSignIn);
             saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
@@ -171,7 +168,6 @@ public class MainActivity extends Activity {
                 editTextPassword.setText(passwordDecrypted);
                 editTextUsername.setText(usernameDecrypted);
             }
-
 
             Button buttonSignIn = (Button) findViewById(R.id.buttonSignIn);
             AutoResizeTextView buttonForgotPassword = (AutoResizeTextView) findViewById(R.id.buttonForgotPassword);
@@ -357,33 +353,4 @@ public class MainActivity extends Activity {
             });
         }
     }
-
-
-    private class DoStuff extends AsyncTask<Void, Integer, Void> {
-
-        @Override
-        protected void onPreExecute() {
-
-
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-        }
-    }
-
-
 }
