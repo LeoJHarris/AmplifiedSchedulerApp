@@ -12,7 +12,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -69,7 +71,6 @@ public class CreateSlot extends AppCompatActivity implements
     private TextView dateView;
     Calendar c = Calendar.getInstance();
     private int year, month, day;
-
 
     CheckBox checkBoxAppointmentRequired;
     Boolean appointmentBoolean = false;
@@ -132,6 +133,8 @@ public class CreateSlot extends AppCompatActivity implements
     String message;
     String locationString;
     Integer numberAttendeesAvaliable = 0;
+    TextView tvSpaces;
+    String my_var;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +172,7 @@ public class CreateSlot extends AppCompatActivity implements
         slotEndTime = (TextView) findViewById(R.id.outputEndTime);
         mAutocompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         TextView textViewHeaderCreateSlot = (TextView) findViewById(R.id.textViewHeaderCreateSlot);
-        TextView tvSpaces = (TextView) findViewById(R.id.tvSpaces);
+        tvSpaces = (TextView) findViewById(R.id.tvSpaces);
         // CheckBox checkBoxAppointmentRequired = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
         buttonSendSlot = (Button) findViewById(R.id.buttonSendSlot);
         //checkBoxString = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
@@ -247,6 +250,26 @@ public class CreateSlot extends AppCompatActivity implements
         updateTime(hour, minute);
 
         new GetContactsThread().execute();
+
+        /**
+         * Unset the var whenever the user types. Validation will
+         * then fail. This is how we enforce selecting from the list.
+         */
+        mAutocompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                my_var = null;
+                mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         recipientsForSlotBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -379,16 +402,17 @@ public class CreateSlot extends AppCompatActivity implements
 
                         String emptys = "";
 
-                        if (subject.trim().equals("") || date.equals("Set Date") || startTime.equals("Set Start Time") || locationString.equals("Please Set Place")) {
+                        if (subject.trim().equals("") || date.equals("Set Date") || startTime.equals("Set Start Time")
+                                || locationString.equals("Please Set Place") || my_var == null) {
 
                             if (subject.trim().equals("")) {
                                 if ((emptys.trim().equals(""))) {
-                                    emptys += "Name";
+                                    emptys += "Title";
                                 } else {
-                                    emptys += ", Name";
+                                    emptys += ", Title";
                                 }
                             }
-                            if (locationString.equals("Please Set Location")) {
+                            if (my_var == null) {
                                 if ((emptys.trim().equals(""))) {
                                     emptys += "Place";
                                 } else {
@@ -464,6 +488,21 @@ public class CreateSlot extends AppCompatActivity implements
                 }
             }
         });
+
+        editTextNumberAttendeesAvaliable.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String string = String.valueOf(editTextNumberAttendeesAvaliable.getText().toString());
+                    if ((!(string.equals("")))) {
+                        editTextNumberAttendeesAvaliable.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
+                        editTextNumberAttendeesAvaliable.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
+                    } else {
+                        editTextNumberAttendeesAvaliable.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                    }
+                }
+            }
+        });
         slotMessageEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             public void onFocusChange(View v, boolean hasFocus) {
@@ -474,21 +513,6 @@ public class CreateSlot extends AppCompatActivity implements
                         slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
                     } else {
                         slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    }
-                }
-            }
-        });
-        mAutocompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String string = mAddressTextView.getText().toString();
-                    if ((!(string.equals("")))) {
-                        mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                        mAutocompleteTextView.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-
-                    } else {
-                        mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     }
                 }
             }
@@ -760,7 +784,24 @@ public class CreateSlot extends AppCompatActivity implements
                 @Override
                 public void handleResponse(Map map) {
 
-                    Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_SHORT).show();
+                    btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                    btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                    btnSlotDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                    recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                    slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                    slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                    buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
+                    addedContactsForSlot.clear();
+                    mAddressTextView.setText("Please Set Place");
+                    mAutocompleteTextView.setText("");
+                    slotSubjectEditText.setText("");
+                    slotsDate.setText("Set Date");
+                    slotStartTime.setText("Set Start Time");
+                    slotEndTime.setText("Set End Time");
+                    slotSubjectEditText.setText("");
+                    slotMessageEditText.setText("");
+                    // ringProgressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -784,14 +825,6 @@ public class CreateSlot extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(Void result) {
-
-            slotSubjectEditText.setText("");
-            slotsDate.setText("Set Date");
-            slotStartTime.setText("Set Start Time");
-            slotEndTime.setText("Set End Time");
-            slotSubjectEditText.setText("");
-            slotMessageEditText.setText("");
-            // ringProgressDialog.dismiss();
         }
     }
 
@@ -873,6 +906,9 @@ public class CreateSlot extends AppCompatActivity implements
             = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            my_var = mPlaceArrayAdapter.getItem(position).toString();
+            mAutocompleteTextView.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
+            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
             final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
             Log.i(LOG_TAG, "Selected: " + item.description);
@@ -882,6 +918,7 @@ public class CreateSlot extends AppCompatActivity implements
             Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
         }
     };
+
 
     private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
             = new ResultCallback<PlaceBuffer>() {

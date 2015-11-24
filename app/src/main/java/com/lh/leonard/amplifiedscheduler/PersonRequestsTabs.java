@@ -1,6 +1,7 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -47,7 +48,7 @@ public class PersonRequestsTabs extends Fragment {
     List<Person> personsRequestsList;
     private ProgressBar progressBarRequesting;
     AutoResizeTextView textViewTextNoRequestingUsers;
-    //ProgressDialog ringProgressDialog;
+    ProgressDialog ringProgressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -164,9 +165,9 @@ public class PersonRequestsTabs extends Fragment {
                                         public void onClick(DialogInterface dialog, int whichButton) {
 
                                             dialog.dismiss();
-//                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-//                                                    "Adding " + personsRequestsList.get(position).getFullname() + " to your contacts ...", true);
-//                                            ringProgressDialog.setCancelable(false);
+                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
+                                                    "Adding " + personsRequestsList.get(position).getFullname() + " to your contacts ...", true);
+                                            ringProgressDialog.setCancelable(false);
                                             new YesRequest(position).execute();
                                         }
                                     })
@@ -175,9 +176,9 @@ public class PersonRequestsTabs extends Fragment {
                                         public void onClick(DialogInterface dialog, int whichButton) {
 
                                             dialog.dismiss();
-//                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-//                                                    "Removing " + personsRequestsList.get(position).getFullname() + " from your contact requests ...", true);
-//                                            ringProgressDialog.setCancelable(false);
+                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
+                                                    "Removing " + personsRequestsList.get(position).getFullname() + " from your contact requests ...", true);
+                                            ringProgressDialog.setCancelable(false);
                                             new NoRequest(val, position).execute();
 
                                         }
@@ -279,7 +280,7 @@ public class PersonRequestsTabs extends Fragment {
                 progressBarRequesting.setVisibility(View.GONE);
                 textViewTextNoRequestingUsers.setVisibility(View.VISIBLE);
             }
-            //   ringProgressDialog.dismiss();
+            ringProgressDialog.dismiss();
             Toast.makeText(v.getContext(), removedFullname + " added as a contact", Toast.LENGTH_SHORT).show();
         }
     }
@@ -351,7 +352,7 @@ public class PersonRequestsTabs extends Fragment {
                 rvRequest.setVisibility(View.GONE);
                 textViewTextNoRequestingUsers.setVisibility(View.VISIBLE);
             }
-            // ringProgressDialog.dismiss();
+            ringProgressDialog.dismiss();
             Toast.makeText(v.getContext(), removedFullname + " rejected as contact", Toast.LENGTH_SHORT).show();
         }
     }
