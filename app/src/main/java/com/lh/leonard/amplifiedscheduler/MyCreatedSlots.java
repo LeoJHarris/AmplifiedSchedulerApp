@@ -127,14 +127,14 @@ public class MyCreatedSlots extends Fragment {
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
             slot = slots.getData();
 
-           for(int j = 0; j < slot.size(); j++) {
-                if (slot.get(j).parseDateString().compareTo(date) < 0) {
-
-                    Backendless.Geo.removePoint(slot.get(j).getLocation());
-                    Backendless.Persistence.of(Slot.class).remove(slot.get(j));
-                    slot.remove(j);
-                }
-            }
+//           for(int j = 0; j < slot.size(); j++) {
+//              //  if (slot.get(j).parseDateString().before(date)) {
+//
+//                    Backendless.Geo.removePoint(slot.get(j).getLocation());
+//                    Backendless.Persistence.of(Slot.class).remove(slot.get(j));
+//                    slot.remove(j);
+//              //  }
+//            }
 
         return null;
         }

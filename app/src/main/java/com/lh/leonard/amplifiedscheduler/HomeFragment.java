@@ -136,11 +136,11 @@ public class HomeFragment extends Fragment {
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
-            for (int j = 0; j < invitedEvents; j++) {
-                if (personLoggedIn.getPendingResponseSlot().get(j).parseDateString().compareTo(date) < 0) {
-                    personLoggedIn.getPendingResponseSlot().remove(j);
-                }
-            }
+//            for (int j = 0; j < invitedEvents; j++) {
+//                if (personLoggedIn.getPendingResponseSlot().get(j).parseDateString().compareTo(date) < 0) {
+//                    personLoggedIn.getPendingResponseSlot().remove(j);
+//                }
+//            }
             personLoggedIn.getPendingResponseSlot().size();
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {

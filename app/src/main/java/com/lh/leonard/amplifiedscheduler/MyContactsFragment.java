@@ -5,6 +5,7 @@ package com.lh.leonard.amplifiedscheduler;
  */
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Typeface;
@@ -33,6 +34,7 @@ import java.util.Map;
 
 public class MyContactsFragment extends Fragment {
 
+    private ProgressBar progressBarRequesting;
     List<Person> persons;
     Person personLoggedIn;
     BackendlessUser loggedInUser = Backendless.UserService.CurrentUser();
@@ -49,6 +51,7 @@ public class MyContactsFragment extends Fragment {
     AlertDialog dialog;
     LinearLayoutManager llm;
     String removedFullName;
+    ProgressDialog ringProgressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -158,8 +161,10 @@ public class MyContactsFragment extends Fragment {
                                     .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
+                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
+                                                    "Removing " + myContactsList.get(position).getFullname() + " from your contacts ...", true);
+                                            ringProgressDialog.setCancelable(false);
                                             new RemoveContact(position).execute();
-                                            dialog.dismiss();
                                         }
                                     })
                                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -255,6 +260,7 @@ public class MyContactsFragment extends Fragment {
                 rvMyContacts.setVisibility(View.GONE);
                 textViewTextNoContacts.setVisibility(View.VISIBLE);
             }
+            ringProgressDialog.dismiss();
             Toast.makeText(getContext(), removedFullName + " was removed from contacts", Toast.LENGTH_SHORT).show();
         }
     }

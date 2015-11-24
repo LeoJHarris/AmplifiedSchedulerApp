@@ -315,22 +315,22 @@ public class NavDrawerActivity extends AppCompatActivity {
             int sizeGoingToEvents = person.getGoingToSlot().size();
             int sizeMyCreatedEvents = person.getMyCreatedSlot().size();
 
-            for (int j = 0; j < sizeGoingToEvents; j++) {
-                if (person.getGoingToSlot().get(j).parseDateString().compareTo(date) < 0) {
-                    person.getGoingToSlot().remove(j);
-                }
-            }
-
-            for (int j = 0; j < sizePendingResponseEvents; j++) {
-                if (person.getPendingResponseSlot().get(j).parseDateString().compareTo(date) < 0) {
-                    person.getPendingResponseSlot().remove(j);
-                }
-            }
-            for (int j = 0; j < sizeMyCreatedEvents; j++) {
-                if (person.getMyCreatedSlot().get(j).parseDateString().compareTo(date) < 0) {
-                    person.getMyCreatedSlot().remove(j);
-                }
-            }
+//            for (int j = 0; j < sizeGoingToEvents; j++) {
+//              //  if (person.getGoingToSlot().get(j).parseDateString().compareTo(date) < 0) {
+//                    person.getGoingToSlot().remove(j);
+//                }
+//         //   }
+//
+//            for (int j = 0; j < sizePendingResponseEvents; j++) {
+//           //     if (person.getPendingResponseSlot().get(j).parseDateString().before(date)) {
+//                    person.getPendingResponseSlot().remove(j);
+//           //     }
+//            }
+//            for (int j = 0; j < sizeMyCreatedEvents; j++) {
+//          //      if (person.getMyCreatedSlot().get(j).parseDateString().before(date)) {
+//                    person.getMyCreatedSlot().remove(j);
+//           //     }
+//            }
 
             sizePendingResponseEvents = person.getPendingResponseSlot().size();
             sizeGoingToEvents = person.getGoingToSlot().size();

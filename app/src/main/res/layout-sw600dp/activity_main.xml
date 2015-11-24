@@ -87,7 +87,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_weight="1"
                     android:text="Remember me"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -109,7 +109,7 @@
                 android:gravity="center"
                 android:paddingTop="25dp"
                 android:text="Forgot Password?"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
 
         </LinearLayout>
@@ -130,7 +130,7 @@
                 android:gravity="center"
                 android:paddingTop="25dp"
                 android:text="Create Account"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
         </LinearLayout>
     </RelativeLayout>
@@ -151,7 +151,7 @@
             android:gravity="center"
             android:paddingTop="35dp"
             android:text="App Designed And Made By Leonard Harris"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="15sp" />
     </LinearLayout>
 

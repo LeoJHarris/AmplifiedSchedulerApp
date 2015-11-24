@@ -126,11 +126,11 @@ public class SlotsImGoingTo extends Fragment {
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
             slot = slots.getData();
 
-            for (int j = 0; j < slot.size(); j++) {
-                if (slot.get(j).parseDateString().compareTo(date) < 0) {
-                    slot.remove(j);
-                }
-            }
+//            for (int j = 0; j < slot.size(); j++) {
+//              //  if (slot.get(j).parseDateString().before(date)) {
+//                    slot.remove(j);
+//              //  }
+//            }
 
             return null;
         }

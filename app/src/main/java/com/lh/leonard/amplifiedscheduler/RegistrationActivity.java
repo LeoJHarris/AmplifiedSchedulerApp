@@ -6,8 +6,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -22,6 +25,7 @@ import com.backendless.async.callback.BackendlessCallback;
 
 public class RegistrationActivity extends ActionBarActivity {
 
+    String my_var;
     Drawable tickIconDraw;
     Drawable crossIconDraw;
     ProgressDialog ringProgressDialog;
@@ -39,7 +43,7 @@ public class RegistrationActivity extends ActionBarActivity {
 
     Drawable passwordBadIconDraw;
     Drawable emailBadIconDraw;
-
+    ArrayAdapter<String> adapter;
     Validator validator = new Validator();
 
     @Override
@@ -94,7 +98,7 @@ public class RegistrationActivity extends ActionBarActivity {
         // Get the string array
         String[] countries = getResources().getStringArray(R.array.countries_array);
         // Create the adapter and set it to the AutoCompleteTextView
-        ArrayAdapter<String> adapter =
+        adapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
@@ -144,66 +148,64 @@ public class RegistrationActivity extends ActionBarActivity {
                         && phone.toString().equals("") && county.toString().equals("")
                         && password.toString().equals("") &&
                         passwordConfirm.toString().equals("")
-                        && email.toString().equals(""))) {
-                    {
+                        && email.toString().equals("")) && my_var != null) {
 
-                        //TODO Create Person instance with name and additional info
+                    //TODO Create Person instance with name and additional info
 
-                        if (password.toString().equals(passwordConfirm.toString())) {
+                    if (password.toString().equals(passwordConfirm.toString())) {
 
-                            if (validator.isPasswordValid(passwordConfirm)) {
+                        if (validator.isPasswordValid(passwordConfirm)) {
 
-                                if (validator.isValidEmail(email)) {
+                            if (validator.isValidEmail(email)) {
 
-                                    ringProgressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait ...", "Signing in ...", true);
-                                    ringProgressDialog.setCancelable(false);
+                                ringProgressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait ...", "Signing in ...", true);
+                                ringProgressDialog.setCancelable(false);
 
-                                    BackendlessUser user = new BackendlessUser();
+                                BackendlessUser user = new BackendlessUser();
 
-                                    user.setEmail(email.toString());
-                                    user.setPassword(password.toString());
+                                user.setEmail(email.toString());
+                                user.setPassword(password.toString());
 
-                                    //TODO SEND ME TEXT; check that Cell phone is correct
+                                //TODO SEND ME TEXT; check that Cell phone is correct
 
 
-                                    Person person = new Person();
-                                    person.setFname(fname.toString());
-                                    person.setLname(lname.toString());
-                                    person.setEmail(email.toString());
-                                    person.setPhone(phone.toString());
-                                    person.setCountry(county.toString());
-                                    person.setFullname(fname.toString() + " " + lname.toString()); // TODO Make textbox for full name
+                                Person person = new Person();
+                                person.setFname(fname.toString());
+                                person.setLname(lname.toString());
+                                person.setEmail(email.toString());
+                                person.setPhone(phone.toString());
+                                person.setCountry(county.toString());
+                                person.setFullname(fname.toString() + " " + lname.toString()); // TODO Make textbox for full name
 
-                                    user.setProperty("persons", person);
+                                user.setProperty("persons", person);
 
-                                    Backendless.UserService.register(user, new BackendlessCallback<BackendlessUser>() {
-                                        @Override
-                                        public void handleResponse(BackendlessUser backendlessUser) {
+                                Backendless.UserService.register(user, new BackendlessCallback<BackendlessUser>() {
+                                    @Override
+                                    public void handleResponse(BackendlessUser backendlessUser) {
 
-                                            //TODO Threading when users registers, show spinner.
+                                        //TODO Threading when users registers, show spinner.
 
-                                            Log.i("Registration", backendlessUser.getEmail() + " successfully registered");
+                                        Log.i("Registration", backendlessUser.getEmail() + " successfully registered");
 
-                                            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                                            intent.putExtra("nameRegistered", fname + "," + lname);
+                                        Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                                        intent.putExtra("nameRegistered", fname + "," + lname);
 
-                                            startActivity(intent);
-                                        }
+                                        startActivity(intent);
+                                    }
 
 //                        public void handleFault(BackendlessFault fault) {
 //                            // an error has occurred, the error code can be retrieved with fault.getCode() // TODO: use getCode and provide appriate user feedback http://backendless.com/documentation/users/android/users_user_registration.htm
 //                            Toast.makeText(getApplicationContext(), "Please re-enter valid details" + fault.getCode(), Toast.LENGTH_LONG).show();
 //                        }
-                                    });
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com", Toast.LENGTH_LONG).show();
-                                }
+                                });
                             } else {
-                                Toast.makeText(getApplicationContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Passwords did not match, please check passwords match", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Passwords did not match, please check passwords match", Toast.LENGTH_LONG).show();
                     }
 
                 } else {
@@ -307,14 +309,32 @@ public class RegistrationActivity extends ActionBarActivity {
                 }
             }
         });
-        textViewCountry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+        textViewCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if ((!(textViewCountry.getText().toString().equals("")))) {
-                    textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryGoodIconDraw, null, tickIconDraw, null);
-                } else {
-                    textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryIconDraw, null, null, null);
-                }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                my_var = adapter.getItem(position).toString();
+                textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryGoodIconDraw, null, tickIconDraw, null);
+
+            }
+        });
+        /**
+         * Unset the var whenever the user types. Validation will
+         * then fail. This is how we enforce selecting from the list.
+         */
+        textViewCountry.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                my_var = null;
+                textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryIconDraw, null, null, null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
     }
