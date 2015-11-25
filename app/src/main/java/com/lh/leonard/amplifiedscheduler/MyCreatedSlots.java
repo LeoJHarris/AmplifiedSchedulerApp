@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.util.Date;
@@ -268,9 +270,19 @@ public class MyCreatedSlots extends Fragment {
 
             args.put("event", slot.get(positionInList).getObjectId());
 
-            Backendless.Events.dispatch("ManageEvent", args);
+            Backendless.Events.dispatch("ManageEvent", args, new AsyncCallback<Map>() {
+                        @Override
+                        public void handleResponse(Map map) {
+                            Toast.makeText(v.getContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();
+                        }
 
-            slot.remove(positionInList);
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+
+                        }
+                    });
+
+                    slot.remove(positionInList);
 
             return null;
         }
@@ -302,7 +314,6 @@ public class MyCreatedSlots extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
             }
-            Toast.makeText(v.getContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 
