@@ -202,9 +202,9 @@ public class MyCreatedSlotsDialog extends Activity {
 
                 }
 
-            } else {
-                textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
-            }
+           }// else {
+//                //textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
+//            }
 
             if (slotSelected.getLocation() != null) {
                 if (addresses != null) {

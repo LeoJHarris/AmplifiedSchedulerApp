@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.kobakei.ratethisapp.RateThisApp;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +52,12 @@ public class HomeFragment extends Fragment {
         Backendless.Data.mapTableToClass("Person", Person.class);
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+
+
+            // Monitor launch times and interval from installation
+            RateThisApp.onStart(getActivity());
+            // If the criteria is satisfied, "Rate this app" dialog will be shown
+            RateThisApp.showRateDialogIfNeeded(getActivity());
 
 
         AutoResizeTextView welcomeLabel = (AutoResizeTextView) v.findViewById(R.id.textViewWelcomeLabel);

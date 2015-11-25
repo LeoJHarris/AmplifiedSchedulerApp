@@ -24,11 +24,14 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyCreatedSlots extends Fragment {
 
@@ -136,7 +139,7 @@ public class MyCreatedSlots extends Fragment {
 //              //  }
 //            }
 
-        return null;
+            return null;
         }
 
         @Override
@@ -238,7 +241,6 @@ public class MyCreatedSlots extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-
             StringBuilder whereClause = new StringBuilder();
             whereClause.append("Slot[attendees]");
             whereClause.append(".objectId='").append(slot.get(positionInList).getObjectId()).append("'");
@@ -259,31 +261,29 @@ public class MyCreatedSlots extends Fragment {
                 sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
             }
 
+            eventRemoved = slot.get(positionInList).getSubject();
 
             // Deleting process
 
-            List<String> relations = new ArrayList<String>();
-            relations.add("myCreatedSlot");
-            Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+            Map<String, String> args = new HashMap<>();
+            args.put("id", "deleteevent");
 
-            int pos = 0;
+            args.put("event", slot.get(positionInList).getObjectId());
 
-            for (int i = 0; i < person.myCreatedSlot.size(); i++) {
+            Backendless.Events.dispatch("ManageEvent", args, new AsyncCallback<Map>() {
+                        @Override
+                        public void handleResponse(Map map) {
+                            Toast.makeText(v.getContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();
+                        }
 
-                if (person.myCreatedSlot.get(i).getObjectId().equals(slot.get(positionInList).getObjectId())) {
-                    pos = i;
-                    break;
-                }
-            }
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
 
-            eventRemoved = slot.get(positionInList).getSubject();
-            if (slot.get(positionInList).getLocation() != null) {
-                Backendless.Geo.removePoint(slot.get(positionInList).getLocation());
-            }
+                        }
+                    });
 
-            Long result = Backendless.Persistence.of(Slot.class).remove(slot.get(positionInList)); // TODO toast "'result' events removed"
+                    slot.remove(positionInList);
 
-            slot.remove(positionInList);
             return null;
         }
 
@@ -307,13 +307,13 @@ public class MyCreatedSlots extends Fragment {
                 rv.setAdapter(adapter);
                 ringProgressDialog.dismiss();
             } else {
+                rv.setAdapter(null);
                 ringProgressDialog.dismiss();
                 searchViewSlots.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
             }
-            Toast.makeText(v.getContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 

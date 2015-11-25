@@ -150,7 +150,7 @@ public class ParticipantsActivity extends Activity {
 
             } else {
                 progressBar.setVisibility(View.GONE);
-                textViewTextNoSlotAvaliable.setText("No one is currently going to this schedule");
+                textViewTextNoSlotAvaliable.setText("No one is currently going to this event");
                 textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
             }
         }

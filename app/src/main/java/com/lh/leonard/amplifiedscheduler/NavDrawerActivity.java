@@ -8,11 +8,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,14 +31,14 @@ import java.util.List;
 
 public class NavDrawerActivity extends AppCompatActivity {
 
-
+    ShareActionProvider mShareActionProvider;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     ProgressDialog ringProgressDialog;
 
     Person personLoggedIn;
-
     int resourceIntPendingResponseEvents;
     int resourceIntPersonsRequestingMe;
+
 
     String valResponseEvents = "";
     String valPersonsRequestingMe = "";
@@ -100,28 +102,6 @@ public class NavDrawerActivity extends AppCompatActivity {
             personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         }
         new GetNavInfo().execute();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void selectItem(int position) {
@@ -196,6 +176,32 @@ public class NavDrawerActivity extends AppCompatActivity {
         }
         if (intent != null) {
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+// Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.share);
+// Fetch and store ShareActionProvider
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+        Intent shareItem = new Intent(Intent.ACTION_SEND);
+        shareItem.setAction(Intent.ACTION_SEND);
+        shareItem.setType("text/plain");
+        shareItem.putExtra(Intent.EXTRA_TEXT, "Text To Share");
+        //mShareActionProvider.setShareIntent(shareItem);
+
+        setShareIntent(shareItem);
+
+        return true;
+    }
+
+    // Call to update the share intent
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
         }
     }
 
