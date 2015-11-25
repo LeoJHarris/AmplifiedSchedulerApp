@@ -21,6 +21,7 @@
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rv"
         android:layout_width="wrap_content"
+        android:scrollbars="vertical"
         android:layout_height="wrap_content"
         android:layout_below="@id/searchViewSlots"
         android:visibility="gone" />
@@ -31,6 +32,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/searchViewFindContacts"
         android:gravity="center"
+        android:textColor="@color/black"
         android:text="You have no events"
         android:textSize="23sp"
         android:visibility="gone" />

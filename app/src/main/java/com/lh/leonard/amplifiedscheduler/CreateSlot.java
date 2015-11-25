@@ -451,7 +451,7 @@ public class CreateSlot extends AppCompatActivity implements
                             Toast.makeText(getApplicationContext(), "Please fill: " + emptys, Toast.LENGTH_SHORT).show();
                         } else {
 
-
+                            Toast.makeText(getApplicationContext(), "Sending event", Toast.LENGTH_LONG).show();
                             new ParseURL().execute();
                         }
                     } else {

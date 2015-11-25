@@ -25,6 +25,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.kobakei.ratethisapp.RateThisApp;
 
 import se.simbio.encryption.Encryption;
 
@@ -46,7 +47,6 @@ public class MainActivity extends Activity {
 
     Boolean useBackButton = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +54,12 @@ public class MainActivity extends Activity {
 
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
+        // Custom criteria: 3 days and 5 launches
+        RateThisApp.Config config = new RateThisApp.Config(30, 20);
+        // Custom title and message
+        config.setTitle(R.string.rta_dialog_title);
+        config.setMessage(R.string.rta_dialog_message);
+        RateThisApp.init(config);
 
         extras = getIntent().getExtras();
 
