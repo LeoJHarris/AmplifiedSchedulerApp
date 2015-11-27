@@ -1,110 +1,128 @@
 package com.lh.leonard.amplifiedscheduler;
 
-import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
+import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class SlotsImGoingTo extends Fragment {
+public class SlotsImGoingTo extends Activity {
 
-    Person person;
-    List<Slot> slot;
-    BackendlessCollection<Person> persons;
-    BackendlessCollection<Slot> slots;
-    SearchView searchViewSlots;
-    AutoResizeTextView textViewTextNoSlotAvaliable;
-    RVAdapter adapter;
-    private ProgressBar progressBar;
-    AlertDialog dialog;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
-    ProgressDialog ringProgressDialog;
-    View v;
+    List<Slot> slotsList;
+    Slot slotSelected;
+    AutoResizeTextView textViewSubject;
+    AutoResizeTextView textViewMessage;
+    AutoResizeTextView textViewDateAndTime;
+    AutoResizeTextView textViewLocation;
+    AutoResizeTextView textViewMyEventSpacesAvaliable;
+    Integer position;
+    // Button buttonCancelSlot;
+    List<Person> personsToSms;
+    BackendlessCollection<Person> personsToSmsCollection;
+    Button buttonMySlotParticipantsSlot;
+    Person person;
+    BackendlessCollection<Slot> slots;
+    SpannableString content;
+    ProgressBar progressBar;
     String eventRemoved;
-    RecyclerView rv;
-    LinearLayoutManager llm;
-
-    Date date = new Date();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.slots_display, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my_created_slots_dialog);
 
-        getActivity().setTitle("Events Going To");
-
-        date.getTime();
-
-        Backendless.Persistence.mapTableToClass("Person", Person.class);
+        Backendless.Data.mapTableToClass("Slot", Slot.class);
+        Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
+        Backendless.Persistence.mapTableToClass("Person", Person.class);
 
-        final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
-        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
-        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
-        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+        final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
-        textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
-        textViewTextNoSlotAvaliable.setTypeface(RobotoCondensedLightItalic);
+        textViewSubject = (AutoResizeTextView) findViewById(R.id.textViewMySlotSubject);
+        textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewMySlotMessage);
+        textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewMySlotDateAndTime);
+        textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewMySlotLocation);
+        textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
+        //buttonCancelSlot = (Button) findViewById(R.id.buttonMySlotCancelSlot);
+        buttonMySlotParticipantsSlot = (Button) findViewById(R.id.buttonMySlotParticipantsSlot);
+
+        textViewSubject.setTypeface(RobotoCondensedLight);
+        textViewMessage.setTypeface(RobotoCondensedLight);
+        textViewDateAndTime.setTypeface(RobotoCondensedLight);
+        textViewLocation.setTypeface(RobotoCondensedLight);
+        textViewMyEventSpacesAvaliable.setTypeface(RobotoCondensedLight);
+        // buttonCancelSlot.setTypeface(regularFont);
+        buttonMySlotParticipantsSlot.setTypeface(RobotoCondensedLight);
+
+        Backendless.Data.mapTableToClass("Slot", Slot.class);
+        Backendless.Data.mapTableToClass("Person", Person.class);
 
         person = (Person) userLoggedIn.getProperty("persons");
 
-        new ParseURL().execute();
+        new LoadMyContacts().execute();
 
-        searchViewSlots = (SearchView) v.findViewById(R.id.searchViewSlots);
+//        buttonCancelSlot.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                new CancelEvent().execute();
+//            }
+//        });
 
-        searchViewSlots.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                                                   public boolean onQueryTextChange(String text) {
+        buttonMySlotParticipantsSlot.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
 
-                                                       if (adapter != null) {
-                                                           if (TextUtils.isEmpty(text)) {
-                                                               adapter.getFilter().filter("");
-                                                           } else {
-                                                               adapter.getFilter().filter(text.toString());
-                                                           }
-                                                       }
-                                                       return true;
-                                                   }
+                                                                Intent participantsIntent = new Intent(SlotsImGoingTo.this, ParticipantsActivity.class);
 
-                                                   @Override
-                                                   public boolean onQueryTextSubmit(String query) {
-                                                       return false;
-                                                   }
-                                               }
+                                                                participantsIntent.putExtra("eventid", slotSelected.getObjectId());
+
+                                                                startActivity(participantsIntent);
+                                                            }
+                                                        }
         );
 
-        return v;
+        textViewLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Intent mapIntent = new Intent(SlotsImGoingTo.this, JustMapActivity.class);
+
+                mapIntent.putExtra("lat", slotSelected.getLocation().getLatitude());
+                mapIntent.putExtra("long", slotSelected.getLocation().getLongitude());
+                mapIntent.putExtra("subject", slotSelected.getSubject());
+                startActivity(mapIntent);
+            }
+        });
     }
 
-    private class ParseURL extends AsyncTask<Void, Integer, Void> {
+    private class LoadMyContacts extends AsyncTask<Void, Integer, List<Address>> {
 
         @Override
         protected void onPreExecute() {
-            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
@@ -114,105 +132,141 @@ public class SlotsImGoingTo extends Fragment {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected List<Address> doInBackground(Void... params) {
+
+            Bundle data = getIntent().getExtras();
+            position = data.getInt("slotRef");
 
             StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Person[goingToSlot]");
+            whereClause.append("Person[mycreatedslot]");
             whereClause.append(".objectId='").append(person.getObjectId()).append("'");
 
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause.toString());
 
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
-            slot = slots.getData();
 
-//            for (int j = 0; j < slot.size(); j++) {
-//              //  if (slot.get(j).parseDateString().before(date)) {
-//                    slot.remove(j);
-//              //  }
+            slotsList = slots.getData();
+
+            slotSelected = slotsList.get(position);
+
+            Geocoder geocoder = new Geocoder(getBaseContext());
+            List<Address> addresses = null;
+
+            try {
+                // Getting a maximum of 3 Address that matches the input text
+                addresses = geocoder.getFromLocation(slotSelected.getLocation().getLatitude(), slotSelected.getLocation().getLongitude(), 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return addresses;
+        }
+
+        @Override
+        protected void onPostExecute(List<Address> addresses) {
+
+
+            if (slotSelected.getSubject() != null) {
+                textViewSubject.setText(slotSelected.getSubject());
+            }
+
+            if (slotSelected.getMessage() != null) {
+                textViewMessage.setText("Message: " + slotSelected.getMessage());
+            }
+
+//            if (slotSelected.getDateofslot() != null) {
+//                if (slotSelected.getStart() != null) {
+//
+//                    if (slotSelected.getEnd() == null) {
+//                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart());
+//
+//                    } else {
+//                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart() + " - " + slotSelected.getEnd());
+//                    }
+//                }
 //            }
+
+//            if (person.fname != null) {
+//                textViewOrganiser = (TextView) findViewById(R.id.textViewMySlotOrganiser);
+//                textViewOrganiser.setText(person.getFname() + " " + person.getLname() + " created this event/slot");
+//            }
+
+            if (slotSelected.getMaxattendees() != 0) {
+
+
+                Integer spacesAvaliable = slotSelected.getMaxattendees();
+                Integer going = slotSelected.getAttendees().size();
+                {
+                    Integer spacesLeft = spacesAvaliable - slotSelected.getAttendees().size();
+                    textViewMyEventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
+
+                }
+
+            }// else {
+//                //textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
+//            }
+
+            if (slotSelected.getLocation() != null) {
+                if (addresses != null) {
+                    for (int i = 0; i < addresses.size(); i++) {
+                        Address address = (Address) addresses.get(i);
+                        String addressText = String.format("%s, %s",
+                                address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                                address.getCountryName());
+
+                        content = new SpannableString("Where: " + addressText);
+                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                        textViewLocation.setText(content); //TODO Button to get Location else just Text
+                        break;
+
+                    }
+                }
+            }
+            progressBar = (ProgressBar) findViewById(R.id.progressBarMyCreatedSlotsDialog);
+            progressBar.setVisibility(View.GONE);
+
+            textViewMyEventSpacesAvaliable.setVisibility(View.VISIBLE);
+            textViewSubject.setVisibility(View.VISIBLE);
+            textViewMessage.setVisibility(View.VISIBLE);
+            textViewLocation.setVisibility(View.VISIBLE);
+            textViewDateAndTime.setVisibility(View.VISIBLE);
+            // buttonCancelSlot.setVisibility(View.VISIBLE);
+            buttonMySlotParticipantsSlot.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private class GetAttendees extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+
+            List<String> relations = new ArrayList<String>();
+            relations.add("attendees");
+            //   relations.add("invitedpersons");
+            slotSelected = Backendless.Data.of(Slot.class).findById(slotSelected.getObjectId(), relations);
 
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            if (isAdded()) {
 
-                if (!slot.isEmpty()) {
 
-                    rv = (RecyclerView) v.findViewById(R.id.rv);
-
-                    rv.setHasFixedSize(true);
-                    llm = new LinearLayoutManager(v.getContext());
-                    rv.setLayoutManager(llm);
-
-                    Resources r = getResources();
-
-                    adapter = new RVAdapter(slot, r);
-
-                    rv.setAdapter(adapter);
-
-                    rv.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rv, new RecyclerItemClickListener.OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(View view, int position) {
-
-                            Intent slotDialogIntent = new Intent(getActivity(), SlotsImGoingToDialog.class);
-
-                            slotDialogIntent.putExtra("slotRef", position);
-
-                            startActivity(slotDialogIntent);
-                        }
-
-                        @Override
-                        public void onItemLongClick(View view, final int position) {
-
-                            dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Not going to " + slot.get(position).getSubject() + "?")
-                                    .setMessage("Do you want to remove " + slot.get(position).getSubject())
-                                    .setIcon(R.drawable.ic_questionmark)
-                                    .setPositiveButton("Remove schedule", new DialogInterface.OnClickListener() {
-
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                                            dialog.dismiss();
-                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Remove schedule " + slot.get(position).getSubject() + " ...", true);
-                                            ringProgressDialog.setCancelable(false);
-                                            new RemoveEvent(position).execute();
-
-                                        }
-                                    }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
-
-                        }
-                    }
-                    ));
-                    progressBar.setVisibility(View.GONE);
-                    rv.setVisibility(View.VISIBLE);
-                    searchViewSlots.setVisibility(View.VISIBLE);
-
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
-                }
-            }
         }
     }
 
-    private class RemoveEvent extends AsyncTask<Void, Integer, Void> {
-
-        int positionInList;
-
-        public RemoveEvent(int positionInList) {
-
-            this.positionInList = positionInList;
-        }
+    private class CancelEvent extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -228,45 +282,48 @@ public class SlotsImGoingTo extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            List<String> relations = new ArrayList<String>();
-            relations.add("goingToSlot");
-            Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relations);
 
-            List<String> relationsSlot = new ArrayList<String>();
-            relations.add("attendees");
-            Slot slotAddAttendee = Backendless.Data.of(Slot.class).findById(slot.get(positionInList), relationsSlot);
+            StringBuilder whereClause = new StringBuilder();
+            whereClause.append("Slot[attendees]");
+            whereClause.append(".objectId='").append(slotSelected.getObjectId()).append("'");
+
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            dataQuery.setWhereClause(whereClause.toString());
+
+            personsToSmsCollection = Backendless.Data.of(Person.class).find(dataQuery);
+            personsToSms = personsToSmsCollection.getData();
+
+            String fullnamePersonLoggedIn = person.getFullname();
+            // String dateofslot = slotSelected.getDateofslot();
+            String subject = slotSelected.getSubject();
+            String placeofSlot = slotSelected.getPlace();
+
+            for (Person pId : personsToSms) {
+
+                //   sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
+            }
+
+
+            // Deleting process
+
+            List<String> relations = new ArrayList<String>();
+            relations.add("myCreatedSlot");
+            Person person1 = Backendless.Data.of(Person.class).findById(person.getObjectId(), relations);
 
             int pos = 0;
 
-            for (int i = 0; i < person1.getGoingToSlot().size(); i++) {
+            for (int i = 0; i < person1.myCreatedSlot.size(); i++) {
 
-                if (person1.getGoingToSlot().get(i).getObjectId().equals(slot.get(positionInList).getObjectId())) {
+                if (person1.myCreatedSlot.get(i).getObjectId().equals(slotSelected.getObjectId())) {
                     pos = i;
                     break;
                 }
             }
 
-            int posAttendees = 0;
+            eventRemoved = slotSelected.getSubject();
+            //  Backendless.Geo.removePoint(slotSelected.getLocation());
 
-            for (int i = 0; i < person1.getGoingToSlot().size(); i++) {
-
-                if (slotAddAttendee.getAttendees().get(i).getObjectId().equals(slot.get(positionInList).getObjectId())) {
-                    posAttendees = i;
-                    break;
-                }
-            }
-
-            sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - Amplified Scheduler: " + person.getFullname() + "  has indicated he/she is no longer going to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
-
-            slotAddAttendee.getAttendees().remove(posAttendees);
-
-            Backendless.Data.of(Slot.class).save(slotAddAttendee);
-
-            person1.getGoingToSlot().remove(pos);
-
-            eventRemoved = slot.get(positionInList).getSubject();
-            slot.remove(positionInList);
-            Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person1);
+            Long result = Backendless.Persistence.of(Slot.class).remove(slotSelected); // TODO toast "'result' events removed"
 
             return null;
         }
@@ -274,46 +331,14 @@ public class SlotsImGoingTo extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
 
-            rv.setAdapter(null);
-
-            if (!slot.isEmpty()) {
-
-                rv.setHasFixedSize(true);
-
-                rv.setLayoutManager(llm);
-
-                // rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
-
-                Resources r = getResources();
-
-                adapter = new RVAdapter(slot, r);
-
-                rv.setAdapter(adapter);
-                ringProgressDialog.dismiss();
-            } else {
-                ringProgressDialog.dismiss();
-                searchViewSlots.setVisibility(View.GONE);
-                rv.setVisibility(View.GONE);
-                progressBar.setVisibility(View.GONE);
-                textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
-            }
-            Toast.makeText(v.getContext(), eventRemoved + " was removed", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
-//TODO SHOULD JUST PASS THE LIST OF NUMBERS _ QUICKER
 
     @JavascriptInterface
-    public void sendsmss(String phoneNumber, String message) {
+    public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
 
-        int lengthToSubString;
-        int lengthMessage = message.length();
-        if (lengthMessage < 300) {
-            lengthToSubString = lengthMessage;
-        } else {
-            lengthToSubString = 300;
-        }
-        String messageSubString = message.substring(0, lengthToSubString);
-
+        String messageSubString = "Automated TXT - Amplified Scheduler: Event" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }

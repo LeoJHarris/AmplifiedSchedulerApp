@@ -3,13 +3,10 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.widget.Button;
@@ -20,7 +17,6 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,13 +24,12 @@ public class MyCreatedSlotsDialog extends Activity {
 
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     List<Slot> slotsList;
-    Slot slotSelected;
     AutoResizeTextView textViewSubject;
     AutoResizeTextView textViewMessage;
     AutoResizeTextView textViewDateAndTime;
     AutoResizeTextView textViewLocation;
-    AutoResizeTextView textViewMyEventSpacesAvaliable;
-    Integer position;
+    AutoResizeTextView textViewMyeventSpacesAvaliable;
+    String objectId;
     // Button buttonCancelSlot;
     List<Person> personsToSms;
     BackendlessCollection<Person> personsToSmsCollection;
@@ -44,6 +39,7 @@ public class MyCreatedSlotsDialog extends Activity {
     SpannableString content;
     ProgressBar progressBar;
     String eventRemoved;
+    Slot event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +60,7 @@ public class MyCreatedSlotsDialog extends Activity {
         textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewMySlotMessage);
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewMySlotDateAndTime);
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewMySlotLocation);
-        textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
+        textViewMyeventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
         //buttonCancelSlot = (Button) findViewById(R.id.buttonMySlotCancelSlot);
         buttonMySlotParticipantsSlot = (Button) findViewById(R.id.buttonMySlotParticipantsSlot);
 
@@ -72,7 +68,7 @@ public class MyCreatedSlotsDialog extends Activity {
         textViewMessage.setTypeface(RobotoCondensedLight);
         textViewDateAndTime.setTypeface(RobotoCondensedLight);
         textViewLocation.setTypeface(RobotoCondensedLight);
-        textViewMyEventSpacesAvaliable.setTypeface(RobotoCondensedLight);
+        textViewMyeventSpacesAvaliable.setTypeface(RobotoCondensedLight);
         // buttonCancelSlot.setTypeface(regularFont);
         buttonMySlotParticipantsSlot.setTypeface(RobotoCondensedLight);
 
@@ -87,7 +83,7 @@ public class MyCreatedSlotsDialog extends Activity {
 //            @Override
 //            public void onClick(View v) {
 //
-//                new CancelEvent().execute();
+//                new Cancelevent().execute();
 //            }
 //        });
 
@@ -97,7 +93,7 @@ public class MyCreatedSlotsDialog extends Activity {
 
                                                                 Intent participantsIntent = new Intent(MyCreatedSlotsDialog.this, ParticipantsActivity.class);
 
-                                                                participantsIntent.putExtra("eventid", slotSelected.getObjectId());
+                                                                participantsIntent.putExtra("eventid", event.getObjectId());
 
                                                                 startActivity(participantsIntent);
                                                             }
@@ -111,15 +107,15 @@ public class MyCreatedSlotsDialog extends Activity {
 
                 Intent mapIntent = new Intent(MyCreatedSlotsDialog.this, JustMapActivity.class);
 
-                mapIntent.putExtra("lat", slotSelected.getLocation().getLatitude());
-                mapIntent.putExtra("long", slotSelected.getLocation().getLongitude());
-                mapIntent.putExtra("subject", slotSelected.getSubject());
+                mapIntent.putExtra("lat", event.getLocation().getLatitude());
+                mapIntent.putExtra("long", event.getLocation().getLongitude());
+                mapIntent.putExtra("subject", event.getSubject());
                 startActivity(mapIntent);
             }
         });
     }
 
-    private class LoadMyContacts extends AsyncTask<Void, Integer, List<Address>> {
+    private class LoadMyContacts extends AsyncTask<Void, Integer, String> {
 
         @Override
         protected void onPreExecute() {
@@ -132,100 +128,69 @@ public class MyCreatedSlotsDialog extends Activity {
         }
 
         @Override
-        protected List<Address> doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
 
             Bundle data = getIntent().getExtras();
-            position = data.getInt("slotRef");
+            objectId = data.getString("objectId");
 
-            StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Person[mycreatedslot]");
-            whereClause.append(".objectId='").append(person.getObjectId()).append("'");
+            event = Backendless.Data.of(Slot.class).findById(objectId);
 
-            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-            dataQuery.setWhereClause(whereClause.toString());
 
-            slots = Backendless.Data.of(Slot.class).find(dataQuery);
+            return (String) event.getLocation().getMetadata("address");
 
-            slotsList = slots.getData();
-
-            slotSelected = slotsList.get(position);
-
-            Geocoder geocoder = new Geocoder(getBaseContext());
-            List<Address> addresses = null;
-
-            try {
-                // Getting a maximum of 3 Address that matches the input text
-                addresses = geocoder.getFromLocation(slotSelected.getLocation().getLatitude(), slotSelected.getLocation().getLongitude(), 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return addresses;
         }
 
         @Override
-        protected void onPostExecute(List<Address> addresses) {
+        protected void onPostExecute(String addresses) {
 
 
-            if (slotSelected.getSubject() != null) {
-                textViewSubject.setText(slotSelected.getSubject());
+            if (event.getSubject() != null) {
+                textViewSubject.setText(event.getSubject());
             }
 
-            if (slotSelected.getMessage() != null) {
-                textViewMessage.setText("Message: " + slotSelected.getMessage());
+            if (event.getMessage() != null) {
+                textViewMessage.setText("Message: " + event.getMessage());
             }
 
-            if (slotSelected.getDateofslot() != null) {
-                if (slotSelected.getStart() != null) {
-
-                    if (slotSelected.getEnd() == null) {
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart());
-
-                    } else {
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart() + " - " + slotSelected.getEnd());
-                    }
-                }
-            }
+//            if (event.getDateofslot() != null) {
+//                if (event.getStart() != null) {
+//
+//                    if (event.getEnd() == null) {
+//                        textViewDateAndTime.setText("When: " + event.getDateofslot() + " @ " + event.getStart());
+//
+//                    } else {
+//                        textViewDateAndTime.setText("When: " + event.getDateofslot() + " @ " + event.getStart() + " - " + event.getEnd());
+//                    }
+//                }
+//            }
 
 //            if (person.fname != null) {
 //                textViewOrganiser = (TextView) findViewById(R.id.textViewMySlotOrganiser);
 //                textViewOrganiser.setText(person.getFname() + " " + person.getLname() + " created this event/slot");
 //            }
 
-            if (slotSelected.getMaxattendees() != 0) {
+            if (event.getMaxattendees() != 0) {
 
 
-                Integer spacesAvaliable = slotSelected.getMaxattendees();
-                Integer going = slotSelected.getAttendees().size();
+                Integer spacesAvaliable = event.getMaxattendees();
+                Integer going = event.getAttendees().size();
                 {
-                    Integer spacesLeft = spacesAvaliable - slotSelected.getAttendees().size();
-                    textViewMyEventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
+                    Integer spacesLeft = spacesAvaliable - event.getAttendees().size();
+                    textViewMyeventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
 
                 }
 
-           }// else {
-//                //textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
+            }// else {
+//                //textViewMyeventSpacesAvaliable.setText("Unlimited Spaces");
 //            }
 
-            if (slotSelected.getLocation() != null) {
-                if (addresses != null) {
-                    for (int i = 0; i < addresses.size(); i++) {
-                        Address address = (Address) addresses.get(i);
-                        String addressText = String.format("%s, %s",
-                                address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                                address.getCountryName());
-
-                        content = new SpannableString("Where: " + addressText);
-                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                        textViewLocation.setText(content); //TODO Button to get Location else just Text
-                        break;
-
-                    }
-                }
+            if (event.getLocation() != null) {
+                textViewLocation.setText((String) event.getLocation().getMetadata("address"));
             }
             progressBar = (ProgressBar) findViewById(R.id.progressBarMyCreatedSlotsDialog);
             progressBar.setVisibility(View.GONE);
 
-            textViewMyEventSpacesAvaliable.setVisibility(View.VISIBLE);
+            textViewMyeventSpacesAvaliable.setVisibility(View.VISIBLE);
             textViewSubject.setVisibility(View.VISIBLE);
             textViewMessage.setVisibility(View.VISIBLE);
             textViewLocation.setVisibility(View.VISIBLE);
@@ -254,7 +219,7 @@ public class MyCreatedSlotsDialog extends Activity {
             List<String> relations = new ArrayList<String>();
             relations.add("attendees");
             //   relations.add("invitedpersons");
-            slotSelected = Backendless.Data.of(Slot.class).findById(slotSelected.getObjectId(), relations);
+            event = Backendless.Data.of(Slot.class).findById(event.getObjectId(), relations);
 
             return null;
         }
@@ -266,7 +231,7 @@ public class MyCreatedSlotsDialog extends Activity {
         }
     }
 
-    private class CancelEvent extends AsyncTask<Void, Integer, Void> {
+    private class Cancelevent extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -285,7 +250,7 @@ public class MyCreatedSlotsDialog extends Activity {
 
             StringBuilder whereClause = new StringBuilder();
             whereClause.append("Slot[attendees]");
-            whereClause.append(".objectId='").append(slotSelected.getObjectId()).append("'");
+            whereClause.append(".objectId='").append(event.getObjectId()).append("'");
 
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause.toString());
@@ -294,13 +259,13 @@ public class MyCreatedSlotsDialog extends Activity {
             personsToSms = personsToSmsCollection.getData();
 
             String fullnamePersonLoggedIn = person.getFullname();
-            String dateofslot = slotSelected.getDateofslot();
-            String subject = slotSelected.getSubject();
-            String placeofSlot = slotSelected.getPlace();
+            // String dateofslot = event.getDateofslot();
+            String subject = event.getSubject();
+            String placeofSlot = event.getPlace();
 
             for (Person pId : personsToSms) {
 
-                sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
+                //   sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
             }
 
 
@@ -314,16 +279,16 @@ public class MyCreatedSlotsDialog extends Activity {
 
             for (int i = 0; i < person1.myCreatedSlot.size(); i++) {
 
-                if (person1.myCreatedSlot.get(i).getObjectId().equals(slotSelected.getObjectId())) {
+                if (person1.myCreatedSlot.get(i).getObjectId().equals(event.getObjectId())) {
                     pos = i;
                     break;
                 }
             }
 
-            eventRemoved = slotSelected.getSubject();
-            //  Backendless.Geo.removePoint(slotSelected.getLocation());
+            eventRemoved = event.getSubject();
+            //  Backendless.Geo.removePoint(event.getLocation());
 
-            Long result = Backendless.Persistence.of(Slot.class).remove(slotSelected); // TODO toast "'result' events removed"
+            Long result = Backendless.Persistence.of(Slot.class).remove(event); // TODO toast "'result' events removed"
 
             return null;
         }
@@ -338,7 +303,7 @@ public class MyCreatedSlotsDialog extends Activity {
     @JavascriptInterface
     public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
 
-        String messageSubString = "Automated TXT - Amplified Scheduler: Event" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
+        String messageSubString = "Automated TXT - Amplified Scheduler: event" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }

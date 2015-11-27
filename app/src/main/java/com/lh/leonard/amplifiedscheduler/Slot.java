@@ -5,6 +5,7 @@ import com.backendless.geo.GeoPoint;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,9 @@ import java.util.List;
  */
 
 public class Slot {
+
+    public Date startdate;
+    public Date endDate;
 
     public String subject;
     public String message;
@@ -24,15 +28,42 @@ public class Slot {
     public String ownerId;
     public String objectId;
     public String owneremailaddress;
-    public String dateofslot;
     public String ownername;
     public GeoPoint location;
     public String phone;
     public List<Person> invitedpersons;
+    public Calendar calStartDate;
     public String place;
+
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setCalDate(Calendar calDate) {
+        this.calStartDate = calDate;
+    }
+
+    public void setStartdate(Date startdate) {
+        this.startdate = startdate;
+    }
+
+    public Date getStartdate() {
+        return startdate;
+    }
 
     public void setInvitedpersons(List<Person> invitedpersons) {
         this.invitedpersons = invitedpersons;
+    }
+
+    public Calendar getStartCalendar() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startdate);
+        return cal;
     }
 
     public String getPlace() {
@@ -82,6 +113,7 @@ public class Slot {
             return "";
         }
     }
+
     public void addAttendee(Person person) {
         if (attendees == null)
             attendees = new ArrayList<Person>();
@@ -96,13 +128,6 @@ public class Slot {
         this.maxattendees = maxattendees;
     }
 
-    public void setDateofslot(String dateofslot) {
-        this.dateofslot = dateofslot;
-    }
-
-    public String getDateofslot() {
-        return dateofslot;
-    }
 
     public String getOwneremailaddress() {
         return owneremailaddress;
@@ -110,6 +135,11 @@ public class Slot {
 
     public String getObjectId() {
         return objectId;
+    }
+
+    public long parseStringToLong() {
+        return Long.valueOf(objectId);
+
     }
 
     public String getOwnerId() {
@@ -202,18 +232,4 @@ public class Slot {
         }
         return result;
     }
-
-
-    protected Date parseDateString() {
-
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        Date result = null;
-        try {
-            result = df.parse(dateofslot);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
 }

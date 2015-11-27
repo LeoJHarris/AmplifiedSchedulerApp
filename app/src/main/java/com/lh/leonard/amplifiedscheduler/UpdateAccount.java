@@ -1,14 +1,12 @@
 package com.lh.leonard.amplifiedscheduler;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -18,7 +16,7 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 
-public class UpdateAccount extends Fragment {
+public class UpdateAccount extends Activity {
 
     ProgressDialog ringProgressDialog;
     View v;
@@ -57,13 +55,11 @@ public class UpdateAccount extends Fragment {
     Validator validator = new Validator();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.activity_update_account, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_update_account);
 
         //TODO set the ic_.. icons to green and keep tick when validated
-
-        getActivity().setTitle("Update Account");
 
         tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
         crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
@@ -88,38 +84,38 @@ public class UpdateAccount extends Fragment {
         personLoggedIn = (Person) user.getProperty("persons");
 
         // Get a reference to the AutoCompleteTextView in the layout
-        final AutoCompleteTextView textViewCountry = (AutoCompleteTextView) v.findViewById(R.id.autocomplete_countryUpdate);
+        final AutoCompleteTextView textViewCountry = (AutoCompleteTextView) findViewById(R.id.autocomplete_countryUpdate);
         // Get the string array
         String[] countries = getResources().getStringArray(R.array.countries_array);
         // Create the adapter and set it to the AutoCompleteTextView
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, countries);
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
-        // final Typeface regularFont = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/GoodDog.otf");
+        // final Typeface regularFont = Typeface.createFromAsset(getContext().getAssets(), "fonts/GoodDog.otf");
 
-        editTextUpdateFNameReg = (EditText) v.findViewById(R.id.editTextUpdateFName);
-        editTextUpdateLNameReg = (EditText) v.findViewById(R.id.editTextUpdateLName);
-        editTextUpdatePhoneReg = (EditText) v.findViewById(R.id.editTextUpdatePhone);
-        editTextUpdateEmail = (EditText) v.findViewById(R.id.editTextUpdateEmail);
-        ediTextUpdatePassword = (EditText) v.findViewById(R.id.ediTextUpdatePassword);
-        editTextUpdatePasswordConfirmReg = (EditText) v.findViewById(R.id.editTextUpdatePasswordConfirm);
+        editTextUpdateFNameReg = (EditText) findViewById(R.id.editTextUpdateFName);
+        editTextUpdateLNameReg = (EditText) findViewById(R.id.editTextUpdateLName);
+        editTextUpdatePhoneReg = (EditText) findViewById(R.id.editTextUpdatePhone);
+        editTextUpdateEmail = (EditText) findViewById(R.id.editTextUpdateEmail);
+        ediTextUpdatePassword = (EditText) findViewById(R.id.ediTextUpdatePassword);
+        editTextUpdatePasswordConfirmReg = (EditText) findViewById(R.id.editTextUpdatePasswordConfirm);
 
-        final AutoResizeTextView txtLabelFnameUpdate = (AutoResizeTextView) v.findViewById(R.id.txtLabelFnameUpdate);
-        final AutoResizeTextView txtLabeLnameUpdate = (AutoResizeTextView) v.findViewById(R.id.txtLabeLnameUpdate);
-        final AutoResizeTextView txtLabelTextPasswordUpdate = (AutoResizeTextView) v.findViewById(R.id.txtLabelTextPasswordUpdate);
-        final AutoResizeTextView txtLabelPasswordConfirmUpdate = (AutoResizeTextView) v.findViewById(R.id.txtLabelPasswordConfirmUpdate);
-        final AutoResizeTextView txtLabelEmailUpdate = (AutoResizeTextView) v.findViewById(R.id.txtLabelEmailUpdate);
-        final AutoResizeTextView txtLabelCountryUpdate = (AutoResizeTextView) v.findViewById(R.id.txtLabelUpdateCountry);
-        final AutoResizeTextView txtLabelPhoneUpdate = (AutoResizeTextView) v.findViewById(R.id.txtLabelPhoneUpdate);
-        AutoResizeTextView editTextNoticeUpdate = (AutoResizeTextView) v.findViewById(R.id.editTextNoticeUpdate);
+        final AutoResizeTextView txtLabelFnameUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelFnameUpdate);
+        final AutoResizeTextView txtLabeLnameUpdate = (AutoResizeTextView) findViewById(R.id.txtLabeLnameUpdate);
+        final AutoResizeTextView txtLabelTextPasswordUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelTextPasswordUpdate);
+        final AutoResizeTextView txtLabelPasswordConfirmUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelPasswordConfirmUpdate);
+        final AutoResizeTextView txtLabelEmailUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelEmailUpdate);
+        final AutoResizeTextView txtLabelCountryUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelUpdateCountry);
+        final AutoResizeTextView txtLabelPhoneUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelPhoneUpdate);
+        AutoResizeTextView editTextNoticeUpdate = (AutoResizeTextView) findViewById(R.id.editTextNoticeUpdate);
 
-        final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
-        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
-        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
-        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+        final Typeface RobotoBlack = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
-        Button updateDetailsBtn = (Button) v.findViewById(R.id.buttonUpdateUser);
+        Button updateDetailsBtn = (Button) findViewById(R.id.buttonUpdateUser);
 
         editTextUpdateFNameReg.setTypeface(RobotoCondensedLight);
         editTextUpdateLNameReg.setTypeface(RobotoCondensedLight);
@@ -141,7 +137,7 @@ public class UpdateAccount extends Fragment {
                                                 @Override
                                                 public void onClick(View v) {
 
-                                                    ringProgressDialog = ProgressDialog.show(v.getContext(), "Please wait ...", "Updating account ...", true);
+                                                    ringProgressDialog = ProgressDialog.show(getApplicationContext(), "Please wait ...", "Updating account ...", true);
                                                     ringProgressDialog.setCancelable(false);
 
                                                     email = editTextUpdateEmail.getText().toString();
@@ -184,7 +180,7 @@ public class UpdateAccount extends Fragment {
                         editTextUpdateEmail.setCompoundDrawablesWithIntrinsicBounds(emailGoodIconDraw, null, tickIconDraw, null);
                     } else {
                         editTextUpdateEmail.setCompoundDrawablesWithIntrinsicBounds(emailBadIconDraw, null, crossIconDraw, null);
-                        Toast.makeText(v.getContext(), "Please enter your email address in the format someone@example.com", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     editTextUpdateEmail.setCompoundDrawablesWithIntrinsicBounds(emailIconDraw, null, null, null);
@@ -212,13 +208,13 @@ public class UpdateAccount extends Fragment {
                             if (ediTextUpdatePassword.getText().toString().equals(editTextUpdatePasswordConfirmReg.getText().toString())) {
                                 ediTextUpdatePassword.setCompoundDrawablesWithIntrinsicBounds(passwordGoodIconDraw, null, tickIconDraw, null);
                             } else {
-                                Toast.makeText(v.getContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
                                 ediTextUpdatePassword.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
                             }
                         }
                     } else {
                         ediTextUpdatePassword.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
-                        Toast.makeText(v.getContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     ediTextUpdatePassword.setCompoundDrawablesWithIntrinsicBounds(passwordIconDraw, null, null, null);
@@ -236,12 +232,12 @@ public class UpdateAccount extends Fragment {
                             if (editTextUpdatePasswordConfirmReg.getText().toString().equals(ediTextUpdatePassword.getText().toString())) {
                                 editTextUpdatePasswordConfirmReg.setCompoundDrawablesWithIntrinsicBounds(passwordGoodIconDraw, null, tickIconDraw, null);
                             } else {
-                                Toast.makeText(v.getContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
                                 editTextUpdatePasswordConfirmReg.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
                             }
                         }
                     } else {
-                        Toast.makeText(v.getContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Password must contain at least 5 or more characters", Toast.LENGTH_SHORT).show();
                         editTextUpdatePasswordConfirmReg.setCompoundDrawablesWithIntrinsicBounds(passwordBadIconDraw, null, crossIconDraw, null);
                     }
                 } else {
@@ -259,8 +255,6 @@ public class UpdateAccount extends Fragment {
                 }
             }
         });
-
-        return v;
     }
 
     private class Parse extends AsyncTask<Void, Integer, Boolean> {
@@ -338,9 +332,9 @@ public class UpdateAccount extends Fragment {
 
             ringProgressDialog.dismiss();
             if (result) {
-                Toast.makeText(getActivity(), "Inputs Updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Inputs Updated", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(), "No Inputs Submitted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "No Inputs Submitted", Toast.LENGTH_SHORT).show();
             }
 
         }

@@ -166,18 +166,18 @@ public class UnseenSlotsDialog extends Activity {
                 textViewMessage.setText("Message: " + slotSelected.getMessage());
             }
 
-            if (slotSelected.getDateofslot() != null) {
-                if (slotSelected.getStart() != null) {
-
-                    if (slotSelected.getEnd() == null) {
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart());
-
-                    } else {
-
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart() + " - " + slotSelected.getEnd());
-                    }
-                }
-            }
+//            if (slotSelected.getDateofslot() != null) {
+//                if (slotSelected.getStart() != null) {
+//
+//                    if (slotSelected.getEnd() == null) {
+//                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart());
+//
+//                    } else {
+//
+//                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + ", " + slotSelected.getStart() + " - " + slotSelected.getEnd());
+//                    }
+//                }
+//            }
 
             if (slotSelected.getLocation() != null) {
                 for (int i = 0; i < addresses.size(); i++) {

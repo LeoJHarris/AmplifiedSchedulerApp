@@ -116,19 +116,19 @@ public class NavDrawerActivity extends AppCompatActivity {
                 intent = new Intent(NavDrawerActivity.this, CreateSlot.class);
                 break;
             case 3:
-                fragment = new MyCreatedSlots();
+                intent = new Intent(NavDrawerActivity.this, MyCreatedSlots.class);
                 break;
             case 4:
-                fragment = new SlotsImGoingTo();
+                intent = new Intent(NavDrawerActivity.this,SlotsImGoingTo.class);
                 break;
             case 5:
-                fragment = new SlotsAwaitingMyResponse();
+                intent = new Intent(NavDrawerActivity.this, SlotsAwaitingMyResponse.class);
                 break;
             case 6:
                 intent = new Intent(NavDrawerActivity.this, AddRemoveContactsTabbed.class);
                 break;
             case 7:
-                fragment = new UpdateAccount();
+                intent = new Intent(NavDrawerActivity.this, UpdateAccount.class);
                 break;
             case 8:
 
@@ -156,12 +156,6 @@ public class NavDrawerActivity extends AppCompatActivity {
         if (fragment != null) {
             fragmentManager = getFragmentManager();
             if (position == 1 || getFragmentManager().findFragmentByTag("home_tag").isVisible()) {
-
-//                Fragment fragmentA = new FragmentA();
-//                getFragmentManager().beginTransaction()
-//                        .replace(R.id.MainFrameLayout, fragmentA, "YOUR_TARGET_FRAGMENT_TAG")
-//                        .addToBackStack("YOUR_SOURCE_FRAGMENT_TAG").commit();
-
 
                 getFragmentManager().beginTransaction()
                         .replace(R.id.frame_container, fragment
@@ -315,32 +309,10 @@ public class NavDrawerActivity extends AppCompatActivity {
             relations.add("pendingResponseSlot");
             Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
 
-
-            int sizePendingResponseEvents = person.getPendingResponseSlot().size();
             int sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
+            int sizePendingResponseEvents = person.getPendingResponseSlot().size();
             int sizeGoingToEvents = person.getGoingToSlot().size();
             int sizeMyCreatedEvents = person.getMyCreatedSlot().size();
-
-//            for (int j = 0; j < sizeGoingToEvents; j++) {
-//              //  if (person.getGoingToSlot().get(j).parseDateString().compareTo(date) < 0) {
-//                    person.getGoingToSlot().remove(j);
-//                }
-//         //   }
-//
-//            for (int j = 0; j < sizePendingResponseEvents; j++) {
-//           //     if (person.getPendingResponseSlot().get(j).parseDateString().before(date)) {
-//                    person.getPendingResponseSlot().remove(j);
-//           //     }
-//            }
-//            for (int j = 0; j < sizeMyCreatedEvents; j++) {
-//          //      if (person.getMyCreatedSlot().get(j).parseDateString().before(date)) {
-//                    person.getMyCreatedSlot().remove(j);
-//           //     }
-//            }
-
-            sizePendingResponseEvents = person.getPendingResponseSlot().size();
-            sizeGoingToEvents = person.getGoingToSlot().size();
-            sizeMyCreatedEvents = person.getMyCreatedSlot().size();
 
             valResponseEvents = " " + String.valueOf(sizePendingResponseEvents);
             valPersonsRequestingMe = " " + String.valueOf(sizePersonsRequestingMe);

@@ -18,6 +18,9 @@
     <item name="custombluemmiddark" type="color">#003380</item>
     <item name="custombluelightblue" type="color">#6699FF</item>
     <item name="blueline" type="color">#00141A</item>
+    <item name="orangecalendar" type="color">#E74900</item>
+    <item name="yellowcalendar" type="color">#F6A800</item>
+    <item name="bluecalendar" type="color">#005281</item>
 
 
     <integer-array name="androidcolors">
@@ -38,6 +41,9 @@
         <item>@color/custombluemmiddark</item>
         <item>@color/custombluelightblue</item>
         <item>@color/blueline</item>
+        <item>@color/orangecalendar</item>
+        <item>@color/yellowcalendar</item>
+        <item>@color/bluecalendar</item>
     </integer-array>
 
 

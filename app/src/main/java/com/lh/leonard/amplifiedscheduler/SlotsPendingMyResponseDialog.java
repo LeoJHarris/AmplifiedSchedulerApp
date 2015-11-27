@@ -162,18 +162,18 @@ public class SlotsPendingMyResponseDialog extends Activity {
                 textViewMessage.setText("Message: " + slotSelected.getMessage());
             }
 
-            if (slotSelected.getDateofslot() != null) {
-                if (slotSelected.getStart() != null) {
-
-                    if (slotSelected.getEnd() == null) {
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart());
-
-                    } else {
-
-                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart() + " - " + slotSelected.getEnd());
-                    }
-                }
-            }
+//            if (slotSelected.getDateofslot() != null) {
+//                if (slotSelected.getStart() != null) {
+//
+//                    if (slotSelected.getEnd() == null) {
+//                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart());
+//
+//                    } else {
+//
+//                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart() + " - " + slotSelected.getEnd());
+//                    }
+//                }
+//            }
 
             if (slotSelected.getLocation() != null) {
                 if (addresses != null) {

@@ -251,7 +251,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                 }
             }
 
-            sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - Amplified Schedule: " + person.getFullname() + " has indicated he/she is not to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
+           // sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - Amplified Schedule: " + person.getFullname() + " has indicated he/she is not to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
 
             person.pendingResponseSlot.remove(pos);
             eventRemoved = slot.get(positionInList).getSubject();
@@ -333,7 +333,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                 }
 
 
-                sendsmss(slot.get(position).getPhone(), "Automated TXT - Amplified Schedule" + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
+               // sendsmss(slot.get(position).getPhone(), "Automated TXT - Amplified Schedule" + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
 
                 person.pendingResponseSlot.remove(pos);
 
