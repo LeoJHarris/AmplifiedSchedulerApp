@@ -53,11 +53,24 @@
             android:label="@string/title_activity_user_logged_in" />
         <activity
             android:name=".MyCreatedSlotsDialog"
+            android:noHistory="true"
             android:label="My Schedule" />
         <activity
             android:name=".MyCreatedSlots"
             android:excludeFromRecents="true"
             android:label="My Events" />
+        <activity
+            android:name=".SlotsImGoingTo"
+            android:excludeFromRecents="true"
+            android:label="My Events" />
+        <activity
+            android:name=".SlotsAwaitingMyResponse"
+            android:excludeFromRecents="true"
+            android:label="My Events" />
+        <activity
+            android:name=".UpdateAccount"
+            android:excludeFromRecents="true"
+            android:label="Update Details" />
         <activity
             android:name=".MapsActivity"
             android:excludeFromRecents="true"

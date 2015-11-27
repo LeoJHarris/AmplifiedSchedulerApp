@@ -28,7 +28,7 @@
             android:layout_marginBottom="70dp"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/orangecalendar"
             android:textSize="24sp" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewWelcomeLabel"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/orangecalendar"
             android:textSize="24sp" />
     </RelativeLayout>
 </FrameLayout>

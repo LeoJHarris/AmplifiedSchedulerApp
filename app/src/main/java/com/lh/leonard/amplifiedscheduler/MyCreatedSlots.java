@@ -133,33 +133,26 @@ public class MyCreatedSlots extends Activity {
         @Override
         protected void onPostExecute(Void result) {
 
-            // progressBar.setVisibility(View.INVISIBLE);
-
-
-            // if (!slot.isEmpty()) {
-
-            // slot.get(0).getDateofslot()
-
-
-            //
-
             CalendarPickerController mPickerController = new CalendarPickerController() {
                 @Override
                 public void onDaySelected(DayItem dayItem) {
-
                 }
 
                 @Override
                 public void onEventSelected(CalendarEvent event) {
 
-                    Intent slotDialogIntent = new Intent(MyCreatedSlots.this, MyCreatedSlotsDialog.class);
+                    if (!event.getTitle().equals("No events")) {
 
-                    int position = Integer.parseInt(String.valueOf(event.getId()));
+                        Intent slotDialogIntent = new Intent(MyCreatedSlots.this, MyCreatedSlotsDialog.class);
+
+                        int position = Integer.parseInt(String.valueOf(event.getId()));
 
 
-                    slotDialogIntent.putExtra("objectId", String.valueOf(eventList.get(position)));
+                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
 
-                    startActivity(slotDialogIntent);
+                        startActivity(slotDialogIntent);
+
+                    }
                 }
             };
 

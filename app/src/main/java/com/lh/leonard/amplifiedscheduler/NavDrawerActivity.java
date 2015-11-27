@@ -119,7 +119,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                 intent = new Intent(NavDrawerActivity.this, MyCreatedSlots.class);
                 break;
             case 4:
-                intent = new Intent(NavDrawerActivity.this,SlotsImGoingTo.class);
+                intent = new Intent(NavDrawerActivity.this, SlotsImGoingTo.class);
                 break;
             case 5:
                 intent = new Intent(NavDrawerActivity.this, SlotsAwaitingMyResponse.class);

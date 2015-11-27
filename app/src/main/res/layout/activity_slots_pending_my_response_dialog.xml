@@ -20,7 +20,7 @@
             android:id="@+id/textViewRequestSlotSubject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black"
+            android:background="@color/bluecalendar"
             android:gravity="center"
             android:padding="10dp"
             android:textColor="@android:color/white"

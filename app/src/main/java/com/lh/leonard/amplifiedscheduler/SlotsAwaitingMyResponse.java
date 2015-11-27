@@ -1,7 +1,7 @@
 package com.lh.leonard.amplifiedscheduler;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,9 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -30,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SlotsAwaitingMyResponse extends Fragment {
+public class SlotsAwaitingMyResponse extends Activity {
 
     Person personLoggedIn;
     RecyclerView rv;
@@ -51,30 +49,28 @@ public class SlotsAwaitingMyResponse extends Fragment {
     Date date = new Date();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.slots_display, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.slots_display);
 
-        getActivity().setTitle("Invited Events");
-        
         date.getTime();
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
-        textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
+        textViewTextNoSlotAvaliable = (AutoResizeTextView) findViewById(R.id.textViewTextNoSlotAvaliable);
 
-        final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
-        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
-        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
-        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+        final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
 
         textViewTextNoSlotAvaliable.setTypeface(RobotoCondensedLightItalic);
 
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 
-        searchViewSlots = (SearchView) v.findViewById(R.id.searchViewSlots);
+        searchViewSlots = (SearchView) findViewById(R.id.searchViewSlots);
 
         searchViewSlots.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                                                    public boolean onQueryTextChange(String text) {
@@ -96,14 +92,13 @@ public class SlotsAwaitingMyResponse extends Fragment {
                                                }
         );
         new ParseURL().execute();
-        return v;
     }
 
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
-            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+            progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
@@ -138,81 +133,81 @@ public class SlotsAwaitingMyResponse extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-            if (isAdded()) {
 
-                if (!slot.isEmpty()) {
 
-                    rv = (RecyclerView) v.findViewById(R.id.rv);
+            if (!slot.isEmpty()) {
 
-                    rv.setHasFixedSize(true);
-                    llm = new LinearLayoutManager(v.getContext());
-                    rv.setLayoutManager(llm);
+                rv = (RecyclerView) findViewById(R.id.rv);
 
-                    Resources r = getResources();
+                rv.setHasFixedSize(true);
+                llm = new LinearLayoutManager(v.getContext());
+                rv.setLayoutManager(llm);
 
-                    adapter = new RVAdapter(slot, r);
+                Resources r = getResources();
 
-                    rv.setAdapter(adapter);
+                adapter = new RVAdapter(slot, r);
 
-                    rv.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rv, new RecyclerItemClickListener.OnItemClickListener() {
+                rv.setAdapter(adapter);
 
-                        @Override
-                        public void onItemClick(View view, int position) {
+                rv.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rv, new RecyclerItemClickListener.OnItemClickListener() {
 
-                            Intent slotDialogIntent = new Intent(getActivity(), SlotsPendingMyResponseDialog.class);
+                    @Override
+                    public void onItemClick(View view, int position) {
 
-                            slotDialogIntent.putExtra("slotRef", position);
+                        Intent slotDialogIntent = new Intent(SlotsAwaitingMyResponse.this, SlotsPendingMyResponseDialog.class);
 
-                            startActivity(slotDialogIntent);
-                        }
+                        slotDialogIntent.putExtra("slotRef", position);
 
-                        @Override
-                        public void onItemLongClick(View view, final int position) {
-
-                            dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Going to " + slot.get(position).getSubject() + "?")
-                                    .setMessage("Do you want to go to " + slot.get(position).getSubject())
-                                    .setIcon(R.drawable.ic_questionmark)
-                                    .setPositiveButton("Going", new DialogInterface.OnClickListener() {
-
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                                            dialog.dismiss();
-                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Accepting invited schedule " + slot.get(position).getSubject() + " ...", true);
-                                            ringProgressDialog.setCancelable(false);
-                                            new GoingToEvent(position).execute();
-
-                                        }
-                                    })
-                                    .setNegativeButton("Not Going", new DialogInterface.OnClickListener() {
-
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Declining invited schedule" + slot.get(position).getSubject() + " ...", true);
-                                            ringProgressDialog.setCancelable(false);
-                                            new NotGoingToEvent(position).execute();
-                                        }
-                                    }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
-                        }
+                        startActivity(slotDialogIntent);
                     }
-                    ));
-                    progressBar.setVisibility(View.GONE);
-                    rv.setVisibility(View.VISIBLE);
-                    searchViewSlots.setVisibility(View.VISIBLE);
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
+
+                    @Override
+                    public void onItemLongClick(View view, final int position) {
+
+                        dialog = new AlertDialog.Builder(v.getContext())
+                                .setTitle("Going to " + slot.get(position).getSubject() + "?")
+                                .setMessage("Do you want to go to " + slot.get(position).getSubject())
+                                .setIcon(R.drawable.ic_questionmark)
+                                .setPositiveButton("Going", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                                        dialog.dismiss();
+                                        ringProgressDialog = ProgressDialog.show(getApplicationContext(), "Please wait ...",
+                                                "Accepting invited schedule " + slot.get(position).getSubject() + " ...", true);
+                                        ringProgressDialog.setCancelable(false);
+                                        new GoingToEvent(position).execute();
+
+                                    }
+                                })
+                                .setNegativeButton("Not Going", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        dialog.dismiss();
+                                        ringProgressDialog = ProgressDialog.show(getApplicationContext(), "Please wait ...",
+                                                "Declining invited schedule" + slot.get(position).getSubject() + " ...", true);
+                                        ringProgressDialog.setCancelable(false);
+                                        new NotGoingToEvent(position).execute();
+                                    }
+                                }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                    }
                 }
+                ));
+                progressBar.setVisibility(View.GONE);
+                rv.setVisibility(View.VISIBLE);
+                searchViewSlots.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+                textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
             }
         }
     }
+
 
     private class NotGoingToEvent extends AsyncTask<Void, Integer, Void> {
 
@@ -251,7 +246,7 @@ public class SlotsAwaitingMyResponse extends Fragment {
                 }
             }
 
-           // sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - Amplified Schedule: " + person.getFullname() + " has indicated he/she is not to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
+            // sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - Amplified Schedule: " + person.getFullname() + " has indicated he/she is not to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
 
             person.pendingResponseSlot.remove(pos);
             eventRemoved = slot.get(positionInList).getSubject();
@@ -312,46 +307,45 @@ public class SlotsAwaitingMyResponse extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (isAdded()) {
 
-                List<String> relations = new ArrayList<String>();
-                relations.add("pendingResponseSlot");
-                Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+            List<String> relations = new ArrayList<String>();
+            relations.add("pendingResponseSlot");
+            Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
 
-                List<String> relationsSlot = new ArrayList<String>();
-                relations.add("attendees");
-                Slot slotAddAttendee = Backendless.Data.of(Slot.class).findById(slot.get(position), relationsSlot);
+            List<String> relationsSlot = new ArrayList<String>();
+            relations.add("attendees");
+            Slot slotAddAttendee = Backendless.Data.of(Slot.class).findById(slot.get(position), relationsSlot);
 
-                int pos = 0;
+            int pos = 0;
 
-                for (int i = 0; i < person.pendingResponseSlot.size(); i++) {
+            for (int i = 0; i < person.pendingResponseSlot.size(); i++) {
 
-                    if (person.pendingResponseSlot.get(i).getObjectId().equals(slot.get(position).getObjectId())) {
-                        pos = i;
-                        break;
-                    }
+                if (person.pendingResponseSlot.get(i).getObjectId().equals(slot.get(position).getObjectId())) {
+                    pos = i;
+                    break;
                 }
-
-
-               // sendsmss(slot.get(position).getPhone(), "Automated TXT - Amplified Schedule" + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
-
-                person.pendingResponseSlot.remove(pos);
-
-                eventRemoved = slot.get(position).getSubject();
-
-                Backendless.Data.of(Person.class).save(person);
-
-                Person p = Backendless.Data.of(Person.class).findById(personLoggedIn);
-
-                p.addSlotGoingToSlot(slot.get(position));
-
-                slotAddAttendee.addAttendee(person);
-
-                Backendless.Data.of(Slot.class).save(slotAddAttendee);
-
-                slot.remove(position);
-                personLoggedIn = Backendless.Data.of(Person.class).save(p);
             }
+
+
+            // sendsmss(slot.get(position).getPhone(), "Automated TXT - Amplified Schedule" + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
+
+            person.pendingResponseSlot.remove(pos);
+
+            eventRemoved = slot.get(position).getSubject();
+
+            Backendless.Data.of(Person.class).save(person);
+
+            Person p = Backendless.Data.of(Person.class).findById(personLoggedIn);
+
+            p.addSlotGoingToSlot(slot.get(position));
+
+            slotAddAttendee.addAttendee(person);
+
+            Backendless.Data.of(Slot.class).save(slotAddAttendee);
+
+            slot.remove(position);
+            personLoggedIn = Backendless.Data.of(Person.class).save(p);
+
             return null;
         }
 
