@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -38,6 +39,11 @@ public class NavDrawerActivity extends AppCompatActivity {
     Person personLoggedIn;
     int resourceIntPendingResponseEvents;
     int resourceIntPersonsRequestingMe;
+
+    int sizePersonsRequestingMe;
+    int sizeGoingToEvents;
+    int sizePendingResponseEvents;
+    int sizeMyCreatedEvents;
 
     private Menu optionsMenu;
 
@@ -188,7 +194,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
                 // Complete with your code
 
-
+                new Refresh().execute();
                 setRefreshActionButtonState(true);
                 return true;
         }
@@ -326,10 +332,10 @@ public class NavDrawerActivity extends AppCompatActivity {
             relations.add("pendingResponseSlot");
             Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
 
-            int sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
-            int sizePendingResponseEvents = person.getPendingResponseSlot().size();
-            int sizeGoingToEvents = person.getGoingToSlot().size();
-            int sizeMyCreatedEvents = person.getMyCreatedSlot().size();
+            sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
+            sizePendingResponseEvents = person.getPendingResponseSlot().size();
+            sizeGoingToEvents = person.getGoingToSlot().size();
+            sizeMyCreatedEvents = person.getMyCreatedSlot().size();
 
             valResponseEvents = " " + String.valueOf(sizePendingResponseEvents);
             valPersonsRequestingMe = " " + String.valueOf(sizePersonsRequestingMe);
@@ -419,6 +425,135 @@ public class NavDrawerActivity extends AppCompatActivity {
             mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
             if (updateNavDrawer) {
                 Drawer.openDrawer(mRecyclerView);
+            }
+        }
+    }
+
+
+    private class Refresh extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            List<String> relations = new ArrayList<String>();
+            relations.add("personsRequestingMe");
+            relations.add("goingToSlot");
+            relations.add("myCreatedSlot");
+            relations.add("pendingResponseSlot");
+            Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+
+            sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
+            sizePendingResponseEvents = person.getPendingResponseSlot().size();
+            sizeGoingToEvents = person.getGoingToSlot().size();
+            sizeMyCreatedEvents = person.getMyCreatedSlot().size();
+
+            valResponseEvents = " " + String.valueOf(sizePendingResponseEvents);
+            valPersonsRequestingMe = " " + String.valueOf(sizePersonsRequestingMe);
+            valGoingToEvents = " " + String.valueOf(sizeGoingToEvents);
+            valMyCreatedEvents = " " + String.valueOf(sizeMyCreatedEvents);
+
+            if (sizePendingResponseEvents >= 1) {
+                resourceIntPendingResponseEvents = R.drawable.ic_actionrequiredinvitedevent;
+            } else {
+                resourceIntPendingResponseEvents = R.drawable.ic_pendingrequestslots;
+            }
+            if (sizePersonsRequestingMe >= 1) {
+                resourceIntPersonsRequestingMe = R.drawable.ic_actionrequiredcontactspng;
+            } else {
+                resourceIntPersonsRequestingMe = R.drawable.ic_addcontact;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            int ICONS[] = {R.drawable.ic_home, R.drawable.ic_createslot
+                    , R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
+                    resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
+
+            String TITLES[] = {"Home", "Create event", "My events " + valMyCreatedEvents, "Going to events " +
+                    valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
+                    valPersonsRequestingMe, "Update account", "Sign out"};
+
+            NAME = personLoggedIn.getFullname();
+            EMAIL = userLoggedIn.getEmail();
+
+            mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+
+            mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
+
+            // And passing the titles,icons,header view name, header view email,
+            // and header view profile picture
+
+            mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
+            mLayoutManager = new LinearLayoutManager(NavDrawerActivity.this);                 // Creating a layout Manager
+            mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+
+            mDrawerToggle = new ActionBarDrawerToggle(NavDrawerActivity.this, Drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
+
+                @Override
+                public void onDrawerOpened(View drawerView) {
+                    super.onDrawerOpened(drawerView);
+                    // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
+                    // open I am not going to put anything here)
+                    // invalidateOptionsMenu();
+
+                    mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+
+                        @Override
+                        public void onItemClick(View view, int position) {
+
+                            selectItem(position);
+                            Drawer.closeDrawer(mRecyclerView);
+                        }
+
+                        @Override
+                        public void onItemLongClick(View view, int position) {
+                            // ...
+
+                            //TODO: Dialog show, remove slot. Remove from list clear adapter, give adapter now list
+                            //TODO Yes: get the ownerObjectId and remove from database
+                        }
+                    }
+                    ));
+                }
+
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                    // Code here will execute once drawer is closed
+                    //  invalidateOptionsMenu();
+                }
+
+            }; // Drawer Toggle Object Made
+            Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
+            mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+
+            if (!Drawer.isDrawerOpen(mRecyclerView)) {
+                Drawer.openDrawer(mRecyclerView);
+            }
+            setRefreshActionButtonState(false);
+
+            Fragment frag = getFragmentManager().findFragmentByTag("home_tag");
+
+            if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText(
+                        String.valueOf((sizePersonsRequestingMe + sizePendingResponseEvents)));
+
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setTextColor(Color.RED);
+
+            } else {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText("No new notifications");
             }
         }
     }

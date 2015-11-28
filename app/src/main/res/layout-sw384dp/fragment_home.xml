@@ -28,27 +28,18 @@
             android:layout_marginBottom="70dp"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:textColor="@color/orangecalendar"
+            android:textColor="@color/bluecalendar"
             android:textSize="28sp" />
 
 
-        <LinearLayout
-            android:id="@+id/LinearLayout"
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewNotificationNumberHome"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/textViewWelcomeLabel"
-            android:layout_margin="10px"
-            android:gravity="center_horizontal|bottom"
-            android:orientation="vertical">
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewNotificationNumberHome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:textColor="@color/orangecalendar"
-                android:textSize="28sp" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewWelcomeLabel"
+            android:gravity="center"
+            android:textColor="@color/bluecalendar"
+            android:textSize="28sp" />
 
     </RelativeLayout>
 </FrameLayout>

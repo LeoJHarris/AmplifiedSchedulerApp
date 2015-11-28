@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
         // Custom criteria: 3 days and 5 launches
-        RateThisApp.Config config = new RateThisApp.Config(30, 20);
+        RateThisApp.Config config = new RateThisApp.Config(20, 15);
         // Custom title and message
         config.setTitle(R.string.rta_dialog_title);
         config.setMessage(R.string.rta_dialog_message);
