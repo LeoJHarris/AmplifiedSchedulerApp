@@ -66,7 +66,7 @@ public class SlotsImGoingTo extends Activity {
         mAgendaCalendarView = (AgendaCalendarView) findViewById(R.id.agenda_calendar_view);
 
         // minimum and maximum date of our calendar
-        // 2 month behind, one year ahead, example: March 2015 <-> May 2015 <-> May 2016
+        // 1 month behind, one year ahead, example: March 2015 <-> May 2015 <-> May 2016
         minDate = Calendar.getInstance();
         maxDate = Calendar.getInstance();
 
@@ -104,7 +104,7 @@ public class SlotsImGoingTo extends Activity {
         protected Void doInBackground(Void... params) {
 
             StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Person[goingToSlot]");
+            whereClause.append("Person[GoingToSlot]");
             whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
 
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -136,20 +136,23 @@ public class SlotsImGoingTo extends Activity {
             CalendarPickerController mPickerController = new CalendarPickerController() {
                 @Override
                 public void onDaySelected(DayItem dayItem) {
-
                 }
 
                 @Override
                 public void onEventSelected(CalendarEvent event) {
 
-                    Intent slotDialogIntent = new Intent(SlotsImGoingTo.this, MyCreatedSlotsDialog.class);
+                    if (!event.getTitle().equals("No events")) {
 
-                    int position = Integer.parseInt(String.valueOf(event.getId()));
+                        Intent slotDialogIntent = new Intent(SlotsImGoingTo.this, MyCreatedSlotsDialog.class);
+
+                        int position = Integer.parseInt(String.valueOf(event.getId()));
 
 
-                    slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
+                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
 
-                    startActivity(slotDialogIntent);
+                        startActivity(slotDialogIntent);
+
+                    }
                 }
             };
 
@@ -188,115 +191,24 @@ public class SlotsImGoingTo extends Activity {
 
             eventList.add(event);
 
-
             //CalendarEvent event1 = new CalendarEvent()
         }
 
     }
 
-    private class CancelEvent extends AsyncTask<Void, Integer, Void> {
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        //When BACK BUTTON is pressed, the activity on the stack is restarted
+        //Do what you want on the refresh procedure here
 
-        int positionInList;
 
-        public CancelEvent(int positionInList) {
-
-            this.positionInList = positionInList;
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Slot[attendees]");
-            whereClause.append(".objectId='").append(slot.get(positionInList).getObjectId()).append("'");
-
-            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-            dataQuery.setWhereClause(whereClause.toString());
-
-            personsToSmsCollection = Backendless.Data.of(Person.class).find(dataQuery);
-            personsToSms = personsToSmsCollection.getData();
-
-            String fullnamePersonLoggedIn = personLoggedIn.getFullname();
-            // String dateofslot = slot.get(positionInList).getDateofslot();
-            String subject = slot.get(positionInList).getSubject();
-            String placeofSlot = slot.get(positionInList).getPlace();
-
-//            for (Person pId : personsToSms) {
-//
-//                sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
-//            }
-
-            eventRemoved = slot.get(positionInList).getSubject();
-
-            // Deleting process
-
-            Map<String, String> args = new HashMap<>();
-            args.put("id", "deleteevent");
-
-            args.put("event", slot.get(positionInList).getObjectId());
-
-            Backendless.Events.dispatch("ManageEvent", args, new AsyncCallback<Map>() {
-                @Override
-                public void handleResponse(Map map) {
-                    Toast.makeText(getApplicationContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-
-                }
-            });
-
-            slot.remove(positionInList);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-            rv.setAdapter(null);
-
-            if (!slot.isEmpty()) {
-
-                rv.setHasFixedSize(true);
-
-                rv.setLayoutManager(llm);
-
-                //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
-
-                Resources r = getResources();
-
-                adapter = new RVAdapter(slot, r);
-
-                rv.setAdapter(adapter);
-                ringProgressDialog.dismiss();
-            } else {
-                rv.setAdapter(null);
-                ringProgressDialog.dismiss();
-                searchViewSlots.setVisibility(View.GONE);
-                rv.setVisibility(View.GONE);
-                progressBar.setVisibility(View.GONE);
-            }
-        }
     }
 
-    @JavascriptInterface
-    public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
-
-        String messageSubString = "Automated TXT - Amplified Schedule: Event" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, NavDrawerActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

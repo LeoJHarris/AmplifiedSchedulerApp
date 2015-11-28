@@ -398,4 +398,11 @@ public class SlotsAwaitingMyResponse extends Activity {
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MyCreatedSlots.class);
+        startActivity(intent);
+        finish();
+    }
 }

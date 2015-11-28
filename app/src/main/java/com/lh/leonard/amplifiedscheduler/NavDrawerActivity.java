@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,8 @@ public class NavDrawerActivity extends AppCompatActivity {
     Person personLoggedIn;
     int resourceIntPendingResponseEvents;
     int resourceIntPersonsRequestingMe;
+
+    ShareActionProvider actionProvider;
 
     int sizePersonsRequestingMe;
     int sizeGoingToEvents;
@@ -185,7 +188,27 @@ public class NavDrawerActivity extends AppCompatActivity {
         this.optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
+
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.share);
+
+        // Fetch and store ShareActionProvider
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out my app at: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+        sendIntent.setType("text/plain");
+        mShareActionProvider.setShareIntent(sendIntent);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    // Call to update the share intent
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -212,13 +235,6 @@ public class NavDrawerActivity extends AppCompatActivity {
                     refreshItem.setActionView(null);
                 }
             }
-        }
-    }
-
-    // Call to update the share intent
-    private void setShareIntent(Intent shareIntent) {
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
         }
     }
 
@@ -548,7 +564,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
             if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
                 ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText(
-                        String.valueOf((sizePersonsRequestingMe + sizePendingResponseEvents)));
+                        String.valueOf((sizePersonsRequestingMe + sizePendingResponseEvents + " notifications")));
 
                 ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setTextColor(Color.RED);
 
