@@ -1,7 +1,6 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -18,8 +17,6 @@ import android.widget.ProgressBar;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,13 +42,12 @@ public class SlotsImGoingToDialog extends Activity {
     ProgressBar progressBar;
     String eventRemoved;
     Slot event;
-    AlertDialog dialog;
     ProgressDialog ringProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_created_slots_dialog);
+        setContentView(R.layout.activity_slots_im_going_to_dialog);
 
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
@@ -68,7 +64,7 @@ public class SlotsImGoingToDialog extends Activity {
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewMySlotDateAndTime);
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewMySlotLocation);
         textViewMyeventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
-        buttonGoingToEventNotGoing = (Button) findViewById(R.id.buttonMySlotCancelSlot);
+        buttonGoingToEventNotGoing = (Button) findViewById(R.id.buttonGoingToEventNotGoing);
         buttonGoingToEventParticipantsSlot = (Button) findViewById(R.id.buttonGoingToEventParticipantsSlot);
 
         textViewSubject.setTypeface(RobotoCondensedLight);
@@ -90,8 +86,7 @@ public class SlotsImGoingToDialog extends Activity {
             @Override
             public void onClick(View v) {
 
-                dialog.dismiss();
-                ringProgressDialog = ProgressDialog.show(SlotsImGoingToDialog.this, "Please wait ...", "Adding " + event.getSubject() + " ...", true);
+                ringProgressDialog = ProgressDialog.show(SlotsImGoingToDialog.this, "Please wait ...", "removing " + event.getSubject() + " ...", true);
                 ringProgressDialog.setCancelable(false);
                 new NotGoingToEvent().execute();
 
@@ -164,14 +159,7 @@ public class SlotsImGoingToDialog extends Activity {
             }
 
             if (event.getStartCalendar() != null) {
-
-
                 textViewDateAndTime.setText("When " + event.getStartCalendar().getTime());
-//                    if (event.getEnd() == null) {
-//                        textViewDateAndTime.setText("When: " + event.getDateofslot() + " @ " + event.getStart());
-//
-//                    } getEnd
-
             }
 
             if (event.getMaxattendees() != 0) {
@@ -227,30 +215,19 @@ public class SlotsImGoingToDialog extends Activity {
             Map<String, String> args = new HashMap<>();
             args.put("id", "removeevent");
 
-            args.put("objectIdPerson",person.getObjectId());
+            args.put("objectIdPerson", person.getObjectId());
 
             args.put("event", event.getObjectId());
 
-            Backendless.Events.dispatch("ManageEvent", args, new AsyncCallback<Map>() {
-                @Override
-                public void handleResponse(Map map) {
-                    dialog.dismiss();
-                    onBackPressed();
-
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-
-                    dialog.dismiss();
-                }
-            });
+            Backendless.Events.dispatch("ManageEvent", args);
 
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
+            ringProgressDialog.dismiss();
+            onBackPressed();
         }
     }
 
@@ -264,7 +241,7 @@ public class SlotsImGoingToDialog extends Activity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MyCreatedSlots.class);
+        Intent intent = new Intent(this, SlotsImGoingTo.class);
         startActivity(intent);
         finish();
     }

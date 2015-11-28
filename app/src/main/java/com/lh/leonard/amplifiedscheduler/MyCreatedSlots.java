@@ -295,16 +295,7 @@ public class MyCreatedSlots extends Activity {
         }
     }
 
-    @Override
-    public void onRestart() {
-        super.onRestart();
-        //When BACK BUTTON is pressed, the activity on the stack is restarted
-        //Do what you want on the refresh procedure here
 
-        Toast.makeText(getApplication(), "", Toast.LENGTH_SHORT).show();
-
-
-    }
 
     @JavascriptInterface
     public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
@@ -319,5 +310,11 @@ public class MyCreatedSlots extends Activity {
         Intent intent = new Intent(this, NavDrawerActivity.class);
         startActivity(intent);
         finish();
+    }
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        //When BACK BUTTON is pressed, the activity on the stack is restarted
+        //Do what you want on the refresh procedure here
     }
 }

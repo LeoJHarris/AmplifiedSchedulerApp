@@ -26,7 +26,7 @@
                 android:background="@color/bluecalendar"
                 android:gravity="center"
                 android:paddingBottom="10dp"
-                android:paddingTop="20dp">
+                android:paddingTop="10dp">
 
                 <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                     android:id="@+id/textViewHeaderCreateSlot"

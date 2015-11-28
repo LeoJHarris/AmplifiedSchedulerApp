@@ -1,43 +1,51 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
+import android.webkit.JavascriptInterface;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.persistence.BackendlessDataQuery;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SlotsPendingMyResponseDialog extends Activity {
 
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     List<Slot> slotsList;
-    Slot slotSelected;
     AutoResizeTextView textViewSubject;
     AutoResizeTextView textViewMessage;
     AutoResizeTextView textViewDateAndTime;
     AutoResizeTextView textViewLocation;
-    AutoResizeTextView textViewMyEventSpacesAvaliable;
-    AutoResizeTextView textViewOrganiser;
-    Integer position;
-    ProgressBar progressBar;
-    //Button buttonCantGo;
-    //  Button buttonGoing;
+    AutoResizeTextView textViewMyeventSpacesAvaliable;
+    String objectId;
+    Button buttonGoingToEventNotGoing;
+    List<Person> personsToSms;
+    BackendlessCollection<Person> personsToSmsCollection;
+    //  Button buttonMySlotParticipantsSlot;
     Person person;
     BackendlessCollection<Slot> slots;
     SpannableString content;
+    ProgressBar progressBar;
+    String eventRemoved;
+    Slot event;
+    ProgressDialog ringProgressDialog;
+    Button buttonInvitedGoingToEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,69 +57,88 @@ public class SlotsPendingMyResponseDialog extends Activity {
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 
-        textViewSubject = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotSubject);
-        textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotMessage);
-        textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotDateAndTime);
-        textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotLocation);
-        textViewMyEventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
-        textViewOrganiser = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotOrganizer);
-        // buttonGoing = (Button) findViewById(R.id.buttonRequestSlotGoing);
-        //  buttonCantGo = (Button) findViewById(R.id.buttonRequestSlotCantGo);
-
         final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
+        textViewSubject = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotSubject);
+        textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotMessage);
+        textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotDateAndTime);
+        textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotLocation);
+        textViewMyeventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
+        buttonGoingToEventNotGoing = (Button) findViewById(R.id.buttonInvitedEventNotGoing);
+        //  buttonMySlotParticipantsSlot = (Button) findViewById(R.id.buttonMySlotParticipantsSlot);
+        buttonInvitedGoingToEvent = (Button) findViewById(R.id.buttonInvitedGoingToEvent);
 
         textViewSubject.setTypeface(RobotoCondensedLight);
         textViewMessage.setTypeface(RobotoCondensedLight);
         textViewDateAndTime.setTypeface(RobotoCondensedLight);
         textViewLocation.setTypeface(RobotoCondensedLight);
-        textViewMyEventSpacesAvaliable.setTypeface(RobotoCondensedLight);
-        textViewOrganiser.setTypeface(RobotoCondensedLight);
-     //    buttonCantGo.setTypeface(regularFont);
-        //   buttonGoing.setTypeface(regularFont);
+        textViewMyeventSpacesAvaliable.setTypeface(RobotoCondensedLight);
+        buttonGoingToEventNotGoing.setTypeface(RobotoCondensedLight);
+        // buttonMySlotParticipantsSlot.setTypeface(RobotoCondensedLight);
+        buttonInvitedGoingToEvent.setTypeface(RobotoCondensedLight);
+
+        Backendless.Data.mapTableToClass("Slot", Slot.class);
+        Backendless.Data.mapTableToClass("Person", Person.class);
 
         person = (Person) userLoggedIn.getProperty("persons");
 
         new LoadMyContacts().execute();
 
-//        buttonCantGo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
+        buttonGoingToEventNotGoing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-//        buttonGoing.setOnClickListener(new View.OnClickListener() {
-//                                           @Override
-//                                           public void onClick(View v) {
+                ringProgressDialog = ProgressDialog.show(SlotsPendingMyResponseDialog.this, "Please wait ...", "Declining " + event.getSubject() + " ...", true);
+                ringProgressDialog.setCancelable(false);
+                new NotGoingToEvent().execute();
+
+            }
+        });
+        buttonInvitedGoingToEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ringProgressDialog = ProgressDialog.show(SlotsPendingMyResponseDialog.this, "Please wait ...", "Accepting Invite to " + event.getSubject() + " ...", true);
+                ringProgressDialog.setCancelable(false);
+                new GoingToEvent().execute();
+            }
+        });
+
+//        buttonMySlotParticipantsSlot.setOnClickListener(new View.OnClickListener() {
+//                                                            @Override
+//                                                            public void onClick(View v) {
 //
-//                                               new AddToMyEvents().execute();
+//                                                                Intent participantsIntent = new Intent(SlotsPendingMyResponseDialog.this, ParticipantsActivity.class);
 //
-//                                           }
-//                                       }
+//                                                                participantsIntent.putExtra("eventid", event.getObjectId());
+//
+//                                                                startActivity(participantsIntent);
+//                                                            }
+//                                                        }
 //        );
 
         textViewLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Intent mapIntent = new Intent(SlotsPendingMyResponseDialog.this, JustMapActivity.class);
 
-                mapIntent.putExtra("lat", slotSelected.getLocation().getLatitude());
-                mapIntent.putExtra("long", slotSelected.getLocation().getLongitude());
+                mapIntent.putExtra("lat", event.getLocation().getLatitude());
+                mapIntent.putExtra("long", event.getLocation().getLongitude());
+                mapIntent.putExtra("subject", event.getSubject());
                 startActivity(mapIntent);
             }
         });
     }
 
-    private class LoadMyContacts extends AsyncTask<Void, Integer, List<Address>> {
+    private class LoadMyContacts extends AsyncTask<Void, Integer, String> {
 
         @Override
         protected void onPreExecute() {
-            //  progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            //   progressBar.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
@@ -121,152 +148,152 @@ public class SlotsPendingMyResponseDialog extends Activity {
         }
 
         @Override
-        protected List<Address> doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
 
             Bundle data = getIntent().getExtras();
-            position = data.getInt("slotRef");
+            objectId = data.getString("objectId");
 
-            StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Person[pendingResponseSlot]");
-            whereClause.append(".objectId='").append(person.getObjectId()).append("'");
+            event = Backendless.Data.of(Slot.class).findById(objectId);
 
-            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-            dataQuery.setWhereClause(whereClause.toString());
+            return (String) event.getLocation().getMetadata("address");
 
-            slots = Backendless.Data.of(Slot.class).find(dataQuery);
-
-            slotsList = slots.getData();
-
-            slotSelected = slotsList.get(position);
-
-            Geocoder geocoder = new Geocoder(getBaseContext());
-            List<Address> addresses = null;
-
-            try {
-                // Getting a maximum of 3 Address that matches the input text
-                addresses = geocoder.getFromLocation(slotSelected.getLocation().getLatitude(), slotSelected.getLocation().getLongitude(), 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return addresses;
         }
 
         @Override
-        protected void onPostExecute(List<Address> addresses) {
+        protected void onPostExecute(String addresses) {
 
-            if (slotSelected.getSubject() != null) {
-                textViewSubject.setText(slotSelected.getSubject());
+
+            if (event.getSubject() != null) {
+                textViewSubject.setText(event.getSubject());
             }
 
-            if (slotSelected.getMessage() != null) {
-                textViewMessage.setText("Message: " + slotSelected.getMessage());
+            if (event.getMessage() != null) {
+                textViewMessage.setText("Message: " + event.getMessage());
             }
 
-//            if (slotSelected.getDateofslot() != null) {
-//                if (slotSelected.getStart() != null) {
-//
-//                    if (slotSelected.getEnd() == null) {
-//                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart());
-//
-//                    } else {
-//
-//                        textViewDateAndTime.setText("When: " + slotSelected.getDateofslot() + " @ " + slotSelected.getStart() + " - " + slotSelected.getEnd());
-//                    }
-//                }
-//            }
-
-            if (slotSelected.getLocation() != null) {
-                if (addresses != null) {
-                    for (int i = 0; i < addresses.size(); i++) {
-                        Address address = (Address) addresses.get(i);
-                        String addressText = String.format("%s, %s",
-                                address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                                address.getCountryName());
-
-                        content = new SpannableString("Where: " + addressText);
-                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                        textViewLocation.setText(content); //TODO Button to get Location else just Text
-                        break;
-
-                    }
-                }
+            if (event.getStartCalendar() != null) {
+                textViewDateAndTime.setText("When " + event.getStartCalendar().getTime());
             }
 
-            if (slotSelected.getOwnername() != null) {
-                textViewOrganiser = (AutoResizeTextView) findViewById(R.id.textViewRequestSlotOrganizer);
-                textViewOrganiser.setText(slotSelected.getOwnername() + " created this event");
-            }
-
-            if (slotSelected.getMaxattendees() != 0) {
+            if (event.getMaxattendees() != 0) {
 
 
-                Integer spacesAvaliable = slotSelected.getMaxattendees();
-                Integer going = slotSelected.getAttendees().size();
+                Integer spacesAvaliable = event.getMaxattendees();
+                Integer going = event.getAttendees().size();
                 {
-                    textViewMyEventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
+                    textViewMyeventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
+
                 }
 
-            } else {
-                textViewMyEventSpacesAvaliable.setText("Unlimited Spaces");
             }
 
+            if (event.getLocation() != null) {
+                content = new SpannableString("Where: " + (String) event.getLocation().getMetadata("address"));
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                textViewLocation.setText(content); //TODO Button to get Location else just Text
+            }
             progressBar = (ProgressBar) findViewById(R.id.progressBarRequestSlotsDialog);
             progressBar.setVisibility(View.GONE);
 
-            textViewMyEventSpacesAvaliable.setVisibility(View.VISIBLE);
+            textViewMyeventSpacesAvaliable.setVisibility(View.VISIBLE);
             textViewSubject.setVisibility(View.VISIBLE);
             textViewMessage.setVisibility(View.VISIBLE);
             textViewLocation.setVisibility(View.VISIBLE);
             textViewDateAndTime.setVisibility(View.VISIBLE);
-            // buttonCancelSlot.setVisibility(View.VISIBLE);
-            // buttonMySlotParticipantsSlot.setVisibility(View.VISIBLE);
+            buttonGoingToEventNotGoing.setVisibility(View.VISIBLE);
+            buttonInvitedGoingToEvent.setVisibility(View.VISIBLE);
+            //   buttonMySlotParticipantsSlot.setVisibility(View.VISIBLE);
         }
     }
 
-//    private class AddToMyEvents extends AsyncTask<Void, Integer, Void> {
-//
-//        @Override
-//        protected void onPreExecute() {
-//            //  progressBar = (ProgressBar) findViewById(R.id.progressBar);
-//            //   progressBar.setVisibility(View.VISIBLE);
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onProgressUpdate(Integer... values) {
-//            super.onProgressUpdate(values);
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//
-//            ArrayList<String> relationPropsPerson = new ArrayList<String>();
-//            relationPropsPerson.add("goingToSlot");
-//            Backendless.Persistence.of(Person.class).loadRelations(person, relationPropsPerson);
-//
-//            // person.getGoingToSlot().add(slotSelected);
-//            //  Backendless.Persistence.save(person);
-//
-//
-//            ArrayList<String> relationProps = new ArrayList<String>();
-//            relationProps.add("attendees");
-//            Backendless.Persistence.of(Slot.class).loadRelations(slotSelected, relationProps);
-//
-//
-//            slotSelected.getAttendees().add(person);
-//
-//            Backendless.Persistence.of(Slot.class).save(slotSelected);
-//
-//            //Still have to remove from my list requesting
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void params) {
-//
-//
-//        }
-//    }
+    private class NotGoingToEvent extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            sendsmss(event.getPhone(), person.getFullname(), event.subject,
+                    event.getStartCalendar().getTime().toString(), event.getStartCalendar().getTime().toString());
+
+            Map<String, String> args = new HashMap<>();
+            args.put("id", "declineinviteevent");
+
+            args.put("objectIdPerson", person.getObjectId());
+
+            args.put("event", event.getObjectId());
+
+            Backendless.Events.dispatch("ManageEvent", args);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            ringProgressDialog.dismiss();
+            onBackPressed();
+        }
+    }
+
+
+    private class GoingToEvent extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            sendsmss(event.getPhone(), person.getFullname(), event.subject,
+                    event.getStartCalendar().getTime().toString(), event.getStartCalendar().getTime().toString());
+
+            Map<String, String> args = new HashMap<>();
+            args.put("id", "acceptinviteevent");
+
+            args.put("objectIdPerson", person.getObjectId());
+
+            args.put("event", event.getObjectId());
+
+            Backendless.Events.dispatch("ManageEvent", args);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            ringProgressDialog.dismiss();
+            onBackPressed();
+        }
+    }
+
+    @JavascriptInterface
+    public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
+
+        String messageSubString = "Automated TXT - Amplified Scheduler: " + subject + " on the " + date + " at " + place + " was cancelled by ";
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, SlotsAwaitingMyResponse.class);
+        startActivity(intent);
+        finish();
+    }
 }

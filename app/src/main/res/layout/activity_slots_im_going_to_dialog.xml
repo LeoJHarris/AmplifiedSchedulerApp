@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:fillViewport="true">
 
     <RelativeLayout
@@ -124,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/button_default_bg"
-                android:text="Cancel Event"
+                android:text="Cant Go"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:visibility="gone" />

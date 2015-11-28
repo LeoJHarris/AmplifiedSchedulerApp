@@ -112,9 +112,6 @@
             android:value="AIzaSyCie9wDjjfgkNxs2eFpRQf5v8oBY0mhLME" />
 
         <activity
-            android:name=".UnseenSlotsDialog"
-            android:label="" />
-        <activity
             android:name=".SplashActivity"
             android:label=""
             android:theme="@style/AppTheme"></activity>

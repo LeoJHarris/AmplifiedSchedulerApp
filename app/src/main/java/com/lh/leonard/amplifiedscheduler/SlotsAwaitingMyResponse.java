@@ -22,11 +22,15 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SlotsAwaitingMyResponse extends Activity {
 
@@ -140,7 +144,7 @@ public class SlotsAwaitingMyResponse extends Activity {
                 rv = (RecyclerView) findViewById(R.id.rv);
 
                 rv.setHasFixedSize(true);
-                llm = new LinearLayoutManager(v.getContext());
+                llm = new LinearLayoutManager(getApplication());
                 rv.setLayoutManager(llm);
 
                 Resources r = getResources();
@@ -149,14 +153,14 @@ public class SlotsAwaitingMyResponse extends Activity {
 
                 rv.setAdapter(adapter);
 
-                rv.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rv, new RecyclerItemClickListener.OnItemClickListener() {
+                rv.addOnItemTouchListener(new RecyclerItemClickListener(getApplication(), rv, new RecyclerItemClickListener.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(View view, int position) {
 
                         Intent slotDialogIntent = new Intent(SlotsAwaitingMyResponse.this, SlotsPendingMyResponseDialog.class);
 
-                        slotDialogIntent.putExtra("slotRef", position);
+                        slotDialogIntent.putExtra("objectId", slot.get(position).getObjectId());
 
                         startActivity(slotDialogIntent);
                     }
@@ -164,7 +168,7 @@ public class SlotsAwaitingMyResponse extends Activity {
                     @Override
                     public void onItemLongClick(View view, final int position) {
 
-                        dialog = new AlertDialog.Builder(v.getContext())
+                        dialog = new AlertDialog.Builder(getApplicationContext())
                                 .setTitle("Going to " + slot.get(position).getSubject() + "?")
                                 .setMessage("Do you want to go to " + slot.get(position).getSubject())
                                 .setIcon(R.drawable.ic_questionmark)
@@ -177,7 +181,6 @@ public class SlotsAwaitingMyResponse extends Activity {
                                                 "Accepting invited schedule " + slot.get(position).getSubject() + " ...", true);
                                         ringProgressDialog.setCancelable(false);
                                         new GoingToEvent(position).execute();
-
                                     }
                                 })
                                 .setNegativeButton("Not Going", new DialogInterface.OnClickListener() {
@@ -208,7 +211,6 @@ public class SlotsAwaitingMyResponse extends Activity {
         }
     }
 
-
     private class NotGoingToEvent extends AsyncTask<Void, Integer, Void> {
 
         int positionInList;
@@ -232,26 +234,27 @@ public class SlotsAwaitingMyResponse extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            List<String> relations = new ArrayList<String>();
-            relations.add("pendingResponseSlot");
-            Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+            Map<String, String> args = new HashMap<>();
+            args.put("id", "declineinviteevent");
 
-            int pos = 0;
+            args.put("objectIdPerson", personLoggedIn.getObjectId());
 
-            for (int i = 0; i < person.pendingResponseSlot.size(); i++) {
+            args.put("event", slot.get(positionInList).getObjectId());
 
-                if (person.pendingResponseSlot.get(i).getObjectId().equals(slot.get(positionInList).getObjectId())) {
-                    pos = i;
-                    break;
+            Backendless.Events.dispatch("ManageEvent", args, new AsyncCallback<Map>() {
+                @Override
+                public void handleResponse(Map map) {
+                    dialog.dismiss();
+                    onBackPressed();
+
                 }
-            }
 
-            // sendsmss(slot.get(positionInList).getPhone(), "Automated TXT - Amplified Schedule: " + person.getFullname() + " has indicated he/she is not to your " + slot.get(positionInList).getSubject() + " event on the " + slot.get(positionInList).getDateofslot());
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
 
-            person.pendingResponseSlot.remove(pos);
-            eventRemoved = slot.get(positionInList).getSubject();
-            slot.remove(positionInList);
-            Person updatedPersonLoggedIn = Backendless.Data.of(Person.class).save(person);
+                    dialog.dismiss();
+                }
+            });
 
             return null;
         }
@@ -282,7 +285,7 @@ public class SlotsAwaitingMyResponse extends Activity {
                 progressBar.setVisibility(View.GONE);
                 textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
             }
-            Toast.makeText(v.getContext(), eventRemoved + " was declined", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), eventRemoved + " was declined", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -379,7 +382,7 @@ public class SlotsAwaitingMyResponse extends Activity {
                 progressBar.setVisibility(View.GONE);
                 textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
             }
-            Toast.makeText(v.getContext(), "Going to " + eventRemoved, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Going to " + eventRemoved, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -401,8 +404,15 @@ public class SlotsAwaitingMyResponse extends Activity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MyCreatedSlots.class);
+        Intent intent = new Intent(this, NavDrawerActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        //When BACK BUTTON is pressed, the activity on the stack is restarted
+        //Do what you want on the refresh procedure here
     }
 }

@@ -73,7 +73,6 @@ public class MainActivity extends Activity {
 
         encryption = Encryption.getDefault("Key", "Salt", new byte[16]);  // 16
 
-
         new Decrypt().execute();
     }
 

@@ -4,24 +4,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telephony.SmsManager;
 import android.view.View;
-import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.github.tibolte.agendacalendarview.AgendaCalendarView;
 import com.github.tibolte.agendacalendarview.CalendarPickerController;
@@ -30,10 +24,8 @@ import com.github.tibolte.agendacalendarview.models.DayItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class SlotsImGoingTo extends Activity {
 
@@ -143,7 +135,7 @@ public class SlotsImGoingTo extends Activity {
 
                     if (!event.getTitle().equals("No events")) {
 
-                        Intent slotDialogIntent = new Intent(SlotsImGoingTo.this, MyCreatedSlotsDialog.class);
+                        Intent slotDialogIntent = new Intent(SlotsImGoingTo.this, SlotsImGoingToDialog.class);
 
                         int position = Integer.parseInt(String.valueOf(event.getId()));
 

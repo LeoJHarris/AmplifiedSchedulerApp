@@ -198,7 +198,7 @@ public class NavDrawerActivity extends AppCompatActivity {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT,
-                "Hey check out my app at: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
         sendIntent.setType("text/plain");
         mShareActionProvider.setShareIntent(sendIntent);
         return super.onCreateOptionsMenu(menu);
@@ -564,7 +564,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
             if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
                 ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText(
-                        String.valueOf((sizePersonsRequestingMe + sizePendingResponseEvents + " notifications")));
+                        String.valueOf((sizePersonsRequestingMe + sizePendingResponseEvents + " Notifications")));
 
                 ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setTextColor(Color.RED);
 
