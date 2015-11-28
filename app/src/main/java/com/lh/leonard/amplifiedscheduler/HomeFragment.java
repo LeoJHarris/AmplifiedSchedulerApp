@@ -155,18 +155,6 @@ public class HomeFragment extends Fragment {
                 textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications"));
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
-//                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        Fragment unseenSlotsFragment = new UnseenSlotsFragment();
-//
-//                        FragmentManager fragmentManager = getFragmentManager();
-//                        fragmentManager.beginTransaction()
-//                                .replace(R.id.frame_container, unseenSlotsFragment).addToBackStack("home").commit();
-//                    }
-//                });
-
                 textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -178,7 +166,7 @@ public class HomeFragment extends Fragment {
                 });
 
             } else {
-                textViewNotificationNumberHome.setText("No new notifications - tap to refresh");
+                textViewNotificationNumberHome.setText("No new notifications");
                 textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -189,8 +177,6 @@ public class HomeFragment extends Fragment {
                     }
                 });
             }
-            // Toast.makeText(getContext(), "Check", Toast.LENGTH_SHORT).show();
-            //  new ParseURL().execute();
         }
     }
 

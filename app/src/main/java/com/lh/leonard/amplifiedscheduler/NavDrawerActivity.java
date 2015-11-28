@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -39,6 +39,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     int resourceIntPendingResponseEvents;
     int resourceIntPersonsRequestingMe;
 
+    private Menu optionsMenu;
 
     String valResponseEvents = "";
     String valPersonsRequestingMe = "";
@@ -175,21 +176,37 @@ public class NavDrawerActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-// Locate MenuItem with ShareActionProvider
-        MenuItem item = menu.findItem(R.id.share);
-// Fetch and store ShareActionProvider
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        this.optionsMenu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_home, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-        Intent shareItem = new Intent(Intent.ACTION_SEND);
-        shareItem.setAction(Intent.ACTION_SEND);
-        shareItem.setType("text/plain");
-        shareItem.putExtra(Intent.EXTRA_TEXT, "Text To Share");
-        //mShareActionProvider.setShareIntent(shareItem);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
 
-        setShareIntent(shareItem);
+                // Complete with your code
 
-        return true;
+
+                setRefreshActionButtonState(true);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void setRefreshActionButtonState(final boolean refreshing) {
+        if (optionsMenu != null) {
+            final MenuItem refreshItem = optionsMenu
+                    .findItem(R.id.action_refresh);
+            if (refreshItem != null) {
+                if (refreshing) {
+                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+                } else {
+                    refreshItem.setActionView(null);
+                }
+            }
+        }
     }
 
     // Call to update the share intent

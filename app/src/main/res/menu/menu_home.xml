@@ -4,17 +4,23 @@
     tools:context="com.lh.leonard.amplifiedscheduler.NavDrawerActivity">
 
     <!--<item-->
-        <!--android:id="@+id/action_refresh"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="always"-->
-        <!--android:icon="@drawable/i.png"-->
-        <!--android:title="Refresh"/>-->
+    <!--android:id="@+id/action_refresh"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="always"-->
+    <!--android:icon="@drawable/i.png"-->
+    <!--android:title="Refresh"/>-->
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_popup_sync_3"
+        android:title="refresh"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/share"
-        android:title="share"
         android:actionProviderClass="android.widget.ShareActionProvider"
-        app:showAsAction="always"/>
+        android:title="share"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

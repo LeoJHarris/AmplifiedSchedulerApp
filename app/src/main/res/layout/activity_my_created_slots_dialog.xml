@@ -76,23 +76,23 @@
             android:visibility="gone" />
 
         <!--<LinearLayout-->
-            <!--android:id="@+id/LinearLayout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_below="@id/textViewMyEventSpacesAvaliable"-->
-            <!--android:layout_margin="10px"-->
-            <!--android:gravity="center_horizontal|bottom"-->
-            <!--android:orientation="vertical">-->
+        <!--android:id="@+id/LinearLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@id/textViewMyEventSpacesAvaliable"-->
+        <!--android:layout_margin="10px"-->
+        <!--android:gravity="center_horizontal|bottom"-->
+        <!--android:orientation="vertical">-->
 
-            <!--<Button-->
-                <!--android:id="@+id/buttonMySlotParticipantsSlot"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:background="@drawable/button_default_bg"-->
-                <!--android:text="Persons Going"-->
-                <!--android:textSize="22sp"-->
-                <!--android:visibility="gone" />-->
+        <!--<Button-->
+        <!--android:id="@+id/buttonMySlotParticipantsSlot"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@drawable/button_default_bg"-->
+        <!--android:text="Persons Going"-->
+        <!--android:textSize="22sp"-->
+        <!--android:visibility="gone" />-->
         <!--</LinearLayout>-->
 
 

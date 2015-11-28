@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
     android:gravity="center"
-    android:padding="10dp"
+    android:fitsSystemWindows="true"
     tools:context="com.lh.leonard.amplifiedscheduler.HomeFragment">
 
     <!--10" tablets-->
@@ -12,6 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:gravity="center">
 
         <ImageView

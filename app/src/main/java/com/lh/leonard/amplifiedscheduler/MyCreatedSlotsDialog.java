@@ -15,7 +15,6 @@ import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -270,15 +269,14 @@ public class MyCreatedSlotsDialog extends Activity {
             Backendless.Events.dispatch("ManageEvent", args, new AsyncCallback<Map>() {
                 @Override
                 public void handleResponse(Map map) {
-                    Toast.makeText(getApplicationContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();
-
+                    dialog.dismiss();
                     onBackPressed();
 
                 }
 
                 @Override
                 public void handleFault(BackendlessFault backendlessFault) {
-
+                    dialog.dismiss();
                 }
             });
 
@@ -300,6 +298,9 @@ public class MyCreatedSlotsDialog extends Activity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MyCreatedSlots.class));
+        Intent intent = new Intent(this, MyCreatedSlots.class);
+        startActivity(intent);
+        finish();
+
     }
 }

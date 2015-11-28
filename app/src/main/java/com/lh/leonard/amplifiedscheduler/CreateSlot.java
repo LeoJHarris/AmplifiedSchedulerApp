@@ -803,22 +803,7 @@ public class CreateSlot extends AppCompatActivity implements
                 @Override
                 public void handleResponse(Map map) {
 
-                    btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    btnSlotDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
-                    addedContactsForSlot.clear();
-                    mAddressTextView.setText("Please Set Place");
-                    mAutocompleteTextView.setText("");
-                    slotSubjectEditText.setText("");
-                    slotsDate.setText("Set Date");
-                    slotStartTime.setText("Set Start Time");
-                    slotEndTime.setText("Set End Time");
-                    slotSubjectEditText.setText("");
-                    slotMessageEditText.setText("");
+
                     // ringProgressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_LONG).show();
                 }
@@ -844,6 +829,22 @@ public class CreateSlot extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(Void result) {
+            btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            btnSlotDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
+            addedContactsForSlot.clear();
+            mAddressTextView.setText("Please Set Place");
+            mAutocompleteTextView.setText("");
+            slotSubjectEditText.setText("");
+            slotsDate.setText("Set Date");
+            slotStartTime.setText("Set Start Time");
+            slotEndTime.setText("Set End Time");
+            slotSubjectEditText.setText("");
+            slotMessageEditText.setText("");
         }
     }
 
