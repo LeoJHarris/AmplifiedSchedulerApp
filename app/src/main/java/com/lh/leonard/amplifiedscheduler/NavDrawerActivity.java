@@ -41,8 +41,6 @@ public class NavDrawerActivity extends AppCompatActivity {
     int resourceIntPendingResponseEvents;
     int resourceIntPersonsRequestingMe;
 
-    ShareActionProvider actionProvider;
-
     int sizePersonsRequestingMe;
     int sizeGoingToEvents;
     int sizePendingResponseEvents;
@@ -54,9 +52,6 @@ public class NavDrawerActivity extends AppCompatActivity {
     String valPersonsRequestingMe = "";
     String valGoingToEvents = "";
     String valMyCreatedEvents = "";
-
-
-    Date date = new Date();
 
     //First We Declare Titles And Icons For Our Navigation Drawer List View
     //This Icons And Titles Are holded in an Array as you can see
@@ -84,8 +79,6 @@ public class NavDrawerActivity extends AppCompatActivity {
 
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
-
-        date.getTime();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

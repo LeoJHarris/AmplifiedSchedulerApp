@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/imageViewMainLogo"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="100dp"
             android:src="@drawable/main_textlogo_360" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView

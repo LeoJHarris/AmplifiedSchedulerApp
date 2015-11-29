@@ -1,6 +1,5 @@
 package com.lh.leonard.amplifiedscheduler;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,12 +7,15 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -35,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class MyCreatedSlots extends Activity {
+public class MyCreatedSlots extends AppCompatActivity {
 
     Person personLoggedIn;
     List<Slot> slot;
@@ -57,6 +59,8 @@ public class MyCreatedSlots extends Activity {
     List<CalendarEvent> eventList;
     Calendar minDate;
     Calendar maxDate;
+    private Toolbar toolbar;
+    RelativeLayout RLProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,7 @@ public class MyCreatedSlots extends Activity {
         setContentView(R.layout.event_calendar);
 
         mAgendaCalendarView = (AgendaCalendarView) findViewById(R.id.agenda_calendar_view);
-
+        RLProgressBar = (RelativeLayout) findViewById(R.id.RLProgressBar);
         // minimum and maximum date of our calendar
         // 2 month behind, one year ahead, example: March 2015 <-> May 2015 <-> May 2016
         minDate = Calendar.getInstance();
@@ -79,6 +83,8 @@ public class MyCreatedSlots extends Activity {
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         new ParseURL().execute();
@@ -157,9 +163,9 @@ public class MyCreatedSlots extends Activity {
             };
 
             mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
-
-            //    }
             progressBar.setVisibility(View.GONE);
+            RLProgressBar.setVisibility(View.GONE);
+            mAgendaCalendarView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -296,7 +302,6 @@ public class MyCreatedSlots extends Activity {
     }
 
 
-
     @JavascriptInterface
     public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
 
@@ -311,6 +316,7 @@ public class MyCreatedSlots extends Activity {
         startActivity(intent);
         finish();
     }
+
     @Override
     public void onRestart() {
         super.onRestart();
