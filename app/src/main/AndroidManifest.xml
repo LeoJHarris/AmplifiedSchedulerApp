@@ -111,8 +111,10 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCie9wDjjfgkNxs2eFpRQf5v8oBY0mhLME" />
+            android:value="AIzaSyAgLfiKNQonSw2Tuxkg0zNk_LehF7Gpkzo" />
 
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>
