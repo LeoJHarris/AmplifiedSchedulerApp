@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.multidex.MultiDex;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.Display;
@@ -75,7 +76,11 @@ public class MainActivity extends Activity {
 
         new Change().execute();
     }
-
+    protected void attachBaseContext(Context base)
+    {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
     public class Validator {
 
         private boolean isPasswordValid(CharSequence password) {
