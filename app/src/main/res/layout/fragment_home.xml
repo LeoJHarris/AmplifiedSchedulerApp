@@ -44,7 +44,7 @@
             android:layout_below="@+id/imageViewMainLogo"
             android:gravity="center"
             android:paddingBottom="20dp"
-            android:textColor="@color/black"
+            android:textColor="@color/orangecalendar"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewWelcomeLabel"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/orangecalendar"
             android:textSize="50sp"
             android:textStyle="bold" />
     </RelativeLayout>

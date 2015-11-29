@@ -2,7 +2,6 @@ package com.lh.leonard.amplifiedscheduler;
 
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -20,7 +19,6 @@ import com.backendless.BackendlessUser;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 /**
@@ -32,8 +30,6 @@ public class HomeFragment extends Fragment {
     Person personLoggedIn;
     BackendlessCollection<Person> persons;
     AutoResizeTextView textViewNotificationNumberHome;
-    //  Typeface fontHomeName;
-    Date date = new Date();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,23 +37,19 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        date.getTime();
-
         textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
 
         textViewNotificationNumberHome.setText("Fetching  notifications");
-
-        getActivity().setTitle("Home");
 
         Backendless.Data.mapTableToClass("Person", Person.class);
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
 
-            // Monitor launch times and interval from installation
-            RateThisApp.onStart(getActivity());
-            // If the criteria is satisfied, "Rate this app" dialog will be shown
-            RateThisApp.showRateDialogIfNeeded(getActivity());
+        // Monitor launch times and interval from installation
+        RateThisApp.onStart(getActivity());
+        // If the criteria is satisfied, "Rate this app" dialog will be shown
+        RateThisApp.showRateDialogIfNeeded(getActivity());
 
 
         AutoResizeTextView welcomeLabel = (AutoResizeTextView) v.findViewById(R.id.textViewWelcomeLabel);
@@ -139,7 +131,6 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
 
-
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
@@ -155,43 +146,9 @@ public class HomeFragment extends Fragment {
                 textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications"));
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
-//                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        Fragment unseenSlotsFragment = new UnseenSlotsFragment();
-//
-//                        FragmentManager fragmentManager = getFragmentManager();
-//                        fragmentManager.beginTransaction()
-//                                .replace(R.id.frame_container, unseenSlotsFragment).addToBackStack("home").commit();
-//                    }
-//                });
-
-                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent n = new Intent(getActivity(), NavDrawerActivity.class);
-                        n.putExtra("refresh", true);
-                        startActivity(n);
-                    }
-                });
-
             } else {
-                textViewNotificationNumberHome.setText("No new notifications - tap to refresh");
-                textViewNotificationNumberHome.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent n = new Intent(getActivity(), NavDrawerActivity.class);
-                        n.putExtra("refresh", false);
-                        startActivity(n);
-                    }
-                });
+                textViewNotificationNumberHome.setText("No new notifications");
             }
-            // Toast.makeText(getContext(), "Check", Toast.LENGTH_SHORT).show();
-            //  new ParseURL().execute();
         }
     }
-
 }

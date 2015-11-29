@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
+    android:fitsSystemWindows="true"
     android:gravity="center"
-    android:padding="10dp"
     tools:context="com.lh.leonard.amplifiedscheduler.HomeFragment">
 
     <!--nexus 4-->
@@ -28,8 +28,9 @@
             android:layout_marginBottom="70dp"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/bluecalendar"
             android:textSize="28sp" />
+
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewNotificationNumberHome"
@@ -37,7 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewWelcomeLabel"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/bluecalendar"
             android:textSize="28sp" />
+
     </RelativeLayout>
 </FrameLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lh.leonard.amplifiedscheduler" >
+    package="com.lh.leonard.amplifiedscheduler">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -28,16 +28,18 @@
         android:xlargeScreens="true" />
 
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@drawable/appicon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+
         <service android:name="com.backendless.AndroidService" />
 
         <activity
             android:name=".MainActivity"
             android:label="Amplified Scheduler"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,14 +48,29 @@
         </activity>
         <activity
             android:name=".RegistrationActivity"
-            android:label="@string/title_activity_registration"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".UserLoggedIn"
-            android:label="@string/title_activity_user_logged_in" />
+            android:label="" />
         <activity
             android:name=".MyCreatedSlotsDialog"
-            android:label="My Schedule" />
+            android:label="" />
+        <activity
+            android:name=".MyCreatedSlots"
+            android:label="" />
+        <activity
+            android:name=".SlotsImGoingTo"
+            android:excludeFromRecents="true"
+            android:label="" />
+        <activity
+            android:name=".SlotsAwaitingMyResponse"
+            android:excludeFromRecents="true"
+            android:label="" />
+        <activity
+            android:name=".UpdateAccount"
+            android:excludeFromRecents="true"
+            android:label="" />
         <activity
             android:name=".MapsActivity"
             android:excludeFromRecents="true"
@@ -61,33 +78,33 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".ForgotPasswordReset"
-            android:label="@string/title_activity_forgot_password_reset" />
+            android:label="" />
         <activity
             android:name=".SlotsImGoingToDialog"
-            android:label="Schedule Going To" />
+            android:label="" />
         <activity
             android:name=".CreateSlot"
-            android:label="@string/title_activity_create_slot"
+            android:label=""
             android:noHistory="true" />
         <activity
             android:name=".RecipientsForSlot"
-            android:label="Add Contacts For Schedule"
+            android:label=""
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".AddRemoveContactsTabbed"
-            android:label="Amplified Scheduler Home"
+            android:label=""
             android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".NavDrawerActivity"
-            android:label="Amplified Scheduler"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".SlotsPendingMyResponseDialog"
-            android:label="Invited Schedule" />
+            android:label="" />
         <activity
             android:name=".JustMapActivity"
-            android:label="JustMaps" />
+            android:label="" />
         <activity
             android:name=".ParticipantsActivity"
             android:theme="@android:style/Theme.Dialog" />
@@ -96,14 +113,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCie9wDjjfgkNxs2eFpRQf5v8oBY0mhLME" />
 
-        <activity
-            android:name=".UnseenSlotsDialog"
-            android:label="@string/title_activity_unseen_slots_dialog" />
-        <activity
-            android:name=".SplashActivity"
-            android:label="@string/title_activity_splash"
-            android:theme="@style/AppTheme" >
-        </activity>
     </application>
 
 </manifest>

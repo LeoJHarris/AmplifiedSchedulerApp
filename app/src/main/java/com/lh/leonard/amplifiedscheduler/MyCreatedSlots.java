@@ -1,21 +1,17 @@
 package com.lh.leonard.amplifiedscheduler;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -27,13 +23,19 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.github.tibolte.agendacalendarview.AgendaCalendarView;
+import com.github.tibolte.agendacalendarview.CalendarPickerController;
+import com.github.tibolte.agendacalendarview.models.CalendarEvent;
+import com.github.tibolte.agendacalendarview.models.DayItem;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-public class MyCreatedSlots extends Fragment {
+public class MyCreatedSlots extends Activity {
 
     Person personLoggedIn;
     List<Slot> slot;
@@ -45,69 +47,50 @@ public class MyCreatedSlots extends Fragment {
     SearchView searchViewSlots;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     RVAdapter adapter;
-    AutoResizeTextView textViewTextNoSlotAvaliable;
     View v;
     ProgressDialog ringProgressDialog;
     AlertDialog dialog;
     RecyclerView rv;
     LinearLayoutManager llm;
     String eventRemoved;
-
-    Date date = new Date();
+    AgendaCalendarView mAgendaCalendarView;
+    List<CalendarEvent> eventList;
+    Calendar minDate;
+    Calendar maxDate;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.slots_display, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.event_calendar);
 
-        getActivity().setTitle("My Events");
+        mAgendaCalendarView = (AgendaCalendarView) findViewById(R.id.agenda_calendar_view);
 
-        date.getTime();
+        // minimum and maximum date of our calendar
+        // 2 month behind, one year ahead, example: March 2015 <-> May 2015 <-> May 2016
+        minDate = Calendar.getInstance();
+        maxDate = Calendar.getInstance();
+
+        minDate.add(Calendar.MONTH, -1);
+        minDate.set(Calendar.DAY_OF_MONTH, 1);
+        maxDate.add(Calendar.YEAR, 1);
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
-        final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
-        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
-        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
-        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
-
-        textViewTextNoSlotAvaliable = (AutoResizeTextView) v.findViewById(R.id.textViewTextNoSlotAvaliable);
-        textViewTextNoSlotAvaliable.setTypeface(RobotoCondensedLightItalic);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         new ParseURL().execute();
-        searchViewSlots = (SearchView) v.findViewById(R.id.searchViewSlots);
-
-        searchViewSlots.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                                                   public boolean onQueryTextChange(String text) {
-
-                                                       if (adapter != null) {
-                                                           if (TextUtils.isEmpty(text)) {
-                                                               adapter.getFilter().filter("");
-                                                           } else {
-                                                               adapter.getFilter().filter(text.toString());
-                                                           }
-                                                       }
-                                                       return true;
-                                                   }
-
-                                                   @Override
-                                                   public boolean onQueryTextSubmit(String query) {
-                                                       return false;
-                                                   }
-                                               }
-        );
-        return v;
+        searchViewSlots = (SearchView) findViewById(R.id.searchViewSlots);
     }
+
 
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
-            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+            progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
@@ -130,6 +113,11 @@ public class MyCreatedSlots extends Fragment {
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
             slot = slots.getData();
 
+
+            eventList = new ArrayList<>();
+
+            getEventsFromList(slot);
+
 //           for(int j = 0; j < slot.size(); j++) {
 //              //  if (slot.get(j).parseDateString().before(date)) {
 //
@@ -145,77 +133,68 @@ public class MyCreatedSlots extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
 
-            // progressBar.setVisibility(View.INVISIBLE);
-            if (isAdded()) {
-
-                if (!slot.isEmpty()) {
-
-                    rv = (RecyclerView) v.findViewById(R.id.rv);
-
-                    rv.setHasFixedSize(true);
-                    llm = new LinearLayoutManager(v.getContext());
-                    rv.setLayoutManager(llm);
-
-                    Resources r = getResources();
-
-
-                    adapter = new RVAdapter(slot, r);
-
-                    rv.setAdapter(adapter);
-
-                    rv.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rv, new RecyclerItemClickListener.OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(View view, int position) {
-
-                            Intent slotDialogIntent = new Intent(getActivity(), MyCreatedSlotsDialog.class);
-
-                            // slotDialogIntent.putExtra("slotId", slots.get(position).getObjectId()); // TODO send the slot to the dialog intent.
-
-                            slotDialogIntent.putExtra("slotRef", position);
-
-                            startActivity(slotDialogIntent);
-                        }
-
-                        @Override
-                        public void onItemLongClick(View view, final int position) {
-
-
-                            dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Cancel Events?")
-                                    .setMessage("Do you want cancel your " + slot.get(position).getSubject() + " event?")
-                                    .setIcon(R.drawable.ic_questionmark)
-                                    .setPositiveButton("Yup, Cancel", new DialogInterface.OnClickListener() {
-
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                                            dialog.dismiss();
-                                            ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                                                    "Cancelling Event: " + slot.get(position).getSubject() + " ...", true);
-                                            ringProgressDialog.setCancelable(false);
-                                            new CancelEvent(position).execute();
-                                        }
-                                    })
-                                    .setNegativeButton("Nope, Keep", new DialogInterface.OnClickListener() {
-
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
-
-
-                        }
-                    }
-                    ));
-                    progressBar.setVisibility(View.GONE);
-                    rv.setVisibility(View.VISIBLE);
-                    searchViewSlots.setVisibility(View.VISIBLE);
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
+            CalendarPickerController mPickerController = new CalendarPickerController() {
+                @Override
+                public void onDaySelected(DayItem dayItem) {
                 }
-            }
+
+                @Override
+                public void onEventSelected(CalendarEvent event) {
+
+                    if (!event.getTitle().equals("No events")) {
+
+                        Intent slotDialogIntent = new Intent(MyCreatedSlots.this, MyCreatedSlotsDialog.class);
+
+                        int position = Integer.parseInt(String.valueOf(event.getId()));
+
+
+                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
+
+                        startActivity(slotDialogIntent);
+
+                    }
+                }
+            };
+
+            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
+
+            //    }
+            progressBar.setVisibility(View.GONE);
         }
+    }
+
+
+    private void getEventsFromList(List<Slot> eventListSlots) {
+
+
+        for (int i = 0; i < eventListSlots.size(); i++) {
+
+            Calendar startTime = Calendar.getInstance();
+            Calendar endTime = Calendar.getInstance();
+
+            startTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
+
+            // End time
+            endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
+
+            // System.out.println(startTime.toString());
+
+            String location = (String) eventListSlots.get(i).getLocation().getMetadata("address");
+
+            CalendarEvent event = new CalendarEvent(eventListSlots.get(i).getSubject(),
+                    eventListSlots.get(i).getMessage(), location,
+                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, false);
+
+            Long l = Long.parseLong(String.valueOf(i));
+
+            event.setId(l);
+
+            eventList.add(event);
+
+
+            //CalendarEvent event1 = new CalendarEvent()
+        }
+
     }
 
     private class CancelEvent extends AsyncTask<Void, Integer, Void> {
@@ -252,14 +231,14 @@ public class MyCreatedSlots extends Fragment {
             personsToSms = personsToSmsCollection.getData();
 
             String fullnamePersonLoggedIn = personLoggedIn.getFullname();
-            String dateofslot = slot.get(positionInList).getDateofslot();
+            // String dateofslot = slot.get(positionInList).getDateofslot();
             String subject = slot.get(positionInList).getSubject();
             String placeofSlot = slot.get(positionInList).getPlace();
 
-            for (Person pId : personsToSms) {
-
-                sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
-            }
+//            for (Person pId : personsToSms) {
+//
+//                sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
+//            }
 
             eventRemoved = slot.get(positionInList).getSubject();
 
@@ -271,18 +250,18 @@ public class MyCreatedSlots extends Fragment {
             args.put("event", slot.get(positionInList).getObjectId());
 
             Backendless.Events.dispatch("ManageEvent", args, new AsyncCallback<Map>() {
-                        @Override
-                        public void handleResponse(Map map) {
-                            Toast.makeText(v.getContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();
-                        }
+                @Override
+                public void handleResponse(Map map) {
+                    Toast.makeText(getApplicationContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();
+                }
 
-                        @Override
-                        public void handleFault(BackendlessFault backendlessFault) {
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
 
-                        }
-                    });
+                }
+            });
 
-                    slot.remove(positionInList);
+            slot.remove(positionInList);
 
             return null;
         }
@@ -312,10 +291,11 @@ public class MyCreatedSlots extends Fragment {
                 searchViewSlots.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
-                textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
             }
         }
     }
+
+
 
     @JavascriptInterface
     public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
@@ -323,5 +303,18 @@ public class MyCreatedSlots extends Fragment {
         String messageSubString = "Automated TXT - Amplified Schedule: Event" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, NavDrawerActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        //When BACK BUTTON is pressed, the activity on the stack is restarted
+        //Do what you want on the refresh procedure here
     }
 }

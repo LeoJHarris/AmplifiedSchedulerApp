@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:fillViewport="true">
 
     <RelativeLayout
@@ -11,94 +12,122 @@
         android:paddingBottom="10dp">
 
         <ProgressBar
-            android:id="@+id/progressBarSlotsGoingToDialog"
+            android:id="@+id/progressBarMyCreatedSlotsDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewGoingToSlotSubject"
+            android:id="@+id/textViewMySlotSubject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black"
+            android:background="@color/bluecalendar"
             android:gravity="center"
             android:padding="10dp"
             android:textColor="@android:color/white"
             android:textSize="35sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewGoingToSlotMessage"
+            android:id="@+id/textViewMySlotMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewGoingToSlotSubject"
+            android:layout_below="@id/textViewMySlotSubject"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:visibility="gone" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewGoingToSlotDateAndTime"
+            android:id="@+id/textViewMySlotDateAndTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewGoingToSlotMessage"
+            android:layout_below="@id/textViewMySlotMessage"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:visibility="gone" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewGoingToSlotLocation"
+            android:id="@+id/textViewMySlotLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewGoingToSlotDateAndTime"
+            android:layout_below="@id/textViewMySlotDateAndTime"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:visibility="gone" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/textViewMyEventSpacesAvaliable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewGoingToSlotLocation"
+            android:layout_below="@id/textViewMySlotLocation"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:visibility="gone" />
 
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewGoingToSlotOrganizer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewMyEventSpacesAvaliable"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:textSize="22sp" />
+        <!--<LinearLayout-->
+        <!--android:id="@+id/LinearLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@id/textViewMyEventSpacesAvaliable"-->
+        <!--android:layout_margin="10px"-->
+        <!--android:gravity="center_horizontal|bottom"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<Button-->
+        <!--android:id="@+id/buttonMySlotParticipantsSlot"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@drawable/button_default_bg"-->
+        <!--android:text="Persons Going"-->
+        <!--android:textSize="22sp"-->
+        <!--android:visibility="gone" />-->
+        <!--</LinearLayout>-->
+
 
         <LinearLayout
             android:id="@+id/LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/textViewGoingToSlotOrganizer"
-            android:layout_margin="10dp"
+            android:layout_below="@id/textViewMyEventSpacesAvaliable"
+            android:layout_margin="10px"
             android:gravity="center_horizontal|bottom"
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/buttonMySlotParticipantsSlot"
+                android:id="@+id/buttonGoingToEventParticipantsSlot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/buttonMySlotCancelSlot"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_default_bg"
+                android:text="People Going"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/buttonGoingToEventNotGoing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/button_default_bg"
-                android:text="People Going"
-                android:textSize="22sp"
+                android:text="Cant Go"
+                android:textColor="@color/black"
+                android:textSize="20sp"
                 android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>

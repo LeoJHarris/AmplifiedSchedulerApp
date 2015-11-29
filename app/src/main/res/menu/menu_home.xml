@@ -4,20 +4,27 @@
     tools:context="com.lh.leonard.amplifiedscheduler.NavDrawerActivity">
 
     <!--<item-->
-        <!--android:id="@+id/action_refresh"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="always"-->
-        <!--android:icon="@drawable/i.png"-->
-        <!--android:title="Refresh"/>-->
+    <!--android:id="@+id/action_refresh"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="always"-->
+    <!--android:icon="@drawable/i.png"-->
+    <!--android:title="Refresh"/>-->
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:title="refresh"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/share"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        android:icon="@drawable/ic__action_share"
         android:title="share"
-        android:actionProviderClass="android.widget.ShareActionProvider"
-        app:showAsAction="always"/>
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
+    <!--<item-->
+        <!--android:id="@+id/action_settings"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="@string/action_settings"-->
+        <!--app:showAsAction="never" />-->
 </menu>

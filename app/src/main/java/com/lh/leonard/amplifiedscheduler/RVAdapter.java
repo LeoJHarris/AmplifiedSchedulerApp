@@ -48,7 +48,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
     public void onBindViewHolder(SlotViewHolder slotViewHolder, int i) {
 
         slotViewHolder.slotTitle.setText(listSlots.get(i).getSubject());
-        slotViewHolder.slotDate.setText("Date: " + listSlots.get(i).getDateofslot().toString());
+       // slotViewHolder.slotDate.setText("Date: " + listSlots.get(i).getDateofslot().toString());
         slotViewHolder.slotFullName.setText("From: " + listSlots.get(i).getOwnername().toString());
 
 //        if (listSlots.get(i).getMaxattendees() != 0) {

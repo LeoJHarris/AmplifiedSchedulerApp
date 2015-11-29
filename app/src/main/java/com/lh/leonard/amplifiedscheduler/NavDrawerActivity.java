@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -17,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -39,6 +41,14 @@ public class NavDrawerActivity extends AppCompatActivity {
     int resourceIntPendingResponseEvents;
     int resourceIntPersonsRequestingMe;
 
+    ShareActionProvider actionProvider;
+
+    int sizePersonsRequestingMe;
+    int sizeGoingToEvents;
+    int sizePendingResponseEvents;
+    int sizeMyCreatedEvents;
+
+    private Menu optionsMenu;
 
     String valResponseEvents = "";
     String valPersonsRequestingMe = "";
@@ -116,19 +126,19 @@ public class NavDrawerActivity extends AppCompatActivity {
                 intent = new Intent(NavDrawerActivity.this, CreateSlot.class);
                 break;
             case 3:
-                fragment = new MyCreatedSlots();
+                intent = new Intent(NavDrawerActivity.this, MyCreatedSlots.class);
                 break;
             case 4:
-                fragment = new SlotsImGoingTo();
+                intent = new Intent(NavDrawerActivity.this, SlotsImGoingTo.class);
                 break;
             case 5:
-                fragment = new SlotsAwaitingMyResponse();
+                intent = new Intent(NavDrawerActivity.this, SlotsAwaitingMyResponse.class);
                 break;
             case 6:
                 intent = new Intent(NavDrawerActivity.this, AddRemoveContactsTabbed.class);
                 break;
             case 7:
-                fragment = new UpdateAccount();
+                intent = new Intent(NavDrawerActivity.this, UpdateAccount.class);
                 break;
             case 8:
 
@@ -157,12 +167,6 @@ public class NavDrawerActivity extends AppCompatActivity {
             fragmentManager = getFragmentManager();
             if (position == 1 || getFragmentManager().findFragmentByTag("home_tag").isVisible()) {
 
-//                Fragment fragmentA = new FragmentA();
-//                getFragmentManager().beginTransaction()
-//                        .replace(R.id.MainFrameLayout, fragmentA, "YOUR_TARGET_FRAGMENT_TAG")
-//                        .addToBackStack("YOUR_SOURCE_FRAGMENT_TAG").commit();
-
-
                 getFragmentManager().beginTransaction()
                         .replace(R.id.frame_container, fragment
                         ).addToBackStack(null).commit();
@@ -181,27 +185,56 @@ public class NavDrawerActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-// Locate MenuItem with ShareActionProvider
+        this.optionsMenu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_home, menu);
+
+
+        // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.share);
-// Fetch and store ShareActionProvider
+
+        // Fetch and store ShareActionProvider
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-
-        Intent shareItem = new Intent(Intent.ACTION_SEND);
-        shareItem.setAction(Intent.ACTION_SEND);
-        shareItem.setType("text/plain");
-        shareItem.putExtra(Intent.EXTRA_TEXT, "Text To Share");
-        //mShareActionProvider.setShareIntent(shareItem);
-
-        setShareIntent(shareItem);
-
-        return true;
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+        sendIntent.setType("text/plain");
+        mShareActionProvider.setShareIntent(sendIntent);
+        return super.onCreateOptionsMenu(menu);
     }
 
     // Call to update the share intent
     private void setShareIntent(Intent shareIntent) {
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(shareIntent);
+        }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+
+                // Complete with your code
+
+                new Refresh().execute();
+                setRefreshActionButtonState(true);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void setRefreshActionButtonState(final boolean refreshing) {
+        if (optionsMenu != null) {
+            final MenuItem refreshItem = optionsMenu
+                    .findItem(R.id.action_refresh);
+            if (refreshItem != null) {
+                if (refreshing) {
+                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+                } else {
+                    refreshItem.setActionView(null);
+                }
+            }
         }
     }
 
@@ -315,29 +348,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             relations.add("pendingResponseSlot");
             Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
 
-
-            int sizePendingResponseEvents = person.getPendingResponseSlot().size();
-            int sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
-            int sizeGoingToEvents = person.getGoingToSlot().size();
-            int sizeMyCreatedEvents = person.getMyCreatedSlot().size();
-
-//            for (int j = 0; j < sizeGoingToEvents; j++) {
-//              //  if (person.getGoingToSlot().get(j).parseDateString().compareTo(date) < 0) {
-//                    person.getGoingToSlot().remove(j);
-//                }
-//         //   }
-//
-//            for (int j = 0; j < sizePendingResponseEvents; j++) {
-//           //     if (person.getPendingResponseSlot().get(j).parseDateString().before(date)) {
-//                    person.getPendingResponseSlot().remove(j);
-//           //     }
-//            }
-//            for (int j = 0; j < sizeMyCreatedEvents; j++) {
-//          //      if (person.getMyCreatedSlot().get(j).parseDateString().before(date)) {
-//                    person.getMyCreatedSlot().remove(j);
-//           //     }
-//            }
-
+            sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
             sizePendingResponseEvents = person.getPendingResponseSlot().size();
             sizeGoingToEvents = person.getGoingToSlot().size();
             sizeMyCreatedEvents = person.getMyCreatedSlot().size();
@@ -430,6 +441,135 @@ public class NavDrawerActivity extends AppCompatActivity {
             mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
             if (updateNavDrawer) {
                 Drawer.openDrawer(mRecyclerView);
+            }
+        }
+    }
+
+
+    private class Refresh extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            List<String> relations = new ArrayList<String>();
+            relations.add("personsRequestingMe");
+            relations.add("goingToSlot");
+            relations.add("myCreatedSlot");
+            relations.add("pendingResponseSlot");
+            Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+
+            sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
+            sizePendingResponseEvents = person.getPendingResponseSlot().size();
+            sizeGoingToEvents = person.getGoingToSlot().size();
+            sizeMyCreatedEvents = person.getMyCreatedSlot().size();
+
+            valResponseEvents = " " + String.valueOf(sizePendingResponseEvents);
+            valPersonsRequestingMe = " " + String.valueOf(sizePersonsRequestingMe);
+            valGoingToEvents = " " + String.valueOf(sizeGoingToEvents);
+            valMyCreatedEvents = " " + String.valueOf(sizeMyCreatedEvents);
+
+            if (sizePendingResponseEvents >= 1) {
+                resourceIntPendingResponseEvents = R.drawable.ic_actionrequiredinvitedevent;
+            } else {
+                resourceIntPendingResponseEvents = R.drawable.ic_pendingrequestslots;
+            }
+            if (sizePersonsRequestingMe >= 1) {
+                resourceIntPersonsRequestingMe = R.drawable.ic_actionrequiredcontactspng;
+            } else {
+                resourceIntPersonsRequestingMe = R.drawable.ic_addcontact;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            int ICONS[] = {R.drawable.ic_home, R.drawable.ic_createslot
+                    , R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
+                    resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
+
+            String TITLES[] = {"Home", "Create event", "My events " + valMyCreatedEvents, "Going to events " +
+                    valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
+                    valPersonsRequestingMe, "Update account", "Sign out"};
+
+            NAME = personLoggedIn.getFullname();
+            EMAIL = userLoggedIn.getEmail();
+
+            mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+
+            mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
+
+            // And passing the titles,icons,header view name, header view email,
+            // and header view profile picture
+
+            mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
+            mLayoutManager = new LinearLayoutManager(NavDrawerActivity.this);                 // Creating a layout Manager
+            mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+
+            mDrawerToggle = new ActionBarDrawerToggle(NavDrawerActivity.this, Drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
+
+                @Override
+                public void onDrawerOpened(View drawerView) {
+                    super.onDrawerOpened(drawerView);
+                    // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
+                    // open I am not going to put anything here)
+                    // invalidateOptionsMenu();
+
+                    mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+
+                        @Override
+                        public void onItemClick(View view, int position) {
+
+                            selectItem(position);
+                            Drawer.closeDrawer(mRecyclerView);
+                        }
+
+                        @Override
+                        public void onItemLongClick(View view, int position) {
+                            // ...
+
+                            //TODO: Dialog show, remove slot. Remove from list clear adapter, give adapter now list
+                            //TODO Yes: get the ownerObjectId and remove from database
+                        }
+                    }
+                    ));
+                }
+
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                    // Code here will execute once drawer is closed
+                    //  invalidateOptionsMenu();
+                }
+
+            }; // Drawer Toggle Object Made
+            Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
+            mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+
+            if (!Drawer.isDrawerOpen(mRecyclerView)) {
+                Drawer.openDrawer(mRecyclerView);
+            }
+            setRefreshActionButtonState(false);
+
+            Fragment frag = getFragmentManager().findFragmentByTag("home_tag");
+
+            if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText(
+                        String.valueOf((sizePersonsRequestingMe + sizePendingResponseEvents + " Notifications")));
+
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setTextColor(Color.RED);
+
+            } else {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText("No new notifications");
             }
         }
     }

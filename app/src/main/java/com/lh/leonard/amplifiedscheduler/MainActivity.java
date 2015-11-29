@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.multidex.MultiDex;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.Display;
@@ -55,7 +56,7 @@ public class MainActivity extends Activity {
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
         // Custom criteria: 3 days and 5 launches
-        RateThisApp.Config config = new RateThisApp.Config(30, 20);
+        RateThisApp.Config config = new RateThisApp.Config(20, 15);
         // Custom title and message
         config.setTitle(R.string.rta_dialog_title);
         config.setMessage(R.string.rta_dialog_message);
@@ -73,10 +74,13 @@ public class MainActivity extends Activity {
 
         encryption = Encryption.getDefault("Key", "Salt", new byte[16]);  // 16
 
-
-        new Decrypt().execute();
+        new Change().execute();
     }
-
+    protected void attachBaseContext(Context base)
+    {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
     public class Validator {
 
         private boolean isPasswordValid(CharSequence password) {
@@ -103,11 +107,11 @@ public class MainActivity extends Activity {
         }
     }
 
-    private class Decrypt extends AsyncTask<Void, Integer, Void> {
+    private class Change extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
-
+            super.onPreExecute();
         }
 
         @Override
@@ -185,11 +189,6 @@ public class MainActivity extends Activity {
             final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
             final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
             final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
-
-            //  HashMap args = new HashMap();
-            // args.put( "weather", "sunny" );
-
-            //Backendless.Events.dispatch("AddAsContacts", args);
 
             buttonSignIn.setTypeface(RobotoCondensedLight);
             editTextUsername.setTypeface(RobotoCondensedLight);
@@ -274,13 +273,7 @@ public class MainActivity extends Activity {
             }
 
 
-            final Button loginButton = (Button) findViewById(R.id.buttonSignIn);
-
-            final TextView passwordRecoveryButton = (TextView) findViewById(R.id.buttonForgotPassword);
-
-            final TextView registerButton = (TextView) findViewById(R.id.buttonRegistration);
-
-            registerButton.setOnClickListener(new View.OnClickListener() {
+            buttonRegistration.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     Intent registerIntent = new Intent(MainActivity.this, RegistrationActivity.class);
@@ -288,7 +281,7 @@ public class MainActivity extends Activity {
                 }
             });
 
-            passwordRecoveryButton.setOnClickListener(new View.OnClickListener() {
+            buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent recoveryPasswordIntent = new Intent(MainActivity.this, ForgotPasswordReset.class);
@@ -298,7 +291,7 @@ public class MainActivity extends Activity {
 
             //TODO Threading when users registers, show spinner.
 
-            loginButton.setOnClickListener(new View.OnClickListener() {
+            buttonSignIn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     EditText emailField = (EditText) findViewById(R.id.emailSignIn);

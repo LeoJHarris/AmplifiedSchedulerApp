@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.text.Editable;
@@ -49,6 +51,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +93,8 @@ public class CreateSlot extends AppCompatActivity implements
 
     String justStartTime;
     String justEndTime;
+    int startHour;
+    int startMinute;
 
     List<Person> myContactsPersonsList;
     BackendlessCollection<Person> myContactPersons;
@@ -114,6 +119,10 @@ public class CreateSlot extends AppCompatActivity implements
     Switch aSwitch;
 
     StringBuilder dateFormatSet = new StringBuilder();
+    int startDay;
+    int startMonth;
+    int startYear;
+
 
     Button btnSlotDate;
     //  ImageButton btnGetLocationGeoPoint;
@@ -549,6 +558,7 @@ public class CreateSlot extends AppCompatActivity implements
             Map<String, Object> locationMap = new HashMap<>();
             locationMap.put("location", location);
             eventLocation.setMetadata(locationMap);
+
         }
     }
 
@@ -614,6 +624,9 @@ public class CreateSlot extends AppCompatActivity implements
     private void showDate(int year, int month, int day) {
 
         dateFormatSet.setLength(0);
+        startDay = day;
+        startMonth = month;
+        startYear = year;
         dateView.setText("Date: " + dateFormatSet.append(day).append("/")
                 .append(month).append("/").append(year));
 
@@ -709,6 +722,9 @@ public class CreateSlot extends AppCompatActivity implements
 
 
         if (outputInt == 1) {
+            startMinute = mins;
+            startHour = hours;
+
             justStartTime = aTime;
             output.setText("Start Time: " + aTime);
 
@@ -726,6 +742,11 @@ public class CreateSlot extends AppCompatActivity implements
             output1.setText("End Time: " + aTime);
             btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
         }
+    }
+    protected void attachBaseContext(Context base)
+    {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
@@ -753,8 +774,13 @@ public class CreateSlot extends AppCompatActivity implements
             HashMap<String, Object> hashMapEvent = new HashMap<>();
             hashMapEvent.put("subject", subject);
             hashMapEvent.put("message", message);
-            hashMapEvent.put("date", dateFormatSet.toString());
-            hashMapEvent.put("starttime", justStartTime);
+
+            Date startDate = getDateFromDatePicker(startDay, startMonth, startYear, startMinute, startHour);
+
+//            =getDate(dateFormatSet.toString() + " " + justStartTime);
+
+            hashMapEvent.put("starttime", startDate);
+
             hashMapEvent.put("endtime", justEndTime);
             hashMapEvent.put("attendees", numberAttendeesAvaliable);
             hashMapEvent.put("phone", personLoggedIn.getPhone());
@@ -784,22 +810,7 @@ public class CreateSlot extends AppCompatActivity implements
                 @Override
                 public void handleResponse(Map map) {
 
-                    btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    btnSlotDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
-                    addedContactsForSlot.clear();
-                    mAddressTextView.setText("Please Set Place");
-                    mAutocompleteTextView.setText("");
-                    slotSubjectEditText.setText("");
-                    slotsDate.setText("Set Date");
-                    slotStartTime.setText("Set Start Time");
-                    slotEndTime.setText("Set End Time");
-                    slotSubjectEditText.setText("");
-                    slotMessageEditText.setText("");
+
                     // ringProgressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_LONG).show();
                 }
@@ -825,8 +836,43 @@ public class CreateSlot extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(Void result) {
+            btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            btnSlotDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
+            addedContactsForSlot.clear();
+            mAddressTextView.setText("Please Set Place");
+            mAutocompleteTextView.setText("");
+            slotSubjectEditText.setText("");
+            slotsDate.setText("Set Date");
+            slotStartTime.setText("Set Start Time");
+            slotEndTime.setText("Set End Time");
+            slotSubjectEditText.setText("");
+            slotMessageEditText.setText("");
         }
     }
+
+    public static Date getDateFromDatePicker(int day, int month, int year, int minute, int hours) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month-1, day, hours, minute);
+        return calendar.getTime();
+    }
+
+//    protected Date getDate(String dateofslot) {
+//
+//        SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy hh:mm a", Locale.getDefault());
+//        Date result = null;
+//        try {
+//            result = df.parse(dateofslot);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return result;
+//    }
 
     @JavascriptInterface
     public void sendsmss(String phoneNumber, String message, String subject, String date, String time) {
@@ -964,4 +1010,5 @@ public class CreateSlot extends AppCompatActivity implements
         mPlaceArrayAdapter.setGoogleApiClient(null);
         Log.e(LOG_TAG, "Google Places API connection suspended.");
     }
+
 }
