@@ -19,17 +19,17 @@ package com.lh.leonard.amplifiedscheduler;
  * limitations under the License.
  */
 
-        import android.content.Context;
-        import android.graphics.Canvas;
-        import android.graphics.Color;
-        import android.graphics.Paint;
-        import android.graphics.RadialGradient;
-        import android.graphics.Shader;
-        import android.graphics.drawable.ShapeDrawable;
-        import android.graphics.drawable.shapes.OvalShape;
-        import android.support.v4.view.ViewCompat;
-        import android.view.animation.Animation;
-        import android.widget.ImageView;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
+import android.support.v4.view.ViewCompat;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 
 /**
  * Private class created to work around issues with AnimationListeners being

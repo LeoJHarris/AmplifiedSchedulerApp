@@ -36,7 +36,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label=""
+            android:label="Amplified Scheduler"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -111,10 +111,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCie9wDjjfgkNxs2eFpRQf5v8oBY0mhLME" />
 
-        <activity
-            android:name=".SplashActivity"
-            android:label=""
-            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

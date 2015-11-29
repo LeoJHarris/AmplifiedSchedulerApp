@@ -17,8 +17,6 @@ import android.widget.ProgressBar;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
 
 import java.util.HashMap;
 import java.util.List;

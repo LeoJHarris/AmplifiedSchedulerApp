@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
 
         encryption = Encryption.getDefault("Key", "Salt", new byte[16]);  // 16
 
-        new Decrypt().execute();
+        new Change().execute();
     }
 
     public class Validator {
@@ -102,11 +102,11 @@ public class MainActivity extends Activity {
         }
     }
 
-    private class Decrypt extends AsyncTask<Void, Integer, Void> {
+    private class Change extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
-
+            super.onPreExecute();
         }
 
         @Override
@@ -184,11 +184,6 @@ public class MainActivity extends Activity {
             final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
             final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
             final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
-
-            //  HashMap args = new HashMap();
-            // args.put( "weather", "sunny" );
-
-            //Backendless.Events.dispatch("AddAsContacts", args);
 
             buttonSignIn.setTypeface(RobotoCondensedLight);
             editTextUsername.setTypeface(RobotoCondensedLight);
@@ -273,13 +268,7 @@ public class MainActivity extends Activity {
             }
 
 
-            final Button loginButton = (Button) findViewById(R.id.buttonSignIn);
-
-            final TextView passwordRecoveryButton = (TextView) findViewById(R.id.buttonForgotPassword);
-
-            final TextView registerButton = (TextView) findViewById(R.id.buttonRegistration);
-
-            registerButton.setOnClickListener(new View.OnClickListener() {
+            buttonRegistration.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     Intent registerIntent = new Intent(MainActivity.this, RegistrationActivity.class);
@@ -287,7 +276,7 @@ public class MainActivity extends Activity {
                 }
             });
 
-            passwordRecoveryButton.setOnClickListener(new View.OnClickListener() {
+            buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent recoveryPasswordIntent = new Intent(MainActivity.this, ForgotPasswordReset.class);
@@ -297,7 +286,7 @@ public class MainActivity extends Activity {
 
             //TODO Threading when users registers, show spinner.
 
-            loginButton.setOnClickListener(new View.OnClickListener() {
+            buttonSignIn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     EditText emailField = (EditText) findViewById(R.id.emailSignIn);
