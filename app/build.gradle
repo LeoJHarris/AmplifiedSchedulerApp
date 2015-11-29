@@ -8,7 +8,7 @@ android {
         applicationId "com.lh.leonard.amplifiedscheduler"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 30
+        versionCode 31
         versionName "1.68"
         multiDexEnabled true
     }
@@ -17,7 +17,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true;
+            minifyEnabled false;
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
