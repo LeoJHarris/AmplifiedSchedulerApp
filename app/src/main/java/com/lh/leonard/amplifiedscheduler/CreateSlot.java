@@ -562,23 +562,6 @@ public class CreateSlot extends AppCompatActivity implements
         }
     }
 
-//    public void onCheckboxClicked(View view) {
-//        // Is the view now checked?
-//        boolean checked = ((CheckBox) view).isChecked();
-//
-//        // Check which checkbox was clicked
-//        switch (view.getId()) {
-//            case R.id.checkBoxAppointmentRequired:
-//                if (checked) {
-//                    appointmentBoolean = true;
-//
-//                } else {
-//                    appointmentBoolean = false;
-//                }
-//                break;
-//        }
-//    }
-
     @SuppressWarnings("deprecation")
     public void setDate(View view) {
         showDialog(999);
@@ -743,8 +726,8 @@ public class CreateSlot extends AppCompatActivity implements
             btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
         }
     }
-    protected void attachBaseContext(Context base)
-    {
+
+    protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
@@ -858,7 +841,7 @@ public class CreateSlot extends AppCompatActivity implements
     public static Date getDateFromDatePicker(int day, int month, int year, int minute, int hours) {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month-1, day, hours, minute);
+        calendar.set(year, month - 1, day, hours, minute);
         return calendar.getTime();
     }
 
@@ -1011,4 +994,10 @@ public class CreateSlot extends AppCompatActivity implements
         Log.e(LOG_TAG, "Google Places API connection suspended.");
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, NavDrawerActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

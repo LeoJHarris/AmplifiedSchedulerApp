@@ -1,6 +1,7 @@
 package com.lh.leonard.amplifiedscheduler;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -52,7 +53,7 @@ public class AddRemoveContactsTabbed extends AppCompatActivity {
 
                 Fragment fragment = ((ViewPagerAdapter) pager.getAdapter()).getFragment(position);
 
-               // (position == 1 || position == 0)
+                // (position == 1 || position == 0)
 
                 if (fragment != null) {
                     fragment.onResume();
@@ -62,5 +63,12 @@ public class AddRemoveContactsTabbed extends AppCompatActivity {
         tabs.setOnPageChangeListener(pageChangeListener);
         pager.setCurrentItem(pageSelected);
         pager.setAdapter(adapter3); //Set your FragmentPagerAdapter
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, NavDrawerActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
