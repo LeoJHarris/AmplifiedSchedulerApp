@@ -102,8 +102,10 @@ public class NavDrawerActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+        setRefreshActionButtonState(true);
         getNav();
         new Refresh().execute();
+        setRefreshActionButtonState(false);
 
     }
 
@@ -491,7 +493,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                 Drawer.openDrawer(mRecyclerView);
             }
             OpenDrawer = false;
-            setRefreshActionButtonState(false);
+
 
             Fragment frag = getFragmentManager().findFragmentByTag("home_tag");
 
@@ -504,6 +506,14 @@ public class NavDrawerActivity extends AppCompatActivity {
             } else {
                 ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText("No new notifications");
             }
+            setRefreshActionButtonState(false);
         }
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        //When BACK BUTTON is pressed, the activity on the stack is restarted
+        //Do what you want on the refresh procedure here
     }
 }

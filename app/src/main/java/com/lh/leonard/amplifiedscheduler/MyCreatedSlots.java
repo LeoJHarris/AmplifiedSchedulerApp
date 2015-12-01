@@ -125,11 +125,7 @@ public class MyCreatedSlots extends AppCompatActivity {
             getEventsFromList(slot);
 
 //           for(int j = 0; j < slot.size(); j++) {
-//              //  if (slot.get(j).parseDateString().before(date)) {
-//
-//                    Backendless.Geo.removePoint(slot.get(j).getLocation());
-//                    Backendless.Persistence.of(Slot.class).remove(slot.get(j));
-//                    slot.remove(j);
+//              //
 //              //  }
 //            }
 
@@ -182,8 +178,6 @@ public class MyCreatedSlots extends AppCompatActivity {
 
             // End time
             endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
-
-            // System.out.println(startTime.toString());
 
             String location = (String) eventListSlots.get(i).getLocation().getMetadata("address");
 
