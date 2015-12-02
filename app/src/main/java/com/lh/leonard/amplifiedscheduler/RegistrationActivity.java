@@ -1,14 +1,16 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.multidex.MultiDex;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,9 +23,10 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.BackendlessCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 
-public class RegistrationActivity extends ActionBarActivity {
+public class RegistrationActivity extends AppCompatActivity {
 
     String my_var;
     Drawable tickIconDraw;
@@ -40,16 +43,20 @@ public class RegistrationActivity extends ActionBarActivity {
     Drawable passwordGoodIconDraw;
     Drawable countryGoodIconDraw;
     Drawable phoneGoodIconDraw;
-
+    private Toolbar toolbar;
     Drawable passwordBadIconDraw;
     Drawable emailBadIconDraw;
     ArrayAdapter<String> adapter;
     Validator validator = new Validator();
+    String EMAILBAD = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
@@ -74,7 +81,6 @@ public class RegistrationActivity extends ActionBarActivity {
         final AutoResizeTextView txtLabelEmailReg = (AutoResizeTextView) findViewById(R.id.txtLabelEmailReg);
         final AutoResizeTextView txtLabelCountryReg = (AutoResizeTextView) findViewById(R.id.txtLabelCountryReg);
         final AutoResizeTextView txtLabelPhone = (AutoResizeTextView) findViewById(R.id.txtLabelPhone);
-        TextView textViewHeaderReg = (TextView) findViewById(R.id.textViewHeaderRegister);
 
         tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
         crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
@@ -119,7 +125,6 @@ public class RegistrationActivity extends ActionBarActivity {
         lnameField.setTypeface(RobotoCondensedLight);
         phoneField.setTypeface(RobotoCondensedLight);
         registerButton.setTypeface(RobotoCondensedLight);
-        textViewHeaderReg.setTypeface(RobotoCondensedLight);
         txtLabelCountryReg.setTypeface(RobotoCondensedLight);
         txtLabelEmailReg.setTypeface(RobotoCondensedLight);
         txtLabelFnameReg.setTypeface(RobotoCondensedLight);
@@ -134,7 +139,7 @@ public class RegistrationActivity extends ActionBarActivity {
             public void onClick(View v) {
 
 
-                CharSequence email = emailField.getText(); //TODO regex tester, might be it on server, handle fault with code
+                final CharSequence email = emailField.getText(); //TODO regex tester, might be it on server, handle fault with code
 
                 final CharSequence fname = fnameField.getText();
                 final CharSequence lname = lnameField.getText();
@@ -158,16 +163,12 @@ public class RegistrationActivity extends ActionBarActivity {
 
                             if (validator.isValidEmail(email)) {
 
-                                ringProgressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait ...", "Signing in ...", true);
+                                ringProgressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait ...", "Creating Account ...", true);
                                 ringProgressDialog.setCancelable(false);
 
                                 BackendlessUser user = new BackendlessUser();
-
                                 user.setEmail(email.toString());
                                 user.setPassword(password.toString());
-
-                                //TODO SEND ME TEXT; check that Cell phone is correct
-
 
                                 Person person = new Person();
                                 person.setFname(fname.toString());
@@ -175,7 +176,7 @@ public class RegistrationActivity extends ActionBarActivity {
                                 person.setEmail(email.toString());
                                 person.setPhone(phone.toString());
                                 person.setCountry(county.toString());
-                                person.setFullname(fname.toString() + " " + lname.toString()); // TODO Make textbox for full name
+                                person.setFullname(fname.toString() + " " + lname.toString());
 
                                 user.setProperty("persons", person);
 
@@ -183,20 +184,30 @@ public class RegistrationActivity extends ActionBarActivity {
                                     @Override
                                     public void handleResponse(BackendlessUser backendlessUser) {
 
-                                        //TODO Threading when users registers, show spinner.
-
-                                        Log.i("Registration", backendlessUser.getEmail() + " successfully registered");
-
                                         Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                                         intent.putExtra("nameRegistered", fname + "," + lname);
 
                                         startActivity(intent);
                                     }
 
-//                        public void handleFault(BackendlessFault fault) {
-//                            // an error has occurred, the error code can be retrieved with fault.getCode() // TODO: use getCode and provide appriate user feedback http://backendless.com/documentation/users/android/users_user_registration.htm
-//                            Toast.makeText(getApplicationContext(), "Please re-enter valid details" + fault.getCode(), Toast.LENGTH_LONG).show();
-//                        }
+                                    public void handleFault(BackendlessFault fault) {
+                                        ringProgressDialog.dismiss();
+                                        int errorCode = Integer.valueOf(fault.getCode());
+                                        if (errorCode == 3033) {
+                                            EMAILBAD = email.toString();
+                                            Toast.makeText(getApplicationContext(), "Error: User with the same email address already exists", Toast.LENGTH_LONG).show();
+                                            emailField.setCompoundDrawablesWithIntrinsicBounds(emailBadIconDraw, null, crossIconDraw, null);
+                                        } else if (errorCode == 3009) {
+                                            Toast.makeText(getApplicationContext(), "Error: User registration is currently disabled by admin, please try again soon", Toast.LENGTH_LONG).show();
+                                        } else if (errorCode == 3013) {
+                                            Toast.makeText(getApplicationContext(), "Error: Missing email property", Toast.LENGTH_LONG).show();
+                                        } else if (errorCode == 3014) {
+                                            Toast.makeText(getApplicationContext(), "Error: External registration failed with an error", Toast.LENGTH_LONG).show();
+                                        } else if (errorCode == 3039 || errorCode == 3041 || errorCode == 3040 || errorCode == 3043
+                                                || errorCode == 8000 || errorCode == 3012 || errorCode == 3011 || errorCode == 3021) {
+                                            Toast.makeText(getApplicationContext(), "Error: " + fault.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
                                 });
                             } else {
                                 Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com", Toast.LENGTH_LONG).show();
@@ -240,11 +251,19 @@ public class RegistrationActivity extends ActionBarActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if ((!(emailField.getText().toString().equals("")))) {
-                    if (validator.isValidEmail(emailField.getText().toString())) {
-                        emailField.setCompoundDrawablesWithIntrinsicBounds(emailGoodIconDraw, null, tickIconDraw, null);
+                    if (!emailField.getText().toString().equals(EMAILBAD)) {
+                        if (validator.isValidEmail(emailField.getText().toString())) {
+                            emailField.setCompoundDrawablesWithIntrinsicBounds(emailGoodIconDraw, null, tickIconDraw, null);
+                        } else {
+                            emailField.setCompoundDrawablesWithIntrinsicBounds(emailBadIconDraw, null, crossIconDraw, null);
+                            Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         emailField.setCompoundDrawablesWithIntrinsicBounds(emailBadIconDraw, null, crossIconDraw, null);
-                        Toast.makeText(getApplicationContext(), "Please enter your email address in the format someone@example.com", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "User with the same email address already exists",
+                                Toast.LENGTH_LONG).show();
+
                     }
                 } else {
                     emailField.setCompoundDrawablesWithIntrinsicBounds(emailIconDraw, null, null, null);
@@ -318,10 +337,7 @@ public class RegistrationActivity extends ActionBarActivity {
 
             }
         });
-        /**
-         * Unset the var whenever the user types. Validation will
-         * then fail. This is how we enforce selecting from the list.
-         */
+
         textViewCountry.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -354,6 +370,19 @@ public class RegistrationActivity extends ActionBarActivity {
                 return false;
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
+    }
+
+
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
 

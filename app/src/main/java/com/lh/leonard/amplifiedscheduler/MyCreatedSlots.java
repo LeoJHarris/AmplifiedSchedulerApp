@@ -7,11 +7,16 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
@@ -61,7 +66,7 @@ public class MyCreatedSlots extends AppCompatActivity {
     Calendar maxDate;
     private Toolbar toolbar;
     RelativeLayout RLProgressBar;
-
+    private Menu optionsMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,11 +129,6 @@ public class MyCreatedSlots extends AppCompatActivity {
 
             getEventsFromList(slot);
 
-//           for(int j = 0; j < slot.size(); j++) {
-//              //
-//              //  }
-//            }
-
             return null;
         }
 
@@ -164,7 +164,26 @@ public class MyCreatedSlots extends AppCompatActivity {
             mAgendaCalendarView.setVisibility(View.VISIBLE);
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.optionsMenu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_share, menu);
 
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.share);
+
+        // Fetch and store ShareActionProvider
+        ShareActionProvider  mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+        sendIntent.setType("text/plain");
+        mShareActionProvider.setShareIntent(sendIntent);
+        return super.onCreateOptionsMenu(menu);
+    }
 
     private void getEventsFromList(List<Slot> eventListSlots) {
 

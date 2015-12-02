@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment {
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
         // final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "RobotoCondensed-Light.ttf");
 
-        textViewNotificationNumberHome.setTypeface(RobotoCondensedLight);
+        textViewNotificationNumberHome.setTypeface(RobotoBlack);
 
         welcomeLabel.setTypeface(RobotoCondensedLightItalic);
 

@@ -12,13 +12,18 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.widget.AdapterView;
@@ -74,7 +79,7 @@ public class CreateSlot extends AppCompatActivity implements
     private TextView dateView;
     Calendar c = Calendar.getInstance();
     private int year, month, day;
-
+    private Menu optionsMenu;
     CheckBox checkBoxAppointmentRequired;
     Boolean appointmentBoolean = false;
     static final int TIME_DIALOG_ID = 1111;
@@ -134,7 +139,7 @@ public class CreateSlot extends AppCompatActivity implements
     ArrayList<Person> addedContactsForSlot;
 
     GeoPoint eventLocation;
-
+    private Toolbar toolbar;
     String date;
     String startTime;
     String endTime;
@@ -150,6 +155,8 @@ public class CreateSlot extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_slot);
 
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
         mGoogleApiClient = new GoogleApiClient.Builder(CreateSlot.this)
                 .addApi(Places.GEO_DATA_API)
@@ -166,7 +173,6 @@ public class CreateSlot extends AppCompatActivity implements
                 null, null); //BOUNDS_MOUNTAIN_VIEW
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
 
-
         tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
         crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
 
@@ -180,7 +186,6 @@ public class CreateSlot extends AppCompatActivity implements
         slotStartTime = (TextView) findViewById(R.id.outputStartTime);
         slotEndTime = (TextView) findViewById(R.id.outputEndTime);
         mAutocompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
-        TextView textViewHeaderCreateSlot = (TextView) findViewById(R.id.textViewHeaderCreateSlot);
         tvSpaces = (TextView) findViewById(R.id.tvSpaces);
         // CheckBox checkBoxAppointmentRequired = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
         buttonSendSlot = (Button) findViewById(R.id.buttonSendSlot);
@@ -209,7 +214,6 @@ public class CreateSlot extends AppCompatActivity implements
         slotStartTime.setTypeface(RobotoCondensedLight);
         slotEndTime.setTypeface(RobotoCondensedLight);
         mAutocompleteTextView.setTypeface(RobotoCondensedLight);
-        textViewHeaderCreateSlot.setTypeface(RobotoCondensedBold);
         tvSpaces.setTypeface(RobotoCondensedLight);
         //checkBoxString.setTypeface(regularFont);
         buttonSendSlot.setTypeface(RobotoCondensedLight);
@@ -622,13 +626,6 @@ public class CreateSlot extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_slot, menu);
-        return true;
-    }
-
     public void addButtonClickListener() {
 
         btnClickSetStartTime = (Button) findViewById(R.id.btnClickSetStartTime);
@@ -999,5 +996,26 @@ public class CreateSlot extends AppCompatActivity implements
         Intent intent = new Intent(this, NavDrawerActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.optionsMenu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_share, menu);
+
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.share);
+
+        // Fetch and store ShareActionProvider
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+        sendIntent.setType("text/plain");
+        mShareActionProvider.setShareIntent(sendIntent);
+        return super.onCreateOptionsMenu(menu);
     }
 }

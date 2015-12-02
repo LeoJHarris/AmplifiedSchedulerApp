@@ -48,7 +48,7 @@
         </activity>
         <activity
             android:name=".RegistrationActivity"
-            android:label=""
+            android:label="Sign Up"
             android:screenOrientation="portrait" />
         <activity
             android:name=".UserLoggedIn"
@@ -70,7 +70,7 @@
         <activity
             android:name=".UpdateAccount"
             android:excludeFromRecents="true"
-            android:label="" />
+            android:label="Update Account" />
         <activity
             android:name=".MapsActivity"
             android:excludeFromRecents="true"
@@ -78,13 +78,13 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".ForgotPasswordReset"
-            android:label="" />
+            android:label="Password Reset" />
         <activity
             android:name=".SlotsImGoingToDialog"
             android:label="" />
         <activity
             android:name=".CreateSlot"
-            android:label=""
+            android:label="Create Event"
             android:noHistory="true" />
         <activity
             android:name=".RecipientsForSlot"
@@ -113,7 +113,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAgLfiKNQonSw2Tuxkg0zNk_LehF7Gpkzo" />
 
-        <meta-data android:name="com.google.android.gms.version"
+        <meta-data
+            android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
     </application>
 

@@ -1,11 +1,18 @@
 package com.lh.leonard.amplifiedscheduler;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -16,7 +23,7 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 
-public class UpdateAccount extends Activity {
+public class UpdateAccount extends AppCompatActivity {
 
     ProgressDialog ringProgressDialog;
     View v;
@@ -42,10 +49,10 @@ public class UpdateAccount extends Activity {
     Drawable passwordGoodIconDraw;
     Drawable countryGoodIconDraw;
     Drawable phoneGoodIconDraw;
-
+    private Menu optionsMenu;
     Drawable passwordBadIconDraw;
     Drawable emailBadIconDraw;
-
+    private Toolbar toolbar;
     String fname;
     String lname;
     String phone;
@@ -60,6 +67,9 @@ public class UpdateAccount extends Activity {
         setContentView(R.layout.activity_update_account);
 
         //TODO set the ic_.. icons to green and keep tick when validated
+
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
         tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
         crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
@@ -352,5 +362,33 @@ public class UpdateAccount extends Activity {
                 return false;
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, NavDrawerActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.optionsMenu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_share, menu);
+
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.share);
+
+        // Fetch and store ShareActionProvider
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+        sendIntent.setType("text/plain");
+        mShareActionProvider.setShareIntent(sendIntent);
+        return super.onCreateOptionsMenu(menu);
     }
 }
