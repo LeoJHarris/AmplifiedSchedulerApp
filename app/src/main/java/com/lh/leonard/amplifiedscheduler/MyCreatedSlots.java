@@ -3,7 +3,6 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -13,22 +12,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.github.tibolte.agendacalendarview.AgendaCalendarView;
 import com.github.tibolte.agendacalendarview.CalendarPickerController;
@@ -37,10 +31,8 @@ import com.github.tibolte.agendacalendarview.models.DayItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class MyCreatedSlots extends AppCompatActivity {
 
@@ -51,7 +43,6 @@ public class MyCreatedSlots extends AppCompatActivity {
     private ProgressBar progressBar;
     BackendlessCollection<Person> persons;
     BackendlessCollection<Slot> slots;
-    SearchView searchViewSlots;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     RVAdapter adapter;
     View v;
@@ -67,6 +58,7 @@ public class MyCreatedSlots extends AppCompatActivity {
     private Toolbar toolbar;
     RelativeLayout RLProgressBar;
     private Menu optionsMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +85,6 @@ public class MyCreatedSlots extends AppCompatActivity {
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         new ParseURL().execute();
-        searchViewSlots = (SearchView) findViewById(R.id.searchViewSlots);
     }
 
 
@@ -103,6 +94,140 @@ public class MyCreatedSlots extends AppCompatActivity {
         protected void onPreExecute() {
             progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            StringBuilder whereClause = new StringBuilder();
+            whereClause.append("Person[mycreatedslot]");
+            whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
+
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            dataQuery.setWhereClause(whereClause.toString());
+
+            slots = Backendless.Data.of(Slot.class).find(dataQuery);
+            slot = slots.getData();
+
+            eventList = new ArrayList<>();
+
+            getEventsFromList(slot);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            CalendarPickerController mPickerController = new CalendarPickerController() {
+                @Override
+                public void onDaySelected(DayItem dayItem) {
+                }
+
+                @Override
+                public void onEventSelected(CalendarEvent event) {
+
+                    if (!event.getTitle().equals("No events")) {
+
+                        Intent slotDialogIntent = new Intent(MyCreatedSlots.this, MyCreatedSlotsDialog.class);
+
+                        int position = Integer.parseInt(String.valueOf(event.getId()));
+
+                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
+
+                        startActivity(slotDialogIntent);
+                    }
+                }
+            };
+            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
+            progressBar.setVisibility(View.GONE);
+            RLProgressBar.setVisibility(View.GONE);
+            mAgendaCalendarView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setRefreshActionButtonState(final boolean refreshing) {
+        if (optionsMenu != null) {
+            final MenuItem refreshItem = optionsMenu
+                    .findItem(R.id.action_refresh);
+            if (refreshItem != null) {
+                if (refreshing) {
+                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+                } else {
+                    refreshItem.setActionView(null);
+                }
+            }
+        }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+
+                // Complete with your code
+                new Refresh().execute();
+                setRefreshActionButtonState(true);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.optionsMenu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_share, menu);
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.share);
+
+        // Fetch and store ShareActionProvider
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+        sendIntent.setType("text/plain");
+        mShareActionProvider.setShareIntent(sendIntent);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void getEventsFromList(List<Slot> eventListSlots) {
+
+        for (int i = 0; i < eventListSlots.size(); i++) {
+
+            Calendar startTime = Calendar.getInstance();
+            Calendar endTime = Calendar.getInstance();
+
+            startTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
+
+            // End time
+            endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
+
+            String location = (String) eventListSlots.get(i).getLocation().getMetadata("address");
+
+            CalendarEvent event = new CalendarEvent(eventListSlots.get(i).getSubject(),
+                    eventListSlots.get(i).getMessage(), location,
+                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, false);
+
+            Long l = Long.parseLong(String.valueOf(i));
+
+            event.setId(l);
+
+            eventList.add(event);
+        }
+    }
+
+    private class Refresh extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
             super.onPreExecute();
         }
 
@@ -159,168 +284,9 @@ public class MyCreatedSlots extends AppCompatActivity {
             };
 
             mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
-            progressBar.setVisibility(View.GONE);
-            RLProgressBar.setVisibility(View.GONE);
-            mAgendaCalendarView.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(), "Events Synced", Toast.LENGTH_LONG).show();
+            setRefreshActionButtonState(false);
         }
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        this.optionsMenu = menu;
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_share, menu);
-
-
-        // Locate MenuItem with ShareActionProvider
-        MenuItem item = menu.findItem(R.id.share);
-
-        // Fetch and store ShareActionProvider
-        ShareActionProvider  mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT,
-                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
-        sendIntent.setType("text/plain");
-        mShareActionProvider.setShareIntent(sendIntent);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    private void getEventsFromList(List<Slot> eventListSlots) {
-
-
-        for (int i = 0; i < eventListSlots.size(); i++) {
-
-            Calendar startTime = Calendar.getInstance();
-            Calendar endTime = Calendar.getInstance();
-
-            startTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
-
-            // End time
-            endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
-
-            String location = (String) eventListSlots.get(i).getLocation().getMetadata("address");
-
-            CalendarEvent event = new CalendarEvent(eventListSlots.get(i).getSubject(),
-                    eventListSlots.get(i).getMessage(), location,
-                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, false);
-
-            Long l = Long.parseLong(String.valueOf(i));
-
-            event.setId(l);
-
-            eventList.add(event);
-
-
-            //CalendarEvent event1 = new CalendarEvent()
-        }
-
-    }
-
-    private class CancelEvent extends AsyncTask<Void, Integer, Void> {
-
-        int positionInList;
-
-        public CancelEvent(int positionInList) {
-
-            this.positionInList = positionInList;
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Slot[attendees]");
-            whereClause.append(".objectId='").append(slot.get(positionInList).getObjectId()).append("'");
-
-            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-            dataQuery.setWhereClause(whereClause.toString());
-
-            personsToSmsCollection = Backendless.Data.of(Person.class).find(dataQuery);
-            personsToSms = personsToSmsCollection.getData();
-
-            String fullnamePersonLoggedIn = personLoggedIn.getFullname();
-            // String dateofslot = slot.get(positionInList).getDateofslot();
-            String subject = slot.get(positionInList).getSubject();
-            String placeofSlot = slot.get(positionInList).getPlace();
-
-//            for (Person pId : personsToSms) {
-//
-//                sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, dateofslot, placeofSlot);
-//            }
-
-            eventRemoved = slot.get(positionInList).getSubject();
-
-            // Deleting process
-
-            Map<String, String> args = new HashMap<>();
-            args.put("id", "deleteevent");
-
-            args.put("event", slot.get(positionInList).getObjectId());
-
-            Backendless.Events.dispatch("ManageEvent", args, new AsyncCallback<Map>() {
-                @Override
-                public void handleResponse(Map map) {
-                    Toast.makeText(getApplicationContext(), eventRemoved + " was cancelled", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-
-                }
-            });
-
-            slot.remove(positionInList);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-            rv.setAdapter(null);
-
-            if (!slot.isEmpty()) {
-
-                rv.setHasFixedSize(true);
-
-                rv.setLayoutManager(llm);
-
-                //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
-
-                Resources r = getResources();
-
-                adapter = new RVAdapter(slot, r);
-
-                rv.setAdapter(adapter);
-                ringProgressDialog.dismiss();
-            } else {
-                rv.setAdapter(null);
-                ringProgressDialog.dismiss();
-                searchViewSlots.setVisibility(View.GONE);
-                rv.setVisibility(View.GONE);
-                progressBar.setVisibility(View.GONE);
-            }
-        }
-    }
-
-
-    @JavascriptInterface
-    public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
-
-        String messageSubString = "Automated TXT - Amplified Schedule: Event" + subject + " on the " + date + " at " + place + " was cancelled by " + from;
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }
 
     @Override

@@ -139,8 +139,6 @@ public class NavDrawerActivity extends AppCompatActivity {
                     public void handleFault(BackendlessFault fault) {
                         // something went wrong and logout failed, to get the error code call fault.getCode()
                         ringProgressDialog.dismiss();
-
-
                     }
                 });
 
