@@ -21,24 +21,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="4dp"
-                android:background="@color/bluecalendar"
-                android:gravity="center"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:layout_height="wrap_content">
 
-                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                    android:id="@+id/textViewHeaderCreateSlot"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_column="0"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_row="0"
-                    android:gravity="center"
-                    android:text="New Event"
-                    android:textColor="@color/white"
-                    android:textSize="30sp" />
+                <include
+                    android:id="@+id/tool_bar"
+                    layout="@layout/tool_bar"></include>
 
             </LinearLayout>
 

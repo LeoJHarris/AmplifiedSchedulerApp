@@ -28,7 +28,6 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class NavDrawerActivity extends AppCompatActivity {
@@ -41,12 +40,12 @@ public class NavDrawerActivity extends AppCompatActivity {
     int resourceIntPendingResponseEvents;
     int resourceIntPersonsRequestingMe;
 
-    ShareActionProvider actionProvider;
-
     int sizePersonsRequestingMe;
     int sizeGoingToEvents;
     int sizePendingResponseEvents;
     int sizeMyCreatedEvents;
+
+    Boolean OpenDrawer = false;
 
     private Menu optionsMenu;
 
@@ -54,15 +53,6 @@ public class NavDrawerActivity extends AppCompatActivity {
     String valPersonsRequestingMe = "";
     String valGoingToEvents = "";
     String valMyCreatedEvents = "";
-
-
-    Date date = new Date();
-
-    //First We Declare Titles And Icons For Our Navigation Drawer List View
-    //This Icons And Titles Are holded in an Array as you can see
-
-    //Similarly we Create a String Resource for the name and email in the header view
-    //And we also create a int resource for profile picture in the header view
 
     String NAME;
     String EMAIL;
@@ -85,8 +75,6 @@ public class NavDrawerActivity extends AppCompatActivity {
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 
-        date.getTime();
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             updateNavDrawer = extras.getBoolean("refresh");
@@ -101,17 +89,18 @@ public class NavDrawerActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
-
-        // Need to be fixed
-        if (userLoggedIn.getProperty("persons") != null) {
+        if (userLoggedIn != null) {
             personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         } else {
-            BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
-            Backendless.Data.mapTableToClass("Person", Person.class);
-            Backendless.Persistence.mapTableToClass("Person", Person.class);
-            personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
-        new GetNavInfo().execute();
+        setRefreshActionButtonState(true);
+        getNav();
+        new Refresh().execute();
+        setRefreshActionButtonState(false);
+
     }
 
     private void selectItem(int position) {
@@ -120,28 +109,24 @@ public class NavDrawerActivity extends AppCompatActivity {
         Intent intent = null;
         switch (position) {
             case 1:
-                fragment = new HomeFragment();
-                break;
-            case 2:
                 intent = new Intent(NavDrawerActivity.this, CreateSlot.class);
                 break;
-            case 3:
+            case 2:
                 intent = new Intent(NavDrawerActivity.this, MyCreatedSlots.class);
                 break;
-            case 4:
+            case 3:
                 intent = new Intent(NavDrawerActivity.this, SlotsImGoingTo.class);
                 break;
-            case 5:
+            case 4:
                 intent = new Intent(NavDrawerActivity.this, SlotsAwaitingMyResponse.class);
                 break;
-            case 6:
+            case 5:
                 intent = new Intent(NavDrawerActivity.this, AddRemoveContactsTabbed.class);
                 break;
-            case 7:
+            case 6:
                 intent = new Intent(NavDrawerActivity.this, UpdateAccount.class);
                 break;
-            case 8:
-
+            case 7:
                 ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
                 ringProgressDialog.setCancelable(false);
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
@@ -154,8 +139,6 @@ public class NavDrawerActivity extends AppCompatActivity {
                     public void handleFault(BackendlessFault fault) {
                         // something went wrong and logout failed, to get the error code call fault.getCode()
                         ringProgressDialog.dismiss();
-
-
                     }
                 });
 
@@ -204,19 +187,12 @@ public class NavDrawerActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    // Call to update the share intent
-    private void setShareIntent(Intent shareIntent) {
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
-        }
-    }
-
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
 
                 // Complete with your code
-
+                OpenDrawer = true;
                 new Refresh().execute();
                 setRefreshActionButtonState(true);
                 return true;
@@ -242,7 +218,6 @@ public class NavDrawerActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         Fragment HomeFragment = getFragmentManager().findFragmentByTag("home_tag");
-
 
         if ((HomeFragment != null && HomeFragment.isVisible()) || fragmentManager.getBackStackEntryCount() <= 0) {
 
@@ -327,122 +302,76 @@ public class NavDrawerActivity extends AppCompatActivity {
         }
     }
 
-    private class GetNavInfo extends AsyncTask<Void, Integer, Void> {
+    public void getNav() {
+        setRefreshActionButtonState(true);
+        resourceIntPersonsRequestingMe = R.drawable.ic_addcontact;
+        resourceIntPendingResponseEvents = R.drawable.ic_pendingrequestslots;
 
-        @Override
-        protected void onPreExecute() {
-        }
+        int ICONS[] = {R.drawable.ic_createslot, R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
+                resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
+        String TITLES[] = {"Create event", "My events " + valMyCreatedEvents, "Going to events " +
+                valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
+                valPersonsRequestingMe, "Update account", "Sign out"};
 
-        @Override
-        protected Void doInBackground(Void... params) {
+        NAME = personLoggedIn.getFullname();
+        EMAIL = userLoggedIn.getEmail();
 
-            List<String> relations = new ArrayList<String>();
-            relations.add("personsRequestingMe");
-            relations.add("goingToSlot");
-            relations.add("myCreatedSlot");
-            relations.add("pendingResponseSlot");
-            Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+        mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
 
-            sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
-            sizePendingResponseEvents = person.getPendingResponseSlot().size();
-            sizeGoingToEvents = person.getGoingToSlot().size();
-            sizeMyCreatedEvents = person.getMyCreatedSlot().size();
+        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
 
-            valResponseEvents = " " + String.valueOf(sizePendingResponseEvents);
-            valPersonsRequestingMe = " " + String.valueOf(sizePersonsRequestingMe);
-            valGoingToEvents = " " + String.valueOf(sizeGoingToEvents);
-            valMyCreatedEvents = " " + String.valueOf(sizeMyCreatedEvents);
+        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
 
-            if (sizePendingResponseEvents >= 1) {
-                resourceIntPendingResponseEvents = R.drawable.ic_actionrequiredinvitedevent;
-            } else {
-                resourceIntPendingResponseEvents = R.drawable.ic_pendingrequestslots;
-            }
-            if (sizePersonsRequestingMe >= 1) {
-                resourceIntPersonsRequestingMe = R.drawable.ic_actionrequiredcontactspng;
-            } else {
-                resourceIntPersonsRequestingMe = R.drawable.ic_addcontact;
-            }
-            return null;
-        }
+        // And passing the titles,icons,header view name, header view email,
+        // and header view profile picture
 
-        @Override
-        protected void onPostExecute(Void result) {
-
-            int ICONS[] = {R.drawable.ic_home, R.drawable.ic_createslot
-                    , R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
-                    resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
-
-            String TITLES[] = {"Home", "Create event", "My events " + valMyCreatedEvents, "Going to events " +
-                    valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
-                    valPersonsRequestingMe, "Update account", "Sign out"};
-
-            NAME = personLoggedIn.getFullname();
-            EMAIL = userLoggedIn.getEmail();
-
-            mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
-
-            mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
-
-            mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
-
-            // And passing the titles,icons,header view name, header view email,
-            // and header view profile picture
-
-            mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
-            mLayoutManager = new LinearLayoutManager(NavDrawerActivity.this);                 // Creating a layout Manager
-            mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+        mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
+        mLayoutManager = new LinearLayoutManager(NavDrawerActivity.this);                 // Creating a layout Manager
+        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
 
 
-            Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
-            mDrawerToggle = new ActionBarDrawerToggle(NavDrawerActivity.this, Drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
+        Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
+        mDrawerToggle = new ActionBarDrawerToggle(NavDrawerActivity.this, Drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
-                @Override
-                public void onDrawerOpened(View drawerView) {
-                    super.onDrawerOpened(drawerView);
-                    // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
-                    // open I am not going to put anything here)
-                    // invalidateOptionsMenu();
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
+                // open I am not going to put anything here)
+                // invalidateOptionsMenu();
 
-                    mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
 
-                        @Override
-                        public void onItemClick(View view, int position) {
+                    @Override
+                    public void onItemClick(View view, int position) {
 
-                            selectItem(position);
-                            Drawer.closeDrawer(mRecyclerView);
-                        }
-
-                        @Override
-                        public void onItemLongClick(View view, int position) {
-                            // ...
-
-                            //TODO: Dialog show, remove slot. Remove from list clear adapter, give adapter now list
-                            //TODO Yes: get the ownerObjectId and remove from database
-                        }
+                        selectItem(position);
+                        Drawer.closeDrawer(mRecyclerView);
                     }
-                    ));
-                }
 
-                @Override
-                public void onDrawerClosed(View drawerView) {
-                    super.onDrawerClosed(drawerView);
-                    // Code here will execute once drawer is closed
-                    //  invalidateOptionsMenu();
-                }
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                        // ...
 
-            }; // Drawer Toggle Object Made
-            Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
-            mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
-            if (updateNavDrawer) {
-                Drawer.openDrawer(mRecyclerView);
+                        //TODO: Dialog show, remove slot. Remove from list clear adapter, give adapter now list
+                        //TODO Yes: get the ownerObjectId and remove from database
+                    }
+                }
+                ));
             }
-        }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                // Code here will execute once drawer is closed
+                //  invalidateOptionsMenu();
+            }
+
+        }; // Drawer Toggle Object Made
+        Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
+        mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+        setRefreshActionButtonState(false);
     }
 
 
@@ -493,11 +422,11 @@ public class NavDrawerActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
 
-            int ICONS[] = {R.drawable.ic_home, R.drawable.ic_createslot
+            int ICONS[] = {R.drawable.ic_createslot
                     , R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
                     resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-            String TITLES[] = {"Home", "Create event", "My events " + valMyCreatedEvents, "Going to events " +
+            String TITLES[] = {"Create event", "My events " + valMyCreatedEvents, "Going to events " +
                     valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
                     valPersonsRequestingMe, "Update account", "Sign out"};
 
@@ -507,9 +436,6 @@ public class NavDrawerActivity extends AppCompatActivity {
             mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
 
             mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
-
-            // And passing the titles,icons,header view name, header view email,
-            // and header view profile picture
 
             mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
             mLayoutManager = new LinearLayoutManager(NavDrawerActivity.this);                 // Creating a layout Manager
@@ -555,10 +481,11 @@ public class NavDrawerActivity extends AppCompatActivity {
             Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
             mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
 
-            if (!Drawer.isDrawerOpen(mRecyclerView)) {
+            if (OpenDrawer) {
                 Drawer.openDrawer(mRecyclerView);
             }
-            setRefreshActionButtonState(false);
+            OpenDrawer = false;
+
 
             Fragment frag = getFragmentManager().findFragmentByTag("home_tag");
 
@@ -571,6 +498,14 @@ public class NavDrawerActivity extends AppCompatActivity {
             } else {
                 ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText("No new notifications");
             }
+            setRefreshActionButtonState(false);
         }
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        //When BACK BUTTON is pressed, the activity on the stack is restarted
+        //Do what you want on the refresh procedure here
     }
 }

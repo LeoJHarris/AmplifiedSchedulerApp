@@ -86,6 +86,7 @@
                     android:layout_alignBaseline="@id/buttonSignIn"
                     android:layout_alignParentRight="true"
                     android:layout_weight="1"
+                    android:text="Remember me"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -151,7 +152,7 @@
             android:clickable="true"
             android:gravity="center"
             android:paddingTop="20dp"
-            android:text="App Designed And Made By Leonard Harris"
+            android:text="@string/name_version_num"
             android:textColor="@color/black"
             android:textSize="15sp" />
     </LinearLayout>

@@ -1,6 +1,5 @@
 package com.lh.leonard.amplifiedscheduler;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -9,8 +8,10 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SlotsAwaitingMyResponse extends Activity {
+public class SlotsAwaitingMyResponse extends AppCompatActivity {
 
     Person personLoggedIn;
     RecyclerView rv;
@@ -49,15 +50,14 @@ public class SlotsAwaitingMyResponse extends Activity {
     String eventRemoved;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     View v;
+    private Toolbar toolbar;
 
-    Date date = new Date();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.slots_display);
 
-        date.getTime();
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
@@ -69,6 +69,8 @@ public class SlotsAwaitingMyResponse extends Activity {
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
         textViewTextNoSlotAvaliable.setTypeface(RobotoCondensedLightItalic);
 

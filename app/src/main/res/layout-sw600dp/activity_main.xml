@@ -150,7 +150,7 @@
             android:clickable="true"
             android:gravity="center"
             android:paddingTop="35dp"
-            android:text="App Designed And Made By Leonard Harris"
+            android:text="@string/name_version_num"
             android:textColor="@color/black"
             android:textSize="15sp" />
     </LinearLayout>

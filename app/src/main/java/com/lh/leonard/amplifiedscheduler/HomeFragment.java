@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment {
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
         // final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "RobotoCondensed-Light.ttf");
 
-        textViewNotificationNumberHome.setTypeface(RobotoCondensedLight);
+        textViewNotificationNumberHome.setTypeface(RobotoBlack);
 
         welcomeLabel.setTypeface(RobotoCondensedLightItalic);
 
@@ -97,13 +97,10 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
-
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
-            //  progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            //   progressBar.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
@@ -118,12 +115,13 @@ public class HomeFragment extends Fragment {
             if (isAdded()) {
 
                 ArrayList<String> relationProps = new ArrayList<>();
-                // relationProps.add("unseenSlots");
                 relationProps.add("personsRequestingMe");
-                // relationProps.add("goingToSlot");
-                // relationProps.add("myCreatedSlot");
+                relationProps.add("contacts");
+                relationProps.add("personsImRequesting");
+                relationProps.add("goingToSlot");
+                relationProps.add("myCreatedSlot");
                 relationProps.add("pendingResponseSlot");
-                Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps); //TODO no internet fails
+                Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
             }
             return null;
         }
@@ -134,11 +132,6 @@ public class HomeFragment extends Fragment {
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
-//            for (int j = 0; j < invitedEvents; j++) {
-//                if (personLoggedIn.getPendingResponseSlot().get(j).parseDateString().compareTo(date) < 0) {
-//                    personLoggedIn.getPendingResponseSlot().remove(j);
-//                }
-//            }
             personLoggedIn.getPendingResponseSlot().size();
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {

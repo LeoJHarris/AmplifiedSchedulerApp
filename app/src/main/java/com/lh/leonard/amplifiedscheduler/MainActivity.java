@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -64,11 +63,23 @@ public class MainActivity extends Activity {
 
         extras = getIntent().getExtras();
 
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+
         if (extras != null) {
-            if (extras.getString("loggedoutperson") != null) {
+            if (extras.getString("loggedoutperson") != null && (loginPreferences.getBoolean("saveLogin", false))) {
                 Toast.makeText(getApplicationContext(), "Just fetching your sign in credentials", Toast.LENGTH_LONG).show();
                 useBackButton = true;
 
+            } else if (extras.getString("nameRegistered") != null) {
+                loginPrefsEditor.clear();
+                loginPrefsEditor.commit();
+                String NameArray = extras.getString("nameRegistered");
+                String[] NameSplit = NameArray.split(",");
+
+                Toast.makeText(getApplication(),
+                        "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1],
+                        Toast.LENGTH_LONG).show();
             }
         }
 
@@ -76,11 +87,12 @@ public class MainActivity extends Activity {
 
         new Change().execute();
     }
-    protected void attachBaseContext(Context base)
-    {
+
+    protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
+
     public class Validator {
 
         private boolean isPasswordValid(CharSequence password) {
@@ -122,8 +134,6 @@ public class MainActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-            loginPrefsEditor = loginPreferences.edit();
 
             saveLogin = loginPreferences.getBoolean("saveLogin", false);
             if (saveLogin) {
@@ -142,15 +152,7 @@ public class MainActivity extends Activity {
             useBackButton = false;
 
             if (extras != null) {
-                if (extras.getString("nameRegistered") != null) {
-
-                    String NameArray = extras.getString("nameRegistered");
-                    String[] NameSplit = NameArray.split(",");
-
-                    Toast.makeText(getApplication(),
-                            "Successfully registered account for " + NameSplit[0] + " " + NameSplit[1],
-                            Toast.LENGTH_LONG).show();
-                } else if (extras.getString("loggedoutperson") != null) {
+                if (extras.getString("loggedoutperson") != null) {
                     String NameArray = extras.getString("loggedoutperson");
                     String[] NameSplit = NameArray.split(",");
 
@@ -256,6 +258,8 @@ public class MainActivity extends Activity {
             signup.setSpan(new UnderlineSpan(), 0, signup.length(), 0);
             buttonRegistration.setText(signup);
 
+
+            //Should be async, user has gotto main activity and still logged in
             if (Backendless.UserService.CurrentUser() != null) {
                 BackendlessUser user = Backendless.UserService.CurrentUser();
                 final Person personLoggedOut = (Person) user.getProperty("loggedoutperson");
@@ -333,13 +337,16 @@ public class MainActivity extends Activity {
                                 }
 
                                 public void handleFault(BackendlessFault fault) {
-                                    // login failed, to get the error code call fault.getCode()
-                                    System.out.println(fault.getMessage());
-                                    System.out.println(fault.getCode());
                                     if (ringProgressDialog != null) {
                                         ringProgressDialog.dismiss();
                                     }
-                                    Toast.makeText(getApplicationContext(), "Unable to sign in. Please check internet connection & credentials are correct.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(),
+                                            "Error " + fault.getMessage(),
+                                            Toast.LENGTH_LONG).show();
+
+//                                    Toast.makeText(getApplicationContext(),
+//                                            "Unable to sign in. Please check internet connection & credentials are correct",
+//                                            Toast.LENGTH_LONG).show();
                                 }
                             });
                         } else {

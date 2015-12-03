@@ -102,22 +102,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLFormSignIn"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="35dp"
             android:gravity="center"
             android:orientation="vertical">
 
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/buttonForgotPassword"
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
                 android:clickable="true"
                 android:gravity="center"
                 android:text="Forgot Password?"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
 
         </LinearLayout>
 
@@ -126,7 +124,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLForGotPassword"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -138,7 +136,7 @@
                 android:gravity="center"
                 android:text="Create Account"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -157,7 +155,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:gravity="center"
-            android:text="App Designed And Made By Leonard Harris"
+            android:text="@string/name_version_num"
             android:textColor="@color/black"
             android:textSize="15sp" />
     </LinearLayout>

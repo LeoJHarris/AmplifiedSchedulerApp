@@ -4,6 +4,10 @@
     android:background="@drawable/gradient_color_bg"
     android:fitsSystemWindows="true">
 
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar"></include>
+
     <SearchView
         android:id="@+id/searchViewSlots"
         android:layout_width="match_parent"
