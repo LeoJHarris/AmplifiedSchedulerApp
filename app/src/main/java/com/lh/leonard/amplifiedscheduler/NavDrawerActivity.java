@@ -223,8 +223,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
             if (Drawer == null && mRecyclerView == null) {
                 new AlertDialog.Builder(NavDrawerActivity.this)
-                        .setTitle("Logging out").setMessage("You are about to logout out").
-                        setIcon(R.drawable.ic_xclamationmark)
+                        .setTitle("Logging out").setMessage("You are about to logout out")
                         .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 

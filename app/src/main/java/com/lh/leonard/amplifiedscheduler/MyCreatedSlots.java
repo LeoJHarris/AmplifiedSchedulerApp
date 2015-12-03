@@ -206,7 +206,7 @@ public class MyCreatedSlots extends AppCompatActivity {
             Calendar endTime = Calendar.getInstance();
 
             startTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
-
+            startTime.set(Calendar.HOUR_OF_DAY, eventListSlots.get(i).getStartCalendar().get(Calendar.HOUR_OF_DAY));
             // End time
             endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
 
@@ -216,9 +216,7 @@ public class MyCreatedSlots extends AppCompatActivity {
                     eventListSlots.get(i).getMessage(), location,
                     ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, false);
 
-            Long l = Long.parseLong(String.valueOf(i));
-
-            event.setId(l);
+            event.setId(Long.parseLong(String.valueOf(i)));
 
             eventList.add(event);
         }

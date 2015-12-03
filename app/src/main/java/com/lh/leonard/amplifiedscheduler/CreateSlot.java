@@ -127,7 +127,8 @@ public class CreateSlot extends AppCompatActivity implements
     int startDay;
     int startMonth;
     int startYear;
-
+    int endMinute;
+    int endHours;
 
     Button btnSlotDate;
     //  ImageButton btnGetLocationGeoPoint;
@@ -717,7 +718,8 @@ public class CreateSlot extends AppCompatActivity implements
             btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
 
         } else if (outputInt == 2) {
-
+            endMinute = mins;
+            endHours = hours;
             justEndTime = aTime;
             output1.setText("End Time: " + aTime);
             btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
@@ -747,21 +749,15 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         protected Void doInBackground(Void... params) {
 
-            // String startDateTime = dateFormatSet.toString() + " " + justStartTime; // TODO REmove date var, dont need to get the text from textview now
-            //  String endDateTime = dateFormatSet.toString() + " " + justEndTime;
-
-
             HashMap<String, Object> hashMapEvent = new HashMap<>();
             hashMapEvent.put("subject", subject);
             hashMapEvent.put("message", message);
 
             Date startDate = getDateFromDatePicker(startDay, startMonth, startYear, startMinute, startHour);
-
-//            =getDate(dateFormatSet.toString() + " " + justStartTime);
+            Date endDate = getDateFromDatePicker(startDay, startMonth, startYear, endMinute, endHours);
 
             hashMapEvent.put("starttime", startDate);
-
-            hashMapEvent.put("endtime", justEndTime);
+            hashMapEvent.put("endtime", endDate);
             hashMapEvent.put("attendees", numberAttendeesAvaliable);
             hashMapEvent.put("phone", personLoggedIn.getPhone());
             hashMapEvent.put("host", personLoggedIn.getFullname());
