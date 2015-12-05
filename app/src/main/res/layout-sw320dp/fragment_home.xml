@@ -3,63 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
+    android:orientation="vertical"
     android:fitsSystemWindows="true"
     android:gravity="center"
-    android:orientation="vertical"
     tools:context="com.lh.leonard.amplifiedscheduler.HomeFragment">
 
     <!--smaller then 600dp handsets hand held
  - Nexus one
  - fame
  -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:gravity="center">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/imageViewMainLogo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:gravity="center">
+            android:layout_height="130dp"
+            android:src="@drawable/main_textlogo_320" />
 
-            <ImageView
-                android:id="@+id/imageViewMainLogo"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:src="@drawable/main_textlogo_320" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/imageViewMainLogo"
-                android:gravity="left"
-
-                android:paddingTop="10dp"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/textViewNotificationNumberHome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewName"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewWelcomeLabel"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageViewMainLogo"
+            android:gravity="center"
+            android:paddingBottom="50dp"
+            android:paddingTop="25dp"
+            android:textColor="@color/orangecalendar"
+            android:textSize="25sp" />
 
-
-        </RelativeLayout>
-    </LinearLayout>
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewNotificationNumberHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewWelcomeLabel"
+            android:gravity="center"
+            android:textColor="@color/orangecalendar"
+            android:textSize="25sp" />
+    </RelativeLayout>
 </FrameLayout>

@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
         RateThisApp.showRateDialogIfNeeded(getActivity());
 
 
-        AutoResizeTextView NameLabel = (AutoResizeTextView) v.findViewById(R.id.textViewName);
+        AutoResizeTextView welcomeLabel = (AutoResizeTextView) v.findViewById(R.id.textViewWelcomeLabel);
 
         AutoResizeTextView textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
         ImageView imageViewMainLogo = (ImageView) v.findViewById(R.id.imageViewMainLogo);
@@ -68,16 +68,16 @@ public class HomeFragment extends Fragment {
         if (width == 320 && height == 480) {
             imageViewMainLogo.requestLayout();
             imageViewMainLogo.getLayoutParams().height = 140;
-            NameLabel.setTextSize(22);
-            NameLabel.setPadding(0, 20, 0, 35);
+            welcomeLabel.setTextSize(22);
+            welcomeLabel.setPadding(0, 20, 0, 35);
             textViewNotificationNumberHome.setTextSize(22);
         }
         // 2.7" QVGA
         else if (width == 240 && height == 320) {
             imageViewMainLogo.requestLayout();
             imageViewMainLogo.getLayoutParams().height = 100;
-            NameLabel.setTextSize(18);
-            NameLabel.setPadding(0, 7, 0, 10);
+            welcomeLabel.setTextSize(18);
+            welcomeLabel.setPadding(0, 7, 0, 10);
             textViewNotificationNumberHome.setTextSize(18);
         }
 
@@ -89,9 +89,9 @@ public class HomeFragment extends Fragment {
 
         textViewNotificationNumberHome.setTypeface(RobotoBlack);
 
-        NameLabel.setTypeface(RobotoCondensedLightItalic);
+        welcomeLabel.setTypeface(RobotoCondensedLightItalic);
 
-        NameLabel.setText(personLoggedIn.getFullname());
+        welcomeLabel.setText("Welcome " + personLoggedIn.getFullname() + "!");
 
         new ParseURL().execute();
         return v;
@@ -140,11 +140,7 @@ public class HomeFragment extends Fragment {
                 textViewNotificationNumberHome.setTextColor(Color.RED);
 
             } else {
-                textViewNotificationNumberHome.setText(personLoggedIn.getMyCreatedSlot().size() + "contacts • " +
-                        personLoggedIn.getPersonsRequestingMe() + " contact requests sent • " +
-                        personLoggedIn.getPersonsImRequesting().size() + "contact requests waiting • " +
-                personLoggedIn.getPendingResponseSlot().size() + "invited events • " +
-                        personLoggedIn.getGoingToSlot().size() + "going to events • ");
+                textViewNotificationNumberHome.setText("No new notifications");
             }
         }
     }
