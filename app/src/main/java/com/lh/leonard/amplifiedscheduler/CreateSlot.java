@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +15,7 @@ import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -40,8 +41,11 @@ import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter;
+import com.codetroopers.betterpickers.recurrencepicker.RecurrencePickerDialogFragment;
 import com.codetroopers.betterpickers.timepicker.TimePickerBuilder;
 import com.codetroopers.betterpickers.timepicker.TimePickerDialogFragment;
+import com.codetroopers.betterpickers.timezonepicker.TimeZoneInfo;
+import com.codetroopers.betterpickers.timezonepicker.TimeZonePickerDialogFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -57,16 +61,16 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class CreateSlot extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, CalendarDatePickerDialogFragment.OnDateSetListener,
-        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.ConnectionCallbacks, TimeZonePickerDialogFragment.OnTimeZoneSetListener,
         TimePickerDialogFragment.TimePickerDialogHandler {
 
     private static final String LOG_TAG = "MainActivity";
     private static final int GOOGLE_API_CLIENT_ID = 0;
     private AutoCompleteTextView mAutocompleteTextView;
-    private AutoResizeTextView mAddressTextView;
     private AutoResizeTextView mAttTextView;
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
@@ -80,6 +84,8 @@ public class CreateSlot extends AppCompatActivity implements
     Boolean sendSMS = true;
     Boolean subjectSet = false;
     Boolean contactsAdded = false;
+    AutoResizeTextView timeZone;
+    LinearLayout llTimeZone;
 
     List<Person> myContactsPersonsList;
     BackendlessCollection<Person> myContactPersons;
@@ -94,6 +100,7 @@ public class CreateSlot extends AppCompatActivity implements
     EditText editTextNumberAttendeesAvaliable;
     EditText slotSubjectEditText;
     EditText slotMessageEditText;
+    EditText editTextNote;
     Switch aSwitch;
     CheckBox allDaySwitch;
     Calendar startCalendar;
@@ -101,21 +108,24 @@ public class CreateSlot extends AppCompatActivity implements
     AutoResizeTextView textViewEndTime;
     //  ImageButton btnGetLocationGeoPoint;
 
+    private String mRrule;
+
+
     CharSequence[] testArray;
     ArrayList<Integer> mSelectedItems;
-    Drawable tickIconDraw;
     ArrayList<Person> addedContactsForSlot;
-
+    AutoResizeTextView labelAllDay;
     GeoPoint eventLocation;
     private Toolbar toolbar;
     String subject;
+    String note;
     String message;
-    String locationString;
     Integer numberAttendeesAvaliable = 0;
     String my_var;
     AutoResizeTextView textViewEndDate;
     AutoResizeTextView textViewStartDate;
     private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
+    private static final String FRAG_TAG_TIME_ZONE_PICKER = "timeZonePickerDialogFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,14 +143,11 @@ public class CreateSlot extends AppCompatActivity implements
         mAutocompleteTextView = (AutoCompleteTextView) findViewById(R.id
                 .autoCompleteTextView);
         mAutocompleteTextView.setThreshold(3);
-        mAddressTextView = (AutoResizeTextView) findViewById(R.id.address);
         mAttTextView = (AutoResizeTextView) findViewById(R.id.att);
         mAutocompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
-                null, null); //BOUNDS_MOUNTAIN_VIEW
+                null, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
-
-        tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
 
         aSwitch = (Switch) findViewById(R.id.switchAutomatedSMS);
         allDaySwitch = (CheckBox) findViewById(R.id.checkboxAllDay);
@@ -155,20 +162,27 @@ public class CreateSlot extends AppCompatActivity implements
         // btnGetLocationGeoPoint = (ImageButton) findViewById(R.id.btnGetLocationGeoPoint);
         textViewEndDate = (AutoResizeTextView) findViewById(R.id.textViewEndDate);
         textViewStartTime = (AutoResizeTextView) findViewById(R.id.textViewStartTime);
-
+        timeZone = (AutoResizeTextView) findViewById(R.id.editTextTimeZone);
+        llTimeZone = (LinearLayout) findViewById(R.id.llTimeZone);
+        editTextNote = (EditText) findViewById(R.id.editTextNotes);
+        labelAllDay = (AutoResizeTextView) findViewById(R.id.labelAllDay);
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
-        // final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "RobotoCondensed-Light.ttf");
 
+        textViewEndTime.setTypeface(RobotoCondensedLight);
+        editTextNumberAttendeesAvaliable.setTypeface(RobotoCondensedLight);
+        timeZone.setTypeface(RobotoCondensedLight);
+        textViewStartDate.setTypeface(RobotoCondensedLight);
+        labelAllDay.setTypeface(RobotoCondensedLight);
+        editTextNote.setTypeface(RobotoCondensedLight);
         textViewEndDate.setTypeface(RobotoCondensedLight);
         recipientsForSlotBtn.setTypeface(RobotoCondensedLight);
         textViewStartTime.setTypeface(RobotoCondensedLight);
         slotSubjectEditText.setTypeface(RobotoCondensedLight);
         slotMessageEditText.setTypeface(RobotoCondensedLight);
-        mAddressTextView.setTypeface(RobotoCondensedLight);
         mAttTextView.setTypeface(RobotoCondensedLight);
         mAutocompleteTextView.setTypeface(RobotoCondensedLight);
         buttonSendSlot.setTypeface(RobotoCondensedLight);
@@ -189,12 +203,17 @@ public class CreateSlot extends AppCompatActivity implements
             personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         }
 
+        now = Calendar.getInstance();
+        TimeZone tz = TimeZone.getDefault();
+        //tz.getDisplayName(false, TimeZone.SHORT)
+        timeZone.setText(tz.getDisplayName() + " " + tz.getID());
 
         /********* display current time on screen Start ********/
         startCalendar = Calendar.getInstance();
         endCalendar = Calendar.getInstance();
         endCalendar.add(Calendar.DAY_OF_YEAR, 1);
-
+        startCalendar.setTimeZone(tz);
+        endCalendar.setTimeZone(tz);
         //SET CURRENT TIME AND DATES AND ADD 1 TO END CAL
         textViewStartDate.setText(getDateFormat(startCalendar));
 
@@ -203,7 +222,6 @@ public class CreateSlot extends AppCompatActivity implements
         textViewStartTime.setText(getTimeFormat(startCalendar));
 
         textViewEndTime.setText(getTimeFormat(endCalendar));
-
 
         textViewStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,6 +261,32 @@ public class CreateSlot extends AppCompatActivity implements
                         now.get(Calendar.MONTH) - 1, now.get(Calendar.DAY_OF_MONTH)), null);
 
                 calendarDatePickerDialogFragment.show(fm, FRAG_TAG_DATE_PICKER);
+            }
+        });
+
+        timeZone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                Bundle b = new Bundle();
+
+                Time t = new Time();
+                t.setToNow();
+                now = Calendar.getInstance();
+                b.putLong(TimeZonePickerDialogFragment.BUNDLE_START_TIME_MILLIS, t.toMillis(false));
+                b.putString(TimeZonePickerDialogFragment.BUNDLE_TIME_ZONE, getTimeZoneFormat(now));
+                // may be more efficient to serialize and pass in EventRecurrence
+                b.putString(RecurrencePickerDialogFragment.BUNDLE_RRULE, mRrule);
+
+                TimeZonePickerDialogFragment tzpd = (TimeZonePickerDialogFragment) fm
+                        .findFragmentByTag(FRAG_TAG_TIME_ZONE_PICKER);
+                if (tzpd != null) {
+                    tzpd.dismiss();
+                }
+                tzpd = new TimeZonePickerDialogFragment();
+                tzpd.setArguments(b);
+                tzpd.setOnTimeZoneSetListener(CreateSlot.this);
+                tzpd.show(fm, FRAG_TAG_TIME_ZONE_PICKER);
             }
         });
 
@@ -291,7 +335,7 @@ public class CreateSlot extends AppCompatActivity implements
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateSlot.this);
 
-                mSelectedItems = new ArrayList<>(); // TODO temporary
+                mSelectedItems = new ArrayList<>();
 
                 // set the dialog title
                 builder.setTitle("Invite contacts for event")
@@ -341,18 +385,8 @@ public class CreateSlot extends AppCompatActivity implements
                         }
                         if (!(addedContactsForSlot.isEmpty())) {
                             recipientsForSlotBtn.setText("Contacts added");
-                            recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                            recipientsForSlotBtn.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-
                             contactsAdded = true;
-
                             Toast.makeText(CreateSlot.this, "Contacts Added", Toast.LENGTH_SHORT).show();
-
-                            if (subjectSet) {
-                                buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-                                buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                            }
-
                         } else {
                             Toast.makeText(CreateSlot.this, "No Contacts Added", Toast.LENGTH_LONG).show();
                             contactsAdded = false;
@@ -360,14 +394,12 @@ public class CreateSlot extends AppCompatActivity implements
                             buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.red));
                         }
                     }
-                })
-
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                // removes the AlertDialog in the screen
-                            }
-                        }).show();
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // removes the AlertDialog in the screen
+                    }
+                }).show();
             }
         });
 
@@ -394,14 +426,13 @@ public class CreateSlot extends AppCompatActivity implements
                             numberAttendeesAvaliable = Integer.parseInt(editTextNumberAttendeesAvaliable.getText().toString());
                         }
                         subject = slotSubjectEditText.getText().toString();
+                        note = editTextNote.getText().toString();
                         message = slotMessageEditText.getText().toString();
-                        locationString = mAddressTextView.getText().toString();
                         //TODO Set Slot Ready to send with tick
 
                         String emptys = "";
 
-                        if (subject.trim().equals("")
-                                || locationString.equals("Please Set Place") || my_var == null) {
+                        if (subject.trim().equals("") || my_var == null) {
 
                             if (subject.trim().equals("")) {
                                 if ((emptys.trim().equals(""))) {
@@ -438,49 +469,9 @@ public class CreateSlot extends AppCompatActivity implements
                 if (!hasFocus) {
                     String string = slotSubjectEditText.getText().toString();
                     if ((!(string.equals("")))) {
-                        slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-
-                        if (contactsAdded) {
-                            buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-                            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                        }
-
-                        slotSubjectEditText.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                         subjectSet = true;
-
                     } else {
-                        slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.red));
                         subjectSet = false;
-                    }
-                }
-            }
-        });
-
-        editTextNumberAttendeesAvaliable.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String string = String.valueOf(editTextNumberAttendeesAvaliable.getText().toString());
-                    if ((!(string.equals("")))) {
-                        editTextNumberAttendeesAvaliable.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-                        editTextNumberAttendeesAvaliable.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                    } else {
-                        editTextNumberAttendeesAvaliable.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    }
-                }
-            }
-        });
-        slotMessageEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String string = slotMessageEditText.getText().toString();
-                    if ((!(string.equals("")))) {
-                        slotMessageEditText.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-                        slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                    } else {
-                        slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     }
                 }
             }
@@ -492,10 +483,12 @@ public class CreateSlot extends AppCompatActivity implements
                     if (isChecked) {
                         textViewEndTime.setVisibility(View.GONE);
                         textViewStartTime.setVisibility(View.GONE);
+                        llTimeZone.setVisibility(View.GONE);
                         allDayEvent = true;
                     } else {
                         textViewEndTime.setVisibility(View.VISIBLE);
                         textViewStartTime.setVisibility(View.VISIBLE);
+                        llTimeZone.setVisibility(View.VISIBLE);
                         allDayEvent = false;
                     }
                 }
@@ -551,6 +544,12 @@ public class CreateSlot extends AppCompatActivity implements
             }
             textViewEndDate.setText(getDateFormat(endCalendar));
         }
+    }
+
+    private String getTimeZoneFormat(Calendar c) {
+
+        TimeZone timeZone = c.getTimeZone();
+        return timeZone.getID();
     }
 
     private String getDateFormat(Calendar c) {
@@ -616,6 +615,14 @@ public class CreateSlot extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public void onTimeZoneSet(TimeZoneInfo tzi) {
+        timeZone.setText(tzi.mDisplayName + " " + tzi.mTzId + " " + tzi.getGmtDisplayName(CreateSlot.this));
+
+        endCalendar.setTimeZone(TimeZone.getTimeZone(tzi.mTzId));
+        startCalendar.setTimeZone(TimeZone.getTimeZone(tzi.mTzId));
+    }
+
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
         @Override
@@ -634,7 +641,7 @@ public class CreateSlot extends AppCompatActivity implements
             HashMap<String, Object> hashMapEvent = new HashMap<>();
             hashMapEvent.put("subject", subject);
             hashMapEvent.put("message", message);
-
+            hashMapEvent.put("note", note);
             hashMapEvent.put("starttime", startCalendar.getTime());
             hashMapEvent.put("endtime", endCalendar.getTime());
             hashMapEvent.put("attendees", numberAttendeesAvaliable);
@@ -685,15 +692,13 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Void result) {
 
-            recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             addedContactsForSlot.clear();
-            mAddressTextView.setText("Please Set Place");
             mAutocompleteTextView.setText("");
             slotSubjectEditText.setText("");
             slotSubjectEditText.setText("");
             slotMessageEditText.setText("");
+            editTextNote.setText("");
+            editTextNumberAttendeesAvaliable.setText("");
         }
     }
 
@@ -741,7 +746,6 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         protected Void doInBackground(Void... params) {
 
-
             StringBuilder whereClause = new StringBuilder();
             whereClause.append("Person[contacts]");
             whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
@@ -768,8 +772,6 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             my_var = mPlaceArrayAdapter.getItem(position).toString();
-            mAutocompleteTextView.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
             final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
             Log.i(LOG_TAG, "Selected: " + item.description);
@@ -794,7 +796,6 @@ public class CreateSlot extends AppCompatActivity implements
             place = places.get(0);
             CharSequence attributions = places.getAttributions();
 
-            mAddressTextView.setText(Html.fromHtml("Selected Place: " + place.getAddress() + " " + place.getPhoneNumber()));
             if (attributions != null) {
                 mAttTextView.setVisibility(View.VISIBLE);
                 mAttTextView.setText(Html.fromHtml(attributions.toString()));
@@ -838,7 +839,6 @@ public class CreateSlot extends AppCompatActivity implements
         this.optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_share, menu);
-
 
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.share);
