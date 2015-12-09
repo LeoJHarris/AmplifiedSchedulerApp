@@ -23,7 +23,8 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,6 @@ import java.util.Map;
 public class MyCreatedSlotsDialog extends Activity {
 
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
-    List<Slot> slotsList;
     AutoResizeTextView textViewSubject;
     AutoResizeTextView textViewMessage;
     AutoResizeTextView textViewDateAndTime;
@@ -50,6 +50,7 @@ public class MyCreatedSlotsDialog extends Activity {
     Slot event;
     AlertDialog dialog;
     ProgressDialog ringProgressDialog;
+    AutoResizeTextView textViewMyNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class MyCreatedSlotsDialog extends Activity {
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
+
         textViewSubject = (AutoResizeTextView) findViewById(R.id.textViewMySlotSubject);
         textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewMySlotMessage);
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewMySlotDateAndTime);
@@ -73,7 +75,9 @@ public class MyCreatedSlotsDialog extends Activity {
         textViewMyeventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
         buttonCancelSlot = (Button) findViewById(R.id.buttonMySlotCancelSlot);
         buttonMySlotParticipantsSlot = (Button) findViewById(R.id.buttonMySlotParticipantsSlot);
+        textViewMyNote = (AutoResizeTextView) findViewById(R.id.textViewMyNote);
 
+        textViewMyNote.setTypeface(RobotoCondensedLight);
         textViewSubject.setTypeface(RobotoCondensedLight);
         textViewMessage.setTypeface(RobotoCondensedLight);
         textViewDateAndTime.setTypeface(RobotoCondensedLight);
@@ -81,9 +85,6 @@ public class MyCreatedSlotsDialog extends Activity {
         textViewMyeventSpacesAvaliable.setTypeface(RobotoCondensedLight);
         buttonCancelSlot.setTypeface(RobotoCondensedLight);
         buttonMySlotParticipantsSlot.setTypeface(RobotoCondensedLight);
-
-        Backendless.Data.mapTableToClass("Slot", Slot.class);
-        Backendless.Data.mapTableToClass("Person", Person.class);
 
         person = (Person) userLoggedIn.getProperty("persons");
 
@@ -94,9 +95,9 @@ public class MyCreatedSlotsDialog extends Activity {
             public void onClick(View v) {
 
                 dialog = new AlertDialog.Builder(v.getContext())
-                        .setTitle("Cancel Event?")
-                        .setMessage("Do you want cancel your " + event.getSubject() + " event?")
-                        .setPositiveButton("Yup, Cancel", new DialogInterface.OnClickListener() {
+                        .setTitle("Cancel")
+                        .setMessage("Are you sure you want to discard this event?")
+                        .setPositiveButton("DISCARD", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
 
@@ -106,7 +107,7 @@ public class MyCreatedSlotsDialog extends Activity {
                                 new CancelEvent().execute();
                             }
                         })
-                        .setNegativeButton("Nope, Keep", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("KEEP", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 dialog.dismiss();
@@ -143,6 +144,22 @@ public class MyCreatedSlotsDialog extends Activity {
         });
     }
 
+    private String getDateFormat(Calendar c) {
+        SimpleDateFormat sdf = new SimpleDateFormat("E d MMM");
+        return sdf.format(c.getTime());
+    }
+
+    private String getYearFormat(Calendar c) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        return sdf.format(c.getTime());
+    }
+
+    private String getTimeFormat(Calendar c) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aaa");
+        return sdf.format(c.getTime());
+    }
+
     private class LoadMyContacts extends AsyncTask<Void, Integer, String> {
 
         @Override
@@ -163,49 +180,62 @@ public class MyCreatedSlotsDialog extends Activity {
 
             event = Backendless.Data.of(Slot.class).findById(objectId);
 
-
             return (String) event.getLocation().getMetadata("address");
-
         }
 
         @Override
         protected void onPostExecute(String addresses) {
-
 
             if (event.getSubject() != null) {
                 textViewSubject.setText(event.getSubject());
             }
 
             if (event.getMessage() != null) {
-                textViewMessage.setText("Message: " + event.getMessage());
+                if (event.getMessage().equals("")) {
+                    textViewMessage.setText("Message: No message avaliable");
+                } else {
+                    textViewMessage.setText("Message: " + event.getMessage());
+                }
             }
 
             if (event.getStartCalendar() != null) {
 
-
-                textViewDateAndTime.setText("When " + event.getStartCalendar().getTime());
-//                    if (event.getEnd() == null) {
-//                        textViewDateAndTime.setText("When: " + event.getDateofslot() + " @ " + event.getStart());
-//
-//                    } getEnd
-
+                if (event.getStartCalendar().equals(event.getEndCalendar())) {
+                    textViewDateAndTime.setText("When: " + getDateFormat(event.getStartCalendar()) + " at "
+                            + getTimeFormat(event.getStartCalendar()) + " to " +
+                            getTimeFormat(event.getEndCalendar()) + " " + getYearFormat(event.getEndCalendar()));
+                } else {
+                    textViewDateAndTime.setText("When: " + getDateFormat(event.getStartCalendar()) + " at "
+                            + getTimeFormat(event.getStartCalendar()) + " to " +
+                            getDateFormat(event.getEndCalendar()) + " " + getTimeFormat(event.getEndCalendar()) +
+                            " " + getYearFormat(event.getEndCalendar()));
+                }
             }
-
+            if (event.getNote() != null) {
+                if (event.getMessage().equals("")) {
+                    textViewMyNote.setText("Private note: No private note avaliable");
+                } else {
+                    textViewMyNote.setText("Private note: " + event.getNote());
+                }
+            }
             if (event.getMaxattendees() != 0) {
 
-
+                String message = "";
                 Integer spacesAvaliable = event.getMaxattendees();
                 Integer going = event.getAttendees().size();
+                Integer spacesLeft = (spacesAvaliable - going);
                 {
-                    Integer spacesLeft = spacesAvaliable - event.getAttendees().size();
-                    textViewMyeventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
-
+                    if (spacesLeft > 1 || spacesLeft == 0) {
+                        message = spacesLeft + " spaces remaining";
+                    } else if (spacesLeft == 1) {
+                        message = spacesLeft + " space remaining";
+                    }
+                    textViewMyeventSpacesAvaliable.setText(going + " going, " + message);
                 }
-
             }
 
             if (event.getLocation() != null) {
-                content = new SpannableString("Where: " + (String) event.getLocation().getMetadata("address"));
+                content = new SpannableString("Where: " + event.getLocation().getMetadata("address"));
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                 textViewLocation.setText(content); //TODO Button to get Location else just Text
             }
@@ -216,6 +246,7 @@ public class MyCreatedSlotsDialog extends Activity {
             textViewSubject.setVisibility(View.VISIBLE);
             textViewMessage.setVisibility(View.VISIBLE);
             textViewLocation.setVisibility(View.VISIBLE);
+            textViewMyNote.setVisibility(View.VISIBLE);
             textViewDateAndTime.setVisibility(View.VISIBLE);
             buttonCancelSlot.setVisibility(View.VISIBLE);
             buttonMySlotParticipantsSlot.setVisibility(View.VISIBLE);
@@ -250,7 +281,6 @@ public class MyCreatedSlotsDialog extends Activity {
             personsToSms = personsToSmsCollection.getData();
 
             String fullnamePersonLoggedIn = person.getFullname();
-            Date dateofslot = event.getStartdate();
             String subject = event.getSubject();
             String placeofSlot = event.getPlace();
 

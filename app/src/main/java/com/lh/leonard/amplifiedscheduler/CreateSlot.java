@@ -203,25 +203,7 @@ public class CreateSlot extends AppCompatActivity implements
             personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         }
 
-        now = Calendar.getInstance();
-        TimeZone tz = TimeZone.getDefault();
-        //tz.getDisplayName(false, TimeZone.SHORT)
-        timeZone.setText(tz.getDisplayName() + " " + tz.getID());
-
-        /********* display current time on screen Start ********/
-        startCalendar = Calendar.getInstance();
-        endCalendar = Calendar.getInstance();
-        endCalendar.add(Calendar.DAY_OF_YEAR, 1);
-        startCalendar.setTimeZone(tz);
-        endCalendar.setTimeZone(tz);
-        //SET CURRENT TIME AND DATES AND ADD 1 TO END CAL
-        textViewStartDate.setText(getDateFormat(startCalendar));
-
-        textViewEndDate.setText(getDateFormat(endCalendar));
-
-        textViewStartTime.setText(getTimeFormat(startCalendar));
-
-        textViewEndTime.setText(getTimeFormat(endCalendar));
+        setDates();
 
         textViewStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -387,11 +369,15 @@ public class CreateSlot extends AppCompatActivity implements
                             recipientsForSlotBtn.setText("Contacts added");
                             contactsAdded = true;
                             Toast.makeText(CreateSlot.this, "Contacts Added", Toast.LENGTH_SHORT).show();
+
+                            if (subjectSet && my_var != null) {
+                                buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_event_ready), null, null, null);
+
+                            }
                         } else {
                             Toast.makeText(CreateSlot.this, "No Contacts Added", Toast.LENGTH_LONG).show();
                             contactsAdded = false;
-                            recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                            buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.red));
+                            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_send_event), null, null, null);
                         }
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -463,6 +449,14 @@ public class CreateSlot extends AppCompatActivity implements
             }
         });
 
+        mAutocompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (my_var == null) {
+                }
+            }
+        });
+
         slotSubjectEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             public void onFocusChange(View v, boolean hasFocus) {
@@ -470,8 +464,12 @@ public class CreateSlot extends AppCompatActivity implements
                     String string = slotSubjectEditText.getText().toString();
                     if ((!(string.equals("")))) {
                         subjectSet = true;
+                        if (contactsAdded && my_var != null) {
+                            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_event_ready), null, null, null);
+                        }
                     } else {
                         subjectSet = false;
+                        buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_send_event), null, null, null);
                     }
                 }
             }
@@ -494,7 +492,6 @@ public class CreateSlot extends AppCompatActivity implements
                 }
             });
         }
-//TODO ADDS NOTES FOR HOST FOR PIVATE USe
         if (aSwitch != null) {
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -546,6 +543,28 @@ public class CreateSlot extends AppCompatActivity implements
         }
     }
 
+    public void setDates() {
+        now = Calendar.getInstance();
+        TimeZone tz = TimeZone.getDefault();
+        //tz.getDisplayName(false, TimeZone.SHORT)
+        timeZone.setText(tz.getDisplayName() + " " + tz.getID());
+
+        /********* display current time on screen Start ********/
+        startCalendar = Calendar.getInstance();
+        endCalendar = Calendar.getInstance();
+        endCalendar.add(Calendar.HOUR_OF_DAY, 1);
+        startCalendar.setTimeZone(tz);
+        endCalendar.setTimeZone(tz);
+        //SET CURRENT TIME AND DATES AND ADD 1 TO END CAL
+        textViewStartDate.setText(getDateFormat(startCalendar));
+
+        textViewEndDate.setText(getDateFormat(endCalendar));
+
+        textViewStartTime.setText(getTimeFormat(startCalendar));
+
+        textViewEndTime.setText(getTimeFormat(endCalendar));
+    }
+
     private String getTimeZoneFormat(Calendar c) {
 
         TimeZone timeZone = c.getTimeZone();
@@ -561,7 +580,6 @@ public class CreateSlot extends AppCompatActivity implements
 
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aaa");
         return sdf.format(c.getTime());
-
     }
 
     @Override
@@ -571,11 +589,13 @@ public class CreateSlot extends AppCompatActivity implements
             startCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             startCalendar.set(Calendar.MINUTE, minute);
 
-            if (startCalendar.after(endCalendar)) {
+            if (startCalendar.after(endCalendar) || startCalendar.equals(endCalendar)) {
+
                 endCalendar.set(startCalendar.get(Calendar.YEAR),
                         startCalendar.get(Calendar.MONTH), startCalendar.get(Calendar.DAY_OF_MONTH),
                         startCalendar.get(Calendar.HOUR_OF_DAY), startCalendar.get(Calendar.MINUTE),
                         startCalendar.get(Calendar.SECOND));
+                endCalendar.add(Calendar.HOUR_OF_DAY, 1);
                 textViewEndDate.setText(getDateFormat(endCalendar));
                 textViewEndTime.setText(getTimeFormat(endCalendar));
             }
@@ -648,7 +668,8 @@ public class CreateSlot extends AppCompatActivity implements
             hashMapEvent.put("phone", personLoggedIn.getPhone());
             hashMapEvent.put("host", personLoggedIn.getFullname());
             hashMapEvent.put("loggedinperson", personLoggedIn.getObjectId());
-            hashMapEvent.put("alldayevent", allDayEvent); // TODO ADD THIS IN THE BACKENDLESS CONSOLE, and SERVER CODE
+            hashMapEvent.put("alldayevent", allDayEvent);
+
             int o = 0;
             for (Person pId : addedContactsForSlot) {
 
@@ -692,13 +713,17 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Void result) {
 
+            editTextNumberAttendeesAvaliable.setText("");
             addedContactsForSlot.clear();
             mAutocompleteTextView.setText("");
             slotSubjectEditText.setText("");
-            slotSubjectEditText.setText("");
             slotMessageEditText.setText("");
             editTextNote.setText("");
-            editTextNumberAttendeesAvaliable.setText("");
+            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_send_event), null, null, null);
+            setDates();
+            contactsAdded = false;
+            subjectSet = false;
+            my_var = null;
         }
     }
 
@@ -772,6 +797,10 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             my_var = mPlaceArrayAdapter.getItem(position).toString();
+
+            if (subjectSet && contactsAdded) {
+                buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_event_ready), null, null, null);
+            }
             final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
             Log.i(LOG_TAG, "Selected: " + item.description);

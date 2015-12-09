@@ -17,7 +17,7 @@ public class Slot {
 
     public Date startdate;
     public Date enddate;
-    public boolean allDayEvent;
+    public boolean alldayevent;
     public String subject;
     public String message;
     public String start;
@@ -32,6 +32,7 @@ public class Slot {
     public String place;
     public String note;
 
+
     public Date getStartdate() {
         return startdate;
     }
@@ -43,6 +44,12 @@ public class Slot {
     public Calendar getStartCalendar() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(startdate);
+        return cal;
+    }
+
+    public Calendar getEndCalendar() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(enddate);
         return cal;
     }
 
@@ -59,7 +66,7 @@ public class Slot {
     }
 
     public boolean isAllDayEvent() {
-        return allDayEvent;
+        return alldayevent;
     }
 
     public String getPlace() {

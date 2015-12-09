@@ -4,17 +4,33 @@
     android:background="@drawable/gradient_color_bg"
     android:fitsSystemWindows="true">
 
-    <include
-        android:id="@+id/tool_bar"
-        layout="@layout/tool_bar"></include>
+    <LinearLayout
+        android:id="@+id/lltoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <SearchView
-        android:id="@+id/searchViewSlots"
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/tool_bar"></include>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lllsearchview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:queryHint="Search Slots"
-        android:searchIcon="@drawable/ic_searchicon"
-        android:visibility="gone" />
+        android:layout_below="@id/lltoolbar"
+        android:orientation="vertical">
+
+        <SearchView
+            android:id="@+id/searchViewSlots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:queryHint="Search Slots"
+            android:searchIcon="@drawable/ic_searchicon"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -23,13 +39,20 @@
         android:layout_centerInParent="true"
         android:gravity="center" />
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/rv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/searchViewSlots"
-        android:scrollbars="vertical"
-        android:visibility="gone" />
+    <LinearLayout
+        android:id="@+id/llrv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/lllsearchview">
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/searchViewSlots"
+            android:scrollbars="vertical"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
         android:id="@+id/textViewTextNoSlotAvaliable"

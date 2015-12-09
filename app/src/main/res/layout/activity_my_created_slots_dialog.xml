@@ -41,10 +41,22 @@
             android:visibility="gone" />
 
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewMySlotDateAndTime"
+            android:id="@+id/textViewMyNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewMySlotMessage"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textSize="22sp"
+            android:visibility="gone" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewMySlotDateAndTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewMyNote"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
@@ -102,7 +114,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/textViewMyEventSpacesAvaliable"
-            android:layout_margin="10px"
             android:gravity="center_horizontal|bottom"
             android:orientation="vertical">
 
@@ -112,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/buttonMySlotCancelSlot"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
+                android:layout_margin="5dp"
                 android:background="@drawable/button_default_bg"
                 android:text="People Going"
                 android:textColor="@color/black"
@@ -124,6 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_margin="5dp"
                 android:background="@drawable/button_default_bg"
                 android:text="Cancel Event"
                 android:textColor="@color/black"

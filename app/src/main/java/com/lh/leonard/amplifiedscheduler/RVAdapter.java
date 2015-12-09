@@ -51,19 +51,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SlotViewHolder> im
        // slotViewHolder.slotDate.setText("Date: " + listSlots.get(i).getDateofslot().toString());
         slotViewHolder.slotFullName.setText("From: " + listSlots.get(i).getOwnername().toString());
 
-//        if (listSlots.get(i).getMaxattendees() != 0) {
-//            Integer spacesAvaliable = listSlots.get(i).getMaxattendees();
-//            Integer going = listSlots.get(i).getAttendees().size();
-//            {
-//
-//                slotViewHolder.slotAvaliability.setText(going + " going, waiting response from " + (spacesAvaliable - going));
-//
-//            }
-//
-//        } else {
-//            slotViewHolder.slotAvaliability.setText("Unlimited Spaces");
-//        }
-
         int lengthToSubString;
         int lengthMessage = listSlots.get(i).getMessage().length();
         if (lengthMessage < 50) {

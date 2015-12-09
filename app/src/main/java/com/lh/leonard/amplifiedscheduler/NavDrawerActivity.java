@@ -127,7 +127,8 @@ public class NavDrawerActivity extends AppCompatActivity {
                 intent = new Intent(NavDrawerActivity.this, UpdateAccount.class);
                 break;
             case 7:
-                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+                ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...",
+                        "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
                 ringProgressDialog.setCancelable(false);
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
                     public void handleResponse(Void response) {
@@ -223,7 +224,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
             if (Drawer == null && mRecyclerView == null) {
                 new AlertDialog.Builder(NavDrawerActivity.this)
-                        .setTitle("Logging out").setMessage("You are about to logout out")
+                        .setTitle("Logout").setMessage("Are you sure you want to logout?")
                         .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
@@ -258,8 +259,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             } else {
 
                 new AlertDialog.Builder(NavDrawerActivity.this)
-                        .setTitle("Logging out").setMessage("You are about to logout out").
-                        setIcon(R.drawable.ic_xclamationmark)
+                        .setTitle("Logout").setMessage("Are you sure you want to logout?")
                         .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
@@ -423,7 +423,8 @@ public class NavDrawerActivity extends AppCompatActivity {
 
             int ICONS[] = {R.drawable.ic_createslot
                     , R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
-                    resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
+                    resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe,
+                    R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
             String TITLES[] = {"Create event", "My events " + valMyCreatedEvents, "Going to events " +
                     valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +

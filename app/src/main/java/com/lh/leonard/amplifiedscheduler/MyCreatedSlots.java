@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -31,7 +30,6 @@ import com.github.tibolte.agendacalendarview.models.DayItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -176,7 +174,7 @@ public class MyCreatedSlots extends AppCompatActivity {
             case R.id.action_refresh:
 
                 // Complete with your code
-               // new Refresh().execute();
+                // new Refresh().execute();
                 setRefreshActionButtonState(true);
                 return true;
         }
@@ -208,18 +206,23 @@ public class MyCreatedSlots extends AppCompatActivity {
 
         for (int i = 0; i < eventListSlots.size(); i++) {
 
-            Calendar startTime =  Calendar.getInstance();
-            Calendar endTime =  Calendar.getInstance();
+            Boolean allDay = false;
+
+            if (eventListSlots.get(i).isAllDayEvent()) {
+                allDay = true;
+            }
+
+            Calendar startTime = Calendar.getInstance();
+            Calendar endTime = Calendar.getInstance();
 
             startTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
-            // End time
-            endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
+
+            endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getEndCalendar().get(Calendar.DAY_OF_YEAR));
 
             String location = (String) eventListSlots.get(i).getLocation().getMetadata("address");
-
             CalendarEvent event = new CalendarEvent(eventListSlots.get(i).getSubject(),
                     eventListSlots.get(i).getMessage(), location,
-                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, false);
+                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, allDay);
 
             event.setId(Long.parseLong(String.valueOf(i)));
             eventList.add(event);

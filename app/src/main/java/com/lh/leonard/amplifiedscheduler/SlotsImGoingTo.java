@@ -53,6 +53,7 @@ public class SlotsImGoingTo extends AppCompatActivity {
     Calendar maxDate;
     private Toolbar toolbar;
     RelativeLayout RLProgressBar;
+    Boolean alldayevent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +168,13 @@ public class SlotsImGoingTo extends AppCompatActivity {
 
         for (int i = 0; i < eventListSlots.size(); i++) {
 
+
+            Boolean allDay = false;
+
+            if (eventListSlots.get(i).isAllDayEvent()) {
+                allDay = true;
+            }
+
             Calendar startTime = Calendar.getInstance();
             Calendar endTime = Calendar.getInstance();
 
@@ -181,7 +189,7 @@ public class SlotsImGoingTo extends AppCompatActivity {
 
             CalendarEvent event = new CalendarEvent(eventListSlots.get(i).getSubject(),
                     eventListSlots.get(i).getMessage(), location,
-                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, false);
+                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, allDay);
 
             Long l = Long.parseLong(String.valueOf(i));
 
