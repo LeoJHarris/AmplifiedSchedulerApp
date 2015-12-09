@@ -78,7 +78,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/textViewMyEventSpacesAvaliable"
-            android:layout_margin="10px"
             android:gravity="center_horizontal|bottom"
             android:orientation="vertical">
 
@@ -88,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/buttonInvitedEventNotGoing"
                 android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/button_default_bg"
                 android:text="Going"
@@ -100,12 +100,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_margin="5dp"
                 android:background="@drawable/button_default_bg"
                 android:text="Not Going"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:visibility="gone" />
         </LinearLayout>
-
     </RelativeLayout>
 </ScrollView>

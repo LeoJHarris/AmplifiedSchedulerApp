@@ -18,6 +18,8 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,6 +135,24 @@ public class SlotsPendingMyResponseDialog extends Activity {
         });
     }
 
+
+    private String getDateFormat(Calendar c) {
+        SimpleDateFormat sdf = new SimpleDateFormat("E d MMM");
+        return sdf.format(c.getTime());
+    }
+
+    private String getYearFormat(Calendar c) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        return sdf.format(c.getTime());
+    }
+
+    private String getTimeFormat(Calendar c) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aaa");
+        return sdf.format(c.getTime());
+    }
+
+
     private class LoadMyContacts extends AsyncTask<Void, Integer, String> {
 
         @Override
@@ -166,23 +186,41 @@ public class SlotsPendingMyResponseDialog extends Activity {
             }
 
             if (event.getMessage() != null) {
-                textViewMessage.setText("Message: " + event.getMessage());
+                if (event.getMessage().equals("")) {
+                    textViewMessage.setText("Message: No message avaliable");
+                } else {
+                    textViewMessage.setText("Message: " + event.getMessage());
+                }
             }
 
             if (event.getStartCalendar() != null) {
-                textViewDateAndTime.setText("When " + event.getStartCalendar().getTime());
+
+                if (event.getStartCalendar().equals(event.getEndCalendar())) {
+                    textViewDateAndTime.setText("When: " + getDateFormat(event.getStartCalendar()) + " at "
+                            + getTimeFormat(event.getStartCalendar()) + " to " +
+                            getTimeFormat(event.getEndCalendar()) + " " + getYearFormat(event.getEndCalendar()));
+                } else {
+                    textViewDateAndTime.setText("When: " + getDateFormat(event.getStartCalendar()) + " at "
+                            + getTimeFormat(event.getStartCalendar()) + " to " +
+                            getDateFormat(event.getEndCalendar()) + " " + getTimeFormat(event.getEndCalendar()) +
+                            " " + getYearFormat(event.getEndCalendar()));
+                }
             }
 
             if (event.getMaxattendees() != 0) {
 
-
+                String message = "";
                 Integer spacesAvaliable = event.getMaxattendees();
                 Integer going = event.getAttendees().size();
+                Integer spacesLeft = (spacesAvaliable - going);
                 {
-                    textViewMyeventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
-
+                    if (spacesLeft > 1 || spacesLeft == 0) {
+                        message = spacesLeft + " spaces remaining";
+                    } else if (spacesLeft == 1) {
+                        message = spacesLeft + " space remaining";
+                    }
+                    textViewMyeventSpacesAvaliable.setText(going + " going, " + message);
                 }
-
             }
 
             if (event.getLocation() != null) {

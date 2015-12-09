@@ -1,17 +1,12 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.multidex.MultiDex;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
@@ -20,6 +15,7 @@ import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,11 +27,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -45,6 +39,13 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
+import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter;
+import com.codetroopers.betterpickers.recurrencepicker.RecurrencePickerDialogFragment;
+import com.codetroopers.betterpickers.timepicker.TimePickerBuilder;
+import com.codetroopers.betterpickers.timepicker.TimePickerDialogFragment;
+import com.codetroopers.betterpickers.timezonepicker.TimeZoneInfo;
+import com.codetroopers.betterpickers.timezonepicker.TimeZonePickerDialogFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -54,101 +55,77 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class CreateSlot extends AppCompatActivity implements
-        GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks {
+        GoogleApiClient.OnConnectionFailedListener, CalendarDatePickerDialogFragment.OnDateSetListener,
+        GoogleApiClient.ConnectionCallbacks, TimeZonePickerDialogFragment.OnTimeZoneSetListener,
+        TimePickerDialogFragment.TimePickerDialogHandler {
+
     private static final String LOG_TAG = "MainActivity";
     private static final int GOOGLE_API_CLIENT_ID = 0;
     private AutoCompleteTextView mAutocompleteTextView;
-    private AutoResizeTextView mAddressTextView;
     private AutoResizeTextView mAttTextView;
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
-    // private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
-    //   new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
+    Calendar now;
+    Boolean allDayEvent = false;
     Place place;
-    private Calendar calendar;
-    private TextView dateView;
-    Calendar c = Calendar.getInstance();
-    private int year, month, day;
+    private AutoResizeTextView textViewStartTime;
     private Menu optionsMenu;
-    CheckBox checkBoxAppointmentRequired;
-    Boolean appointmentBoolean = false;
-    static final int TIME_DIALOG_ID = 1111;
-    private TextView output;
-    private TextView output1;
-    public Button btnClickSetStartTime;
-    public Button btnClickSetEndTime;
-    private int hour;
-    private int minute;
-
+    int datePickerSelected = 0;
     Boolean sendSMS = true;
-    Boolean dateSet = false;
     Boolean subjectSet = false;
     Boolean contactsAdded = false;
-    Boolean startTimeSet = false;
-
-    String justStartTime;
-    String justEndTime;
-    int startHour;
-    int startMinute;
+    AutoResizeTextView timeZone;
+    LinearLayout llTimeZone;
 
     List<Person> myContactsPersonsList;
     BackendlessCollection<Person> myContactPersons;
-
     BackendlessCollection<Person> persons;
-
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
 
-    ArrayList<String> contactsIds = new ArrayList<>();
-
+    int timeSelected = 0;
     Person personLoggedIn;
     LatLng latLng;
-    int outputInt = 0;
     Button recipientsForSlotBtn;
     public Button buttonSendSlot;
     EditText editTextNumberAttendeesAvaliable;
     EditText slotSubjectEditText;
     EditText slotMessageEditText;
-    TextView slotsDate;
-    TextView slotStartTime;
-    TextView slotEndTime;
+    EditText editTextNote;
     Switch aSwitch;
-
-    StringBuilder dateFormatSet = new StringBuilder();
-    int startDay;
-    int startMonth;
-    int startYear;
-
-
-    Button btnSlotDate;
+    CheckBox allDaySwitch;
+    Calendar startCalendar;
+    Calendar endCalendar;
+    AutoResizeTextView textViewEndTime;
     //  ImageButton btnGetLocationGeoPoint;
+
+    private String mRrule;
+
 
     CharSequence[] testArray;
     ArrayList<Integer> mSelectedItems;
-    Drawable tickIconDraw;
-    Drawable crossIconDraw;
     ArrayList<Person> addedContactsForSlot;
-
+    AutoResizeTextView labelAllDay;
     GeoPoint eventLocation;
     private Toolbar toolbar;
-    String date;
-    String startTime;
-    String endTime;
     String subject;
+    String note;
     String message;
-    String locationString;
     Integer numberAttendeesAvaliable = 0;
-    TextView tvSpaces;
     String my_var;
+    AutoResizeTextView textViewEndDate;
+    AutoResizeTextView textViewStartDate;
+    private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
+    private static final String FRAG_TAG_TIME_ZONE_PICKER = "timeZonePickerDialogFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,61 +143,51 @@ public class CreateSlot extends AppCompatActivity implements
         mAutocompleteTextView = (AutoCompleteTextView) findViewById(R.id
                 .autoCompleteTextView);
         mAutocompleteTextView.setThreshold(3);
-        mAddressTextView = (AutoResizeTextView) findViewById(R.id.address);
         mAttTextView = (AutoResizeTextView) findViewById(R.id.att);
         mAutocompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
-                null, null); //BOUNDS_MOUNTAIN_VIEW
+                null, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
 
-        tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
-        crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
-
         aSwitch = (Switch) findViewById(R.id.switchAutomatedSMS);
+        allDaySwitch = (CheckBox) findViewById(R.id.checkboxAllDay);
         editTextNumberAttendeesAvaliable = (EditText) findViewById(R.id.numberPickerAttendees);
         recipientsForSlotBtn = (Button) findViewById(R.id.recipientsForSlot);
-        slotsDate = (TextView) findViewById(R.id.textViewDate);
-        btnSlotDate = (Button) findViewById(R.id.btnSlotDate);
+        textViewEndTime = (AutoResizeTextView) findViewById(R.id.textViewEndTime);
         slotSubjectEditText = (EditText) findViewById(R.id.editSlotSubject);
         slotMessageEditText = (EditText) findViewById(R.id.editTextSlotMessage);
-        slotStartTime = (TextView) findViewById(R.id.outputStartTime);
-        slotEndTime = (TextView) findViewById(R.id.outputEndTime);
         mAutocompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
-        tvSpaces = (TextView) findViewById(R.id.tvSpaces);
-        // CheckBox checkBoxAppointmentRequired = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
         buttonSendSlot = (Button) findViewById(R.id.buttonSendSlot);
-        //checkBoxString = (CheckBox) findViewById(R.id.checkBoxAppointmentRequired);
-        Button btnSlotDate = (Button) findViewById(R.id.btnSlotDate);
-        Button btnClickSetStartTime = (Button) findViewById(R.id.btnClickSetStartTime);
-        btnClickSetEndTime = (Button) findViewById(R.id.btnClickSetEndTime);
+        textViewStartDate = (AutoResizeTextView) findViewById(R.id.textViewStartDate);
         // btnGetLocationGeoPoint = (ImageButton) findViewById(R.id.btnGetLocationGeoPoint);
-
+        textViewEndDate = (AutoResizeTextView) findViewById(R.id.textViewEndDate);
+        textViewStartTime = (AutoResizeTextView) findViewById(R.id.textViewStartTime);
+        timeZone = (AutoResizeTextView) findViewById(R.id.editTextTimeZone);
+        llTimeZone = (LinearLayout) findViewById(R.id.llTimeZone);
+        editTextNote = (EditText) findViewById(R.id.editTextNotes);
+        labelAllDay = (AutoResizeTextView) findViewById(R.id.labelAllDay);
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
-        // final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "RobotoCondensed-Light.ttf");
 
-
+        textViewEndTime.setTypeface(RobotoCondensedLight);
+        editTextNumberAttendeesAvaliable.setTypeface(RobotoCondensedLight);
+        timeZone.setTypeface(RobotoCondensedLight);
+        textViewStartDate.setTypeface(RobotoCondensedLight);
+        labelAllDay.setTypeface(RobotoCondensedLight);
+        editTextNote.setTypeface(RobotoCondensedLight);
+        textViewEndDate.setTypeface(RobotoCondensedLight);
         recipientsForSlotBtn.setTypeface(RobotoCondensedLight);
-        slotsDate.setTypeface(RobotoCondensedLight);
-        // checkBoxAppointmentRequired.setTypeface(regularFont);
-        btnSlotDate.setTypeface(RobotoCondensedLight);
+        textViewStartTime.setTypeface(RobotoCondensedLight);
         slotSubjectEditText.setTypeface(RobotoCondensedLight);
         slotMessageEditText.setTypeface(RobotoCondensedLight);
-        mAddressTextView.setTypeface(RobotoCondensedLight);
         mAttTextView.setTypeface(RobotoCondensedLight);
-        slotStartTime.setTypeface(RobotoCondensedLight);
-        slotEndTime.setTypeface(RobotoCondensedLight);
         mAutocompleteTextView.setTypeface(RobotoCondensedLight);
-        tvSpaces.setTypeface(RobotoCondensedLight);
-        //checkBoxString.setTypeface(regularFont);
         buttonSendSlot.setTypeface(RobotoCondensedLight);
-        btnClickSetStartTime.setTypeface(RobotoCondensedLight);
-        btnClickSetEndTime.setTypeface(RobotoCondensedLight);
         aSwitch.setTypeface(RobotoCondensedLight);
-
+        allDaySwitch.setTypeface(RobotoCondensedLight);
         aSwitch.setChecked(true);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Persistence.mapTableToClass("Person", Person.class);
@@ -236,31 +203,92 @@ public class CreateSlot extends AppCompatActivity implements
             personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         }
 
-        dateView = (TextView) findViewById(R.id.textViewDate);
-        calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);
+        setDates();
 
+        textViewStartTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeSelected = 1;
+                TimePickerBuilder tpb = new TimePickerBuilder()
+                        .setFragmentManager(getSupportFragmentManager())
+                        .setStyleResId(R.style.BetterPickersDialogFragment_Light);
+                tpb.show();
+            }
+        });
 
-        //TODO check if contacts were added, back button removes list
+        textViewEndTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeSelected = 2;
+                TimePickerBuilder tpb = new TimePickerBuilder()
+                        .setFragmentManager(getSupportFragmentManager())
+                        .setStyleResId(R.style.BetterPickersDialogFragment_Light);
+                tpb.show();
+            }
+        });
 
+        textViewStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        //month = calendar.get(Calendar.MONTH);
-        //day = calendar.get(Calendar.DAY_OF_MONTH);
-        //showDate(year, month + 1, day);
+                datePickerSelected = 1;
+                FragmentManager fm = getSupportFragmentManager();
+                now = Calendar.getInstance();
 
-        output = (TextView) findViewById(R.id.outputStartTime);
-        output1 = (TextView) findViewById(R.id.outputEndTime);
+                CalendarDatePickerDialogFragment calendarDatePickerDialogFragment = CalendarDatePickerDialogFragment
+                        .newInstance(CreateSlot.this, now.get(Calendar.YEAR), now.get(Calendar.MONTH),
+                                now.get(Calendar.DAY_OF_MONTH));
 
-        /********* display current time on screen Start ********/
+                calendarDatePickerDialogFragment.setDateRange(new MonthAdapter.CalendarDay(now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH) - 1, now.get(Calendar.DAY_OF_MONTH)), null);
 
-        final Calendar c = Calendar.getInstance();
-        // Current Hour
-        hour = c.get(Calendar.HOUR_OF_DAY);
-        // Current Minute
-        minute = c.get(Calendar.MINUTE);
+                calendarDatePickerDialogFragment.show(fm, FRAG_TAG_DATE_PICKER);
+            }
+        });
 
-        // set current time into output textview
-        updateTime(hour, minute);
+        timeZone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                Bundle b = new Bundle();
+
+                Time t = new Time();
+                t.setToNow();
+                now = Calendar.getInstance();
+                b.putLong(TimeZonePickerDialogFragment.BUNDLE_START_TIME_MILLIS, t.toMillis(false));
+                b.putString(TimeZonePickerDialogFragment.BUNDLE_TIME_ZONE, getTimeZoneFormat(now));
+                // may be more efficient to serialize and pass in EventRecurrence
+                b.putString(RecurrencePickerDialogFragment.BUNDLE_RRULE, mRrule);
+
+                TimeZonePickerDialogFragment tzpd = (TimeZonePickerDialogFragment) fm
+                        .findFragmentByTag(FRAG_TAG_TIME_ZONE_PICKER);
+                if (tzpd != null) {
+                    tzpd.dismiss();
+                }
+                tzpd = new TimeZonePickerDialogFragment();
+                tzpd.setArguments(b);
+                tzpd.setOnTimeZoneSetListener(CreateSlot.this);
+                tzpd.show(fm, FRAG_TAG_TIME_ZONE_PICKER);
+            }
+        });
+
+        textViewEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerSelected = 2;
+                FragmentManager fm = getSupportFragmentManager();
+                now = Calendar.getInstance();
+
+                CalendarDatePickerDialogFragment calendarDatePickerDialogFragment = CalendarDatePickerDialogFragment
+                        .newInstance(CreateSlot.this, now.get(Calendar.YEAR), now.get(Calendar.MONTH),
+                                now.get(Calendar.DAY_OF_MONTH));
+
+                calendarDatePickerDialogFragment.setDateRange(new MonthAdapter.CalendarDay(now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH) - 1, now.get(Calendar.DAY_OF_MONTH)), null);
+
+                calendarDatePickerDialogFragment.show(fm, FRAG_TAG_DATE_PICKER);
+            }
+        });
 
         new GetContactsThread().execute();
 
@@ -289,7 +317,7 @@ public class CreateSlot extends AppCompatActivity implements
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateSlot.this);
 
-                mSelectedItems = new ArrayList<Integer>(); // TODO temporary
+                mSelectedItems = new ArrayList<>();
 
                 // set the dialog title
                 builder.setTitle("Invite contacts for event")
@@ -303,7 +331,6 @@ public class CreateSlot extends AppCompatActivity implements
 
                                 //TODO set so when dialog opens again it has all contacts ticked that were intially ticked mSelectedItems has the list
 
-
                                 if (isChecked) {
                                     // if the user checked the item, add it to the selected items
                                     mSelectedItems.add(which);
@@ -316,65 +343,49 @@ public class CreateSlot extends AppCompatActivity implements
                                 // for example a tool tip that gives user an idea of what he is selecting
                                 // showToast("Just an example description.");
                             }
+                        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
 
-                        })
+                        // user clicked OK, so save the mSelectedItems results somewhere
+                        // here we are trying to retrieve the selected items indices
+                        String selectedIndex = "";
+                        for (Integer i : mSelectedItems) {
+                            selectedIndex += i + ", ";
+                        }
 
-                                // Set the action buttons
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
+                        addedContactsForSlot = new ArrayList<Person>();
 
-                                // user clicked OK, so save the mSelectedItems results somewhere
-                                // here we are trying to retrieve the selected items indices
-                                String selectedIndex = "";
-                                for (Integer i : mSelectedItems) {
-                                    selectedIndex += i + ", ";
-                                }
+                        String[] selectedContacts = selectedIndex.split(", ");
 
-                                addedContactsForSlot = new ArrayList<Person>();
+                        for (int j = 0; j < selectedContacts.length; j++) {
 
-                                String[] selectedContacts = selectedIndex.split(", ");
+                            if (selectedContacts[j] != " " && selectedContacts[j] != "") {
 
-                                for (int j = 0; j < selectedContacts.length; j++) {
-
-                                    if (selectedContacts[j] != " " && selectedContacts[j] != "") {
-
-
-                                        addedContactsForSlot.add(myContactsPersonsList.get(Integer.parseInt(selectedContacts[j].replaceAll("\\s+", ""))));
-                                    }
-                                }
-                                if (!(addedContactsForSlot.isEmpty())) {
-                                    recipientsForSlotBtn.setText("Contacts added");
-                                    recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                                    recipientsForSlotBtn.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-
-                                    contactsAdded = true;
-
-                                    Toast.makeText(CreateSlot.this, "Contacts Added", Toast.LENGTH_SHORT).show();
-
-                                    if (dateSet && subjectSet && startTimeSet) {
-                                        buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-                                        buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                                    }
-
-                                } else {
-                                    Toast.makeText(CreateSlot.this, "No Contacts Added", Toast.LENGTH_LONG).show();
-                                    contactsAdded = false;
-                                    recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                                    buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
-                                    buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.red));
-                                }
+                                addedContactsForSlot.add(myContactsPersonsList.get(Integer.parseInt(selectedContacts[j].replaceAll("\\s+", ""))));
                             }
-                        })
+                        }
+                        if (!(addedContactsForSlot.isEmpty())) {
+                            recipientsForSlotBtn.setText("Contacts added");
+                            contactsAdded = true;
+                            Toast.makeText(CreateSlot.this, "Contacts Added", Toast.LENGTH_SHORT).show();
 
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                // removes the AlertDialog in the screen
+                            if (subjectSet && my_var != null) {
+                                buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_event_ready), null, null, null);
+
                             }
-                        })
-
-                        .show();
+                        } else {
+                            Toast.makeText(CreateSlot.this, "No Contacts Added", Toast.LENGTH_LONG).show();
+                            contactsAdded = false;
+                            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_send_event), null, null, null);
+                        }
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // removes the AlertDialog in the screen
+                    }
+                }).show();
             }
         });
 
@@ -387,11 +398,6 @@ public class CreateSlot extends AppCompatActivity implements
 
         //TODO Google maps
 
-        /********* display current time on screen End ********/
-
-        // Add Button Click Listener
-        addButtonClickListener();
-
         buttonSendSlot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -400,23 +406,19 @@ public class CreateSlot extends AppCompatActivity implements
                     if (!(addedContactsForSlot.isEmpty())) {
 
                         slotSubjectEditText.getText().toString();
-                        date = slotsDate.getText().toString();
                         if (editTextNumberAttendeesAvaliable.getText().toString().equals("")) {
                             numberAttendeesAvaliable = 0;
                         } else {
                             numberAttendeesAvaliable = Integer.parseInt(editTextNumberAttendeesAvaliable.getText().toString());
                         }
-                        startTime = slotStartTime.getText().toString();
-                        endTime = slotEndTime.getText().toString();
                         subject = slotSubjectEditText.getText().toString();
+                        note = editTextNote.getText().toString();
                         message = slotMessageEditText.getText().toString();
-                        locationString = mAddressTextView.getText().toString();
                         //TODO Set Slot Ready to send with tick
 
                         String emptys = "";
 
-                        if (subject.trim().equals("") || date.equals("Set Date") || startTime.equals("Set Start Time")
-                                || locationString.equals("Please Set Place") || my_var == null) {
+                        if (subject.trim().equals("") || my_var == null) {
 
                             if (subject.trim().equals("")) {
                                 if ((emptys.trim().equals(""))) {
@@ -432,35 +434,6 @@ public class CreateSlot extends AppCompatActivity implements
                                     emptys += ", Place";
                                 }
                             }
-
-                            if (startTime.equals("Set Start Time")) {
-                                if ((emptys.trim().equals(""))) {
-                                    emptys += "Start Time";
-                                } else {
-                                    emptys += ", Start Time";
-                                }
-                            }
-                            if (date.equals("Set Date")) {
-                                if ((emptys.trim().equals(""))) {
-                                    emptys += "Date";
-                                } else {
-                                    emptys += ", Date";
-                                }
-                            }
-//                            if (endTime.trim().equals("Please Set End Time")) {
-//                                if ((emptys.trim().equals(""))) {
-//                                    emptys += "End Time";
-//                                } else {
-//                                    emptys += ", End Time";
-//                                }
-//                            }
-//                            if (message.trim().equals("")) {
-//                                if ((emptys.trim().equals(""))) {
-//                                    emptys += "Message";
-//                                } else {
-//                                    emptys += ", Message";
-//                                }
-//                            }
                             Toast.makeText(getApplicationContext(), "Please fill: " + emptys, Toast.LENGTH_SHORT).show();
                         } else {
 
@@ -476,67 +449,53 @@ public class CreateSlot extends AppCompatActivity implements
             }
         });
 
+        mAutocompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (my_var == null) {
+                }
+            }
+        });
+
         slotSubjectEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     String string = slotSubjectEditText.getText().toString();
                     if ((!(string.equals("")))) {
-                        slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-
-                        if (dateSet && contactsAdded && startTimeSet) {
-                            buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-                            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                        }
-
-                        slotSubjectEditText.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
                         subjectSet = true;
-
+                        if (contactsAdded && my_var != null) {
+                            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_event_ready), null, null, null);
+                        }
                     } else {
-                        slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
-                        buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.red));
                         subjectSet = false;
+                        buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_send_event), null, null, null);
                     }
                 }
             }
         });
-
-        editTextNumberAttendeesAvaliable.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String string = String.valueOf(editTextNumberAttendeesAvaliable.getText().toString());
-                    if ((!(string.equals("")))) {
-                        editTextNumberAttendeesAvaliable.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-                        editTextNumberAttendeesAvaliable.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
+        if (allDaySwitch != null) {
+            allDaySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        textViewEndTime.setVisibility(View.GONE);
+                        textViewStartTime.setVisibility(View.GONE);
+                        llTimeZone.setVisibility(View.GONE);
+                        allDayEvent = true;
                     } else {
-                        editTextNumberAttendeesAvaliable.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                        textViewEndTime.setVisibility(View.VISIBLE);
+                        textViewStartTime.setVisibility(View.VISIBLE);
+                        llTimeZone.setVisibility(View.VISIBLE);
+                        allDayEvent = false;
                     }
                 }
-            }
-        });
-        slotMessageEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String string = slotMessageEditText.getText().toString();
-                    if ((!(string.equals("")))) {
-                        slotMessageEditText.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-                        slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-                    } else {
-                        slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    }
-                }
-            }
-        });
-
+            });
+        }
         if (aSwitch != null) {
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                    Toast.makeText(getApplicationContext(), "An automated SMS will" + (isChecked ? "" : " not") + " be sent to invited contacts",
-//                            Toast.LENGTH_SHORT).show();
                     if (isChecked) {
                         sendSMS = true;
                     } else {
@@ -548,15 +507,125 @@ public class CreateSlot extends AppCompatActivity implements
     }
 
     @Override
+    public void onDateSet(CalendarDatePickerDialogFragment dialog, int year, int monthOfYear, int dayOfMonth) {
+        //Set startCalander year, month, day
+        if (datePickerSelected == 1) {
+
+            startCalendar.set(Calendar.YEAR, year);
+            startCalendar.set(Calendar.MONTH, monthOfYear);
+            startCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            if (startCalendar.after(endCalendar)) {
+                endCalendar.set(startCalendar.get(Calendar.YEAR),
+                        startCalendar.get(Calendar.MONTH), startCalendar.get(Calendar.DAY_OF_MONTH),
+                        startCalendar.get(Calendar.HOUR_OF_DAY), startCalendar.get(Calendar.MINUTE),
+                        startCalendar.get(Calendar.SECOND));
+                textViewEndDate.setText(getDateFormat(endCalendar));
+                textViewEndTime.setText(getTimeFormat(endCalendar));
+            }
+
+            textViewStartDate.setText(getDateFormat(startCalendar));
+        }
+        //Set endCalander year, month, day
+        else if (datePickerSelected == 2) {
+            endCalendar.set(Calendar.YEAR, year);
+            endCalendar.set(Calendar.MONTH, monthOfYear);
+            endCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            if (endCalendar.before(startCalendar)) {
+                startCalendar.set(endCalendar.get(Calendar.YEAR),
+                        endCalendar.get(Calendar.MONTH), endCalendar.get(Calendar.DAY_OF_MONTH),
+                        endCalendar.get(Calendar.HOUR_OF_DAY), endCalendar.get(Calendar.MINUTE),
+                        endCalendar.get(Calendar.SECOND));
+                textViewStartDate.setText(getDateFormat(startCalendar));
+                textViewStartTime.setText(getTimeFormat(startCalendar));
+            }
+            textViewEndDate.setText(getDateFormat(endCalendar));
+        }
+    }
+
+    public void setDates() {
+        now = Calendar.getInstance();
+        TimeZone tz = TimeZone.getDefault();
+        //tz.getDisplayName(false, TimeZone.SHORT)
+        timeZone.setText(tz.getDisplayName() + " " + tz.getID());
+
+        /********* display current time on screen Start ********/
+        startCalendar = Calendar.getInstance();
+        endCalendar = Calendar.getInstance();
+        endCalendar.add(Calendar.HOUR_OF_DAY, 1);
+        startCalendar.setTimeZone(tz);
+        endCalendar.setTimeZone(tz);
+        //SET CURRENT TIME AND DATES AND ADD 1 TO END CAL
+        textViewStartDate.setText(getDateFormat(startCalendar));
+
+        textViewEndDate.setText(getDateFormat(endCalendar));
+
+        textViewStartTime.setText(getTimeFormat(startCalendar));
+
+        textViewEndTime.setText(getTimeFormat(endCalendar));
+    }
+
+    private String getTimeZoneFormat(Calendar c) {
+
+        TimeZone timeZone = c.getTimeZone();
+        return timeZone.getID();
+    }
+
+    private String getDateFormat(Calendar c) {
+        SimpleDateFormat sdf = new SimpleDateFormat("E , d MMM , yyyy");
+        return sdf.format(c.getTime());
+    }
+
+    private String getTimeFormat(Calendar c) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aaa");
+        return sdf.format(c.getTime());
+    }
+
+    @Override
+    public void onDialogTimeSet(int reference, int hourOfDay, int minute) {
+
+        if (timeSelected == 1) {
+            startCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            startCalendar.set(Calendar.MINUTE, minute);
+
+            if (startCalendar.after(endCalendar) || startCalendar.equals(endCalendar)) {
+
+                endCalendar.set(startCalendar.get(Calendar.YEAR),
+                        startCalendar.get(Calendar.MONTH), startCalendar.get(Calendar.DAY_OF_MONTH),
+                        startCalendar.get(Calendar.HOUR_OF_DAY), startCalendar.get(Calendar.MINUTE),
+                        startCalendar.get(Calendar.SECOND));
+                endCalendar.add(Calendar.HOUR_OF_DAY, 1);
+                textViewEndDate.setText(getDateFormat(endCalendar));
+                textViewEndTime.setText(getTimeFormat(endCalendar));
+            }
+
+            textViewStartTime.setText(getTimeFormat(startCalendar));
+        } else if (timeSelected == 2) {
+            endCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            endCalendar.set(Calendar.MINUTE, minute);
+
+            if (endCalendar.before(startCalendar)) {
+                startCalendar.set(endCalendar.get(Calendar.YEAR),
+                        endCalendar.get(Calendar.MONTH), endCalendar.get(Calendar.DAY_OF_MONTH),
+                        endCalendar.get(Calendar.HOUR_OF_DAY), endCalendar.get(Calendar.MINUTE),
+                        endCalendar.get(Calendar.SECOND));
+                textViewStartDate.setText(getDateFormat(startCalendar));
+                textViewStartTime.setText(getTimeFormat(startCalendar));
+            }
+            textViewEndTime.setText(getTimeFormat(endCalendar));
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data != null) {
-            double geoLocation[] = new double[2];
+            double geoLocation[];
 
             String location = data.getStringExtra("location");
             geoLocation = data.getDoubleArrayExtra("geolocation");
-
 
             eventLocation = new GeoPoint(geoLocation[0], geoLocation[1]);
             Map<String, Object> locationMap = new HashMap<>();
@@ -566,176 +635,18 @@ public class CreateSlot extends AppCompatActivity implements
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public void setDate(View view) {
-        showDialog(999);
-    }
-
     @Override
-    protected Dialog onCreateDialog(int id) {
-        // TODO Auto-generated method stub
-        if (id == 999) {
+    public void onTimeZoneSet(TimeZoneInfo tzi) {
+        timeZone.setText(tzi.mDisplayName + " " + tzi.mTzId + " " + tzi.getGmtDisplayName(CreateSlot.this));
 
-            year = c.get(Calendar.YEAR);
-            month = c.get(Calendar.MONTH);
-            day = c.get(Calendar.DAY_OF_MONTH);
-
-            return new DatePickerDialog(this, myDateListener, year, month, day);
-        }
-        switch (id) {
-            case TIME_DIALOG_ID:
-
-                // Date date = new Date();
-                // Toast.makeText(CreateSlot.this, String.valueOf(date.getTime()), Toast.LENGTH_SHORT).show(); TODO check date is valid
-
-                // set time picker as current time
-                return new TimePickerDialog(this, timePickerListener, hour, minute,
-                        false);
-        }
-        return null;
-    }
-
-    //TODO Java Docs: Times Date pickers
-
-    private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
-            // TODO Auto-generated method stub
-            // arg1 = year
-            // arg2 = month
-            // arg3 = day
-            showDate(arg1, arg2 + 1, arg3);
-        }
-    };
-
-    private void showDate(int year, int month, int day) {
-
-        dateFormatSet.setLength(0);
-        startDay = day;
-        startMonth = month;
-        startYear = year;
-        dateView.setText("Date: " + dateFormatSet.append(day).append("/")
-                .append(month).append("/").append(year));
-
-        dateSet = true;
-        btnSlotDate.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-
-        if (subjectSet && contactsAdded) {
-            buttonSendSlot.getResources().getColorStateList(R.color.deepdarkgreen);
-            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-        }
-    }
-
-    public void addButtonClickListener() {
-
-        btnClickSetStartTime = (Button) findViewById(R.id.btnClickSetStartTime);
-
-        btnClickSetStartTime.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                outputInt = 1;
-                showDialog(TIME_DIALOG_ID);
-            }
-
-        });
-
-
-        btnClickSetEndTime.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                outputInt = 2;
-                showDialog(TIME_DIALOG_ID);
-            }
-
-        });
-    }
-
-    private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
-
-
-        @Override
-        public void onTimeSet(TimePicker view, int hourOfDay, int minutes) {
-            // TODO Auto-generated method stub
-            hour = hourOfDay;
-            minute = minutes;
-
-            updateTime(hour, minute);
-        }
-
-    };
-
-    private static String utilTime(int value) {
-
-        if (value < 10)
-            return "0" + String.valueOf(value);
-        else
-            return String.valueOf(value);
-    }
-
-    // Used to convert 24hr format to 12hr format with AM/PM values
-    private void updateTime(int hours, int mins) {
-
-        String timeSet = "";
-        if (hours > 12) {
-            hours -= 12;
-            timeSet = "PM";
-        } else if (hours == 0) {
-            hours += 12;
-            timeSet = "AM";
-        } else if (hours == 12)
-            timeSet = "PM";
-        else
-            timeSet = "AM";
-        String minutes = "";
-        if (mins < 10)
-            minutes = "0" + mins;
-        else
-            minutes = String.valueOf(mins);
-
-        // Append in a StringBuilder
-        String aTime = new StringBuilder().append(hours).append(':')
-                .append(minutes).append(" ").append(timeSet).toString();
-
-
-        if (outputInt == 1) {
-            startMinute = mins;
-            startHour = hours;
-
-            justStartTime = aTime;
-            output.setText("Start Time: " + aTime);
-
-            if (dateSet && contactsAdded && subjectSet) {
-                buttonSendSlot.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-                buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-            }
-
-            startTimeSet = true;
-            btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-
-        } else if (outputInt == 2) {
-
-            justEndTime = aTime;
-            output1.setText("End Time: " + aTime);
-            btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
-        }
-    }
-
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
+        endCalendar.setTimeZone(TimeZone.getTimeZone(tzi.mTzId));
+        startCalendar.setTimeZone(TimeZone.getTimeZone(tzi.mTzId));
     }
 
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
-
         @Override
         protected void onPreExecute() {
-//            ringProgressDialog = ProgressDialog.show(CreateSlot.this, "Please wait ...", "Sending event ...", true);
-//            ringProgressDialog.setCancelable(false);
             super.onPreExecute();
         }
 
@@ -747,25 +658,17 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         protected Void doInBackground(Void... params) {
 
-            // String startDateTime = dateFormatSet.toString() + " " + justStartTime; // TODO REmove date var, dont need to get the text from textview now
-            //  String endDateTime = dateFormatSet.toString() + " " + justEndTime;
-
-
             HashMap<String, Object> hashMapEvent = new HashMap<>();
             hashMapEvent.put("subject", subject);
             hashMapEvent.put("message", message);
-
-            Date startDate = getDateFromDatePicker(startDay, startMonth, startYear, startMinute, startHour);
-
-//            =getDate(dateFormatSet.toString() + " " + justStartTime);
-
-            hashMapEvent.put("starttime", startDate);
-
-            hashMapEvent.put("endtime", justEndTime);
+            hashMapEvent.put("note", note);
+            hashMapEvent.put("starttime", startCalendar.getTime());
+            hashMapEvent.put("endtime", endCalendar.getTime());
             hashMapEvent.put("attendees", numberAttendeesAvaliable);
             hashMapEvent.put("phone", personLoggedIn.getPhone());
             hashMapEvent.put("host", personLoggedIn.getFullname());
             hashMapEvent.put("loggedinperson", personLoggedIn.getObjectId());
+            hashMapEvent.put("alldayevent", allDayEvent);
 
             int o = 0;
             for (Person pId : addedContactsForSlot) {
@@ -783,15 +686,9 @@ public class CreateSlot extends AppCompatActivity implements
 
             hashMapEvent.put("location", place.getAddress());
 
-            //  Backendless.Events.dispatch("CreateEvent", hashMapEvent);
-
-
             Backendless.Events.dispatch("CreateEvent", hashMapEvent, new AsyncCallback<Map>() {
                 @Override
                 public void handleResponse(Map map) {
-
-
-                    // ringProgressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_LONG).show();
                 }
 
@@ -801,14 +698,13 @@ public class CreateSlot extends AppCompatActivity implements
                 }
             });
 
-
             //TODO reused code below here from multiple class Should make a class and method maybe
 
             // For all the contacts add to their pending response slot
             for (Person pId : addedContactsForSlot) {
 
                 if (sendSMS) {
-                    sendsmss(pId.getPhone(), message, subject, dateFormatSet.toString(), justStartTime);
+                    sendsmss(pId.getPhone(), message, subject, startCalendar.getTime().getTime());
                 }
             }
             return null;
@@ -816,46 +712,23 @@ public class CreateSlot extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(Void result) {
-            btnClickSetStartTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            btnClickSetEndTime.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            btnSlotDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            recipientsForSlotBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            slotSubjectEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            slotMessageEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(null, null, crossIconDraw, null);
+
+            editTextNumberAttendeesAvaliable.setText("");
             addedContactsForSlot.clear();
-            mAddressTextView.setText("Please Set Place");
             mAutocompleteTextView.setText("");
             slotSubjectEditText.setText("");
-            slotsDate.setText("Set Date");
-            slotStartTime.setText("Set Start Time");
-            slotEndTime.setText("Set End Time");
-            slotSubjectEditText.setText("");
             slotMessageEditText.setText("");
+            editTextNote.setText("");
+            buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_send_event), null, null, null);
+            setDates();
+            contactsAdded = false;
+            subjectSet = false;
+            my_var = null;
         }
     }
 
-    public static Date getDateFromDatePicker(int day, int month, int year, int minute, int hours) {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month - 1, day, hours, minute);
-        return calendar.getTime();
-    }
-
-//    protected Date getDate(String dateofslot) {
-//
-//        SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy hh:mm a", Locale.getDefault());
-//        Date result = null;
-//        try {
-//            result = df.parse(dateofslot);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        return result;
-//    }
-
     @JavascriptInterface
-    public void sendsmss(String phoneNumber, String message, String subject, String date, String time) {
+    public void sendsmss(String phoneNumber, String message, String subject, Long startDate) {
 
         String fullnameLoggedin = personLoggedIn.getFullname();
         String dots = "";
@@ -871,13 +744,13 @@ public class CreateSlot extends AppCompatActivity implements
                 dots = "...";
             }
             String messageSubString = message.substring(0, lengthToSubString);
-            messageSubString = "Amplified Scheduler: Invited Event. Host: " + fullnameLoggedin +
-                    ". " + subject + " - " + messageSubString + dots + " When: " + date + " at " + time;
+            messageSubString = "Amplified Scheduler: Invited Event from " + fullnameLoggedin +
+                    ". " + subject + messageSubString + dots + " When: " + startDate;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         } else {
             String messageSubString = "Amplified Scheduler: Invited Event. Host: " + fullnameLoggedin +
-                    ". " + subject + " - no message included " + " when: " + date + " at " + time;
+                    ". " + subject + " no message included " + "when: " + startDate;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         }
@@ -898,7 +771,6 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         protected Void doInBackground(Void... params) {
 
-
             StringBuilder whereClause = new StringBuilder();
             whereClause.append("Person[contacts]");
             whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
@@ -910,9 +782,6 @@ public class CreateSlot extends AppCompatActivity implements
 
             myContactsPersonsList = myContactPersons.getData();
 
-            // where we will store or remove selected items
-            //  mSelectedItems = new ArrayList<Integer>();
-
             testArray = new String[myContactsPersonsList.size()];
             int i = 0;
             for (Person pers : myContactsPersonsList) {
@@ -921,11 +790,6 @@ public class CreateSlot extends AppCompatActivity implements
             }
             return null;
         }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-        }
     }
 
     private AdapterView.OnItemClickListener mAutocompleteClickListener
@@ -933,8 +797,10 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             my_var = mPlaceArrayAdapter.getItem(position).toString();
-            mAutocompleteTextView.setTextColor(getResources().getColorStateList(R.color.deepdarkgreen));
-            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, tickIconDraw, null);
+
+            if (subjectSet && contactsAdded) {
+                buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_event_ready), null, null, null);
+            }
             final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
             Log.i(LOG_TAG, "Selected: " + item.description);
@@ -959,7 +825,6 @@ public class CreateSlot extends AppCompatActivity implements
             place = places.get(0);
             CharSequence attributions = places.getAttributions();
 
-            mAddressTextView.setText(Html.fromHtml("Selected Place: " + place.getAddress() + " " + place.getPhoneNumber()));
             if (attributions != null) {
                 mAttTextView.setVisibility(View.VISIBLE);
                 mAttTextView.setText(Html.fromHtml(attributions.toString()));
@@ -1004,7 +869,6 @@ public class CreateSlot extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_share, menu);
 
-
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.share);
 
@@ -1017,5 +881,16 @@ public class CreateSlot extends AppCompatActivity implements
         sendIntent.setType("text/plain");
         mShareActionProvider.setShareIntent(sendIntent);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onResume() {
+        // Example of reattaching to the fragment
+        super.onResume();
+        CalendarDatePickerDialogFragment calendarDatePickerDialogFragment = (CalendarDatePickerDialogFragment) getSupportFragmentManager()
+                .findFragmentByTag(FRAG_TAG_DATE_PICKER);
+        if (calendarDatePickerDialogFragment != null) {
+            calendarDatePickerDialogFragment.setOnDateSetListener(this);
+        }
     }
 }

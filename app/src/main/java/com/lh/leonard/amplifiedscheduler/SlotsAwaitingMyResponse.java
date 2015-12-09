@@ -28,10 +28,11 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class SlotsAwaitingMyResponse extends AppCompatActivity {
 
@@ -51,7 +52,6 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity {
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     View v;
     private Toolbar toolbar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,12 +126,23 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity {
 
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
             slot = slots.getData();
+            Calendar now = Calendar.getInstance();
+            TimeZone tz = TimeZone.getDefault();
+            now.setTimeZone(tz);
 
             for (int j = 0; j < slot.size(); j++) {
-                if (slot.get(j).getMaxattendees() != 0) {
-                    if (slot.get(j).attendees.size() >= slot.get(j).getMaxattendees()) { //|| slot.get(j).parseDateString().before(date)
-                        slot.remove(j);
+
+                System.out.println(slot.get(j).getStartCalendar());
+                System.out.println(" now:" + now);
+
+                if (slot.get(j).getStartCalendar().before(now) || slot.get(j).getStartCalendar().equals(now)) {
+                    if (slot.get(j).getMaxattendees() != 0) {
+                        if (slot.get(j).attendees.size() >= slot.get(j).getMaxattendees()) {
+                            slot.remove(j);
+                        }
                     }
+                } else {
+                    slot.remove(j);
                 }
             }
             return null;
@@ -171,30 +182,29 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity {
                     public void onItemLongClick(View view, final int position) {
 
                         dialog = new AlertDialog.Builder(getApplicationContext())
-                                .setTitle("Going to " + slot.get(position).getSubject() + "?")
-                                .setMessage("Do you want to go to " + slot.get(position).getSubject())
-                                .setIcon(R.drawable.ic_questionmark)
-                                .setPositiveButton("Going", new DialogInterface.OnClickListener() {
+                                .setTitle("Go to event")
+                                .setMessage("You about to go to " + slot.get(position).getSubject())
+                                .setPositiveButton("GOING", new DialogInterface.OnClickListener() {
 
                                     public void onClick(DialogInterface dialog, int whichButton) {
 
                                         dialog.dismiss();
                                         ringProgressDialog = ProgressDialog.show(getApplicationContext(), "Please wait ...",
-                                                "Accepting invited schedule " + slot.get(position).getSubject() + " ...", true);
+                                                "Going to " + slot.get(position).getSubject() + " ...", true);
                                         ringProgressDialog.setCancelable(false);
                                         new GoingToEvent(position).execute();
                                     }
                                 })
-                                .setNegativeButton("Not Going", new DialogInterface.OnClickListener() {
+                                .setNegativeButton("NOT GOING", new DialogInterface.OnClickListener() {
 
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         dialog.dismiss();
                                         ringProgressDialog = ProgressDialog.show(getApplicationContext(), "Please wait ...",
-                                                "Declining invited schedule" + slot.get(position).getSubject() + " ...", true);
+                                                "Not going to" + slot.get(position).getSubject() + " ...", true);
                                         ringProgressDialog.setCancelable(false);
                                         new NotGoingToEvent(position).execute();
                                     }
-                                }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                                }).setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
 
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         dialog.dismiss();

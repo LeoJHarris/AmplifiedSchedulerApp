@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -53,8 +52,7 @@ public class MyCreatedSlots extends AppCompatActivity {
     String eventRemoved;
     AgendaCalendarView mAgendaCalendarView;
     List<CalendarEvent> eventList;
-    Calendar minDate;
-    Calendar maxDate;
+
     private Toolbar toolbar;
     RelativeLayout RLProgressBar;
     private Menu optionsMenu;
@@ -66,14 +64,6 @@ public class MyCreatedSlots extends AppCompatActivity {
 
         mAgendaCalendarView = (AgendaCalendarView) findViewById(R.id.agenda_calendar_view);
         RLProgressBar = (RelativeLayout) findViewById(R.id.RLProgressBar);
-        // minimum and maximum date of our calendar
-        // 2 month behind, one year ahead, example: March 2015 <-> May 2015 <-> May 2016
-        minDate = Calendar.getInstance();
-        maxDate = Calendar.getInstance();
-
-        minDate.add(Calendar.MONTH, -1);
-        minDate.set(Calendar.DAY_OF_MONTH, 1);
-        maxDate.add(Calendar.YEAR, 1);
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
         Backendless.Persistence.mapTableToClass("Slot", Slot.class);
@@ -145,9 +135,22 @@ public class MyCreatedSlots extends AppCompatActivity {
                     }
                 }
             };
-            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
+
+
+            Calendar minDate;
+            Calendar maxDate;
+            // minimum and maximum date of our calendar
+            // 2 month behind, one year ahead, example: March 2015 <-> May 2015 <-> May 2016
+            minDate = Calendar.getInstance();
+            maxDate = Calendar.getInstance();
+
+            minDate.add(Calendar.MONTH, -1);
+            minDate.set(Calendar.DAY_OF_MONTH, 1);
+            maxDate.add(Calendar.YEAR, 1);
+
             progressBar.setVisibility(View.GONE);
             RLProgressBar.setVisibility(View.GONE);
+            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
             mAgendaCalendarView.setVisibility(View.VISIBLE);
         }
     }
@@ -171,7 +174,7 @@ public class MyCreatedSlots extends AppCompatActivity {
             case R.id.action_refresh:
 
                 // Complete with your code
-                new Refresh().execute();
+                // new Refresh().execute();
                 setRefreshActionButtonState(true);
                 return true;
         }
@@ -200,94 +203,97 @@ public class MyCreatedSlots extends AppCompatActivity {
 
     private void getEventsFromList(List<Slot> eventListSlots) {
 
+
         for (int i = 0; i < eventListSlots.size(); i++) {
+
+            Boolean allDay = false;
+
+            if (eventListSlots.get(i).isAllDayEvent()) {
+                allDay = true;
+            }
 
             Calendar startTime = Calendar.getInstance();
             Calendar endTime = Calendar.getInstance();
 
             startTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
 
-            // End time
-            endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
+            endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getEndCalendar().get(Calendar.DAY_OF_YEAR));
 
             String location = (String) eventListSlots.get(i).getLocation().getMetadata("address");
-
             CalendarEvent event = new CalendarEvent(eventListSlots.get(i).getSubject(),
                     eventListSlots.get(i).getMessage(), location,
-                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, false);
+                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, allDay);
 
-            Long l = Long.parseLong(String.valueOf(i));
-
-            event.setId(l);
-
+            event.setId(Long.parseLong(String.valueOf(i)));
             eventList.add(event);
         }
     }
 
-    private class Refresh extends AsyncTask<Void, Integer, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Person[mycreatedslot]");
-            whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
-
-            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-            dataQuery.setWhereClause(whereClause.toString());
-
-            slots = Backendless.Data.of(Slot.class).find(dataQuery);
-            slot = slots.getData();
-
-
-            eventList = new ArrayList<>();
-
-            getEventsFromList(slot);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-            CalendarPickerController mPickerController = new CalendarPickerController() {
-                @Override
-                public void onDaySelected(DayItem dayItem) {
-                }
-
-                @Override
-                public void onEventSelected(CalendarEvent event) {
-
-                    if (!event.getTitle().equals("No events")) {
-
-                        Intent slotDialogIntent = new Intent(MyCreatedSlots.this, MyCreatedSlotsDialog.class);
-
-                        int position = Integer.parseInt(String.valueOf(event.getId()));
-
-
-                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
-
-                        startActivity(slotDialogIntent);
-
-                    }
-                }
-            };
-
-            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
-            Toast.makeText(getApplicationContext(), "Events Synced", Toast.LENGTH_LONG).show();
-            setRefreshActionButtonState(false);
-        }
-    }
+//    private class Refresh extends AsyncTask<Void, Integer, Void> {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected void onProgressUpdate(Integer... values) {
+//            super.onProgressUpdate(values);
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            StringBuilder whereClause = new StringBuilder();
+//            whereClause.append("Person[mycreatedslot]");
+//            whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
+//
+//            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+//            dataQuery.setWhereClause(whereClause.toString());
+//
+//            slots = Backendless.Data.of(Slot.class).find(dataQuery);
+//            slot = slots.getData();
+//
+//
+//            eventList = new ArrayList<>();
+//
+//            getEventsFromList(slot);
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//
+//            CalendarPickerController mPickerController = new CalendarPickerController() {
+//                @Override
+//                public void onDaySelected(DayItem dayItem) {
+//                }
+//
+//                @Override
+//                public void onEventSelected(CalendarEvent event) {
+//
+//                    if (!event.getTitle().equals("No events")) {
+//
+//                        Intent slotDialogIntent = new Intent(MyCreatedSlots.this, MyCreatedSlotsDialog.class);
+//
+//                        int position = Integer.parseInt(String.valueOf(event.getId()));
+//
+//
+//                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
+//
+//                        startActivity(slotDialogIntent);
+//
+//                    }
+//                }
+//            };
+//
+//
+//            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
+//            Toast.makeText(getApplicationContext(), "Events Synced", Toast.LENGTH_LONG).show();
+//            setRefreshActionButtonState(false);
+//        }
+//    }
 
     @Override
     public void onBackPressed() {

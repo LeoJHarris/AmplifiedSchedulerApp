@@ -16,48 +16,29 @@ import java.util.List;
 public class Slot {
 
     public Date startdate;
-    public Date endDate;
-
+    public Date enddate;
+    public boolean alldayevent;
     public String subject;
     public String message;
     public String start;
     public String end;
-    public boolean appointmentOnly;
     public List<Person> attendees;
     public Integer maxattendees;
     public String ownerId;
     public String objectId;
-    public String owneremailaddress;
     public String ownername;
     public GeoPoint location;
     public String phone;
-    public List<Person> invitedpersons;
-    public Calendar calStartDate;
     public String place;
+    public String note;
 
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setCalDate(Calendar calDate) {
-        this.calStartDate = calDate;
-    }
-
-    public void setStartdate(Date startdate) {
-        this.startdate = startdate;
-    }
 
     public Date getStartdate() {
         return startdate;
     }
 
-    public void setInvitedpersons(List<Person> invitedpersons) {
-        this.invitedpersons = invitedpersons;
+    public String getNote() {
+        return note;
     }
 
     public Calendar getStartCalendar() {
@@ -66,16 +47,30 @@ public class Slot {
         return cal;
     }
 
+    public Calendar getEndCalendar() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(enddate);
+        return cal;
+    }
+
+    public Date getEndDate() {
+        return enddate;
+    }
+
+    public void setStartdate(Date startdate) {
+        this.startdate = startdate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.enddate = endDate;
+    }
+
+    public boolean isAllDayEvent() {
+        return alldayevent;
+    }
+
     public String getPlace() {
         return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public List<Person> getInvitedpersons() {
-        return invitedpersons;
     }
 
     public void setPhone(String phone) {
@@ -116,21 +111,12 @@ public class Slot {
 
     public void addAttendee(Person person) {
         if (attendees == null)
-            attendees = new ArrayList<Person>();
+            attendees = new ArrayList<>();
         attendees.add(person);
     }
 
     public void setAttendees(List<Person> attendees) {
         this.attendees = attendees;
-    }
-
-    public void setMaxattendees(Integer maxattendees) {
-        this.maxattendees = maxattendees;
-    }
-
-
-    public String getOwneremailaddress() {
-        return owneremailaddress;
     }
 
     public String getObjectId() {
@@ -158,18 +144,6 @@ public class Slot {
             return "";
         }
     }
-
-    public void setSubject(String title) {
-        this.subject = title;
-    }
-
-    // public GeoPoint getLocation() {
-    ////    return location;
-    //   }
-
-    ///// public void setLocation(GeoPoint coordinated) {
-    //  this.location = coordinated;
-    // }
 
     public String getMessage() {
         return message;
@@ -203,14 +177,6 @@ public class Slot {
         this.end = end;
 
         //this.end = parseStringDate(endDate);
-    }
-
-    public Boolean getAppointmentOnly() {
-        return appointmentOnly;
-    }
-
-    public void setAppointmentOnly(Boolean appointmentOnly) {
-        this.appointmentOnly = appointmentOnly;
     }
 
     private String getDate(Date date) {
