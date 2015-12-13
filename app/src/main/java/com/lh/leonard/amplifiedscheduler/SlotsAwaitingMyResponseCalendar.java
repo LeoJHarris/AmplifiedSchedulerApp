@@ -33,7 +33,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MyCreatedSlots extends AppCompatActivity {
+public class SlotsAwaitingMyResponseCalendar extends AppCompatActivity {
 
     Person personLoggedIn;
     List<Slot> slot;
@@ -95,7 +95,7 @@ public class MyCreatedSlots extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Person[mycreatedslot]");
+            whereClause.append("Person[pendingResponseSlot]");
             whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
 
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -124,7 +124,7 @@ public class MyCreatedSlots extends AppCompatActivity {
 
                     if (!event.getTitle().equals("No events")) {
 
-                        Intent slotDialogIntent = new Intent(MyCreatedSlots.this, MyCreatedSlotsDialog.class);
+                        Intent slotDialogIntent = new Intent(SlotsAwaitingMyResponseCalendar.this, MyCreatedSlotsDialog.class);
 
                         int position = Integer.parseInt(String.valueOf(event.getId()));
 
@@ -175,6 +175,9 @@ public class MyCreatedSlots extends AppCompatActivity {
                 // new Refresh().execute();
                 setRefreshActionButtonState(true);
                 return true;
+
+            case R.id.action_switch:
+                startActivity(new Intent(SlotsAwaitingMyResponseCalendar.this, SlotsAwaitingMyResponse.class));
         }
         return super.onOptionsItemSelected(item);
     }

@@ -57,6 +57,9 @@
             android:name=".MyCreatedSlotsDialog"
             android:label="" />
         <activity
+            android:name=".SlotsAwaitingMyResponseCalendar"
+            android:label="Invited Events" />
+        <activity
             android:name=".MyCreatedSlots"
             android:label="My Events" />
         <activity
