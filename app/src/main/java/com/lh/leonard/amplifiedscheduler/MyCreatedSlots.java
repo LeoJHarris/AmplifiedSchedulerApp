@@ -185,7 +185,7 @@ public class MyCreatedSlots extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         this.optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_share, menu);
+        inflater.inflate(R.menu.menu_events, menu);
 
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.share);

@@ -375,7 +375,7 @@ public class UpdateAccount extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         this.optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_share, menu);
+        inflater.inflate(R.menu.menu_other, menu);
 
 
         // Locate MenuItem with ShareActionProvider
