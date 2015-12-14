@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class SlotsAwaitingMyResponse extends AppCompatActivity implements
+public class GoingToEventsWeekView extends AppCompatActivity implements
         WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.MonthChangeListener {
 
     Person personLoggedIn;
@@ -82,10 +82,10 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
 
-        Intent slotDialogIntent = new Intent(SlotsAwaitingMyResponse.this, SlotsPendingMyResponseDialog.class);
+        Intent slotDialogIntent = new Intent(GoingToEventsWeekView.this, SlotsImGoingToDialog.class);
 
         int position = Integer.parseInt(String.valueOf(event.getId()));
-        slotDialogIntent.putExtra("origin", 1);
+        slotDialogIntent.putExtra("origin", 2);
         slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
 
         startActivity(slotDialogIntent);
@@ -168,7 +168,7 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
         protected Void doInBackground(Void... params) {
             System.out.println("do in background");
             StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Person[pendingResponseSlot]");
+            whereClause.append("Person[goingToSlot]");
             whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
 
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -180,14 +180,6 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
             TimeZone tz = TimeZone.getDefault();
             now.setTimeZone(tz);
 
-            for (int j = 0; j < slot.size(); j++) {
-
-                if (slot.get(j).getMaxattendees() != 0) {
-                    if (slot.get(j).attendees.size() >= slot.get(j).getMaxattendees()) {
-                        slot.remove(j);
-                    }
-                }
-            }
             return null;
         }
 
@@ -279,7 +271,7 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
 
                 return true;
             case R.id.action_switch:
-                startActivity(new Intent(SlotsAwaitingMyResponse.this, SlotsAwaitingMyResponseCalendar.class));
+                startActivity(new Intent(GoingToEventsWeekView.this, SlotsImGoingTo.class));
         }
 
         return super.onOptionsItemSelected(item);

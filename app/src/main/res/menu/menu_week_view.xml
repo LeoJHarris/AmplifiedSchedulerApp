@@ -7,7 +7,7 @@
         android:id="@+id/action_switch"
         android:icon="@drawable/ic_view_switch"
         android:orderInCategory="100"
-        android:title="Calendar"
+        android:title="Week View"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_today"

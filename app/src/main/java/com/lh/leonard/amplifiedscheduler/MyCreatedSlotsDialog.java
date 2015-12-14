@@ -51,6 +51,7 @@ public class MyCreatedSlotsDialog extends Activity {
     AlertDialog dialog;
     ProgressDialog ringProgressDialog;
     AutoResizeTextView textViewMyNote;
+    int origin = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +178,7 @@ public class MyCreatedSlotsDialog extends Activity {
 
             Bundle data = getIntent().getExtras();
             objectId = data.getString("objectId");
-
+            origin = data.getInt("origin");
             event = Backendless.Data.of(Slot.class).findById(objectId);
 
             return (String) event.getLocation().getMetadata("address");
@@ -328,9 +329,19 @@ public class MyCreatedSlotsDialog extends Activity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MyCreatedSlots.class);
-        startActivity(intent);
-        finish();
 
+        if (origin == 1) {
+            Intent intent = new Intent(this, MyEventsWeekView.class);
+            startActivity(intent);
+            finish();
+        } else if (origin == 2) {
+            Intent intent = new Intent(this, MyCreatedSlots.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(this, MyCreatedSlots.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

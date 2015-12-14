@@ -145,8 +145,7 @@ public class SlotsImGoingTo extends AppCompatActivity {
                         Intent slotDialogIntent = new Intent(SlotsImGoingTo.this, SlotsImGoingToDialog.class);
 
                         int position = Integer.parseInt(String.valueOf(event.getId()));
-
-
+                        slotDialogIntent.putExtra("origin", 1);
                         slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
 
                         startActivity(slotDialogIntent);
