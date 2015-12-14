@@ -74,4 +74,9 @@
     <string name="rta_dialog_no">No, thanks</string>
     <string name="name_version_num">Amplified Scheduler v1.74</string>
 
+    <string name="action_today">Today</string>
+    <string name="action_day_view">Day view</string>
+    <string name="action_three_day_view">3 day view</string>
+    <string name="action_week_view">Week view</string>
+
 </resources>

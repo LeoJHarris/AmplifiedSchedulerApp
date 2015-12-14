@@ -301,6 +301,9 @@ public class MainActivity extends Activity {
                     EditText emailField = (EditText) findViewById(R.id.emailSignIn);
                     EditText passwordField = (EditText) findViewById(R.id.passwordSignIn);
 
+                    emailField.setText("leojharris@hotmail.com");
+                    passwordField.setText("testing");
+
                     if (new Validator().isValidEmail(emailField.getText())) {
                         if (new Validator().isPasswordValid(passwordField.getText())) {
 
