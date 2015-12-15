@@ -75,8 +75,6 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         new ParseURL().execute();
-
-
     }
 
     @Override

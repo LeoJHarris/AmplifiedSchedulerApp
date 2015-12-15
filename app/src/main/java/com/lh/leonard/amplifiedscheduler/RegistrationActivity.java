@@ -17,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -360,7 +359,6 @@ public class RegistrationActivity extends AppCompatActivity {
      */
     public class Validator {
 
-
         private boolean isPasswordValid(CharSequence password) {
             return password.toString().length() > 4;
         }
@@ -370,19 +368,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 return false;
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
-    }
-
-
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 }
 

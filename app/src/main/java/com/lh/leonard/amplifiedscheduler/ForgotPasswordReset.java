@@ -4,8 +4,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,18 +45,11 @@ public class ForgotPasswordReset extends AppCompatActivity {
 
                 if (!emailForPasswordRecovery.toString().toString().isEmpty()) {
 
-                    //TODO Check if email exists first
-
-                    //TODO not working
-
                     Backendless.UserService.restorePassword(emailForPasswordRecovery, new AsyncCallback<Void>() {
                         @Override
                         public void handleResponse(Void aVoid) {
-                            System.out.println("Temporary password has been emailed to " + emailForPasswordRecovery);
-                            //TODO Message on the Main page that password sent though, int.addextras
-                            //  Intent passwordRecoverySent = new Intent(getApplicationContext(), MainActivity.class);
-                            //   startActivity(passwordRecoverySent);
-
+                            Toast.makeText(ForgotPasswordReset.this, "New Email sent to " + emailForPasswordRecovery,
+                                    Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
