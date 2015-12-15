@@ -63,6 +63,9 @@
             android:name=".MyCreatedSlots"
             android:label="My Events" />
         <activity
+            android:name=".MyEventsWeekView"
+            android:label="My Events" />
+        <activity
             android:name=".SlotsImGoingTo"
             android:excludeFromRecents="true"
             android:label="Going To Events" />
@@ -98,6 +101,8 @@
             android:label=""
             android:noHistory="true"
             android:screenOrientation="portrait" />
+        <activity android:name=".GoingToEventsWeekView"
+            android:label="Going To Events"/>
         <activity
             android:name=".NavDrawerActivity"
             android:label=""

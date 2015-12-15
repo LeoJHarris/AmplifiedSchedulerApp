@@ -46,6 +46,7 @@ public class SlotsPendingMyResponseDialog extends Activity {
     Slot event;
     ProgressDialog ringProgressDialog;
     Button buttonInvitedGoingToEvent;
+    int origin = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +171,7 @@ public class SlotsPendingMyResponseDialog extends Activity {
 
             Bundle data = getIntent().getExtras();
             objectId = data.getString("objectId");
-
+            origin = data.getInt("origin");
             event = Backendless.Data.of(Slot.class).findById(objectId);
 
             return (String) event.getLocation().getMetadata("address");
@@ -328,8 +329,18 @@ public class SlotsPendingMyResponseDialog extends Activity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, SlotsAwaitingMyResponse.class);
-        startActivity(intent);
-        finish();
+        if (origin == 1) {
+            Intent intent = new Intent(this, SlotsAwaitingMyResponse.class);
+            startActivity(intent);
+            finish();
+        } else if (origin == 2) {
+            Intent intent = new Intent(this, SlotsAwaitingMyResponseCalendar.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(this, SlotsImGoingTo.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

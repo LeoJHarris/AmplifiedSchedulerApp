@@ -75,8 +75,6 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         new ParseURL().execute();
-
-
     }
 
     @Override
@@ -85,7 +83,7 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
         Intent slotDialogIntent = new Intent(SlotsAwaitingMyResponse.this, SlotsPendingMyResponseDialog.class);
 
         int position = Integer.parseInt(String.valueOf(event.getId()));
-
+        slotDialogIntent.putExtra("origin", 1);
         slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
 
         startActivity(slotDialogIntent);

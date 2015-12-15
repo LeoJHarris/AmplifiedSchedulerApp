@@ -112,10 +112,10 @@ public class NavDrawerActivity extends AppCompatActivity {
                 intent = new Intent(NavDrawerActivity.this, CreateSlot.class);
                 break;
             case 2:
-                intent = new Intent(NavDrawerActivity.this, MyCreatedSlots.class);
+                intent = new Intent(NavDrawerActivity.this, MyEventsWeekView.class);
                 break;
             case 3:
-                intent = new Intent(NavDrawerActivity.this, SlotsImGoingTo.class);
+                intent = new Intent(NavDrawerActivity.this, GoingToEventsWeekView.class);
                 break;
             case 4:
                 intent = new Intent(NavDrawerActivity.this, SlotsAwaitingMyResponse.class);
@@ -172,7 +172,6 @@ public class NavDrawerActivity extends AppCompatActivity {
         this.optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
-
 
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.share);

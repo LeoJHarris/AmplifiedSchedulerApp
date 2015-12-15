@@ -6,10 +6,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -54,6 +59,7 @@ public class SlotsImGoingTo extends AppCompatActivity {
     private Toolbar toolbar;
     RelativeLayout RLProgressBar;
     Boolean alldayevent;
+    private Menu optionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,8 +151,7 @@ public class SlotsImGoingTo extends AppCompatActivity {
                         Intent slotDialogIntent = new Intent(SlotsImGoingTo.this, SlotsImGoingToDialog.class);
 
                         int position = Integer.parseInt(String.valueOf(event.getId()));
-
-
+                        slotDialogIntent.putExtra("origin", 1);
                         slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
 
                         startActivity(slotDialogIntent);
@@ -216,5 +221,53 @@ public class SlotsImGoingTo extends AppCompatActivity {
         Intent intent = new Intent(this, NavDrawerActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void setRefreshActionButtonState(final boolean refreshing) {
+        if (optionsMenu != null) {
+            final MenuItem refreshItem = optionsMenu
+                    .findItem(R.id.action_refresh);
+            if (refreshItem != null) {
+                if (refreshing) {
+                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+                } else {
+                    refreshItem.setActionView(null);
+                }
+            }
+        }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+
+                // Complete with your code
+                // new Refresh().execute();
+                setRefreshActionButtonState(true);
+                return true;
+            case R.id.action_switch:
+                startActivity(new Intent(this, GoingToEventsWeekView.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.optionsMenu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_events, menu);
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.share);
+
+        // Fetch and store ShareActionProvider
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+        sendIntent.setType("text/plain");
+        mShareActionProvider.setShareIntent(sendIntent);
+        return super.onCreateOptionsMenu(menu);
     }
 }

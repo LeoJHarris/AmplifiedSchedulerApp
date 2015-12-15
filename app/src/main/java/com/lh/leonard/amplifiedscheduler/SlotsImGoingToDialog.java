@@ -45,6 +45,7 @@ public class SlotsImGoingToDialog extends Activity {
     String eventRemoved;
     Slot event;
     ProgressDialog ringProgressDialog;
+    int origin = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +159,7 @@ public class SlotsImGoingToDialog extends Activity {
 
             Bundle data = getIntent().getExtras();
             objectId = data.getString("objectId");
-
+            origin = data.getInt("origin");
             event = Backendless.Data.of(Slot.class).findById(objectId);
 
 
@@ -275,8 +276,18 @@ public class SlotsImGoingToDialog extends Activity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, SlotsImGoingTo.class);
-        startActivity(intent);
-        finish();
+        if (origin == 1) {
+            Intent intent = new Intent(this, SlotsImGoingTo.class);
+            startActivity(intent);
+            finish();
+        } else if (origin == 2) {
+            Intent intent = new Intent(this, GoingToEventsWeekView.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(this, SlotsImGoingTo.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
