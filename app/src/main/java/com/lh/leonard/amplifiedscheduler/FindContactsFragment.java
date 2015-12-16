@@ -3,6 +3,7 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -66,10 +67,10 @@ public class FindContactsFragment extends Fragment {
     String title;
     String message;
     String messageToAppend;
-    AutoResizeTextView fullname;
     Drawable drawableRequesting;
     Drawable drawableContacts;
     Drawable drawableActionRequired;
+    Resources r = getResources();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,9 +78,7 @@ public class FindContactsFragment extends Fragment {
 
         final LayoutInflater factory = getActivity().getLayoutInflater();
 
-        final View textEntryView = factory.inflate(R.layout.contacts_card_view, null);
-
-        fullname = (AutoResizeTextView) textEntryView.findViewById(R.id.person_fullname);
+        r = getResources();
 
         drawableRequesting = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_friend_requested);
         drawableActionRequired = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_actionrequiredcontactspng);
@@ -109,7 +108,6 @@ public class FindContactsFragment extends Fragment {
 
         searchViewFindContacts.setQueryHint("Search Users");
 
-
         searchViewFindContacts.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                                                           public boolean onQueryTextChange(final String text) {
 
@@ -129,7 +127,7 @@ public class FindContactsFragment extends Fragment {
                                                                   timer = new Timer();
                                                                   callAsynchronousTask();
                                                               } else {
-                                                                  editHintSearchContacts.setText("Search users by email address first or last name.");
+                                                                  editHintSearchContacts.setText("Try searching users by name");
                                                                   editHintSearchContacts.setVisibility(View.VISIBLE);
                                                                   progressBarFindContacts.setVisibility(View.GONE);
                                                                   RLProgressBar.setVisibility(View.GONE);
@@ -267,7 +265,7 @@ public class FindContactsFragment extends Fragment {
 
                     //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                    adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS);
+                    adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS, r);
 
                     rv.setAdapter(adapter);
 
@@ -477,14 +475,12 @@ public class FindContactsFragment extends Fragment {
                     rv.setVisibility(View.GONE);
 
                     if (refreshed) {
-                        editHintSearchContacts.setText("Search users by first or last name.");
+                        editHintSearchContacts.setText("Try searching users by name");
 
                     } else {
-                        editHintSearchContacts.setText("No users found. Try searing users by email address, first or last name.");
+                        editHintSearchContacts.setText("No users found");
                     }
                     editHintSearchContacts.setVisibility(View.VISIBLE);
-
-
                 }
             }
         }
@@ -617,7 +613,7 @@ public class FindContactsFragment extends Fragment {
 
             //Resources r = getResources();
 
-            adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS);
+            adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS, r);
 
             rv.setAdapter(adapter);
 

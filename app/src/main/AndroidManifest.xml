@@ -57,13 +57,7 @@
             android:name=".MyCreatedSlotsDialog"
             android:label="" />
         <activity
-            android:name=".SlotsAwaitingMyResponseCalendar"
-            android:label="Invited Events" />
-        <activity
             android:name=".MyCreatedSlots"
-            android:label="My Events" />
-        <activity
-            android:name=".MyEventsWeekView"
             android:label="My Events" />
         <activity
             android:name=".SlotsImGoingTo"
@@ -101,8 +95,6 @@
             android:label=""
             android:noHistory="true"
             android:screenOrientation="portrait" />
-        <activity android:name=".GoingToEventsWeekView"
-            android:label="Going To Events"/>
         <activity
             android:name=".NavDrawerActivity"
             android:label=""

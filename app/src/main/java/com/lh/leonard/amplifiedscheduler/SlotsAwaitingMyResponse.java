@@ -64,9 +64,7 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
     List<CalendarEvent> eventList;
     LinearLayout linearLayoutWeekView;
     LinearLayout linearLayoutCalendarView;
-
     Boolean weekview = true;
-
     private Toolbar toolbar;
     RelativeLayout RLProgressBar;
     private Menu optionsMenu;
@@ -87,8 +85,6 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
         linearLayoutCalendarView = (LinearLayout) findViewById(R.id.LLCalendarView);
         linearLayoutWeekView = (LinearLayout) findViewById(R.id.LLWeekView);
 
-        Backendless.Persistence.mapTableToClass("Person", Person.class);
-        Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
@@ -118,7 +114,6 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
         Intent slotDialogIntent = new Intent(this, SlotsPendingMyResponseDialog.class);
         int position = Integer.parseInt(String.valueOf(event.getId()));
         slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
-        slotDialogIntent.putExtra("origin", 1);
         startActivity(slotDialogIntent);
     }
 

@@ -3,6 +3,7 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,12 +50,15 @@ public class PersonRequestsTabs extends Fragment {
     private ProgressBar progressBarRequesting;
     AutoResizeTextView textViewTextNoRequestingUsers;
     ProgressDialog ringProgressDialog;
+    Resources r;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.person_requests_tab2, container, false);
 
         personLoggedIn = (Person) loggedInUser.getProperty("persons");
+
+        r = getResources();
 
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Data.mapTableToClass("Slot", Slot.class);
@@ -148,7 +152,7 @@ public class PersonRequestsTabs extends Fragment {
 
                     rvRequest.setLayoutManager(llm);
 
-                    adapterRequest = new ContactsAdapter(personsRequestsList, 1);
+                    adapterRequest = new ContactsAdapter(personsRequestsList, 1, r);
 
                     rvRequest.setAdapter(adapterRequest);
 
@@ -270,7 +274,7 @@ public class PersonRequestsTabs extends Fragment {
 
                 //   rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                adapterRequest = new ContactsAdapter(personsRequestsList, 1);
+                adapterRequest = new ContactsAdapter(personsRequestsList, 1, r);
 
                 rvRequest.setAdapter(adapterRequest);
             } else {
@@ -344,7 +348,7 @@ public class PersonRequestsTabs extends Fragment {
 
                 // rvRequest.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                adapterRequest = new ContactsAdapter(personsRequestsList, 1);
+                adapterRequest = new ContactsAdapter(personsRequestsList, 1, r);
 
                 rvRequest.setAdapter(adapterRequest);
             } else {
@@ -404,7 +408,7 @@ public class PersonRequestsTabs extends Fragment {
 
                     rvRequest.setLayoutManager(llm);
 
-                    adapterRequest = new ContactsAdapter(personsRequestsList, 1);
+                    adapterRequest = new ContactsAdapter(personsRequestsList, 1, r);
 
                     rvRequest.setAdapter(adapterRequest);
 

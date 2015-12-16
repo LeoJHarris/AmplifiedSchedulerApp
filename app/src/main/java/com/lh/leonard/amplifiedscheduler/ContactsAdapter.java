@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,9 +22,6 @@ import java.util.List;
  */
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactViewHolder> implements Filterable {
 
-    int ICON;
-
-    Resources resources;
     private List<Person> listSlots;
     Typeface RobotoBlack;
     Typeface RobotoCondensedLightItalic;
@@ -35,18 +33,22 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     Drawable drawableActionRequired;
     HashMap<Integer, Integer> hashMap = new HashMap<>();
     int VAL;
+    Resources r;
+    Drawable draw = r.getDrawable(R.drawable.user_requesting);
 
-    public ContactsAdapter(List<Person> list, int val) {
+    public ContactsAdapter(List<Person> list, int val, Resources r) {
 
         listSlots = list;
         VAL = val;
+        r = r;
     }
 
-    public ContactsAdapter(List<Person> list, HashMap<Integer, Integer> hashMap) {
+    public ContactsAdapter(List<Person> list, HashMap<Integer, Integer> hashMap, Resources r) {
 
         listSlots = list;
         this.hashMap = hashMap;
         VAL = 10;
+        this.r = r;
     }
 
     @Override
@@ -60,7 +62,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         drawableRequesting = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_friend_requested);
         drawableActionRequired = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_actionrequiredcontactspng);
         drawableContacts = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_currentcontact);
-
         return pvh;
     }
 
@@ -68,30 +69,30 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     public void onBindViewHolder(ContactViewHolder slotViewHolder, int i) {
 
         if (VAL == 0) {
-            slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
+            slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
         } else if (VAL == 1) {
-            slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
+            slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
         } else {
             if (hashMap.get(i) != null) {
                 if (hashMap.get(i) == 1) {
-                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRequesting, null);
+                    slotViewHolder.userImage.setImageDrawable(draw);
+                    slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRequesting, null);
 
                 } else if (hashMap.get(i) == 2) {
-                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
+                    slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
 
                 } else if (hashMap.get(i) == 3) {
-                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
+                    slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
 
                 } else if (hashMap.get(i) == 4) {
-                    slotViewHolder.personsFullName.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
+                    slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
 
                 }
             }
         }
         slotViewHolder.personCountry.setTypeface(RobotoCondensedLight);
-        slotViewHolder.personLastActivity.setTypeface(RobotoCondensedLight);
-        slotViewHolder.personsFullName.setTypeface(RobotoCondensedLight);
-        slotViewHolder.personsFullName.setText(listSlots.get(i).getFname() + " " + listSlots.get(i).getLname());
+        slotViewHolder.name.setTypeface(RobotoCondensedLight);
+        slotViewHolder.name.setText(listSlots.get(i).getFname() + " " + listSlots.get(i).getLname());
         slotViewHolder.personCountry.setText("Country: " + listSlots.get(i).getCountry());
         slotViewHolder.personCountry.setText("Last Activity: " + listSlots.get(i).getUpdated());
     }
@@ -112,7 +113,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 final FilterResults oReturn = new FilterResults();
-                final List<Person> results = new ArrayList<Person>();
+                final List<Person> results = new ArrayList<>();
                 if (orig == null)
                     orig = listSlots;
                 if (constraint != null) {
@@ -138,18 +139,17 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
-        AutoResizeTextView personsFullName;
-        AutoResizeTextView personLastActivity;
+        AutoResizeTextView name;
         AutoResizeTextView personCountry;
+        ImageView userImage;
 
         ContactViewHolder(View itemView) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
-            personsFullName = (AutoResizeTextView) itemView.findViewById(R.id.person_fullname);
-            personLastActivity = (AutoResizeTextView) itemView.findViewById(R.id.person_last_activity);
+            name = (AutoResizeTextView) itemView.findViewById(R.id.textViewName);
+
             personCountry = (AutoResizeTextView) itemView.findViewById(R.id.person_country); //
-            //personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
+            userImage = (ImageView) itemView.findViewById(R.id.thumbnail);
         }
     }
-
 }
