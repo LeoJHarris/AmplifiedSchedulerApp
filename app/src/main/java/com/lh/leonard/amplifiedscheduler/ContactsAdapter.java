@@ -33,6 +33,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     Drawable requestedDrawable;
     Drawable requestingDrawable;
     Drawable friendDrawable;
+    Drawable blankDrawable;
 
     public ContactsAdapter(List<Person> list, int val) {
 
@@ -58,6 +59,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         requestedDrawable = ContextCompat.getDrawable(v.getContext(), R.drawable.requested_user);
         requestingDrawable = ContextCompat.getDrawable(v.getContext(), R.drawable.requesting_user);
         friendDrawable = ContextCompat.getDrawable(v.getContext(), R.drawable.friend_user);
+        blankDrawable = ContextCompat.getDrawable(v.getContext(), R.drawable.user_blank);
         return pvh;
     }
 
@@ -78,6 +80,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                     slotViewHolder.userImage.setImageDrawable(friendDrawable);
                 } else if (hashMap.get(i) == 4) {
                     slotViewHolder.userImage.setImageDrawable(friendDrawable);
+                } else if (hashMap.get(i) == 0) {
+                    slotViewHolder.userImage.setImageDrawable(blankDrawable);
                 }
             }
         }
