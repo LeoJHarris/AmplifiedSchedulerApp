@@ -127,7 +127,7 @@ public class ParticipantsActivity extends Activity {
                 LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                 rv.setLayoutManager(llm);
 
-                adapter = new ContactsAdapter(slot, 0, r);
+                adapter = new ContactsAdapter(slot, 0);
 
                 rv.setAdapter(adapter);
 

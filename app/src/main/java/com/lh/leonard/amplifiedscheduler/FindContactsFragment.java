@@ -70,7 +70,7 @@ public class FindContactsFragment extends Fragment {
     Drawable drawableRequesting;
     Drawable drawableContacts;
     Drawable drawableActionRequired;
-    Resources r = getResources();
+    Resources r;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,8 +93,6 @@ public class FindContactsFragment extends Fragment {
 
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Data.mapTableToClass("Slot", Slot.class);
-        Backendless.Persistence.mapTableToClass("Person", Person.class);
-        Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 
         editHintSearchContacts = (AutoResizeTextView) v.findViewById(R.id.editHintSearchContacts);
         searchViewFindContacts = (SearchView) v.findViewById(R.id.searchViewFindContacts);
@@ -180,7 +178,6 @@ public class FindContactsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            Backendless.Data.mapTableToClass("Person", Person.class);
             String whereClause = "lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%' AND" +
                     " objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -193,7 +190,6 @@ public class FindContactsFragment extends Fragment {
             q.addRelated("contacts");
             dataQuery.setQueryOptions(q);
             BackendlessCollection<Person> result = Backendless.Persistence.of(Person.class).find(dataQuery);
-
 
             personsFoundQuery = result.getData();
 
@@ -265,7 +261,7 @@ public class FindContactsFragment extends Fragment {
 
                     //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                    adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS, r);
+                    adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS);
 
                     rv.setAdapter(adapter);
 
@@ -613,7 +609,7 @@ public class FindContactsFragment extends Fragment {
 
             //Resources r = getResources();
 
-            adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS, r);
+            adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS);
 
             rv.setAdapter(adapter);
 

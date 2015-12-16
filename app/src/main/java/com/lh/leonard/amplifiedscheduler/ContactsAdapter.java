@@ -1,6 +1,5 @@
 package com.lh.leonard.amplifiedscheduler;
 
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -28,27 +27,24 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     Typeface RobotoCondensedLight;
     Typeface RobotoCondensedBold;
     private List<Person> orig;
-    Drawable drawableRequesting;
-    Drawable drawableContacts;
-    Drawable drawableActionRequired;
     HashMap<Integer, Integer> hashMap = new HashMap<>();
     int VAL;
-    Resources r;
-    Drawable draw = r.getDrawable(R.drawable.user_requesting);
 
-    public ContactsAdapter(List<Person> list, int val, Resources r) {
+    Drawable requestedDrawable;
+    Drawable requestingDrawable;
+    Drawable friendDrawable;
+
+    public ContactsAdapter(List<Person> list, int val) {
 
         listSlots = list;
         VAL = val;
-        r = r;
     }
 
-    public ContactsAdapter(List<Person> list, HashMap<Integer, Integer> hashMap, Resources r) {
+    public ContactsAdapter(List<Person> list, HashMap<Integer, Integer> hashMap) {
 
         listSlots = list;
         this.hashMap = hashMap;
         VAL = 10;
-        this.r = r;
     }
 
     @Override
@@ -59,9 +55,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         RobotoCondensedLight = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         RobotoCondensedBold = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
         ContactViewHolder pvh = new ContactViewHolder(v);
-        drawableRequesting = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_friend_requested);
-        drawableActionRequired = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_actionrequiredcontactspng);
-        drawableContacts = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_currentcontact);
+        requestedDrawable = ContextCompat.getDrawable(v.getContext(), R.drawable.requested_user);
+        requestingDrawable = ContextCompat.getDrawable(v.getContext(), R.drawable.requesting_user);
+        friendDrawable = ContextCompat.getDrawable(v.getContext(), R.drawable.friend_user);
         return pvh;
     }
 
@@ -69,24 +65,19 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     public void onBindViewHolder(ContactViewHolder slotViewHolder, int i) {
 
         if (VAL == 0) {
-            slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
+            slotViewHolder.userImage.setImageDrawable(friendDrawable);
         } else if (VAL == 1) {
-            slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
+            slotViewHolder.userImage.setImageDrawable(requestingDrawable);
         } else {
             if (hashMap.get(i) != null) {
                 if (hashMap.get(i) == 1) {
-                    slotViewHolder.userImage.setImageDrawable(draw);
-                    slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRequesting, null);
-
+                    slotViewHolder.userImage.setImageDrawable(requestedDrawable);
                 } else if (hashMap.get(i) == 2) {
-                    slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableActionRequired, null);
-
+                    slotViewHolder.userImage.setImageDrawable(requestingDrawable);
                 } else if (hashMap.get(i) == 3) {
-                    slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
-
+                    slotViewHolder.userImage.setImageDrawable(friendDrawable);
                 } else if (hashMap.get(i) == 4) {
-                    slotViewHolder.name.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableContacts, null);
-
+                    slotViewHolder.userImage.setImageDrawable(friendDrawable);
                 }
             }
         }
@@ -94,7 +85,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         slotViewHolder.name.setTypeface(RobotoCondensedLight);
         slotViewHolder.name.setText(listSlots.get(i).getFname() + " " + listSlots.get(i).getLname());
         slotViewHolder.personCountry.setText("Country: " + listSlots.get(i).getCountry());
-        slotViewHolder.personCountry.setText("Last Activity: " + listSlots.get(i).getUpdated());
     }
 
     @Override
@@ -132,7 +122,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 listSlots = (ArrayList<Person>) results.values;
                 notifyDataSetChanged();
-
             }
         };
     }
@@ -145,10 +134,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
         ContactViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.cv);
+            cv = (CardView) itemView.findViewById(R.id.cardview);
             name = (AutoResizeTextView) itemView.findViewById(R.id.textViewName);
-
-            personCountry = (AutoResizeTextView) itemView.findViewById(R.id.person_country); //
+            personCountry = (AutoResizeTextView) itemView.findViewById(R.id.person_country);
             userImage = (ImageView) itemView.findViewById(R.id.thumbnail);
         }
     }

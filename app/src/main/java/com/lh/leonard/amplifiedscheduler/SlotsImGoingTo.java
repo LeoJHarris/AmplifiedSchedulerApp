@@ -53,7 +53,6 @@ public class SlotsImGoingTo extends AppCompatActivity implements
     BackendlessCollection<Person> persons;
     BackendlessCollection<Slot> slots;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
-    RVAdapter adapter;
     View v;
     ProgressDialog ringProgressDialog;
     AlertDialog dialog;
