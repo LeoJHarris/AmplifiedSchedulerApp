@@ -419,7 +419,6 @@ public class PersonRequestsTabs extends Fragment {
         }
     }
 
-
     @Override
     public void onResume() {
 

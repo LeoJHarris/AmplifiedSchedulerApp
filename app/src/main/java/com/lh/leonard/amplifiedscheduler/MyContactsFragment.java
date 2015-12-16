@@ -156,8 +156,8 @@ public class MyContactsFragment extends Fragment {
                         public void onItemClick(View view, final int position) {
 
                             dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Remove Contact?")
-                                    .setMessage("Do you want to remove " + myContactsList.get(position).getFullname() + " as a contact")
+                                    .setTitle("Remove Contact")
+                                    .setMessage("Remove " + myContactsList.get(position).getFullname() + " as a contact")
                                     .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {

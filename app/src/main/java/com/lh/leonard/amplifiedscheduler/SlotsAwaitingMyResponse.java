@@ -6,14 +6,21 @@ import android.content.Intent;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
 import android.util.TypedValue;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.webkit.JavascriptInterface;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.WeekView;
@@ -22,6 +29,10 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.github.tibolte.agendacalendarview.AgendaCalendarView;
+import com.github.tibolte.agendacalendarview.CalendarPickerController;
+import com.github.tibolte.agendacalendarview.models.CalendarEvent;
+import com.github.tibolte.agendacalendarview.models.DayItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,13 +47,29 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
 
     Person personLoggedIn;
     List<Slot> slot;
+    List<Person> personsToSms;
+    BackendlessCollection<Person> personsToSmsCollection;
+    private ProgressBar progressBar;
     BackendlessCollection<Person> persons;
     BackendlessCollection<Slot> slots;
-    AlertDialog dialog;
-    ProgressDialog ringProgressDialog;
-    private ProgressBar progressBar;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
+    RVAdapter adapter;
+    View v;
+    ProgressDialog ringProgressDialog;
+    AlertDialog dialog;
+    RecyclerView rv;
+    LinearLayoutManager llm;
+    String eventRemoved;
+    AgendaCalendarView mAgendaCalendarView;
+    List<CalendarEvent> eventList;
+    LinearLayout linearLayoutWeekView;
+    LinearLayout linearLayoutCalendarView;
+
+    Boolean weekview = true;
+
     private Toolbar toolbar;
+    RelativeLayout RLProgressBar;
+    private Menu optionsMenu;
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
@@ -52,12 +79,18 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.weekview);
+        setContentView(R.layout.event_view);
 
-        Backendless.Persistence.mapTableToClass("Slot", Slot.class);
+        mAgendaCalendarView = (AgendaCalendarView) findViewById(R.id.agenda_calendar_view);
+        RLProgressBar = (RelativeLayout) findViewById(R.id.RLProgressBar);
+
+        linearLayoutCalendarView = (LinearLayout) findViewById(R.id.LLCalendarView);
+        linearLayoutWeekView = (LinearLayout) findViewById(R.id.LLWeekView);
+
         Backendless.Persistence.mapTableToClass("Person", Person.class);
-        personLoggedIn = (Person) userLoggedIn.getProperty("persons");
-
+        Backendless.Persistence.mapTableToClass("Slot", Slot.class);
+        Backendless.Data.mapTableToClass("Slot", Slot.class);
+        Backendless.Data.mapTableToClass("Person", Person.class);
 
         // Get a reference for the week view in the layout.
         mWeekView = (WeekView) findViewById(R.id.weekView);
@@ -74,18 +107,18 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+
+        personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         new ParseURL().execute();
     }
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
 
-        Intent slotDialogIntent = new Intent(SlotsAwaitingMyResponse.this, SlotsPendingMyResponseDialog.class);
-
+        Intent slotDialogIntent = new Intent(this, SlotsPendingMyResponseDialog.class);
         int position = Integer.parseInt(String.valueOf(event.getId()));
-        slotDialogIntent.putExtra("origin", 1);
         slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
-
+        slotDialogIntent.putExtra("origin", 1);
         startActivity(slotDialogIntent);
     }
 
@@ -150,52 +183,6 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
         return events;
     }
 
-    private class ParseURL extends AsyncTask<Void, Integer, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            System.out.println("do in background");
-            StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Person[pendingResponseSlot]");
-            whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
-
-            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-            dataQuery.setWhereClause(whereClause.toString());
-
-            slots = Backendless.Data.of(Slot.class).find(dataQuery);
-            slot = slots.getData();
-            Calendar now = Calendar.getInstance();
-            TimeZone tz = TimeZone.getDefault();
-            now.setTimeZone(tz);
-
-            for (int j = 0; j < slot.size(); j++) {
-
-                if (slot.get(j).getMaxattendees() != 0) {
-                    if (slot.get(j).attendees.size() >= slot.get(j).getMaxattendees()) {
-                        slot.remove(j);
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-            mWeekView.notifyDatasetChanged();
-        }
-    }
-
     /**
      * Set up a date time interpreter which will show short date values when in week view and long
      * date values otherwise.
@@ -225,15 +212,106 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_week_view, menu);
-        return true;
+    private class ParseURL extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            progressBar = (ProgressBar) findViewById(R.id.progressBar);
+            progressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            StringBuilder whereClause = new StringBuilder();
+            whereClause.append("Person[pendingResponseSlot]");
+            whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
+
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            dataQuery.setWhereClause(whereClause.toString());
+
+            slots = Backendless.Data.of(Slot.class).find(dataQuery);
+            slot = slots.getData();
+
+            eventList = new ArrayList<>();
+
+            Calendar now = Calendar.getInstance();
+            TimeZone tz = TimeZone.getDefault();
+            now.setTimeZone(tz);
+
+            getEventsFromList(slot);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            mWeekView.notifyDatasetChanged();
+
+            CalendarPickerController mPickerController = new CalendarPickerController() {
+                @Override
+                public void onDaySelected(DayItem dayItem) {
+                }
+
+                @Override
+                public void onEventSelected(CalendarEvent event) {
+
+                    if (!event.getTitle().equals("No events")) {
+
+                        Intent slotDialogIntent = new Intent(SlotsAwaitingMyResponse.this, SlotsPendingMyResponseDialog.class);
+
+                        int position = Integer.parseInt(String.valueOf(event.getId()));
+                        slotDialogIntent.putExtra("origin", 2);
+                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
+
+                        startActivity(slotDialogIntent);
+                    }
+                }
+            };
+
+            Calendar minDate;
+            Calendar maxDate;
+            // minimum and maximum date of our calendar
+            // 2 month behind, one year ahead, example: March 2015 <-> May 2015 <-> May 2016
+            minDate = Calendar.getInstance();
+            maxDate = Calendar.getInstance();
+
+            minDate.add(Calendar.MONTH, -1);
+            minDate.set(Calendar.DAY_OF_MONTH, 1);
+            maxDate.add(Calendar.YEAR, 1);
+
+            progressBar.setVisibility(View.GONE);
+            RLProgressBar.setVisibility(View.GONE);
+            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
+            mAgendaCalendarView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setRefreshActionButtonState(final boolean refreshing) {
+        if (optionsMenu != null) {
+            final MenuItem refreshItem = optionsMenu
+                    .findItem(R.id.action_refresh);
+            if (refreshItem != null) {
+                if (refreshing) {
+                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+                } else {
+                    refreshItem.setActionView(null);
+                }
+            }
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
         setupDateTimeInterpreter(id == R.id.action_week_view);
         switch (id) {
             case R.id.action_today:
@@ -274,189 +352,147 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
                     mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
                     mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
                 }
-
-                return true;
             case R.id.action_switch:
-                startActivity(new Intent(SlotsAwaitingMyResponse.this, SlotsAwaitingMyResponseCalendar.class));
+                invalidateOptionsMenu();
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-//    private class NotGoingToEvent extends AsyncTask<Void, Integer, Void> {
-//
-//        public NotGoingToEvent(int positionInList) {
-//
-//
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onProgressUpdate(Integer... values) {
-//            super.onProgressUpdate(values);
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            Map<String, String> args = new HashMap<>();
-//            args.put("id", "declineinviteevent");
-//
-//            args.put("objectIdPerson", personLoggedIn.getObjectId());
-//
-//            args.put("event", slot.get(positionInList).getObjectId());
-//
-//            Backendless.Events.dispatch("ManageEvent", args, new AsyncCallback<Map>() {
-//                @Override
-//                public void handleResponse(Map map) {
-//                    dialog.dismiss();
-//                    onBackPressed();
-//
-//                }
-//
-//                @Override
-//                public void handleFault(BackendlessFault backendlessFault) {
-//
-//                    dialog.dismiss();
-//                }
-//            });
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//
-//                ringProgressDialog.dismiss();
-//                progressBar.setVisibility(View.GONE);
-//
-//            Toast.makeText(getApplicationContext(), eventRemoved + " was declined", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-//
-//    private class GoingToEvent extends AsyncTask<Void, Integer, Void> {
-//
-//        int position;
-//
-//        public GoingToEvent(int position) {
-//            this.position = position;
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onProgressUpdate(Integer... values) {
-//            super.onProgressUpdate(values);
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            List<String> relations = new ArrayList<String>();
-//            relations.add("pendingResponseSlot");
-//            Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
-//
-//            List<String> relationsSlot = new ArrayList<String>();
-//            relations.add("attendees");
-//            Slot slotAddAttendee = Backendless.Data.of(Slot.class).findById(slot.get(position), relationsSlot);
-//
-//            int pos = 0;
-//
-//            for (int i = 0; i < person.pendingResponseSlot.size(); i++) {
-//
-//                if (person.pendingResponseSlot.get(i).getObjectId().equals(slot.get(position).getObjectId())) {
-//                    pos = i;
-//                    break;
-//                }
-//            }
-//
-//
-//            // sendsmss(slot.get(position).getPhone(), "Automated TXT - Amplified Schedule" + person.getFullname() + "  has indicated he/she is going to your " + slot.get(position).getSubject() + " event on the " + slot.get(position).getDateofslot());
-//
-//            person.pendingResponseSlot.remove(pos);
-//
-//            eventRemoved = slot.get(position).getSubject();
-//
-//            Backendless.Data.of(Person.class).save(person);
-//
-//            Person p = Backendless.Data.of(Person.class).findById(personLoggedIn);
-//
-//            p.addSlotGoingToSlot(slot.get(position));
-//
-//            slotAddAttendee.addAttendee(person);
-//
-//            Backendless.Data.of(Slot.class).save(slotAddAttendee);
-//
-//            slot.remove(position);
-//            personLoggedIn = Backendless.Data.of(Person.class).save(p);
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//
-//            rv.setAdapter(null);
-//
-//            if (!slot.isEmpty()) {
-//
-//                rv.setAdapter(null);
-//
-//                rv.setHasFixedSize(true);
-//
-//                rv.setLayoutManager(llm);
-//
-//                // rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
-//
-//                Resources r = getResources();
-//
-//                adapter = new RVAdapter(slot, r);
-//
-//                rv.setAdapter(adapter);
-//
-//                ringProgressDialog.dismiss();
-//
-//            } else {
-//                ringProgressDialog.dismiss();
-//                searchViewSlots.setVisibility(View.GONE);
-//                rv.setVisibility(View.GONE);
-//                progressBar.setVisibility(View.GONE);
-//                textViewTextNoSlotAvaliable.setVisibility(View.VISIBLE);
-//            }
-//            Toast.makeText(getApplicationContext(), "Going to " + eventRemoved, Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
-    @JavascriptInterface
-    public void sendsmss(String phoneNumber, String message) {
-
-        int lengthToSubString;
-        int lengthMessage = message.length();
-        if (lengthMessage < 300) {
-            lengthToSubString = lengthMessage;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.optionsMenu = menu;
+        MenuInflater inflater = getMenuInflater();
+        if (weekview) {
+            inflater.inflate(R.menu.menu_week_view, menu);
+            linearLayoutCalendarView.setVisibility(View.GONE);
+            linearLayoutWeekView.setVisibility(View.VISIBLE);
         } else {
-            lengthToSubString = 300;
+            inflater.inflate(R.menu.menu_events, menu);
+            linearLayoutWeekView.setVisibility(View.GONE);
+            linearLayoutCalendarView.setVisibility(View.VISIBLE);
         }
-        String messageSubString = message.substring(0, lengthToSubString);
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.share);
 
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
+        // Fetch and store ShareActionProvider
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+        sendIntent.setType("text/plain");
+        mShareActionProvider.setShareIntent(sendIntent);
+
+        return super.onCreateOptionsMenu(menu);
     }
+
+    private void getEventsFromList(List<Slot> eventListSlots) {
+
+        for (int i = 0; i < eventListSlots.size(); i++) {
+
+            Boolean allDay = false;
+
+            if (eventListSlots.get(i).isAllDayEvent()) {
+                allDay = true;
+            }
+
+            Calendar startTime = Calendar.getInstance();
+            Calendar endTime = Calendar.getInstance();
+
+            startTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getStartCalendar().get(Calendar.DAY_OF_YEAR));
+
+            endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getEndCalendar().get(Calendar.DAY_OF_YEAR));
+
+            String location = (String) eventListSlots.get(i).getLocation().getMetadata("address");
+            CalendarEvent event = new CalendarEvent(eventListSlots.get(i).getSubject(),
+                    eventListSlots.get(i).getMessage(), location,
+                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, allDay);
+
+            event.setId(Long.parseLong(String.valueOf(i)));
+            eventList.add(event);
+        }
+    }
+
+//    private class Refresh extends AsyncTask<Void, Integer, Void> {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected void onProgressUpdate(Integer... values) {
+//            super.onProgressUpdate(values);
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            StringBuilder whereClause = new StringBuilder();
+//            whereClause.append("Person[mycreatedslot]");
+//            whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
+//
+//            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+//            dataQuery.setWhereClause(whereClause.toString());
+//
+//            slots = Backendless.Data.of(Slot.class).find(dataQuery);
+//            slot = slots.getData();
+//
+//
+//            eventList = new ArrayList<>();
+//
+//            getEventsFromList(slot);
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//
+//            CalendarPickerController mPickerController = new CalendarPickerController() {
+//                @Override
+//                public void onDaySelected(DayItem dayItem) {
+//                }
+//
+//                @Override
+//                public void onEventSelected(CalendarEvent event) {
+//
+//                    if (!event.getTitle().equals("No events")) {
+//
+//                        Intent slotDialogIntent = new Intent(MyCreatedSlots.this, MyCreatedSlotsDialog.class);
+//
+//                        int position = Integer.parseInt(String.valueOf(event.getId()));
+//
+//
+//                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
+//
+//                        startActivity(slotDialogIntent);
+//
+//                    }
+//                }
+//            };
+//
+//
+//            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
+//            Toast.makeText(getApplicationContext(), "Events Synced", Toast.LENGTH_LONG).show();
+//            setRefreshActionButtonState(false);
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, NavDrawerActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void invalidateOptionsMenu() {
+
+        weekview = (weekview) ? false : true;
+
+        super.invalidateOptionsMenu();
     }
 
     @Override

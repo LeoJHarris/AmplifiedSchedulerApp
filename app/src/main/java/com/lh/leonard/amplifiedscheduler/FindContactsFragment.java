@@ -230,7 +230,6 @@ public class FindContactsFragment extends Fragment {
                             if (personsFoundQuery.get(j).personsRequestingMe.get(p).objectId.equals(personLoggedIn.getObjectId())) // check
                             {
                                 hashMapSTATUS.put(j, 1);
-
                                 break;
                             }
                         }
@@ -239,7 +238,6 @@ public class FindContactsFragment extends Fragment {
 
                             if (personsFoundQuery.get(j).personsImRequesting.get(p).objectId.equals(personLoggedIn.getObjectId())) {
                                 hashMapSTATUS.put(j, 2);
-
                                 break;
                             }
                         }
@@ -254,7 +252,6 @@ public class FindContactsFragment extends Fragment {
                     }
                 }
             }
-
             return null;
         }
 
@@ -281,30 +278,29 @@ public class FindContactsFragment extends Fragment {
 
                             if (hashMapSTATUS != null) {
 
-                                String title = "Send Contact Request?";
+                                String title = "Send Contact Request";
                                 String message = "Do you want to send contact request to ";
                                 String messageToAppend = "";
                                 dialogMessage = "Sending contact request to " + personsFoundQuery.get(position).getFullname() + " ...";
                                 postMessage = "Contact request sent to " + personsFoundQuery.get(position).getFullname();
 
-
                                 if (hashMapSTATUS.get(position) == 1) {
-                                    title = "Remove Requesting Contact?";
+                                    title = "Remove Requesting Contact";
                                     message = "Do you want to cancel your contact request to ";
                                     messageToAppend = "";
                                     dialogMessage = "Cancelling contact request to " + personsFoundQuery.get(position).getFullname() + " ...";
                                     postMessage = "Cancelled contact request to " + personsFoundQuery.get(position).getFullname();
                                 } else if (hashMapSTATUS.get(position) == 2) {
-                                    title = "Accept Request?";
+                                    title = "Accept Request";
                                     message = "Do you want to accept ";
-                                    messageToAppend = " as a contact?";
+                                    messageToAppend = " as a contact";
                                     dialogMessage = "Adding " + personsFoundQuery.get(position).getFullname() + " to your contact ...";
                                     postMessage = personsFoundQuery.get(position).getFullname() + " has been added to your contacts";
                                 } else if (hashMapSTATUS.get(position) == 3) {
-                                    title = "Remove Contact?";
-                                    message = "Do you want to remove ";
-                                    messageToAppend = " as a contact?";
-                                    dialogMessage = "Removing " + personsFoundQuery.get(position).getFullname() + " as contact ...";
+                                    title = "Remove Contact";
+                                    message = "Remove ";
+                                    messageToAppend = " as a contact";
+                                    dialogMessage = "Removing " + personsFoundQuery.get(position).getFullname() + " as a contact ...";
                                     postMessage = personsFoundQuery.get(position).getFullname() + " has been removed from your contacts";
                                 }
 

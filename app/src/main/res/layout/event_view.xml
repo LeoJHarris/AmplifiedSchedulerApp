@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:agendaCalendar="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_color_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/tool_bar"></include>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLWeekView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <com.alamkanak.weekview.WeekView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/weekView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:columnGap="8dp"
+            app:dayBackgroundColor="#05000000"
+            app:eventTextColor="@android:color/white"
+            app:headerColumnBackground="@color/bluecalendar"
+            app:headerColumnPadding="8dp"
+            app:headerColumnTextColor="@color/theme_text_icons"
+            app:headerRowBackgroundColor="@color/theme_primary_dark"
+            app:headerRowPadding="12dp"
+            app:hourHeight="60dp"
+            app:noOfVisibleDays="3"
+            app:textSize="12sp"
+            app:todayBackgroundColor="#1848adff"
+            app:todayHeaderTextColor="@color/black" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/RLProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/LLCalendarView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <com.github.tibolte.agendacalendarview.AgendaCalendarView
+            android:id="@+id/agenda_calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            agendaCalendar:agendaCurrentDayTextColor="@color/theme_primary"
+            agendaCalendar:calendarColor="@color/bluecalendar"
+            agendaCalendar:calendarCurrentDayTextColor="@color/calendar_text_current_day"
+            agendaCalendar:calendarDayTextColor="@color/theme_text_icons"
+            agendaCalendar:calendarHeaderColor="@color/theme_primary_dark"
+            agendaCalendar:calendarPastDayTextColor="@color/theme_light_primary"
+            agendaCalendar:fabColor="@color/theme_accent" />
+    </LinearLayout>
+</LinearLayout>

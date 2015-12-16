@@ -112,10 +112,10 @@ public class NavDrawerActivity extends AppCompatActivity {
                 intent = new Intent(NavDrawerActivity.this, CreateSlot.class);
                 break;
             case 2:
-                intent = new Intent(NavDrawerActivity.this, MyEventsWeekView.class);
+                intent = new Intent(NavDrawerActivity.this, MyCreatedSlots.class);
                 break;
             case 3:
-                intent = new Intent(NavDrawerActivity.this, GoingToEventsWeekView.class);
+                intent = new Intent(NavDrawerActivity.this, SlotsImGoingTo.class);
                 break;
             case 4:
                 intent = new Intent(NavDrawerActivity.this, SlotsAwaitingMyResponse.class);
