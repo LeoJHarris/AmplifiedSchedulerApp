@@ -200,7 +200,6 @@ public class MainActivity extends Activity {
             textViewMadeByMeMain.setTypeface(RobotoCondensedLightItalic);
             saveLoginCheckBox.setTypeface(RobotoCondensedLight);
 
-
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
@@ -212,13 +211,13 @@ public class MainActivity extends Activity {
                 imageViewMainLogo.requestLayout();
                 imageViewMainLogo.getLayoutParams().height = 80;
                 editTextUsername.setTextSize(18);
-                editTextUsername.setPadding(6, 6, 6, 6);
-                editTextPassword.setPadding(6, 6, 6, 6);
-                buttonSignIn.setPadding(6, 6, 6, 6);
+                editTextUsername.setPadding(8, 8, 8, 8);
+                editTextPassword.setPadding(8, 8, 8, 8);
+                buttonSignIn.setPadding(8, 8, 8, 8);
                 editTextPassword.setTextSize(18);
-                buttonForgotPassword.setTextSize(18);
-                buttonRegistration.setTextSize(18);
-                textViewMadeByMeMain.setTextSize(15);
+                buttonForgotPassword.setTextSize(16);
+                buttonRegistration.setTextSize(16);
+                textViewMadeByMeMain.setTextSize(14);
                 buttonSignIn.setTextSize(18);
                 saveLoginCheckBox.setTextSize(15);
             }
@@ -226,17 +225,17 @@ public class MainActivity extends Activity {
             else if (width == 240 && height == 320) {
                 imageViewMainLogo.requestLayout();
                 imageViewMainLogo.getLayoutParams().height = 40;
-                editTextUsername.setTextSize(18);
+                editTextUsername.setTextSize(16);
                 imageViewMainLogo.setPadding(0, 10, 0, 0);
                 editTextUsername.setPadding(7, 7, 7, 7);
                 editTextPassword.setPadding(7, 7, 7, 7);
                 buttonSignIn.setPadding(1, 1, 1, 1);
-                editTextPassword.setTextSize(18);
-                saveLoginCheckBox.setTextSize(18);
-                buttonForgotPassword.setTextSize(18);
-                buttonRegistration.setTextSize(18);
-                textViewMadeByMeMain.setTextSize(15);
-                buttonSignIn.setTextSize(18);
+                editTextPassword.setTextSize(16);
+                saveLoginCheckBox.setTextSize(16);
+                buttonForgotPassword.setTextSize(12);
+                buttonRegistration.setTextSize(12);
+                textViewMadeByMeMain.setTextSize(10);
+                buttonSignIn.setTextSize(16);
             } else if (width == 240 && height == 432) {
                 editTextUsername.setTextSize(18);
                 imageViewMainLogo.setPadding(0, 10, 0, 0);

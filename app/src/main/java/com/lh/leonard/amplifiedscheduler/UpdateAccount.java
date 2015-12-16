@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
@@ -66,27 +67,25 @@ public class UpdateAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_account);
 
-        //TODO set the ic_.. icons to green and keep tick when validated
-
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
-        tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
-        crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
-        emailIconDraw = getResources().getDrawable(R.drawable.ic_email);
-        userProfileIconDraw = getResources().getDrawable(R.drawable.ic_user_profile);
-        passwordIconDraw = getResources().getDrawable(R.drawable.ic_password);
-        countryIconDraw = getResources().getDrawable(R.drawable.ic_country);
-        phoneIconDraw = getResources().getDrawable(R.drawable.ic_phone);
+        tickIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_tick);
+        crossIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_cross);
+        emailIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_email);
+        userProfileIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_user_profile);
+        passwordIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_password);
+        countryIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_country);
+        phoneIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_phone);
 
-        emailGoodIconDraw = getResources().getDrawable(R.drawable.ic_email_good);
-        userGoodProfileDraw = getResources().getDrawable(R.drawable.ic_profile_good);
-        passwordGoodIconDraw = getResources().getDrawable(R.drawable.ic_password_good);
-        countryGoodIconDraw = getResources().getDrawable(R.drawable.ic_country_good);
-        phoneGoodIconDraw = getResources().getDrawable(R.drawable.ic_phone_good);
+        emailGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_email_good);
+        userGoodProfileDraw = ContextCompat.getDrawable(this, R.drawable.ic_profile_good);
+        passwordGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_password_good);
+        countryGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_country_good);
+        phoneGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_phone_good);
 
-        emailBadIconDraw = getResources().getDrawable(R.drawable.ic_email_bad);
-        passwordBadIconDraw = getResources().getDrawable(R.drawable.ic_password_bad);
+        emailBadIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_email_bad);
+        passwordBadIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_password_bad);
 
         Backendless.Data.mapTableToClass("Person", Person.class);
 
@@ -101,8 +100,6 @@ public class UpdateAccount extends AppCompatActivity {
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
-
-        // final Typeface regularFont = Typeface.createFromAsset(getContext().getAssets(), "fonts/GoodDog.otf");
 
         editTextUpdateFNameReg = (EditText) findViewById(R.id.editTextUpdateFName);
         editTextUpdateLNameReg = (EditText) findViewById(R.id.editTextUpdateLName);
@@ -127,6 +124,7 @@ public class UpdateAccount extends AppCompatActivity {
 
         Button updateDetailsBtn = (Button) findViewById(R.id.buttonUpdateUser);
 
+        editTextNoticeUpdate.setTypeface(RobotoCondensedLightItalic);
         editTextUpdateFNameReg.setTypeface(RobotoCondensedLight);
         editTextUpdateLNameReg.setTypeface(RobotoCondensedLight);
         editTextUpdatePhoneReg.setTypeface(RobotoCondensedLight);
@@ -146,10 +144,8 @@ public class UpdateAccount extends AppCompatActivity {
         updateDetailsBtn.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-
-                                                    ringProgressDialog = ProgressDialog.show(getApplicationContext(), "Please wait ...", "Updating account ...", true);
+                                                    ringProgressDialog = ProgressDialog.show(UpdateAccount.this, "Please wait ...", "Updating account ...", true);
                                                     ringProgressDialog.setCancelable(false);
-
                                                     email = editTextUpdateEmail.getText().toString();
                                                     fname = editTextUpdateFNameReg.getText().toString();
                                                     lname = editTextUpdateLNameReg.getText().toString();
@@ -314,7 +310,6 @@ public class UpdateAccount extends AppCompatActivity {
                     user.setPassword(password);
                     inputSet = true;
                 }
-
             }
 
             if (firstNameChange && lastNameChange) {
@@ -328,12 +323,9 @@ public class UpdateAccount extends AppCompatActivity {
             }
             if (inputSet) {
 
-                Backendless.Data.of(Person.class).save(p);
-                Backendless.UserService.update(user);
+                user = Backendless.UserService.update(user);
+
             }
-
-            //TODO update the nav drawer names and email after update
-
             return inputSet;
         }
 
@@ -346,13 +338,10 @@ public class UpdateAccount extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "No Inputs Submitted", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
     public class Validator {
-
-
         private boolean isPasswordValid(CharSequence password) {
             return password.toString().length() > 4;
         }
@@ -376,7 +365,6 @@ public class UpdateAccount extends AppCompatActivity {
         this.optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_other, menu);
-
 
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.share);
