@@ -166,7 +166,7 @@ public class MyEventsWeekView extends AppCompatActivity implements
 
         @Override
         protected Void doInBackground(Void... params) {
-            System.out.println("do in background");
+
             StringBuilder whereClause = new StringBuilder();
             whereClause.append("Person[myCreatedSlot]");
             whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");

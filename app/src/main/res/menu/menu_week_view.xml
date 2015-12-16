@@ -6,8 +6,18 @@
     <item
         android:id="@+id/action_switch"
         android:icon="@drawable/ic_action_switch"
-        android:orderInCategory="100"
-        android:title="Week View"
+        android:title="Month View"
+        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/action_refresh"-->
+        <!--android:icon="@drawable/ic_action_refresh"-->
+        <!--android:title="Refresh"-->
+        <!--app:showAsAction="always" />-->
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic__action_share"
+        android:title="Share"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_today"

@@ -36,7 +36,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     HashMap<Integer, Integer> hashMap = new HashMap<>();
     int VAL;
 
-
     public ContactsAdapter(List<Person> list, int val) {
 
         listSlots = list;
@@ -89,26 +88,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                 }
             }
         }
-
-        slotViewHolder.personsFullName.setText(listSlots.get(i).getFname() + " " + listSlots.get(i).getLname());
-        slotViewHolder.personEmail.setText("Country: " + listSlots.get(i).getCountry());
-        if (listSlots.get(i).getContacts() != null) {
-            if (!(listSlots.get(i).getContacts().isEmpty())) {
-                slotViewHolder.personsFacebook.setText(String.valueOf("Contacts: " + listSlots.get(i).getContacts().size()));
-            }
-            slotViewHolder.personsFacebook.setText(String.valueOf("Contacts: " + String.valueOf(0)));
-        } else {
-            slotViewHolder.personsFacebook.setText(String.valueOf("Contacts: " + String.valueOf(0)));
-        }
-        slotViewHolder.personCountry.setText("Last Activity: " + listSlots.get(i).getUpdated());
-
         slotViewHolder.personCountry.setTypeface(RobotoCondensedLight);
-        slotViewHolder.personsFacebook.setTypeface(RobotoCondensedLight);
-        slotViewHolder.personLatestActivity.setTypeface(RobotoCondensedLight);
+        slotViewHolder.personLastActivity.setTypeface(RobotoCondensedLight);
         slotViewHolder.personsFullName.setTypeface(RobotoCondensedLight);
-        slotViewHolder.personEmail.setTypeface(RobotoCondensedLight);
-
-        //personViewHolder.personPhoto.setImageResource(listTeachers.get(i).getPhoto());
+        slotViewHolder.personsFullName.setText(listSlots.get(i).getFname() + " " + listSlots.get(i).getLname());
+        slotViewHolder.personCountry.setText("Country: " + listSlots.get(i).getCountry());
+        slotViewHolder.personCountry.setText("Last Activity: " + listSlots.get(i).getUpdated());
     }
 
     @Override
@@ -154,19 +139,15 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         AutoResizeTextView personsFullName;
-        AutoResizeTextView personsFacebook;
-        AutoResizeTextView personEmail;
-        AutoResizeTextView personLatestActivity;
+        AutoResizeTextView personLastActivity;
         AutoResizeTextView personCountry;
 
         ContactViewHolder(View itemView) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
             personsFullName = (AutoResizeTextView) itemView.findViewById(R.id.person_fullname);
-            personEmail = (AutoResizeTextView) itemView.findViewById(R.id.person_email);
-            personLatestActivity = (AutoResizeTextView) itemView.findViewById(R.id.person_last_activity); //
-            personsFacebook = (AutoResizeTextView) itemView.findViewById(R.id.person_facebook);
-            personCountry = (AutoResizeTextView) itemView.findViewById(R.id.person_country);
+            personLastActivity = (AutoResizeTextView) itemView.findViewById(R.id.person_last_activity);
+            personCountry = (AutoResizeTextView) itemView.findViewById(R.id.person_country); //
             //personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
         }
     }
