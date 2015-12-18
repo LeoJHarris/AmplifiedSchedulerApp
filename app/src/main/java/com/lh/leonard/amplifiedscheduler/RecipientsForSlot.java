@@ -2,6 +2,7 @@ package com.lh.leonard.amplifiedscheduler;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,7 +35,7 @@ public class RecipientsForSlot extends Activity {
     BackendlessCollection<Person> myContactPersons;
     private ProgressBar progressBar;
     ArrayList<String> contactPersonsId = new ArrayList<>();
-
+    Resources r;
     Button doneButton;
 
     @Override
@@ -43,7 +44,7 @@ public class RecipientsForSlot extends Activity {
         setContentView(R.layout.activity_recipients_for_slot);
 
         personLoggedIn = (Person) loggedInUser.getProperty("persons");
-
+        r = getResources();
         doneButton = (Button) findViewById(R.id.buttonDoneSaveContactsForSlot);
         tableRowRecyclerView = (TableRow) findViewById(R.id.tableRowRecyclerView);
         tableRowProgress = (TableRow) findViewById(R.id.tableRowProgress);

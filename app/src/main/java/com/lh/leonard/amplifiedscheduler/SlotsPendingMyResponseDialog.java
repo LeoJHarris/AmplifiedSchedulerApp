@@ -55,8 +55,6 @@ public class SlotsPendingMyResponseDialog extends Activity {
 
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
-        Backendless.Persistence.mapTableToClass("Slot", Slot.class);
-        Backendless.Persistence.mapTableToClass("Person", Person.class);
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
@@ -171,7 +169,6 @@ public class SlotsPendingMyResponseDialog extends Activity {
 
             Bundle data = getIntent().getExtras();
             objectId = data.getString("objectId");
-            origin = data.getInt("origin");
             event = Backendless.Data.of(Slot.class).findById(objectId);
 
             return (String) event.getLocation().getMetadata("address");
@@ -329,18 +326,9 @@ public class SlotsPendingMyResponseDialog extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (origin == 1) {
-            Intent intent = new Intent(this, SlotsAwaitingMyResponse.class);
-            startActivity(intent);
-            finish();
-        } else if (origin == 2) {
-            Intent intent = new Intent(this, SlotsAwaitingMyResponseCalendar.class);
-            startActivity(intent);
-            finish();
-        } else {
+
             Intent intent = new Intent(this, SlotsImGoingTo.class);
             startActivity(intent);
             finish();
-        }
     }
 }

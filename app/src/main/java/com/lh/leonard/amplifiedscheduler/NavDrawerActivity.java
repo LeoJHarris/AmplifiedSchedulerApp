@@ -223,8 +223,8 @@ public class NavDrawerActivity extends AppCompatActivity {
 
             if (Drawer == null && mRecyclerView == null) {
                 new AlertDialog.Builder(NavDrawerActivity.this)
-                        .setTitle("Logout").setMessage("Are you sure you want to logout?")
-                        .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                        .setTitle("Logout").setMessage("You are about to logout")
+                        .setPositiveButton("LOGOUT", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
                                 ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
@@ -247,7 +247,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
                             }
@@ -258,8 +258,8 @@ public class NavDrawerActivity extends AppCompatActivity {
             } else {
 
                 new AlertDialog.Builder(NavDrawerActivity.this)
-                        .setTitle("Logout").setMessage("Are you sure you want to logout?")
-                        .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                        .setTitle("Logout").setMessage("You are about to logout")
+                        .setPositiveButton("LOGOUT", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
                                 ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...", "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
@@ -282,7 +282,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
                             }

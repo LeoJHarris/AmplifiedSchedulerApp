@@ -33,7 +33,6 @@
                 android:id="@+id/editTextNoticeUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawableLeft="@drawable/ic_xclamationmark"
                 android:gravity="center"
                 android:hint="PLEASE NOTE: Only non-empty fields will be submitted."
                 android:paddingBottom="4dp"

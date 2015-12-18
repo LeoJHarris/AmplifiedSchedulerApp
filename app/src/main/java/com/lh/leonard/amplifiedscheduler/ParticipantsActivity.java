@@ -1,6 +1,7 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,16 +30,17 @@ public class ParticipantsActivity extends Activity {
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     ContactsAdapter adapter;
     AutoResizeTextView textViewTextNoSlotAvaliable;
+    Resources r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.slots_display);
 
-        Backendless.Persistence.mapTableToClass("Person", Person.class);
-        Backendless.Persistence.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
+
+        r= getResources();
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");

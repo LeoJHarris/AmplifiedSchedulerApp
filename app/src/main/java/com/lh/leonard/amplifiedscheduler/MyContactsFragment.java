@@ -52,6 +52,7 @@ public class MyContactsFragment extends Fragment {
     LinearLayoutManager llm;
     String removedFullName;
     ProgressDialog ringProgressDialog;
+    Resources r;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class MyContactsFragment extends Fragment {
 
         Backendless.Data.mapTableToClass("Person", Person.class);
 
-        Backendless.Persistence.mapTableToClass("Person", Person.class);
+        r = getResources();
 
         personLoggedIn = (Person) loggedInUser.getProperty("persons");
 
@@ -148,7 +149,7 @@ public class MyContactsFragment extends Fragment {
                     llm = new LinearLayoutManager(v.getContext());
                     rvMyContacts.setLayoutManager(llm);
 
-                    adapter = new ContactsAdapter(myContactsList, 0);
+                    adapter = new ContactsAdapter(myContactsList,0);
                     rvMyContacts.setAdapter(adapter);
                     rvMyContacts.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rvMyContacts, new RecyclerItemClickListener.OnItemClickListener() {
 
@@ -156,8 +157,8 @@ public class MyContactsFragment extends Fragment {
                         public void onItemClick(View view, final int position) {
 
                             dialog = new AlertDialog.Builder(v.getContext())
-                                    .setTitle("Remove Contact")
-                                    .setMessage("Remove " + myContactsList.get(position).getFullname() + " as a contact")
+                                    .setTitle("Remove Contact?")
+                                    .setMessage("Do you want to remove " + myContactsList.get(position).getFullname() + " as a contact")
                                     .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -249,7 +250,6 @@ public class MyContactsFragment extends Fragment {
 
                 //  rvMyContacts.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                Resources r = getResources();
 
                 adapter = new ContactsAdapter(myContactsList, 0);
 

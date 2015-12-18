@@ -3,6 +3,7 @@ package com.lh.leonard.amplifiedscheduler;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -66,10 +67,10 @@ public class FindContactsFragment extends Fragment {
     String title;
     String message;
     String messageToAppend;
-    AutoResizeTextView fullname;
     Drawable drawableRequesting;
     Drawable drawableContacts;
     Drawable drawableActionRequired;
+    Resources r;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,9 +78,7 @@ public class FindContactsFragment extends Fragment {
 
         final LayoutInflater factory = getActivity().getLayoutInflater();
 
-        final View textEntryView = factory.inflate(R.layout.contacts_card_view, null);
-
-        fullname = (AutoResizeTextView) textEntryView.findViewById(R.id.person_fullname);
+        r = getResources();
 
         drawableRequesting = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_friend_requested);
         drawableActionRequired = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_actionrequiredcontactspng);
@@ -94,8 +93,6 @@ public class FindContactsFragment extends Fragment {
 
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Data.mapTableToClass("Slot", Slot.class);
-        Backendless.Persistence.mapTableToClass("Person", Person.class);
-        Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 
         editHintSearchContacts = (AutoResizeTextView) v.findViewById(R.id.editHintSearchContacts);
         searchViewFindContacts = (SearchView) v.findViewById(R.id.searchViewFindContacts);
@@ -108,7 +105,6 @@ public class FindContactsFragment extends Fragment {
         llm = new LinearLayoutManager(v.getContext());
 
         searchViewFindContacts.setQueryHint("Search Users");
-
 
         searchViewFindContacts.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                                                           public boolean onQueryTextChange(final String text) {
@@ -129,7 +125,7 @@ public class FindContactsFragment extends Fragment {
                                                                   timer = new Timer();
                                                                   callAsynchronousTask();
                                                               } else {
-                                                                  editHintSearchContacts.setText("Search users by email address first or last name.");
+                                                                  editHintSearchContacts.setText("Try searching users by name");
                                                                   editHintSearchContacts.setVisibility(View.VISIBLE);
                                                                   progressBarFindContacts.setVisibility(View.GONE);
                                                                   RLProgressBar.setVisibility(View.GONE);
@@ -182,7 +178,6 @@ public class FindContactsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            Backendless.Data.mapTableToClass("Person", Person.class);
             String whereClause = "lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%' AND" +
                     " objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -195,7 +190,6 @@ public class FindContactsFragment extends Fragment {
             q.addRelated("contacts");
             dataQuery.setQueryOptions(q);
             BackendlessCollection<Person> result = Backendless.Persistence.of(Person.class).find(dataQuery);
-
 
             personsFoundQuery = result.getData();
 
@@ -477,14 +471,12 @@ public class FindContactsFragment extends Fragment {
                     rv.setVisibility(View.GONE);
 
                     if (refreshed) {
-                        editHintSearchContacts.setText("Search users by first or last name.");
+                        editHintSearchContacts.setText("Try searching users by name");
 
                     } else {
-                        editHintSearchContacts.setText("No users found. Try searing users by email address, first or last name.");
+                        editHintSearchContacts.setText("No users found");
                     }
                     editHintSearchContacts.setVisibility(View.VISIBLE);
-
-
                 }
             }
         }
