@@ -72,11 +72,17 @@
     <string name="rta_dialog_ok">Rate now</string>
     <string name="rta_dialog_cancel">Later</string>
     <string name="rta_dialog_no">No, thanks</string>
-    <string name="name_version_num">Amplified Scheduler v1.76</string>
+    <string name="name_version_num">Amplified Scheduler v1.77</string>
 
     <string name="action_today">Today</string>
     <string name="action_day_view">Day view</string>
     <string name="action_three_day_view">3 day view</string>
     <string name="action_week_view">Week view</string>
 
+    <string-array name="event_category">
+        <item>Social Event</item>
+        <item>Work Event</item>
+        <item>Cultural Event</item>
+        <item>Academic Event</item>
+    </string-array>
 </resources>

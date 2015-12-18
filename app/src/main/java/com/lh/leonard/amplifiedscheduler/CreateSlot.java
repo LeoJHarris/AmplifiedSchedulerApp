@@ -23,12 +23,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -86,6 +88,7 @@ public class CreateSlot extends AppCompatActivity implements
     Boolean contactsAdded = false;
     AutoResizeTextView timeZone;
     LinearLayout llTimeZone;
+    String eventCategory;
 
     List<Person> myContactsPersonsList;
     BackendlessCollection<Person> myContactPersons;
@@ -134,6 +137,17 @@ public class CreateSlot extends AppCompatActivity implements
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+
+        Backendless.Data.mapTableToClass("Slot", Slot.class);
+        Backendless.Data.mapTableToClass("Person", Person.class);
+
+        if (userLoggedIn.getProperty("persons") != null) {
+            personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+        } else {
+
+        }
+
+        new GetContactsThread().execute();
 
         mGoogleApiClient = new GoogleApiClient.Builder(CreateSlot.this)
                 .addApi(Places.GEO_DATA_API)
@@ -189,19 +203,7 @@ public class CreateSlot extends AppCompatActivity implements
         aSwitch.setTypeface(RobotoCondensedLight);
         allDaySwitch.setTypeface(RobotoCondensedLight);
         aSwitch.setChecked(true);
-        Backendless.Persistence.mapTableToClass("Slot", Slot.class);
-        Backendless.Persistence.mapTableToClass("Person", Person.class);
-        Backendless.Data.mapTableToClass("Slot", Slot.class);
-        Backendless.Data.mapTableToClass("Person", Person.class);
 
-        if (userLoggedIn.getProperty("persons") != null) {
-            personLoggedIn = (Person) userLoggedIn.getProperty("persons");
-        } else {
-            BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
-            Backendless.Data.mapTableToClass("Person", Person.class);
-            Backendless.Persistence.mapTableToClass("Person", Person.class);
-            personLoggedIn = (Person) userLoggedIn.getProperty("persons");
-        }
 
         setDates();
 
@@ -290,8 +292,6 @@ public class CreateSlot extends AppCompatActivity implements
             }
         });
 
-        new GetContactsThread().execute();
-
         /**
          * Unset the var whenever the user types. Validation will
          * then fail. This is how we enforce selecting from the list.
@@ -372,7 +372,6 @@ public class CreateSlot extends AppCompatActivity implements
 
                             if (subjectSet && my_var != null) {
                                 buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_event_ready), null, null, null);
-
                             }
                         } else {
                             Toast.makeText(CreateSlot.this, "No Contacts Added", Toast.LENGTH_LONG).show();
@@ -380,7 +379,7 @@ public class CreateSlot extends AppCompatActivity implements
                             buttonSendSlot.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_send_event), null, null, null);
                         }
                     }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // removes the AlertDialog in the screen
@@ -504,6 +503,32 @@ public class CreateSlot extends AppCompatActivity implements
                 }
             });
         }
+
+        Spinner staticSpinner = (Spinner) findViewById(R.id.static_spinner);
+
+        // Create an ArrayAdapter using the string array and a default spinner
+        ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter
+                .createFromResource(this, R.array.event_category,
+                        android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        staticAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        staticSpinner.setAdapter(staticAdapter);
+
+        staticSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                eventCategory = (String) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -631,14 +656,12 @@ public class CreateSlot extends AppCompatActivity implements
             Map<String, Object> locationMap = new HashMap<>();
             locationMap.put("location", location);
             eventLocation.setMetadata(locationMap);
-
         }
     }
 
     @Override
     public void onTimeZoneSet(TimeZoneInfo tzi) {
         timeZone.setText(tzi.mDisplayName + " " + tzi.mTzId + " " + tzi.getGmtDisplayName(CreateSlot.this));
-
         endCalendar.setTimeZone(TimeZone.getTimeZone(tzi.mTzId));
         startCalendar.setTimeZone(TimeZone.getTimeZone(tzi.mTzId));
     }
@@ -669,6 +692,7 @@ public class CreateSlot extends AppCompatActivity implements
             hashMapEvent.put("host", personLoggedIn.getFullname());
             hashMapEvent.put("loggedinperson", personLoggedIn.getObjectId());
             hashMapEvent.put("alldayevent", allDayEvent);
+            hashMapEvent.put("category", eventCategory);
 
             int o = 0;
             for (Person pId : addedContactsForSlot) {
@@ -750,7 +774,7 @@ public class CreateSlot extends AppCompatActivity implements
             smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         } else {
             String messageSubString = "Amplified Scheduler: Invited Event. Host: " + fullnameLoggedin +
-                    ". " + subject + " no message included " + "when: " + startDate;
+                    ". " + subject + " no message included " + "When: " + startDate;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         }
