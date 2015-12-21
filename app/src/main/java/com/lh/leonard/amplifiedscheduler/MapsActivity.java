@@ -144,7 +144,7 @@ public class MapsActivity extends FragmentActivity {
             // Adding Markers on Google Map for each matching address
             for (int i = 0; i < addresses.size(); i++) {
 
-                Address address = (Address) addresses.get(i);
+                Address address = addresses.get(i);
 
                 // Creating an instance of GeoPoint, to display in Google Map
                 latLng = new LatLng(address.getLatitude(), address.getLongitude());

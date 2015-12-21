@@ -25,7 +25,13 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.facebook.CallbackManager;
 import com.kobakei.ratethisapp.RateThisApp;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import se.simbio.encryption.Encryption;
 
@@ -42,7 +48,7 @@ public class MainActivity extends Activity {
     ProgressDialog ringProgressDialog;
     Boolean loggedOutPersons = false;
     Encryption encryption;
-
+    CallbackManager callbackManager;
     Bundle extras;
 
     Boolean useBackButton = false;
@@ -140,7 +146,6 @@ public class MainActivity extends Activity {
                 passwordDecrypted = encryption.decryptOrNull(loginPreferences.getString("password", ""));
                 usernameDecrypted = loginPreferences.getString("username", "");
             }
-
             return null;
         }
 
@@ -356,6 +361,73 @@ public class MainActivity extends Activity {
                     }
                 }
             });
+
+            Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
+                put("password", "password");
+                //put("last_name", "lastname");
+                put("email", "email");
+            }};
+
+            List<String> permissions = new ArrayList<>();
+            permissions.add("public_profile");
+            permissions.add("user_friends");
+            permissions.add("user_hometown");
+            permissions.add("user_location");
+
+            Backendless.UserService.loginWithFacebook(MainActivity.this, null, facebookFieldMappings, permissions, new AsyncCallback<BackendlessUser>() {
+                @Override
+                public void handleResponse(BackendlessUser response) {
+
+                    Person p = new Person();
+
+                    response.setProperty("Persons",p);
+
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+
+                }
+            });
+
+
+//            Button buttonLoginWithFacebookSDK = (Button) findViewById(R.id.facebookloginsdk);
+//
+//            buttonLoginWithFacebookSDK
+//                    .setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//
+//                            Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
+//                                put("first_name", "firstname");
+//                                put("last_name", "lastname");
+//                             //   put("email", "email");
+//                            }};
+//
+//                            List<String> permissions = new ArrayList<String>(){{
+//                                add("first_name");
+//                                add("last_name");
+//                            //    add("email");
+//                            } };
+//
+//                          Backendless.UserService.loginWithFacebook(MainActivity.this,null,facebookFieldMappings, permissions,new AsyncCallback<BackendlessUser>() {
+//                              @Override
+//                              public void handleResponse(BackendlessUser response) {
+//                                  Intent intent = new Intent(MainActivity.this, NavDrawerActivity.class);
+//                                  startActivity(intent);
+//                              }
+//
+//                              @Override
+//                              public void handleFault(BackendlessFault fault) {
+//                                  Toast.makeText(MainActivity.this, fault.getMessage(), Toast.LENGTH_LONG).show();
+//                              }
+//                          });
+//                        }
+//                    });
+//        }
+//
+//    }
         }
+
     }
 }
