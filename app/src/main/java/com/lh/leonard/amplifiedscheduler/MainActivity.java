@@ -25,7 +25,6 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.facebook.CallbackManager;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ public class MainActivity extends Activity {
     ProgressDialog ringProgressDialog;
     Boolean loggedOutPersons = false;
     Encryption encryption;
-    CallbackManager callbackManager;
     Bundle extras;
 
     Boolean useBackButton = false;
@@ -66,6 +64,7 @@ public class MainActivity extends Activity {
         config.setTitle(R.string.rta_dialog_title);
         config.setMessage(R.string.rta_dialog_message);
         RateThisApp.init(config);
+
 
         extras = getIntent().getExtras();
 
@@ -364,15 +363,20 @@ public class MainActivity extends Activity {
 
             Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
                 put("password", "password");
-                //put("last_name", "lastname");
                 put("email", "email");
+                put("gender", "gender");
+                put("last_name", "lname");
+                put("first_name", "fname");
+                //put("friendrequests",)
             }};
 
             List<String> permissions = new ArrayList<>();
             permissions.add("public_profile");
             permissions.add("user_friends");
-            permissions.add("user_hometown");
-            permissions.add("user_location");
+            permissions.add("email");
+            // permissions.add("user_events");
+            // permissions.add("rsvp_event");
+
 
             Backendless.UserService.loginWithFacebook(MainActivity.this, null, facebookFieldMappings, permissions, new AsyncCallback<BackendlessUser>() {
                 @Override
@@ -380,13 +384,33 @@ public class MainActivity extends Activity {
 
                     Person p = new Person();
 
-                    response.setProperty("Persons",p);
 
+                    p.setGender((String) response.getProperty("gender"));
+                    p.setLname((String) response.getProperty("lname"));
+                    p.setFname((String) response.getProperty("fname"));
+                    p.setFullname(response.getProperty("fname") + " " +
+                            response.getProperty("lname"));
+                    p.setEmail((String) response.getProperty("email"));
+
+
+
+
+                  Person p1 =  Backendless.Data.of(Person.class).save(p);
+                    response.setProperty("Persons", p1);
+                    Backendless.UserService.update(response);
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
+                    loginPrefsEditor.clear();
+                    loginPrefsEditor.commit();
+
+                    Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
+                    startActivity(loggedInIntent);
                 }
 
                 @Override
                 public void handleFault(BackendlessFault fault) {
-
+                    Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -428,6 +452,5 @@ public class MainActivity extends Activity {
 //
 //    }
         }
-
     }
 }
