@@ -65,6 +65,8 @@ public class MainActivity extends Activity {
         config.setMessage(R.string.rta_dialog_message);
         RateThisApp.init(config);
 
+        Backendless.Data.mapTableToClass("Person", Person.class);
+        Backendless.Data.mapTableToClass("Slot", Slot.class);
 
         extras = getIntent().getExtras();
 
@@ -310,10 +312,6 @@ public class MainActivity extends Activity {
                             ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
                             ringProgressDialog.setCancelable(true);
 
-                            Backendless.Data.mapTableToClass("Person", Person.class);
-                            Backendless.Data.mapTableToClass("Slot", Slot.class);
-                            Backendless.Persistence.mapTableToClass("Person", Person.class);
-                            Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 
                             Backendless.UserService.login(emailField.getText().toString(), passwordField.getText().toString(), new AsyncCallback<BackendlessUser>() {
 
@@ -346,10 +344,6 @@ public class MainActivity extends Activity {
                                     Toast.makeText(getApplicationContext(),
                                             "Error " + fault.getMessage(),
                                             Toast.LENGTH_LONG).show();
-
-//                                    Toast.makeText(getApplicationContext(),
-//                                            "Unable to sign in. Please check internet connection & credentials are correct",
-//                                            Toast.LENGTH_LONG).show();
                                 }
                             });
                         } else {
@@ -361,51 +355,34 @@ public class MainActivity extends Activity {
                 }
             });
 
+
+
+
             Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
                 put("password", "password");
                 put("email", "email");
                 put("gender", "gender");
                 put("last_name", "lname");
                 put("first_name", "fname");
-                //put("friendrequests",)
             }};
 
             List<String> permissions = new ArrayList<>();
             permissions.add("public_profile");
             permissions.add("user_friends");
             permissions.add("email");
-            // permissions.add("user_events");
-            // permissions.add("rsvp_event");
-
 
             Backendless.UserService.loginWithFacebook(MainActivity.this, null, facebookFieldMappings, permissions, new AsyncCallback<BackendlessUser>() {
                 @Override
                 public void handleResponse(BackendlessUser response) {
 
                     Person p = new Person();
-
-
                     p.setGender((String) response.getProperty("gender"));
                     p.setLname((String) response.getProperty("lname"));
                     p.setFname((String) response.getProperty("fname"));
                     p.setFullname(response.getProperty("fname") + " " +
                             response.getProperty("lname"));
                     p.setEmail((String) response.getProperty("email"));
-
-
-
-
-                  Person p1 =  Backendless.Data.of(Person.class).save(p);
-                    response.setProperty("Persons", p1);
-                    Backendless.UserService.update(response);
-
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
-                    loginPrefsEditor.clear();
-                    loginPrefsEditor.commit();
-
-                    Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
-                    startActivity(loggedInIntent);
+                    new Save(p, response).execute();
                 }
 
                 @Override
@@ -413,44 +390,75 @@ public class MainActivity extends Activity {
                     Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
-
-//            Button buttonLoginWithFacebookSDK = (Button) findViewById(R.id.facebookloginsdk);
-//
-//            buttonLoginWithFacebookSDK
-//                    .setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                            Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
-//                                put("first_name", "firstname");
-//                                put("last_name", "lastname");
-//                             //   put("email", "email");
-//                            }};
-//
-//                            List<String> permissions = new ArrayList<String>(){{
-//                                add("first_name");
-//                                add("last_name");
-//                            //    add("email");
-//                            } };
-//
-//                          Backendless.UserService.loginWithFacebook(MainActivity.this,null,facebookFieldMappings, permissions,new AsyncCallback<BackendlessUser>() {
-//                              @Override
-//                              public void handleResponse(BackendlessUser response) {
-//                                  Intent intent = new Intent(MainActivity.this, NavDrawerActivity.class);
-//                                  startActivity(intent);
-//                              }
-//
-//                              @Override
-//                              public void handleFault(BackendlessFault fault) {
-//                                  Toast.makeText(MainActivity.this, fault.getMessage(), Toast.LENGTH_LONG).show();
-//                              }
-//                          });
-//                        }
-//                    });
-//        }
-//
-//    }
         }
     }
+
+    private class Save extends AsyncTask<Void, Integer, Void> {
+
+        Person personCreated;
+        BackendlessUser userCreated;
+
+        public Save(Person person, BackendlessUser user) {
+            personCreated = person;
+            userCreated = user;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            BackendlessUser checkUser = Backendless.UserService.findById(userCreated.getObjectId());
+
+            // First time user reg, set User property for person
+            if (checkUser.getProperty("persons") == null) {
+                Person p1 = Backendless.Data.of(Person.class).save(personCreated);
+                userCreated.setProperty("persons", p1);
+                userCreated.setProperty("ownerId", userCreated.getObjectId());
+                userCreated.removeProperty("user-registered");
+                userCreated.removeProperty("socialAccount");
+                Backendless.UserService.update(userCreated);
+            }
+            // Just update person and
+            else {
+
+                Person pp = (Person) checkUser.getProperty("persons");
+
+                pp = Backendless.Data.of(Person.class).findById(pp.getObjectId());
+                pp.setGender((String) checkUser.getProperty("gender"));
+                pp.setLname((String) checkUser.getProperty("lname"));
+                pp.setFname((String) checkUser.getProperty("fname"));
+                pp.setFullname(checkUser.getProperty("fname") + " " +
+                        checkUser.getProperty("lname"));
+                pp.setEmail((String) checkUser.getProperty("email"));
+                Backendless.Persistence.of(Person.class).save(pp);
+                userCreated.setProperty("persons", pp);
+                userCreated.removeProperty("socialAccount");
+                userCreated.removeProperty("user-registered");
+                Backendless.UserService.update(userCreated);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
+            loginPrefsEditor.clear();
+            loginPrefsEditor.commit();
+            Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
+            startActivity(loggedInIntent);
+        }
+    }
+
+
 }

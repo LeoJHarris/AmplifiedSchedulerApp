@@ -1,12 +1,10 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -185,7 +183,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
                                         Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                                         intent.putExtra("nameRegistered", fname + "," + lname);
-
                                         startActivity(intent);
                                     }
 
