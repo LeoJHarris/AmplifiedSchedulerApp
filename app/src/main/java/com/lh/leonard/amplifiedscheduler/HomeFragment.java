@@ -37,9 +37,11 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // FacebookSdk.sdkInitialize(getActivity());
+
         textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
 
-        textViewNotificationNumberHome.setText("Fetching  notifications");
+        textViewNotificationNumberHome.setText("Loading  notifications");
 
         Backendless.Data.mapTableToClass("Person", Person.class);
 
@@ -92,6 +94,14 @@ public class HomeFragment extends Fragment {
         welcomeLabel.setTypeface(RobotoCondensedLightItalic);
 
         welcomeLabel.setText("Welcome " + personLoggedIn.getFullname() + "!");
+
+//        LikeView likeView = (LikeView) v.findViewById(R.id.likeView);
+//        likeView.setFragment(v.getContext().);
+//        likeView.setLikeViewStyle(LikeView.Style.STANDARD);
+//        likeView.setAuxiliaryViewPosition(LikeView.AuxiliaryViewPosition.INLINE);
+//        likeView.setObjectIdAndType(
+//                "https://www.facebook.com/AmplifiedScheduler",
+//                LikeView.ObjectType.OPEN_GRAPH);
 
         new ParseURL().execute();
         return v;

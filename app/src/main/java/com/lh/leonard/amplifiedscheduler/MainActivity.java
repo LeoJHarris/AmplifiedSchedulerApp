@@ -58,6 +58,8 @@ public class MainActivity extends Activity {
 
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
+//        FacebookSdk.sdkInitialize(getApplicationContext());
+
         // Custom criteria: 3 days and 5 launches
         RateThisApp.Config config = new RateThisApp.Config(20, 15);
         // Custom title and message
@@ -281,7 +283,6 @@ public class MainActivity extends Activity {
                 });
             }
 
-
             buttonRegistration.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
@@ -355,9 +356,6 @@ public class MainActivity extends Activity {
                 }
             });
 
-
-
-
             Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
                 put("password", "password");
                 put("email", "email");
@@ -390,6 +388,7 @@ public class MainActivity extends Activity {
                     Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+
         }
     }
 
