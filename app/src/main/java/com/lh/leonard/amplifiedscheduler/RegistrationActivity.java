@@ -181,6 +181,10 @@ public class RegistrationActivity extends AppCompatActivity {
                                     @Override
                                     public void handleResponse(BackendlessUser backendlessUser) {
 
+                                        Person p = (Person) backendlessUser.getProperty("persons");
+                                        p.setOwnerId(backendlessUser.getObjectId());
+                                        Backendless.Data.of(Person.class).save(p);
+
                                         Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                                         intent.putExtra("nameRegistered", fname + "," + lname);
                                         startActivity(intent);

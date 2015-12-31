@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import se.simbio.encryption.Encryption;
 
@@ -57,8 +58,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.splash);
 
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
-
-//        FacebookSdk.sdkInitialize(getApplicationContext());
 
         // Custom criteria: 3 days and 5 launches
         RateThisApp.Config config = new RateThisApp.Config(20, 15);
@@ -156,6 +155,54 @@ public class MainActivity extends Activity {
         protected void onPostExecute(Void result) {
 
             MainActivity.this.setContentView(R.layout.activity_main);
+
+            ImageView facebookButton = (ImageView) findViewById(R.id.FBlogin_button);
+
+            facebookButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
+                        put("password", "password");
+                        put("email", "email");
+                        put("gender", "gender");
+                        put("last_name", "lname");
+                        put("first_name", "fname");
+                    }};
+
+                    List<String> permissions = new ArrayList<>();
+                    permissions.add("public_profile");
+                    permissions.add("user_friends");
+                    permissions.add("email");
+
+                    Backendless.UserService.loginWithFacebook(MainActivity.this, null, facebookFieldMappings, permissions, new AsyncCallback<BackendlessUser>() {
+                        @Override
+                        public void handleResponse(BackendlessUser response) {
+
+                            Person p = new Person();
+                            p.setGender((String) response.getProperty("gender"));
+                            p.setLname((String) response.getProperty("lname"));
+                            p.setFname((String) response.getProperty("fname"));
+                            p.setFullname(response.getProperty("fname") + " " +
+                                    response.getProperty("lname"));
+                            p.setEmail((String) response.getProperty("email"));
+                            try {
+                                new Save(p, response).execute().get();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }, false);
+                }
+            });
 
             useBackButton = false;
 
@@ -355,40 +402,6 @@ public class MainActivity extends Activity {
                     }
                 }
             });
-
-            Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
-                put("password", "password");
-                put("email", "email");
-                put("gender", "gender");
-                put("last_name", "lname");
-                put("first_name", "fname");
-            }};
-
-            List<String> permissions = new ArrayList<>();
-            permissions.add("public_profile");
-            permissions.add("user_friends");
-            permissions.add("email");
-
-            Backendless.UserService.loginWithFacebook(MainActivity.this, null, facebookFieldMappings, permissions, new AsyncCallback<BackendlessUser>() {
-                @Override
-                public void handleResponse(BackendlessUser response) {
-
-                    Person p = new Person();
-                    p.setGender((String) response.getProperty("gender"));
-                    p.setLname((String) response.getProperty("lname"));
-                    p.setFname((String) response.getProperty("fname"));
-                    p.setFullname(response.getProperty("fname") + " " +
-                            response.getProperty("lname"));
-                    p.setEmail((String) response.getProperty("email"));
-                    new Save(p, response).execute();
-                }
-
-                @Override
-                public void handleFault(BackendlessFault fault) {
-                    Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-
         }
     }
 
@@ -458,6 +471,4 @@ public class MainActivity extends Activity {
             startActivity(loggedInIntent);
         }
     }
-
-
 }
