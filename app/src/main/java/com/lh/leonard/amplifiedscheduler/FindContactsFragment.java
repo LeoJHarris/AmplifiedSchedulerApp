@@ -178,8 +178,8 @@ public class FindContactsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            String whereClause = "lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%' AND" +
-                    " objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
+            String whereClause = "(lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%') AND " +
+                    "objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause);
             List<String> relations1 = new ArrayList<String>();

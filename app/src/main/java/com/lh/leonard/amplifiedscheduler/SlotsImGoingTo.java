@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -89,6 +90,18 @@ public class SlotsImGoingTo extends AppCompatActivity implements
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+
+        AutoResizeTextView tvSocial = (AutoResizeTextView) findViewById(R.id.textViewSocial);
+        AutoResizeTextView textViewCulturalEvents = (AutoResizeTextView) findViewById(R.id.textViewCulturalEvents);
+        AutoResizeTextView textViewAcademicEvents = (AutoResizeTextView) findViewById(R.id.textViewAcademicEvents);
+        AutoResizeTextView textViewWorkEvents = (AutoResizeTextView) findViewById(R.id.textViewWorkEvents);
+
+        tvSocial.setTypeface(RobotoCondensedLightItalic);
+        textViewCulturalEvents.setTypeface(RobotoCondensedLightItalic);
+        textViewAcademicEvents.setTypeface(RobotoCondensedLightItalic);
+        textViewWorkEvents.setTypeface(RobotoCondensedLightItalic);
+
         // Get a reference for the week view in the layout.
         mWeekView = (WeekView) findViewById(R.id.weekView);
 
@@ -170,7 +183,15 @@ public class SlotsImGoingTo extends AppCompatActivity implements
                             event.getEndCalendar().get(Calendar.DAY_OF_YEAR),
                             event.getEndCalendar().get(Calendar.HOUR_OF_DAY),
                             event.getStartCalendar().get(Calendar.MINUTE));
-                    weekViewEvent.setColor(getResources().getColor(R.color.red));
+                    if (event.getLocation().getMetadata("category").equals("Social Event")) {
+                        weekViewEvent.setColor(getResources().getColor(R.color.green));
+                    } else if (event.getLocation().getMetadata("category").equals("Work Event")) {
+                        weekViewEvent.setColor(getResources().getColor(R.color.orange));
+                    } else if (event.getLocation().getMetadata("category").equals("Cultural Event")) {
+                        weekViewEvent.setColor(getResources().getColor(R.color.wallet_holo_blue_light));
+                    } else if (event.getLocation().getMetadata("category").equals("Academic Event")) {
+                        weekViewEvent.setColor(getResources().getColor(R.color.purple));
+                    }
                     i++;
                     events.add(weekViewEvent);
                 }
@@ -400,10 +421,22 @@ public class SlotsImGoingTo extends AppCompatActivity implements
 
             endTime.set(Calendar.DAY_OF_YEAR, eventListSlots.get(i).getEndCalendar().get(Calendar.DAY_OF_YEAR));
 
+            int color = ContextCompat.getColor(this, R.color.green);
+
+            if (eventListSlots.get(i).getLocation().getMetadata("category").equals("Social Event")) {
+                color = ContextCompat.getColor(this, R.color.green);
+            } else if (eventListSlots.get(i).getLocation().getMetadata("category").equals("Work Event")) {
+                color = ContextCompat.getColor(this, R.color.orange);
+            } else if (eventListSlots.get(i).getLocation().getMetadata("category").equals("Cultural Event")) {
+                color = ContextCompat.getColor(this, R.color.wallet_holo_blue_light);
+            } else if (eventListSlots.get(i).getLocation().getMetadata("category").equals("Academic Event")) {
+                color = ContextCompat.getColor(this, R.color.purple);
+            }
+
             String location = (String) eventListSlots.get(i).getLocation().getMetadata("address");
             CalendarEvent event = new CalendarEvent(eventListSlots.get(i).getSubject(),
                     eventListSlots.get(i).getMessage(), location,
-                    ContextCompat.getColor(this, R.color.orangecalendar), startTime, endTime, allDay);
+                    color, startTime, endTime, allDay);
 
             event.setId(Long.parseLong(String.valueOf(i)));
             eventList.add(event);

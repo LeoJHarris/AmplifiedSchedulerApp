@@ -24,8 +24,7 @@
             <ImageView
                 android:id="@+id/imageViewMainLogo"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginBottom="15dp"
+                android:layout_height="150dp"
                 android:src="@drawable/main_textlogo_360" />
 
         </LinearLayout>
@@ -35,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLHeader"
+            android:layout_marginTop="60dp"
             android:orientation="vertical">
 
             <EditText
@@ -47,7 +47,7 @@
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:padding="7dp"
-                android:textSize="20sp" />
+                android:textSize="30sp" />
 
             <EditText
                 android:id="@+id/passwordSignIn"
@@ -61,7 +61,7 @@
                 android:inputType="textPassword"
                 android:padding="7dp"
                 android:password="true"
-                android:textSize="20sp" />
+                android:textSize="30sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                     android:background="@drawable/button_default_bg"
                     android:padding="7dp"
                     android:text="Sign In"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
 
                 <CheckBox
                     android:id="@+id/saveLoginCheckBox"
@@ -88,16 +88,34 @@
                     android:layout_weight="1"
                     android:text="Remember me"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
 
             </LinearLayout>
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/LLForGotPassword"
+            android:id="@+id/FacebookSignIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLFormSignIn"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/FBlogin_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/facebook_button" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LLForGotPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/FacebookSignIn"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -107,10 +125,10 @@
                 android:layout_height="match_parent"
                 android:clickable="true"
                 android:gravity="center"
-                android:paddingTop="25dp"
+                android:paddingTop="40dp"
                 android:text="Forgot Password?"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="35sp" />
 
         </LinearLayout>
 
@@ -128,10 +146,10 @@
                 android:layout_height="match_parent"
                 android:clickable="true"
                 android:gravity="center"
-                android:paddingTop="25dp"
+                android:paddingTop="40dp"
                 android:text="Create Account"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="35sp" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -152,7 +170,7 @@
             android:paddingTop="35dp"
             android:text="@string/name_version_num"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="25sp" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -27,6 +27,12 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.kobakei.ratethisapp.RateThisApp;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 import se.simbio.encryption.Encryption;
 
 public class MainActivity extends Activity {
@@ -38,11 +44,10 @@ public class MainActivity extends Activity {
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private Boolean saveLogin;
-
+    Button facebookButton;
     ProgressDialog ringProgressDialog;
     Boolean loggedOutPersons = false;
     Encryption encryption;
-
     Bundle extras;
 
     Boolean useBackButton = false;
@@ -60,6 +65,9 @@ public class MainActivity extends Activity {
         config.setTitle(R.string.rta_dialog_title);
         config.setMessage(R.string.rta_dialog_message);
         RateThisApp.init(config);
+
+        Backendless.Data.mapTableToClass("Person", Person.class);
+        Backendless.Data.mapTableToClass("Slot", Slot.class);
 
         extras = getIntent().getExtras();
 
@@ -140,7 +148,6 @@ public class MainActivity extends Activity {
                 passwordDecrypted = encryption.decryptOrNull(loginPreferences.getString("password", ""));
                 usernameDecrypted = loginPreferences.getString("username", "");
             }
-
             return null;
         }
 
@@ -148,6 +155,52 @@ public class MainActivity extends Activity {
         protected void onPostExecute(Void result) {
 
             MainActivity.this.setContentView(R.layout.activity_main);
+
+            facebookButton = (Button) findViewById(R.id.FBlogin_button);
+
+            facebookButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
+                        put("password", "password");
+                        put("email", "email");
+                        put("gender", "gender");
+                        put("last_name", "lname");
+                        put("first_name", "fname");
+                    }};
+
+                    List<String> permissions = new ArrayList<>();
+                    permissions.add("public_profile");
+                    permissions.add("user_friends");
+                    permissions.add("email");
+
+                    Backendless.UserService.loginWithFacebook(MainActivity.this, null, facebookFieldMappings, permissions, new AsyncCallback<BackendlessUser>() {
+                        @Override
+                        public void handleResponse(BackendlessUser response) {
+
+                            Person p = new Person();
+                            p.setGender((String) response.getProperty("gender"));
+                            p.setLname((String) response.getProperty("lname"));
+                            p.setFname((String) response.getProperty("fname"));
+                            p.setFullname(response.getProperty("fname") + " " +
+                                    response.getProperty("lname"));
+                            p.setEmail((String) response.getProperty("email"));
+                            try {
+                                new Save(p, response).execute().get();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }, false);
+                }
+            });
 
             useBackButton = false;
 
@@ -210,16 +263,17 @@ public class MainActivity extends Activity {
             if (width == 320 && height == 480) {
                 imageViewMainLogo.requestLayout();
                 imageViewMainLogo.getLayoutParams().height = 80;
-                editTextUsername.setTextSize(18);
-                editTextUsername.setPadding(8, 8, 8, 8);
-                editTextPassword.setPadding(8, 8, 8, 8);
-                buttonSignIn.setPadding(8, 8, 8, 8);
-                editTextPassword.setTextSize(18);
-                buttonForgotPassword.setTextSize(16);
-                buttonRegistration.setTextSize(16);
-                textViewMadeByMeMain.setTextSize(14);
-                buttonSignIn.setTextSize(18);
+                editTextUsername.setTextSize(15);
+                editTextUsername.setPadding(4, 4, 4, 4);
+                editTextPassword.setPadding(4, 4, 4, 4);
+                editTextPassword.setTextSize(15);
+                buttonForgotPassword.setTextSize(15);
+                buttonRegistration.setTextSize(15);
+                textViewMadeByMeMain.setTextSize(11);
+                buttonSignIn.setTextSize(15);
+                buttonSignIn.setPadding(0, 0, 0, 0);
                 saveLoginCheckBox.setTextSize(15);
+                // facebookButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.facebook_button_320));
             }
             // 2.7" QVGA
             else if (width == 240 && height == 320) {
@@ -275,7 +329,6 @@ public class MainActivity extends Activity {
                 });
             }
 
-
             buttonRegistration.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
@@ -306,10 +359,6 @@ public class MainActivity extends Activity {
                             ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
                             ringProgressDialog.setCancelable(true);
 
-                            Backendless.Data.mapTableToClass("Person", Person.class);
-                            Backendless.Data.mapTableToClass("Slot", Slot.class);
-                            Backendless.Persistence.mapTableToClass("Person", Person.class);
-                            Backendless.Persistence.mapTableToClass("Slot", Slot.class);
 
                             Backendless.UserService.login(emailField.getText().toString(), passwordField.getText().toString(), new AsyncCallback<BackendlessUser>() {
 
@@ -342,10 +391,6 @@ public class MainActivity extends Activity {
                                     Toast.makeText(getApplicationContext(),
                                             "Error " + fault.getMessage(),
                                             Toast.LENGTH_LONG).show();
-
-//                                    Toast.makeText(getApplicationContext(),
-//                                            "Unable to sign in. Please check internet connection & credentials are correct",
-//                                            Toast.LENGTH_LONG).show();
                                 }
                             });
                         } else {
@@ -356,6 +401,73 @@ public class MainActivity extends Activity {
                     }
                 }
             });
+        }
+    }
+
+    private class Save extends AsyncTask<Void, Integer, Void> {
+
+        Person personCreated;
+        BackendlessUser userCreated;
+
+        public Save(Person person, BackendlessUser user) {
+            personCreated = person;
+            userCreated = user;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            BackendlessUser checkUser = Backendless.UserService.findById(userCreated.getObjectId());
+
+            // First time user reg, set User property for person
+            if (checkUser.getProperty("persons") == null) {
+                Person p1 = Backendless.Data.of(Person.class).save(personCreated);
+                userCreated.setProperty("persons", p1);
+                userCreated.setProperty("ownerId", userCreated.getObjectId());
+                userCreated.removeProperty("user-registered");
+                userCreated.removeProperty("socialAccount");
+                Backendless.UserService.update(userCreated);
+            }
+            // Just update person and
+            else {
+
+                Person pp = (Person) checkUser.getProperty("persons");
+
+                pp = Backendless.Data.of(Person.class).findById(pp.getObjectId());
+                pp.setGender((String) checkUser.getProperty("gender"));
+                pp.setLname((String) checkUser.getProperty("lname"));
+                pp.setFname((String) checkUser.getProperty("fname"));
+                pp.setFullname(checkUser.getProperty("fname") + " " +
+                        checkUser.getProperty("lname"));
+                pp.setEmail((String) checkUser.getProperty("email"));
+                Backendless.Persistence.of(Person.class).save(pp);
+                userCreated.setProperty("persons", pp);
+                userCreated.removeProperty("socialAccount");
+                userCreated.removeProperty("user-registered");
+                Backendless.UserService.update(userCreated);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
+            loginPrefsEditor.clear();
+            loginPrefsEditor.commit();
+            Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
+            startActivity(loggedInIntent);
         }
     }
 }

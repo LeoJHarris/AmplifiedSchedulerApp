@@ -17,6 +17,53 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewSocial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Social Events" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewWorkEvents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/orange"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Work Events" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewCulturalEvents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/wallet_holo_blue_light"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Cultural Events" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/textViewAcademicEvents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/purple"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Academic Events" />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/LLWeekView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,7 +76,7 @@
             android:layout_height="match_parent"
             app:columnGap="8dp"
             app:dayBackgroundColor="#05000000"
-            app:eventTextColor="@android:color/white"
+            app:eventTextColor="@android:color/black"
             app:headerColumnBackground="@color/bluecalendar"
             app:headerColumnPadding="8dp"
             app:headerColumnTextColor="@color/theme_text_icons"

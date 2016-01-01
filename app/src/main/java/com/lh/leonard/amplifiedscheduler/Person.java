@@ -21,6 +21,16 @@ public class Person {
     public List<Slot> pendingResponseSlot;
     public List<Slot> myCreatedSlot;
     public List<Slot> goingToSlot;
+    public String gender;
+    public String ownerId;
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public String getCountry() {
         return country;

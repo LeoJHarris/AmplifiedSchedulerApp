@@ -95,7 +95,7 @@ public class MyCreatedSlotsDialog extends Activity {
 
                 dialog = new AlertDialog.Builder(v.getContext())
                         .setTitle("Cancel")
-                        .setMessage("Are you sure you want to discard this event?")
+                        .setMessage("Discard this event")
                         .setPositiveButton("DISCARD", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {

@@ -94,10 +94,28 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/LLForGotPassword"
+            android:id="@+id/FacebookSignIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLFormSignIn"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/FBlogin_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/facebook_button" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LLForGotPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/FacebookSignIn"
             android:gravity="center"
             android:orientation="vertical">
 

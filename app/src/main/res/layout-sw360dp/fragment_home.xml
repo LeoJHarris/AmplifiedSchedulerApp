@@ -39,5 +39,6 @@
             android:gravity="center"
             android:textColor="@color/bluecalendar"
             android:textSize="24sp" />
+
     </RelativeLayout>
 </FrameLayout>
