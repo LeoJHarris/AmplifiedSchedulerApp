@@ -102,7 +102,7 @@ public class RegistrationActivity extends AppCompatActivity {
         String[] countries = getResources().getStringArray(R.array.countries_array);
         // Create the adapter and set it to the AutoCompleteTextView
         adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, countries);
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
 
