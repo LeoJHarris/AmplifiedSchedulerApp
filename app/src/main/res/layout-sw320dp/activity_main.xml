@@ -28,7 +28,7 @@
             <ImageView
                 android:id="@+id/imageViewMainLogo"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="75dp"
                 android:src="@drawable/main_textlogo_320" />
 
         </LinearLayout>
@@ -51,7 +51,7 @@
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:padding="7dp"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/passwordSignIn"
@@ -65,7 +65,7 @@
                 android:inputType="textPassword"
                 android:padding="7dp"
                 android:password="true"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,9 +79,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:background="@drawable/button_default_bg"
-                    android:padding="7dp"
                     android:text="Sign In"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <CheckBox
                     android:id="@+id/saveLoginCheckBox"
@@ -92,7 +91,7 @@
                     android:layout_weight="1"
                     android:text="Remember me"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
         </RelativeLayout>
@@ -102,12 +101,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLFormSignIn"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="vertical">
 
-
-
+            <Button
+                android:id="@+id/FBlogin_button"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/facebook_button" />
 
         </LinearLayout>
 
@@ -116,10 +119,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/FacebookSignIn"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="vertical">
-
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/buttonForgotPassword"
@@ -129,8 +131,7 @@
                 android:gravity="center"
                 android:text="Forgot Password?"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
-
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -138,7 +139,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLForGotPassword"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -150,7 +151,7 @@
                 android:gravity="center"
                 android:text="Create Account"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -171,6 +172,6 @@
             android:gravity="center"
             android:text="@string/name_version_num"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 </RelativeLayout>

@@ -102,12 +102,12 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
+            <Button
                 android:id="@+id/FBlogin_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/facebook" />
+                android:background="@drawable/facebook_button" />
 
         </LinearLayout>
 
@@ -116,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/FacebookSignIn"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -138,7 +138,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLForGotPassword"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -173,11 +173,4 @@
             android:textColor="@color/black"
             android:textSize="15sp" />
     </LinearLayout>
-
-  <WebView
-        android:id="@+id/webview"
-      android:visibility="gone"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        />
 </RelativeLayout>

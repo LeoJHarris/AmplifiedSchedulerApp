@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private Boolean saveLogin;
-
+    Button facebookButton;
     ProgressDialog ringProgressDialog;
     Boolean loggedOutPersons = false;
     Encryption encryption;
@@ -156,7 +156,7 @@ public class MainActivity extends Activity {
 
             MainActivity.this.setContentView(R.layout.activity_main);
 
-            ImageView facebookButton = (ImageView) findViewById(R.id.FBlogin_button);
+            facebookButton = (Button) findViewById(R.id.FBlogin_button);
 
             facebookButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -192,8 +192,6 @@ public class MainActivity extends Activity {
                             } catch (ExecutionException e) {
                                 e.printStackTrace();
                             }
-
-
                         }
 
                         @Override
@@ -265,16 +263,17 @@ public class MainActivity extends Activity {
             if (width == 320 && height == 480) {
                 imageViewMainLogo.requestLayout();
                 imageViewMainLogo.getLayoutParams().height = 80;
-                editTextUsername.setTextSize(18);
-                editTextUsername.setPadding(8, 8, 8, 8);
-                editTextPassword.setPadding(8, 8, 8, 8);
-                buttonSignIn.setPadding(8, 8, 8, 8);
-                editTextPassword.setTextSize(18);
-                buttonForgotPassword.setTextSize(16);
-                buttonRegistration.setTextSize(16);
-                textViewMadeByMeMain.setTextSize(14);
-                buttonSignIn.setTextSize(18);
+                editTextUsername.setTextSize(15);
+                editTextUsername.setPadding(4, 4, 4, 4);
+                editTextPassword.setPadding(4, 4, 4, 4);
+                editTextPassword.setTextSize(15);
+                buttonForgotPassword.setTextSize(15);
+                buttonRegistration.setTextSize(15);
+                textViewMadeByMeMain.setTextSize(11);
+                buttonSignIn.setTextSize(15);
+                buttonSignIn.setPadding(0, 0, 0, 0);
                 saveLoginCheckBox.setTextSize(15);
+                // facebookButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.facebook_button_320));
             }
             // 2.7" QVGA
             else if (width == 240 && height == 320) {
