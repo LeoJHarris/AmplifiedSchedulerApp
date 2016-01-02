@@ -442,14 +442,13 @@ public class MainActivity extends Activity {
             else {
 
                 Person pp = (Person) checkUser.getProperty("persons");
-
-                pp = Backendless.Data.of(Person.class).findById(pp.getObjectId());
                 pp.setGender((String) checkUser.getProperty("gender"));
                 pp.setLname((String) checkUser.getProperty("lname"));
                 pp.setFname((String) checkUser.getProperty("fname"));
                 pp.setFullname(checkUser.getProperty("fname") + " " +
                         checkUser.getProperty("lname"));
                 pp.setEmail((String) checkUser.getProperty("email"));
+                pp.setSocial("Facebook");
                 Backendless.Persistence.of(Person.class).save(pp);
                 userCreated.setProperty("persons", pp);
                 userCreated.removeProperty("socialAccount");

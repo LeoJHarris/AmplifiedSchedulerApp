@@ -23,6 +23,15 @@ public class Person {
     public List<Slot> goingToSlot;
     public String gender;
     public String ownerId;
+    public String social;
+
+    public void setSocial(String social) {
+        this.social = social;
+    }
+
+    public String getSocial() {
+        return social;
+    }
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
