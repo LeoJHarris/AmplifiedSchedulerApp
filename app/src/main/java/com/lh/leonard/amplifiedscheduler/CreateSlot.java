@@ -545,24 +545,28 @@ public class CreateSlot extends AppCompatActivity implements
                         startCalendar.get(Calendar.MONTH), startCalendar.get(Calendar.DAY_OF_MONTH),
                         startCalendar.get(Calendar.HOUR_OF_DAY), startCalendar.get(Calendar.MINUTE),
                         startCalendar.get(Calendar.SECOND));
+                endCalendar.add(Calendar.HOUR_OF_DAY, 1);
                 textViewEndDate.setText(getDateFormat(endCalendar));
                 textViewEndTime.setText(getTimeFormat(endCalendar));
             }
 
             textViewStartDate.setText(getDateFormat(startCalendar));
         }
-        //Set endCalander year, month, day
+        //End date set, so set new
         else if (datePickerSelected == 2) {
             endCalendar.set(Calendar.YEAR, year);
             endCalendar.set(Calendar.MONTH, monthOfYear);
             endCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            //set new enddate
             if (endCalendar.before(startCalendar)) {
                 startCalendar.set(endCalendar.get(Calendar.YEAR),
                         endCalendar.get(Calendar.MONTH), endCalendar.get(Calendar.DAY_OF_MONTH),
                         endCalendar.get(Calendar.HOUR_OF_DAY), endCalendar.get(Calendar.MINUTE),
                         endCalendar.get(Calendar.SECOND));
-                textViewStartDate.setText(getDateFormat(startCalendar));
+                startCalendar.add(Calendar.HOUR_OF_DAY, -1);
                 textViewStartTime.setText(getTimeFormat(startCalendar));
+                textViewStartDate.setText(getDateFormat(startCalendar));
             }
             textViewEndDate.setText(getDateFormat(endCalendar));
         }
@@ -635,6 +639,7 @@ public class CreateSlot extends AppCompatActivity implements
                         endCalendar.get(Calendar.MONTH), endCalendar.get(Calendar.DAY_OF_MONTH),
                         endCalendar.get(Calendar.HOUR_OF_DAY), endCalendar.get(Calendar.MINUTE),
                         endCalendar.get(Calendar.SECOND));
+                startCalendar.add(Calendar.HOUR_OF_DAY, -1);
                 textViewStartDate.setText(getDateFormat(startCalendar));
                 textViewStartTime.setText(getTimeFormat(startCalendar));
             }

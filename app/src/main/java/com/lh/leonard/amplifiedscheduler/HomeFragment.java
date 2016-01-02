@@ -48,6 +48,7 @@ public class HomeFragment extends Fragment {
     ArrayAdapter<String> adapter;
     String my_var;
     ProgressDialog ringProgressDialog;
+    AlertDialog alert = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -177,6 +178,7 @@ public class HomeFragment extends Fragment {
 
         phone.setHint("Phone");
 
+
         phone.setInputType(InputType.TYPE_CLASS_PHONE);
 
         final AlertDialog.Builder phoneAlert = new AlertDialog.Builder(getActivity())
@@ -186,7 +188,7 @@ public class HomeFragment extends Fragment {
                 .setPositiveButton("DONE", null)
                 .setNeutralButton("LOGOUT", null);
         phoneAlert.setCancelable(false);
-        final AlertDialog alert = phoneAlert.create(); //.show().setCancelable(false);
+        alert = phoneAlert.create(); //.show().setCancelable(false);
 
         alert.show();
 
@@ -206,7 +208,9 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void handleFault(BackendlessFault fault) {
-
+                        Toast.makeText(getActivity(), fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        Intent logOutIntent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(logOutIntent);
                     }
                 });
             }
@@ -220,11 +224,11 @@ public class HomeFragment extends Fragment {
                                                   if ((!phone.getText().toString().equals(""))) {
                                                       new Commit(phone.getText().toString(), 2).execute();
                                                       alert.dismiss();
-                                                      Toast.makeText(getActivity(), "Congrats ,registration complete", Toast.LENGTH_SHORT).show();
+                                                      Toast.makeText(getActivity(), "Registration complete", Toast.LENGTH_SHORT).show();
 
                                                   } else {
                                                       phone.setFocusable(true);
-                                                      Toast.makeText(getActivity(), "Please enter valid Phone", Toast.LENGTH_SHORT).show();
+                                                      Toast.makeText(getActivity(), "Please enter phone", Toast.LENGTH_SHORT).show();
                                                   }
                                               }
                                           }
@@ -249,12 +253,12 @@ public class HomeFragment extends Fragment {
                 .setView(textViewCountry)
                 .setPositiveButton("NEXT", null)
                 .setNeutralButton("LOGOUT", null);
+        countrySelectAlert.setCancelable(false);
+        alert = countrySelectAlert.create(); //.show().setCancelable(false);
 
-        final AlertDialog alertCountry = countrySelectAlert.create(); //.show().setCancelable(false);
+        alert.show();
 
-        alertCountry.show();
-
-        final Button neutralButton = alertCountry.getButton(DialogInterface.BUTTON_NEUTRAL);
+        final Button neutralButton = alert.getButton(DialogInterface.BUTTON_NEUTRAL);
         neutralButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,28 +274,27 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void handleFault(BackendlessFault fault) {
-
+                        Toast.makeText(getActivity(), fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        Intent logOutIntent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(logOutIntent);
                     }
                 });
             }
         });
-        final Button positiveButton = alertCountry.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(new View.OnClickListener()
-
-                                          {
-                                              @Override
-                                              public void onClick(View v) {
-                                                  if ((!textViewCountry.getText().toString().equals(""))) {
-                                                      new Commit(textViewCountry.getText().toString(), 2).execute();
-                                                      alertCountry.dismiss();
-                                                  } else {
-                                                      textViewCountry.setFocusable(true);
-                                                      Toast.makeText(getActivity(), "Please enter valid Phone", Toast.LENGTH_SHORT).show();
-                                                  }
-                                              }
-                                          }
-
-        );
+        final Button positiveButton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (my_var != null) {
+                    new Commit(textViewCountry.getText().toString(), 1).execute();
+                    alert.dismiss();
+                    phoneDialog();
+                } else {
+                    textViewCountry.setFocusable(true);
+                    Toast.makeText(getActivity(), "Please enter country", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         listeners(textViewCountry);
     }
 
@@ -339,7 +342,6 @@ public class HomeFragment extends Fragment {
             } else if (intVal == 2) {
                 personLoggedIn.setPhone(value);
             }
-
             Backendless.Data.of(Person.class).save(personLoggedIn);
             return null;
         }

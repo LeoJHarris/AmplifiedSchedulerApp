@@ -105,7 +105,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
-
         emailField.setText("");
         passwordConfirmField.setText("");
         passwordField.setText("");
@@ -181,9 +180,9 @@ public class RegistrationActivity extends AppCompatActivity {
                                     @Override
                                     public void handleResponse(BackendlessUser backendlessUser) {
 
-                                        Person p = (Person) backendlessUser.getProperty("persons");
-                                        p.setOwnerId(backendlessUser.getObjectId());
-                                        Backendless.Data.of(Person.class).save(p);
+//                                        Person p = (Person) backendlessUser.getProperty("persons");
+//                                        p.setOwnerId(backendlessUser.getObjectId());
+//                                        Backendless.Data.of(Person.class).save(p);
 
                                         Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                                         intent.putExtra("nameRegistered", fname + "," + lname);

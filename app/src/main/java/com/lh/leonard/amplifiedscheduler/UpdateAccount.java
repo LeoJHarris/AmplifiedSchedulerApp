@@ -11,10 +11,14 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -44,7 +48,7 @@ public class UpdateAccount extends AppCompatActivity {
     Drawable passwordIconDraw;
     Drawable countryIconDraw;
     Drawable phoneIconDraw;
-
+    String my_var;
     Drawable emailGoodIconDraw;
     Drawable userGoodProfileDraw;
     Drawable passwordGoodIconDraw;
@@ -60,7 +64,11 @@ public class UpdateAccount extends AppCompatActivity {
     String email;
     String password;
     String passwordConfirm;
+    String country;
     Validator validator = new Validator();
+    AutoCompleteTextView textViewCountry;
+    ArrayAdapter<String> adapter;
+    Boolean social = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,13 +100,14 @@ public class UpdateAccount extends AppCompatActivity {
         user = Backendless.UserService.CurrentUser();
         personLoggedIn = (Person) user.getProperty("persons");
 
+
         // Get a reference to the AutoCompleteTextView in the layout
-        final AutoCompleteTextView textViewCountry = (AutoCompleteTextView) findViewById(R.id.autocomplete_countryUpdate);
+        textViewCountry = (AutoCompleteTextView) findViewById(R.id.autocomplete_countryUpdate);
         // Get the string array
         String[] countries = getResources().getStringArray(R.array.countries_array);
         // Create the adapter and set it to the AutoCompleteTextView
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, countries);
+        adapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
         editTextUpdateFNameReg = (EditText) findViewById(R.id.editTextUpdateFName);
@@ -107,6 +116,22 @@ public class UpdateAccount extends AppCompatActivity {
         editTextUpdateEmail = (EditText) findViewById(R.id.editTextUpdateEmail);
         ediTextUpdatePassword = (EditText) findViewById(R.id.ediTextUpdatePassword);
         editTextUpdatePasswordConfirmReg = (EditText) findViewById(R.id.editTextUpdatePasswordConfirm);
+
+        if (user.getProperty("socialAccount") == null) {
+            editTextUpdateLNameReg.setEnabled(false);
+            editTextUpdateLNameReg.setInputType(InputType.TYPE_NULL);
+            editTextUpdateFNameReg.setEnabled(false);
+            editTextUpdateFNameReg.setInputType(InputType.TYPE_NULL);
+            editTextUpdatePhoneReg.setEnabled(false);
+            editTextUpdatePhoneReg.setInputType(InputType.TYPE_NULL);
+            editTextUpdateEmail.setEnabled(false);
+            editTextUpdateEmail.setInputType(InputType.TYPE_NULL);
+            ediTextUpdatePassword.setEnabled(false);
+            ediTextUpdatePassword.setInputType(InputType.TYPE_NULL);
+            editTextUpdatePasswordConfirmReg.setEnabled(false);
+            editTextUpdatePasswordConfirmReg.setInputType(InputType.TYPE_NULL);
+            social = true;
+        }
 
         final AutoResizeTextView txtLabelFnameUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelFnameUpdate);
         final AutoResizeTextView txtLabeLnameUpdate = (AutoResizeTextView) findViewById(R.id.txtLabeLnameUpdate);
@@ -152,6 +177,7 @@ public class UpdateAccount extends AppCompatActivity {
                                                     phone = editTextUpdatePhoneReg.getText().toString();
                                                     password = ediTextUpdatePassword.getText().toString();
                                                     passwordConfirm = editTextUpdatePasswordConfirmReg.getText().toString();
+                                                    country = textViewCountry.getText().toString();
                                                     new Parse().execute();
                                                 }
                                             }
@@ -261,6 +287,30 @@ public class UpdateAccount extends AppCompatActivity {
                 }
             }
         });
+        textViewCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                my_var = adapter.getItem(position).toString();
+                textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryGoodIconDraw, null, tickIconDraw, null);
+
+            }
+        });
+        textViewCountry.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                my_var = null;
+                textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryIconDraw, null, null, null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
     }
 
     private class Parse extends AsyncTask<Void, Integer, Boolean> {
@@ -281,62 +331,84 @@ public class UpdateAccount extends AppCompatActivity {
 
             Boolean firstNameChange = false;
             Boolean lastNameChange = false;
-            Boolean inputSet = false;
+            Boolean updatePerson = false;
 
-            Person p = Backendless.Data.of(Person.class).findById(personLoggedIn);
-
-            if (!(email.equals(""))) {
-                p.setEmail(email);
+            if (validator.isValidEmail(email)) {
+                personLoggedIn.setEmail(email);
                 user.setEmail(email);
-                inputSet = true;
+                updatePerson = true;
             }
             if (!(fname.equals(""))) {
-                p.setFname(fname);
+                personLoggedIn.setFname(fname);
                 firstNameChange = true;
-                inputSet = true;
+                updatePerson = true;
             }
             if (!(lname.equals(""))) {
-                p.setLname(lname);
+                personLoggedIn.setLname(lname);
                 lastNameChange = true;
-                inputSet = true;
+                updatePerson = true;
             }
             if (!(phone.equals(""))) {
-                p.setPhone(phone.toString());
-                inputSet = true;
+                personLoggedIn.setPhone(phone.toString());
+                updatePerson = true;
             }
-            if ((!(password.equals(""))) && (!(passwordConfirm.equals("")))) {
+            if (validator.isPasswordValid(passwordConfirm) && validator.isPasswordValid(password)) {
 
                 if (password.equals(passwordConfirm)) {
                     user.setPassword(password);
-                    inputSet = true;
+                    updatePerson = true;
                 }
+            }
+            if (my_var != null) {
+                personLoggedIn.setCountry(country);
             }
 
             if (firstNameChange && lastNameChange) {
-                p.setFullname(fname + " " + lname);
+                personLoggedIn.setFullname(fname + " " + lname);
             } else {
-                if (fname != "") {
-                    p.setFullname(fname + " " + p.getLname());
-                } else {
-                    p.setFullname(p.getFname() + " " + lname);
+                if (!fname.equals("")) {
+                    personLoggedIn.setFullname(fname + " " + personLoggedIn.getLname());
+                } else if (!lname.equals("")) {
+                    personLoggedIn.setFullname(personLoggedIn.getFname() + " " + lname);
                 }
             }
-            if (inputSet) {
-
-                user = Backendless.UserService.update(user);
-
+            if (updatePerson) {
+                Backendless.UserService.update(user);
+                Backendless.Data.of(Person.class).save(personLoggedIn);
             }
-            return inputSet;
+            return updatePerson;
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
 
-            ringProgressDialog.dismiss();
             if (result) {
-                Toast.makeText(getApplicationContext(), "Inputs Updated", Toast.LENGTH_SHORT).show();
+                if (social != true) {
+                    editTextUpdateEmail.setText("");
+                    editTextUpdateFNameReg.setText("");
+                    editTextUpdateLNameReg.setText("");
+                    ediTextUpdatePassword.setText("");
+                    editTextUpdatePasswordConfirmReg.setText("");
+                    editTextUpdateEmail.setCompoundDrawablesWithIntrinsicBounds(emailIconDraw, null, null, null);
+                    ediTextUpdatePassword.setCompoundDrawablesWithIntrinsicBounds(passwordIconDraw, null, null, null);
+                    editTextUpdateFNameReg.setCompoundDrawablesWithIntrinsicBounds(userProfileIconDraw, null, null, null);
+                    editTextUpdatePasswordConfirmReg.setCompoundDrawablesWithIntrinsicBounds(passwordIconDraw, null, null, null);
+                    editTextUpdateLNameReg.setCompoundDrawablesWithIntrinsicBounds(userProfileIconDraw, null, null, null);
+                }
+
+                editTextUpdatePhoneReg.setText("");
+                textViewCountry.setText("");
+                my_var = null;
+                editTextUpdatePhoneReg.setCompoundDrawablesWithIntrinsicBounds(phoneIconDraw, null, null, null);
+                textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryIconDraw, null, null, null);
+            }
+
+            ringProgressDialog.dismiss();
+
+            if (result) {
+                Toast.makeText(getApplicationContext(), "Account updated", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(), "No Inputs Submitted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Cannot update account", Toast.LENGTH_SHORT).show();
             }
         }
     }
