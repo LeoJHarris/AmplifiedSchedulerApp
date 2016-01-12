@@ -178,6 +178,40 @@
                 android:inputType="text"
                 android:textSize="22sp" />
 
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/txtLabelGender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:text="Gender:"
+                android:textSize="22sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <RadioButton
+                    android:id="@+id/radioButtonMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Male"
+                    android:textSize="22sp" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignBaseline="@+id/radioButtonMale"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Female"
+                    android:textSize="22sp" />
+            </RelativeLayout>
+
             <Button
                 android:id="@+id/buttonRegisterUser"
                 android:layout_width="match_parent"

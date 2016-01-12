@@ -6,9 +6,10 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -489,13 +491,21 @@ public class NavDrawerActivity extends AppCompatActivity {
             Fragment frag = getFragmentManager().findFragmentByTag("home_tag");
 
             if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
-                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText(
-                        String.valueOf((sizePersonsRequestingMe + sizePendingResponseEvents + " Notifications")));
+                Drawable drawableNotification = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_noification);
 
-                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setTextColor(Color.RED);
+                ((ImageView) frag.getView().findViewById(R.id.imageViewNotification)).setImageDrawable(
+                        drawableNotification);
+
+
+//                ((ImageView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setImageDrawable(
+//                        String.valueOf((sizePersonsRequestingMe + sizePendingResponseEvents + " Notifications")));
+//
+//                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setTextColor(Color.RED);
 
             } else {
-                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText("No new notifications");
+                Drawable drawableNoNotification = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_no_noification);
+                ((ImageView) frag.getView().findViewById(R.id.imageViewNotification)).setImageDrawable(
+                        drawableNoNotification);
             }
             setRefreshActionButtonState(false);
         }

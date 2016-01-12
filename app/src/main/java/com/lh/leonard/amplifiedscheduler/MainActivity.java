@@ -359,7 +359,6 @@ public class MainActivity extends Activity {
                             ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Signing in ...", true);
                             ringProgressDialog.setCancelable(true);
 
-
                             Backendless.UserService.login(emailField.getText().toString(), passwordField.getText().toString(), new AsyncCallback<BackendlessUser>() {
 
                                 public void handleResponse(BackendlessUser user) {
