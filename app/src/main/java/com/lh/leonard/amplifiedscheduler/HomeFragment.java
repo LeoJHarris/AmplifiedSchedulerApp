@@ -35,6 +35,8 @@ import com.backendless.exceptions.BackendlessFault;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -103,7 +105,7 @@ public class HomeFragment extends Fragment {
 
         textViewLoggedIn.setTypeface(RobotoBlack);
 
-        textViewLoggedIn.setText("UserLogged in " + personLoggedIn.getFullname() + "!");
+        textViewLoggedIn.setText("Logged in user " + personLoggedIn.getFullname());
 
         if (personLoggedIn.getCountry() == null || personLoggedIn.getCountry().equals("")) {
             phoneCountryDialog();
@@ -151,7 +153,25 @@ public class HomeFragment extends Fragment {
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
-            personLoggedIn.getPendingResponseSlot().size();
+            AutoResizeTextView textViewContacts = (AutoResizeTextView) v.findViewById(R.id.textViewContacts);
+
+            AutoResizeTextView textViewMyEvents = (AutoResizeTextView) v.findViewById(R.id.textViewMyEvents);
+
+            Collections.sort(personLoggedIn.getMyCreatedSlot(), new Comparator<Slot>() {
+                public int compare(Slot e1, Slot e2) {
+                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                        return 0;
+                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                }
+            });
+
+            AutoResizeTextView textViewGoingToEvents = (AutoResizeTextView) v.findViewById(R.id.textViewGoingToEvents);
+            AutoResizeTextView textViewInvitedEvent = (AutoResizeTextView) v.findViewById(R.id.textViewInvitedEvent);
+            textViewContacts.setText(personLoggedIn.getMyCreatedSlot().get(1).getSubject() + " "
+                    + personLoggedIn.getMyCreatedSlot().get(1).getStartCalendar());
+//            textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().size());
+//            textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().size());
+            //textViewInvitedEvent.setText();
 
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
@@ -174,7 +194,6 @@ public class HomeFragment extends Fragment {
         final EditText phone = new EditText(getActivity());
 
         phone.setHint("Phone");
-
 
         phone.setInputType(InputType.TYPE_CLASS_PHONE);
 

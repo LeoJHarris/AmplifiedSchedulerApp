@@ -35,15 +35,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/LLHeader"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:gravity="center">
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewLoggedIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_user_profile"
+                android:drawableLeft="@drawable/ic_user_logged"
                 android:textColor="@color/black"
+                android:gravity="center"
+                android:padding="20dp"
                 android:textSize="15sp" />
         </LinearLayout>
 
