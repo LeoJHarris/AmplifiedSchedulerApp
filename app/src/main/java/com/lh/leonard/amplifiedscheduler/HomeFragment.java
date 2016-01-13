@@ -75,7 +75,6 @@ public class HomeFragment extends Fragment {
 
         AutoResizeTextView textViewMyEvents = (AutoResizeTextView) v.findViewById(R.id.textViewMyEvents);
 
-
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -154,7 +153,6 @@ public class HomeFragment extends Fragment {
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
             AutoResizeTextView textViewContacts = (AutoResizeTextView) v.findViewById(R.id.textViewContacts);
-
             AutoResizeTextView textViewMyEvents = (AutoResizeTextView) v.findViewById(R.id.textViewMyEvents);
 
             Collections.sort(personLoggedIn.getMyCreatedSlot(), new Comparator<Slot>() {
@@ -164,15 +162,38 @@ public class HomeFragment extends Fragment {
                     return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
                 }
             });
+            Collections.sort(personLoggedIn.getPendingResponseSlot(), new Comparator<Slot>() {
+                public int compare(Slot e1, Slot e2) {
+                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                        return 0;
+                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                }
+            });
+            Collections.sort(personLoggedIn.getGoingToSlot(), new Comparator<Slot>() {
+                public int compare(Slot e1, Slot e2) {
+                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                        return 0;
+                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                }
+            });
+
+            textViewContacts.setText(String.valueOf(personLoggedIn.getContacts().size()));
 
             AutoResizeTextView textViewGoingToEvents = (AutoResizeTextView) v.findViewById(R.id.textViewGoingToEvents);
             AutoResizeTextView textViewInvitedEvent = (AutoResizeTextView) v.findViewById(R.id.textViewInvitedEvent);
-            textViewContacts.setText(personLoggedIn.getMyCreatedSlot().get(1).getSubject() + " "
-                    + personLoggedIn.getMyCreatedSlot().get(1).getStartCalendar());
-//            textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().size());
-//            textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().size());
-            //textViewInvitedEvent.setText();
 
+            if (!personLoggedIn.getMyCreatedSlot().isEmpty()) {
+                textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject() + " "
+                        + personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime());
+            }
+            if (!personLoggedIn.getGoingToSlot().isEmpty()) {
+                textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().get(0).getSubject() + " "
+                        + personLoggedIn.getGoingToSlot().get(0).getStartCalendar().getTime());
+            }
+            if (!personLoggedIn.getPendingResponseSlot().isEmpty()) {
+                textViewInvitedEvent.setText(personLoggedIn.getPendingResponseSlot().get(0).getSubject() + " "
+                        + personLoggedIn.getPendingResponseSlot().get(0).getStartCalendar().getTime());
+            }
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
                 //Notification avaliable

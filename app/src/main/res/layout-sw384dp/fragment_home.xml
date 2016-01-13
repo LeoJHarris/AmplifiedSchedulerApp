@@ -43,9 +43,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_user_logged"
-                android:textColor="@color/black"
+                android:drawableStart="@drawable/ic_user_logged"
                 android:gravity="center"
                 android:padding="20dp"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
         </LinearLayout>
 
@@ -62,9 +63,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_contacts"
+                android:drawableStart="@drawable/ic_contacts"
                 android:padding="10dp"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewMyEvents"
@@ -72,9 +74,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewContacts"
                 android:drawableLeft="@drawable/ic_mycreatedslots"
+                android:drawableStart="@drawable/ic_mycreatedslots"
                 android:padding="10dp"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewGoingToEvents"
@@ -82,9 +85,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewMyEvents"
                 android:drawableLeft="@drawable/ic_goingtoslots"
+                android:drawableStart="@drawable/ic_goingtoslots"
                 android:padding="10dp"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/textViewInvitedEvent"
@@ -92,7 +96,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewGoingToEvents"
                 android:drawableLeft="@drawable/ic_pendingrequestslots"
-                android:padding="10dp"
+                android:drawableStart="@drawable/ic_pendingrequestslots"
+                android:padding="15dp"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
         </RelativeLayout>
