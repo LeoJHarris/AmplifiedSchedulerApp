@@ -53,6 +53,13 @@ public class HomeFragment extends Fragment {
     AlertDialog alert = null;
     ImageView imageViewNotification;
     View v;
+    AutoResizeTextView textViewMyEvents;
+    AutoResizeTextView textViewGoingToEvents;
+    AutoResizeTextView textViewInvitedEvent;
+    AutoResizeTextView textViewMyEventsDate;
+    AutoResizeTextView textViewUpcoming;
+    AutoResizeTextView textViewGoingToEventsDate;
+    AutoResizeTextView textViewInvitedEventDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +68,7 @@ public class HomeFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_home, container, false);
 
         Backendless.Data.mapTableToClass("Person", Person.class);
+
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
@@ -73,7 +81,13 @@ public class HomeFragment extends Fragment {
 
         AutoResizeTextView textViewLoggedIn = (AutoResizeTextView) v.findViewById(R.id.textViewLoggedIn);
 
-        AutoResizeTextView textViewMyEvents = (AutoResizeTextView) v.findViewById(R.id.textViewMyEvents);
+        textViewMyEvents = (AutoResizeTextView) v.findViewById(R.id.textViewMyEvents);
+        textViewGoingToEvents = (AutoResizeTextView) v.findViewById(R.id.textViewGoingToEvents);
+        textViewInvitedEvent = (AutoResizeTextView) v.findViewById(R.id.textViewInvitedEvent);
+        textViewMyEventsDate = (AutoResizeTextView) v.findViewById(R.id.textViewMyEventsDate);
+        textViewUpcoming = (AutoResizeTextView) v.findViewById(R.id.textViewUpcoming);
+        textViewGoingToEventsDate = (AutoResizeTextView) v.findViewById(R.id.textViewGoingToEventsDate);
+        textViewInvitedEventDate = (AutoResizeTextView) v.findViewById(R.id.textViewInvitedEventDate);
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -100,6 +114,12 @@ public class HomeFragment extends Fragment {
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
 
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+
+        textViewGoingToEventsDate.setTypeface(RobotoCondensedLightItalic);
+        textViewMyEventsDate.setTypeface(RobotoCondensedLightItalic);
         textViewMyEvents.setTypeface(RobotoBlack);
 
         textViewLoggedIn.setTypeface(RobotoBlack);
@@ -111,7 +131,6 @@ public class HomeFragment extends Fragment {
         } else if (personLoggedIn.getPhone() == null || personLoggedIn.getPhone().equals("")) {
             phoneDialog();
         }
-
 
         new ParseURL().execute();
         return v;
@@ -142,6 +161,28 @@ public class HomeFragment extends Fragment {
                 relationProps.add("myCreatedSlot");
                 relationProps.add("pendingResponseSlot");
                 Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
+
+                Collections.sort(personLoggedIn.getMyCreatedSlot(), new Comparator<Slot>() {
+                    public int compare(Slot e1, Slot e2) {
+                        if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                            return 0;
+                        return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                    }
+                });
+                Collections.sort(personLoggedIn.getPendingResponseSlot(), new Comparator<Slot>() {
+                    public int compare(Slot e1, Slot e2) {
+                        if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                            return 0;
+                        return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                    }
+                });
+                Collections.sort(personLoggedIn.getGoingToSlot(), new Comparator<Slot>() {
+                    public int compare(Slot e1, Slot e2) {
+                        if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                            return 0;
+                        return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                    }
+                });
             }
             return null;
         }
@@ -152,55 +193,24 @@ public class HomeFragment extends Fragment {
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
-            AutoResizeTextView textViewContacts = (AutoResizeTextView) v.findViewById(R.id.textViewContacts);
-            AutoResizeTextView textViewMyEvents = (AutoResizeTextView) v.findViewById(R.id.textViewMyEvents);
-
-            Collections.sort(personLoggedIn.getMyCreatedSlot(), new Comparator<Slot>() {
-                public int compare(Slot e1, Slot e2) {
-                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
-                        return 0;
-                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
-                }
-            });
-            Collections.sort(personLoggedIn.getPendingResponseSlot(), new Comparator<Slot>() {
-                public int compare(Slot e1, Slot e2) {
-                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
-                        return 0;
-                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
-                }
-            });
-            Collections.sort(personLoggedIn.getGoingToSlot(), new Comparator<Slot>() {
-                public int compare(Slot e1, Slot e2) {
-                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
-                        return 0;
-                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
-                }
-            });
-
-            textViewContacts.setText(String.valueOf(personLoggedIn.getContacts().size()));
-
-            AutoResizeTextView textViewGoingToEvents = (AutoResizeTextView) v.findViewById(R.id.textViewGoingToEvents);
-            AutoResizeTextView textViewInvitedEvent = (AutoResizeTextView) v.findViewById(R.id.textViewInvitedEvent);
 
             if (!personLoggedIn.getMyCreatedSlot().isEmpty()) {
-                textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject() + " "
-                        + personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime());
+                textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject());
+                textViewMyEventsDate.setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
             }
             if (!personLoggedIn.getGoingToSlot().isEmpty()) {
-                textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().get(0).getSubject() + " "
-                        + personLoggedIn.getGoingToSlot().get(0).getStartCalendar().getTime());
+                textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().get(0).getSubject());
+                textViewGoingToEventsDate.setText(personLoggedIn.getGoingToSlot().get(0).getStartCalendar().getTime().toString());
             }
             if (!personLoggedIn.getPendingResponseSlot().isEmpty()) {
-                textViewInvitedEvent.setText(personLoggedIn.getPendingResponseSlot().get(0).getSubject() + " "
-                        + personLoggedIn.getPendingResponseSlot().get(0).getStartCalendar().getTime());
+                textViewInvitedEvent.setText(personLoggedIn.getPendingResponseSlot().get(0).getSubject());
+                textViewInvitedEventDate.setText(personLoggedIn.getPendingResponseSlot().get(0).getStartCalendar().getTime().toString());
             }
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 
                 //Notification avaliable
-
                 Drawable drawableNotification = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_noification);
                 imageViewNotification.setImageDrawable(drawableNotification);
-
 
             } else {
                 Drawable drawableNoNotification = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_no_noification);

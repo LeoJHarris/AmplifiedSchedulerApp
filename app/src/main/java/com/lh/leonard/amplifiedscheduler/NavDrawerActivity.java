@@ -30,7 +30,8 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class NavDrawerActivity extends AppCompatActivity {
 
@@ -194,7 +195,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             case R.id.action_refresh:
 
                 // Complete with your code
-                OpenDrawer = true;
+                //  OpenDrawer = true;
                 new Refresh().execute();
                 setRefreshActionButtonState(true);
                 return true;
@@ -389,17 +390,19 @@ public class NavDrawerActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            List<String> relations = new ArrayList<String>();
-            relations.add("personsRequestingMe");
-            relations.add("goingToSlot");
-            relations.add("myCreatedSlot");
-            relations.add("pendingResponseSlot");
-            Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+            ArrayList<String> relationProps = new ArrayList<>();
+            relationProps.add("personsRequestingMe");
+            relationProps.add("contacts");
+            relationProps.add("personsImRequesting");
+            relationProps.add("goingToSlot");
+            relationProps.add("myCreatedSlot");
+            relationProps.add("pendingResponseSlot");
+            Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
 
-            sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
-            sizePendingResponseEvents = person.getPendingResponseSlot().size();
-            sizeGoingToEvents = person.getGoingToSlot().size();
-            sizeMyCreatedEvents = person.getMyCreatedSlot().size();
+            sizePersonsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
+            sizePendingResponseEvents = personLoggedIn.getPendingResponseSlot().size();
+            sizeGoingToEvents = personLoggedIn.getGoingToSlot().size();
+            sizeMyCreatedEvents = personLoggedIn.getMyCreatedSlot().size();
 
             valResponseEvents = " " + String.valueOf(sizePendingResponseEvents);
             valPersonsRequestingMe = " " + String.valueOf(sizePersonsRequestingMe);
@@ -416,6 +419,28 @@ public class NavDrawerActivity extends AppCompatActivity {
             } else {
                 resourceIntPersonsRequestingMe = R.drawable.ic_addcontact;
             }
+
+            Collections.sort(personLoggedIn.getMyCreatedSlot(), new Comparator<Slot>() {
+                public int compare(Slot e1, Slot e2) {
+                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                        return 0;
+                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                }
+            });
+            Collections.sort(personLoggedIn.getPendingResponseSlot(), new Comparator<Slot>() {
+                public int compare(Slot e1, Slot e2) {
+                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                        return 0;
+                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                }
+            });
+            Collections.sort(personLoggedIn.getGoingToSlot(), new Comparator<Slot>() {
+                public int compare(Slot e1, Slot e2) {
+                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                        return 0;
+                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                }
+            });
             return null;
         }
 
@@ -442,7 +467,8 @@ public class NavDrawerActivity extends AppCompatActivity {
             mLayoutManager = new LinearLayoutManager(NavDrawerActivity.this);                 // Creating a layout Manager
             mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
 
-            mDrawerToggle = new ActionBarDrawerToggle(NavDrawerActivity.this, Drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
+            mDrawerToggle = new ActionBarDrawerToggle(NavDrawerActivity.this,
+                    Drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
                 @Override
                 public void onDrawerOpened(View drawerView) {
@@ -482,30 +508,45 @@ public class NavDrawerActivity extends AppCompatActivity {
             Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
             mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
 
-            if (OpenDrawer) {
-                Drawer.openDrawer(mRecyclerView);
-            }
-            OpenDrawer = false;
-
+//            if (OpenDrawer) {
+//                Drawer.openDrawer(mRecyclerView);
+//            }
+//            OpenDrawer = false;
 
             Fragment frag = getFragmentManager().findFragmentByTag("home_tag");
 
             if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
                 Drawable drawableNotification = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_noification);
-
                 ((ImageView) frag.getView().findViewById(R.id.imageViewNotification)).setImageDrawable(
                         drawableNotification);
-
-
-//                ((ImageView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setImageDrawable(
-//                        String.valueOf((sizePersonsRequestingMe + sizePendingResponseEvents + " Notifications")));
-//
-//                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setTextColor(Color.RED);
-
+                Drawer.openDrawer(mRecyclerView);
             } else {
                 Drawable drawableNoNotification = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_no_noification);
                 ((ImageView) frag.getView().findViewById(R.id.imageViewNotification)).setImageDrawable(
                         drawableNoNotification);
+            }
+
+            if (!personLoggedIn.getMyCreatedSlot().isEmpty()) {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyEvents))
+                        .setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject());
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyEventsDate))
+                        .setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
+            } else {
+                //Do something no events
+            }
+            if (!personLoggedIn.getGoingToSlot().isEmpty()) {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewGoingToEvents))
+                        .setText(personLoggedIn.getGoingToSlot().get(0).getSubject() + " "
+                                + personLoggedIn.getGoingToSlot().get(0).getStartCalendar().getTime());
+            } else {
+
+            }
+            if (!personLoggedIn.getPendingResponseSlot().isEmpty()) {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewInvitedEvent))
+                        .setText(personLoggedIn.getPendingResponseSlot().get(0).getSubject() + " "
+                                + personLoggedIn.getPendingResponseSlot().get(0).getStartCalendar().getTime());
+            } else {
+
             }
             setRefreshActionButtonState(false);
         }
