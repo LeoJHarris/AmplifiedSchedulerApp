@@ -57,9 +57,13 @@ public class HomeFragment extends Fragment {
     AutoResizeTextView textViewGoingToEvents;
     AutoResizeTextView textViewInvitedEvent;
     AutoResizeTextView textViewMyEventsDate;
-    AutoResizeTextView textViewUpcoming;
     AutoResizeTextView textViewGoingToEventsDate;
     AutoResizeTextView textViewInvitedEventDate;
+    AutoResizeTextView textViewLatestEvents;
+    ImageView imageViewInvitedEvents;
+    ImageView imageViewMyEvents;
+    ImageView imageViewGoingToEvents;
+    Drawable drawableTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,9 +89,14 @@ public class HomeFragment extends Fragment {
         textViewGoingToEvents = (AutoResizeTextView) v.findViewById(R.id.textViewGoingToEvents);
         textViewInvitedEvent = (AutoResizeTextView) v.findViewById(R.id.textViewInvitedEvent);
         textViewMyEventsDate = (AutoResizeTextView) v.findViewById(R.id.textViewMyEventsDate);
-        textViewUpcoming = (AutoResizeTextView) v.findViewById(R.id.textViewUpcoming);
         textViewGoingToEventsDate = (AutoResizeTextView) v.findViewById(R.id.textViewGoingToEventsDate);
         textViewInvitedEventDate = (AutoResizeTextView) v.findViewById(R.id.textViewInvitedEventDate);
+        textViewLatestEvents = (AutoResizeTextView) v.findViewById(R.id.textViewLatestEvents);
+        imageViewInvitedEvents = (ImageView) v.findViewById(R.id.imageViewInvitedEvents);
+        imageViewMyEvents = (ImageView) v.findViewById(R.id.imageViewMyEvents);
+        imageViewGoingToEvents = (ImageView) v.findViewById(R.id.imageViewGoingToEvents);
+
+        drawableTime = ContextCompat.getDrawable(getActivity(), R.drawable.ic_time);
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -113,18 +122,20 @@ public class HomeFragment extends Fragment {
         }
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
-
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
+        textViewLatestEvents.setTypeface(RobotoCondensedBold);
         textViewGoingToEventsDate.setTypeface(RobotoCondensedLightItalic);
         textViewMyEventsDate.setTypeface(RobotoCondensedLightItalic);
-        textViewMyEvents.setTypeface(RobotoBlack);
+        textViewInvitedEventDate.setTypeface(RobotoCondensedLightItalic);
+        textViewMyEvents.setTypeface(RobotoCondensedBold);
+        textViewGoingToEvents.setTypeface(RobotoCondensedBold);
+        textViewInvitedEvent.setTypeface(RobotoCondensedBold);
+        textViewLoggedIn.setTypeface(RobotoCondensedBold);
 
-        textViewLoggedIn.setTypeface(RobotoBlack);
-
-        textViewLoggedIn.setText("Logged in user " + personLoggedIn.getFullname());
+        textViewLoggedIn.setText(personLoggedIn.getFullname());
 
         if (personLoggedIn.getCountry() == null || personLoggedIn.getCountry().equals("")) {
             phoneCountryDialog();
@@ -193,29 +204,28 @@ public class HomeFragment extends Fragment {
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
-
             if (!personLoggedIn.getMyCreatedSlot().isEmpty()) {
                 textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject());
                 textViewMyEventsDate.setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
+                imageViewMyEvents.setImageDrawable(drawableTime);
             }
             if (!personLoggedIn.getGoingToSlot().isEmpty()) {
                 textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().get(0).getSubject());
                 textViewGoingToEventsDate.setText(personLoggedIn.getGoingToSlot().get(0).getStartCalendar().getTime().toString());
+                imageViewGoingToEvents.setImageDrawable(drawableTime);
             }
             if (!personLoggedIn.getPendingResponseSlot().isEmpty()) {
                 textViewInvitedEvent.setText(personLoggedIn.getPendingResponseSlot().get(0).getSubject());
                 textViewInvitedEventDate.setText(personLoggedIn.getPendingResponseSlot().get(0).getStartCalendar().getTime().toString());
+                imageViewInvitedEvents.setImageDrawable(drawableTime);
             }
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
-
-                //Notification avaliable
                 Drawable drawableNotification = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_noification);
                 imageViewNotification.setImageDrawable(drawableNotification);
 
             } else {
                 Drawable drawableNoNotification = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_no_noification);
                 imageViewNotification.setImageDrawable(drawableNoNotification);
-                //No notification avaliable
             }
         }
     }
