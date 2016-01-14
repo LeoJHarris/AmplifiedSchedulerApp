@@ -6,11 +6,12 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -34,6 +35,8 @@ import com.backendless.exceptions.BackendlessFault;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -44,24 +47,32 @@ public class HomeFragment extends Fragment {
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     Person personLoggedIn;
     BackendlessCollection<Person> persons;
-    AutoResizeTextView textViewNotificationNumberHome;
     ArrayAdapter<String> adapter;
     String my_var;
     ProgressDialog ringProgressDialog;
     AlertDialog alert = null;
+    ImageView imageViewNotification;
+    View v;
+    AutoResizeTextView textViewMyEvents;
+    AutoResizeTextView textViewGoingToEvents;
+    AutoResizeTextView textViewInvitedEvent;
+    AutoResizeTextView textViewMyEventsDate;
+    AutoResizeTextView textViewGoingToEventsDate;
+    AutoResizeTextView textViewInvitedEventDate;
+    AutoResizeTextView textViewLatestEvents;
+    ImageView imageViewInvitedEvents;
+    ImageView imageViewMyEvents;
+    ImageView imageViewGoingToEvents;
+    Drawable drawableTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
-
-
-        textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
-
-        textViewNotificationNumberHome.setText("Loading  notifications");
+        v = inflater.inflate(R.layout.fragment_home, container, false);
 
         Backendless.Data.mapTableToClass("Person", Person.class);
+
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
@@ -70,12 +81,22 @@ public class HomeFragment extends Fragment {
         // If the criteria is satisfied, "Rate this app" dialog will be shown
         RateThisApp.showRateDialogIfNeeded(getActivity());
 
+        imageViewNotification = (ImageView) v.findViewById(R.id.imageViewNotification);
 
-        AutoResizeTextView welcomeLabel = (AutoResizeTextView) v.findViewById(R.id.textViewWelcomeLabel);
+        AutoResizeTextView textViewLoggedIn = (AutoResizeTextView) v.findViewById(R.id.textViewLoggedIn);
 
-        AutoResizeTextView textViewNotificationNumberHome = (AutoResizeTextView) v.findViewById(R.id.textViewNotificationNumberHome);
-        ImageView imageViewMainLogo = (ImageView) v.findViewById(R.id.imageViewMainLogo);
+        textViewMyEvents = (AutoResizeTextView) v.findViewById(R.id.textViewMyEvents);
+        textViewGoingToEvents = (AutoResizeTextView) v.findViewById(R.id.textViewGoingToEvents);
+        textViewInvitedEvent = (AutoResizeTextView) v.findViewById(R.id.textViewInvitedEvent);
+        textViewMyEventsDate = (AutoResizeTextView) v.findViewById(R.id.textViewMyEventsDate);
+        textViewGoingToEventsDate = (AutoResizeTextView) v.findViewById(R.id.textViewGoingToEventsDate);
+        textViewInvitedEventDate = (AutoResizeTextView) v.findViewById(R.id.textViewInvitedEventDate);
+        textViewLatestEvents = (AutoResizeTextView) v.findViewById(R.id.textViewLatestEvents);
+        imageViewInvitedEvents = (ImageView) v.findViewById(R.id.imageViewInvitedEvents);
+        imageViewMyEvents = (ImageView) v.findViewById(R.id.imageViewMyEvents);
+        imageViewGoingToEvents = (ImageView) v.findViewById(R.id.imageViewGoingToEvents);
 
+        drawableTime = ContextCompat.getDrawable(getActivity(), R.drawable.ic_time);
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -85,40 +106,42 @@ public class HomeFragment extends Fragment {
 
         //Fame
         if (width == 320 && height == 480) {
-            imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 140;
-            welcomeLabel.setTextSize(22);
-            welcomeLabel.setPadding(0, 20, 0, 35);
-            textViewNotificationNumberHome.setTextSize(22);
+            imageViewNotification.requestLayout();
+            imageViewNotification.getLayoutParams().height = 50;
+            textViewLoggedIn.setTextSize(22);
+            textViewLoggedIn.setPadding(0, 20, 0, 35);
+            textViewMyEvents.setTextSize(16);
         }
         // 2.7" QVGA
         else if (width == 240 && height == 320) {
-            imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 100;
-            welcomeLabel.setTextSize(18);
-            welcomeLabel.setPadding(0, 7, 0, 10);
-            textViewNotificationNumberHome.setTextSize(18);
+            imageViewNotification.requestLayout();
+            imageViewNotification.getLayoutParams().height = 500;
+            textViewLoggedIn.setTextSize(18);
+            textViewLoggedIn.setPadding(0, 7, 0, 10);
+            textViewMyEvents.setTextSize(12);
         }
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
-        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
-        // final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "RobotoCondensed-Light.ttf");
 
-        textViewNotificationNumberHome.setTypeface(RobotoBlack);
+        textViewLatestEvents.setTypeface(RobotoCondensedBold);
+        textViewGoingToEventsDate.setTypeface(RobotoCondensedLightItalic);
+        textViewMyEventsDate.setTypeface(RobotoCondensedLightItalic);
+        textViewInvitedEventDate.setTypeface(RobotoCondensedLightItalic);
+        textViewMyEvents.setTypeface(RobotoCondensedBold);
+        textViewGoingToEvents.setTypeface(RobotoCondensedBold);
+        textViewInvitedEvent.setTypeface(RobotoCondensedBold);
+        textViewLoggedIn.setTypeface(RobotoCondensedBold);
 
-        welcomeLabel.setTypeface(RobotoCondensedLightItalic);
-
-        welcomeLabel.setText("Welcome " + personLoggedIn.getFullname() + "!");
-
+        textViewLoggedIn.setText(personLoggedIn.getFullname());
 
         if (personLoggedIn.getCountry() == null || personLoggedIn.getCountry().equals("")) {
             phoneCountryDialog();
         } else if (personLoggedIn.getPhone() == null || personLoggedIn.getPhone().equals("")) {
             phoneDialog();
         }
-
 
         new ParseURL().execute();
         return v;
@@ -149,6 +172,28 @@ public class HomeFragment extends Fragment {
                 relationProps.add("myCreatedSlot");
                 relationProps.add("pendingResponseSlot");
                 Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
+
+                Collections.sort(personLoggedIn.getMyCreatedSlot(), new Comparator<Slot>() {
+                    public int compare(Slot e1, Slot e2) {
+                        if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                            return 0;
+                        return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                    }
+                });
+                Collections.sort(personLoggedIn.getPendingResponseSlot(), new Comparator<Slot>() {
+                    public int compare(Slot e1, Slot e2) {
+                        if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                            return 0;
+                        return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                    }
+                });
+                Collections.sort(personLoggedIn.getGoingToSlot(), new Comparator<Slot>() {
+                    public int compare(Slot e1, Slot e2) {
+                        if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                            return 0;
+                        return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                    }
+                });
             }
             return null;
         }
@@ -159,15 +204,28 @@ public class HomeFragment extends Fragment {
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
-            personLoggedIn.getPendingResponseSlot().size();
-
+            if (!personLoggedIn.getMyCreatedSlot().isEmpty()) {
+                textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject());
+                textViewMyEventsDate.setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
+                imageViewMyEvents.setImageDrawable(drawableTime);
+            }
+            if (!personLoggedIn.getGoingToSlot().isEmpty()) {
+                textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().get(0).getSubject());
+                textViewGoingToEventsDate.setText(personLoggedIn.getGoingToSlot().get(0).getStartCalendar().getTime().toString());
+                imageViewGoingToEvents.setImageDrawable(drawableTime);
+            }
+            if (!personLoggedIn.getPendingResponseSlot().isEmpty()) {
+                textViewInvitedEvent.setText(personLoggedIn.getPendingResponseSlot().get(0).getSubject());
+                textViewInvitedEventDate.setText(personLoggedIn.getPendingResponseSlot().get(0).getStartCalendar().getTime().toString());
+                imageViewInvitedEvents.setImageDrawable(drawableTime);
+            }
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
-
-                textViewNotificationNumberHome.setText(String.valueOf((personsRequestingMe + invitedEvents) + " Notifications"));
-                textViewNotificationNumberHome.setTextColor(Color.RED);
+                Drawable drawableNotification = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_noification);
+                imageViewNotification.setImageDrawable(drawableNotification);
 
             } else {
-                textViewNotificationNumberHome.setText("No new notifications");
+                Drawable drawableNoNotification = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_no_noification);
+                imageViewNotification.setImageDrawable(drawableNoNotification);
             }
         }
     }
@@ -177,7 +235,6 @@ public class HomeFragment extends Fragment {
         final EditText phone = new EditText(getActivity());
 
         phone.setHint("Phone");
-
 
         phone.setInputType(InputType.TYPE_CLASS_PHONE);
 

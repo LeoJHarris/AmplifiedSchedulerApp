@@ -6,9 +6,11 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -28,7 +31,8 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class NavDrawerActivity extends AppCompatActivity {
 
@@ -63,9 +67,17 @@ public class NavDrawerActivity extends AppCompatActivity {
     RecyclerView.Adapter mAdapter = null;                        // Declaring Adapter For Recycler View
     RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
-
+    Typeface RobotoBlack;
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
     Boolean updateNavDrawer = false;
+    Typeface RobotoCondensedLight;
+    Typeface RobotoCondensedLightItalic;
+    Typeface RobotoCondensedBold;
+
+    ImageView imageViewInvitedEvents;
+    ImageView imageViewMyEvents;
+    ImageView imageViewGoingToEvents;
+    Drawable drawableTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +91,13 @@ public class NavDrawerActivity extends AppCompatActivity {
         if (extras != null) {
             updateNavDrawer = extras.getBoolean("refresh");
         }
+
+        RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
+        RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
+        RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+        RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+
+        drawableTime = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_time);
 
         // Set up a home fragment with some welcome in.
         Fragment home = new HomeFragment();
@@ -192,7 +211,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             case R.id.action_refresh:
 
                 // Complete with your code
-                OpenDrawer = true;
+                //  OpenDrawer = true;
                 new Refresh().execute();
                 setRefreshActionButtonState(true);
                 return true;
@@ -387,17 +406,19 @@ public class NavDrawerActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            List<String> relations = new ArrayList<String>();
-            relations.add("personsRequestingMe");
-            relations.add("goingToSlot");
-            relations.add("myCreatedSlot");
-            relations.add("pendingResponseSlot");
-            Person person = Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), relations);
+            ArrayList<String> relationProps = new ArrayList<>();
+            relationProps.add("personsRequestingMe");
+            relationProps.add("contacts");
+            relationProps.add("personsImRequesting");
+            relationProps.add("goingToSlot");
+            relationProps.add("myCreatedSlot");
+            relationProps.add("pendingResponseSlot");
+            Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
 
-            sizePersonsRequestingMe = person.getPersonsRequestingMe().size();
-            sizePendingResponseEvents = person.getPendingResponseSlot().size();
-            sizeGoingToEvents = person.getGoingToSlot().size();
-            sizeMyCreatedEvents = person.getMyCreatedSlot().size();
+            sizePersonsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
+            sizePendingResponseEvents = personLoggedIn.getPendingResponseSlot().size();
+            sizeGoingToEvents = personLoggedIn.getGoingToSlot().size();
+            sizeMyCreatedEvents = personLoggedIn.getMyCreatedSlot().size();
 
             valResponseEvents = " " + String.valueOf(sizePendingResponseEvents);
             valPersonsRequestingMe = " " + String.valueOf(sizePersonsRequestingMe);
@@ -414,6 +435,28 @@ public class NavDrawerActivity extends AppCompatActivity {
             } else {
                 resourceIntPersonsRequestingMe = R.drawable.ic_addcontact;
             }
+
+            Collections.sort(personLoggedIn.getMyCreatedSlot(), new Comparator<Slot>() {
+                public int compare(Slot e1, Slot e2) {
+                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                        return 0;
+                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                }
+            });
+            Collections.sort(personLoggedIn.getPendingResponseSlot(), new Comparator<Slot>() {
+                public int compare(Slot e1, Slot e2) {
+                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                        return 0;
+                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                }
+            });
+            Collections.sort(personLoggedIn.getGoingToSlot(), new Comparator<Slot>() {
+                public int compare(Slot e1, Slot e2) {
+                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                        return 0;
+                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                }
+            });
             return null;
         }
 
@@ -440,7 +483,8 @@ public class NavDrawerActivity extends AppCompatActivity {
             mLayoutManager = new LinearLayoutManager(NavDrawerActivity.this);                 // Creating a layout Manager
             mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
 
-            mDrawerToggle = new ActionBarDrawerToggle(NavDrawerActivity.this, Drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
+            mDrawerToggle = new ActionBarDrawerToggle(NavDrawerActivity.this,
+                    Drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
                 @Override
                 public void onDrawerOpened(View drawerView) {
@@ -480,22 +524,78 @@ public class NavDrawerActivity extends AppCompatActivity {
             Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
             mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
 
-            if (OpenDrawer) {
-                Drawer.openDrawer(mRecyclerView);
-            }
-            OpenDrawer = false;
-
+//            if (OpenDrawer) {
+//                Drawer.openDrawer(mRecyclerView);
+//            }
+//            OpenDrawer = false;
 
             Fragment frag = getFragmentManager().findFragmentByTag("home_tag");
 
             if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
-                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText(
-                        String.valueOf((sizePersonsRequestingMe + sizePendingResponseEvents + " Notifications")));
+                Drawable drawableNotification = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_noification);
+                ((ImageView) frag.getView().findViewById(R.id.imageViewNotification)).setImageDrawable(drawableNotification);
+                Drawer.openDrawer(mRecyclerView);
+            } else {
+                Drawable drawableNoNotification = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_no_noification);
+                ((ImageView) frag.getView().findViewById(R.id.imageViewNotification)).setImageDrawable(drawableNoNotification);
+            }
 
-                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setTextColor(Color.RED);
+            if (!personLoggedIn.getMyCreatedSlot().isEmpty()) {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyEvents)).setTypeface(RobotoCondensedBold);
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyEvents))
+                        .setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject());
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyEventsDate))
+                        .setTypeface(RobotoCondensedLightItalic);
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyEventsDate))
+                        .setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
+
+                ((ImageView) frag.getView().findViewById(R.id.imageViewMyEvents)).setImageDrawable(drawableTime);
 
             } else {
-                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewNotificationNumberHome)).setText("No new notifications");
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyEvents)).setTypeface(RobotoCondensedBold);
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyEvents))
+                        .setText("No Events Avaliable");
+                ((ImageView) frag.getView().findViewById(R.id.imageViewMyEvents)).setImageDrawable(null);
+            }
+            if (!personLoggedIn.getGoingToSlot().isEmpty()) {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewGoingToEvents))
+                        .setText(personLoggedIn.getGoingToSlot().get(0).getSubject());
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewGoingToEvents))
+                        .setTypeface(RobotoCondensedBold);
+
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewGoingToEventsDate)).
+                        setTypeface(RobotoCondensedLightItalic);
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewGoingToEventsDate)).setText(
+                        personLoggedIn.getGoingToSlot().get(0).getStartCalendar().getTime().toString());
+
+                ((ImageView) frag.getView().findViewById(R.id.imageViewGoingToEvents)).setImageDrawable(drawableTime);
+
+            } else {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewGoingToEvents))
+                        .setText("No Events Avaliable");
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewGoingToEvents))
+                        .setTypeface(RobotoCondensedBold);
+
+                ((ImageView) frag.getView().findViewById(R.id.imageViewGoingToEvents)).setImageDrawable(null);
+            }
+            if (!personLoggedIn.getPendingResponseSlot().isEmpty()) {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewInvitedEvent))
+                        .setTypeface(RobotoCondensedBold);
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewInvitedEvent))
+                        .setText(personLoggedIn.getPendingResponseSlot().get(0).getSubject());
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewInvitedEventDate)).
+                        setTypeface(RobotoCondensedLightItalic);
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewInvitedEventDate)).setText(
+                        personLoggedIn.getPendingResponseSlot().get(0).getStartCalendar().getTime().toString());
+
+                ((ImageView) frag.getView().findViewById(R.id.imageViewInvitedEvents)).setImageDrawable(drawableTime);
+            } else {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewInvitedEvent))
+                        .setTypeface(RobotoCondensedBold);
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewInvitedEvent))
+                        .setText("No Events Avaliable");
+
+                ((ImageView) frag.getView().findViewById(R.id.imageViewInvitedEvents)).setImageDrawable(null);
             }
             setRefreshActionButtonState(false);
         }

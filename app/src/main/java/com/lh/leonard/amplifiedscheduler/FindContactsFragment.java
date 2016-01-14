@@ -29,7 +29,6 @@ import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,6 @@ import java.util.TimerTask;
 public class FindContactsFragment extends Fragment {
 
     Timer timer;
-    Boolean gettingContacts = false;
     RelativeLayout RLProgressBar;
     List<Person> person;
     Person personLoggedIn;
@@ -54,9 +52,7 @@ public class FindContactsFragment extends Fragment {
     LinearLayoutManager llm;
     View v;
     SearchView searchViewFindContacts;
-    int val;
     ContactsAdapter adapter;
-    int statusOnPerson = 0;
     String dialogMessage;
     ProgressDialog ringProgressDialog;
     String postMessage;
@@ -64,9 +60,6 @@ public class FindContactsFragment extends Fragment {
     Boolean refreshed = false;
     AutoResizeTextView editHintSearchContacts;
     HashMap<Integer, Integer> hashMapSTATUS = new HashMap<>();
-    String title;
-    String message;
-    String messageToAppend;
     Drawable drawableRequesting;
     Drawable drawableContacts;
     Drawable drawableActionRequired;
@@ -75,8 +68,6 @@ public class FindContactsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.find_contacts_tab2, container, false);
-
-        final LayoutInflater factory = getActivity().getLayoutInflater();
 
         r = getResources();
 
@@ -182,7 +173,6 @@ public class FindContactsFragment extends Fragment {
                     "objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause);
-            List<String> relations1 = new ArrayList<String>();
 
             QueryOptions q = new QueryOptions();
             q.addRelated("personsImRequesting");
@@ -535,7 +525,7 @@ public class FindContactsFragment extends Fragment {
                     hashMapSTATUS.put(position, 0);
                 }
                 // Accept his contact request
-                else if (statusOnPerson == 2) {
+                else if (hashMapSTATUS.get(position) == 2) {
                     //Accept contact Request
                     Map<String, String> args = new HashMap<>();
 
@@ -564,7 +554,6 @@ public class FindContactsFragment extends Fragment {
 
                 } else if (hashMapSTATUS.get(position) == 4) {
 
-
                     //Decline contact Request
                     Map<String, String> args = new HashMap<>();
 
@@ -579,7 +568,8 @@ public class FindContactsFragment extends Fragment {
                 }
 
                 Backendless.Data.mapTableToClass("Person", Person.class);
-                String whereClause = "lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%'";
+                String whereClause = "(lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%') AND " +
+                        "objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
                 BackendlessDataQuery dataQuery = new BackendlessDataQuery();
                 dataQuery.setWhereClause(whereClause);
 
@@ -605,10 +595,6 @@ public class FindContactsFragment extends Fragment {
 
             rv.setLayoutManager(llm);
 
-            //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
-
-            //Resources r = getResources();
-
             adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS);
 
             rv.setAdapter(adapter);
@@ -625,7 +611,7 @@ public class FindContactsFragment extends Fragment {
         searchViewFindContacts.setQuery("", false);
         rv.setAdapter(null);
         progressBarFindContacts.setVisibility(View.GONE);
-        editHintSearchContacts.setText("Search users by first or last name.");
+        editHintSearchContacts.setText("Search users by first or last name");
         editHintSearchContacts.setVisibility(View.VISIBLE);
         timer = null;
         refreshed = true;
@@ -633,7 +619,6 @@ public class FindContactsFragment extends Fragment {
         if (personsFoundQuery != null) {
             personsFoundQuery.clear();
         }
-
         super.onResume();
     }
 

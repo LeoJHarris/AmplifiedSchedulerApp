@@ -708,7 +708,7 @@ public class CreateSlot extends AppCompatActivity implements
 
             hashMapEvent.put("size", o);
 
-            LatLng latLngPlace = place.getLatLng();
+            LatLng latLngPlace = place.getLatLng(); // TODO CHECK NOT NULL place
 
             hashMapEvent.put("lat", latLngPlace.latitude);
             hashMapEvent.put("long", latLngPlace.longitude);

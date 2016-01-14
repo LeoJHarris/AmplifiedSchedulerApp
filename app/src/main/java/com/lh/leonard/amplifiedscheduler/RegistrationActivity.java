@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -78,6 +79,9 @@ public class RegistrationActivity extends AppCompatActivity {
         final AutoResizeTextView txtLabelEmailReg = (AutoResizeTextView) findViewById(R.id.txtLabelEmailReg);
         final AutoResizeTextView txtLabelCountryReg = (AutoResizeTextView) findViewById(R.id.txtLabelCountryReg);
         final AutoResizeTextView txtLabelPhone = (AutoResizeTextView) findViewById(R.id.txtLabelPhone);
+        final AutoResizeTextView txtLabelGender = (AutoResizeTextView) findViewById(R.id.txtLabelGender);
+        final RadioButton radioButtonMale = (RadioButton) findViewById(R.id.radioButtonMale);
+        final RadioButton radioButtonFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
 
         tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
         crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
@@ -105,6 +109,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
+        radioButtonMale.setChecked(false);
+        radioButtonFemale.setChecked(false);
         emailField.setText("");
         passwordConfirmField.setText("");
         passwordField.setText("");
@@ -113,6 +119,8 @@ public class RegistrationActivity extends AppCompatActivity {
         phoneField.setText("");
         textViewCountry.setText("");
 
+        radioButtonMale.setTypeface(RobotoCondensedLight);
+        radioButtonFemale.setTypeface(RobotoCondensedLight);
         emailField.setTypeface(RobotoCondensedLight);
         textViewCountry.setTypeface(RobotoCondensedLight);
         passwordField.setTypeface(RobotoCondensedLight);
@@ -128,6 +136,7 @@ public class RegistrationActivity extends AppCompatActivity {
         txtLabelPasswordConfirmReg.setTypeface(RobotoCondensedLight);
         txtLabelPhone.setTypeface(RobotoCondensedLight);
         txtLabelTextPasswordReg.setTypeface(RobotoCondensedLight);
+        txtLabelGender.setTypeface(RobotoCondensedLight);
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
 
@@ -143,15 +152,18 @@ public class RegistrationActivity extends AppCompatActivity {
                 CharSequence county = textViewCountry.getText();
                 CharSequence password = passwordField.getText();
                 CharSequence passwordConfirm = passwordConfirmField.getText();
+                Boolean genderChecked = false;
+                if (radioButtonFemale.isChecked() || radioButtonMale.isChecked()) {
+                    genderChecked = true;
+
+                }
 
 
                 if (!(fname.toString().trim().equals("") && lname.toString().equals("")
                         && phone.toString().equals("") && county.toString().equals("")
                         && password.toString().equals("") &&
                         passwordConfirm.toString().equals("")
-                        && email.toString().equals("")) && my_var != null) {
-
-                    //TODO Create Person instance with name and additional info
+                        && email.toString().equals("")) && my_var != null && genderChecked != false) {
 
                     if (password.toString().equals(passwordConfirm.toString())) {
 
@@ -169,6 +181,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 Person person = new Person();
                                 person.setFname(fname.toString());
                                 person.setLname(lname.toString());
+                                person.setGender((radioButtonMale.isChecked() ? "Male" : "Female"));
                                 person.setEmail(email.toString());
                                 person.setPhone(phone.toString());
                                 person.setCountry(county.toString());
@@ -221,6 +234,18 @@ public class RegistrationActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "Please input all fields to complete sign up", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+        radioButtonFemale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                radioButtonMale.setChecked(false);
+            }
+        });
+        radioButtonMale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                radioButtonFemale.setChecked(false);
             }
         });
 
