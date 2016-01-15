@@ -27,6 +27,7 @@
                 <ImageView
                     android:id="@+id/imageViewWhichUser"
                     android:layout_width="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="1dp" />
@@ -37,6 +38,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="1dp"
+                    android:layout_alignParentRight="true"
                     android:textSize="11sp" />
 
             </LinearLayout>

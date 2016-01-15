@@ -5,7 +5,7 @@
     android:layout_height="75dp"
     android:background="@color/bluecalendar">
 
-    <TextView
+    <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
         android:id="@id/day"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

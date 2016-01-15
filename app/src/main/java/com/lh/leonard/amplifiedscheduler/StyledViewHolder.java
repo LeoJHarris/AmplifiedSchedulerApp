@@ -9,11 +9,11 @@ import de.jodamob.android.calendar.DayState;
 
 public class StyledViewHolder extends CalendarDayViewHolder {
 
-    private final TextView detailView;
+    private final AutoResizeTextView detailView;
 
     public StyledViewHolder(View itemView) {
         super(itemView);
-        detailView = (TextView) itemView.findViewById(R.id.date_details);
+        detailView = (AutoResizeTextView) itemView.findViewById(R.id.date_details);
     }
 
     @Override

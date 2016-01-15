@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
     Drawable drawableTime;
     RelativeLayout RLProgressBar;
     LinearLayout llEventsForm;
-    LinearLayout llCalendar;
+    RelativeLayout llCalendar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,10 +102,10 @@ public class HomeFragment extends Fragment {
         imageViewInvitedEvents = (ImageView) v.findViewById(R.id.imageViewInvitedEvents);
         imageViewMyEvents = (ImageView) v.findViewById(R.id.imageViewMyEvents);
         imageViewGoingToEvents = (ImageView) v.findViewById(R.id.imageViewGoingToEvents);
-        ImageView imageViewWhichUser = (ImageView) v.findViewById(R.id.imageViewWhichUser);
+
         RLProgressBar = (RelativeLayout) v.findViewById(R.id.RLProgressBar);
         llEventsForm = (LinearLayout) v.findViewById(R.id.llEventsForm);
-        llCalendar = (LinearLayout) v.findViewById(R.id.llCalendar);
+        llCalendar = (RelativeLayout) v.findViewById(R.id.llCalendar);
 
         Drawable drawableUserNonFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_logged);
         Drawable drawableUserFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_facebook);
@@ -114,12 +114,12 @@ public class HomeFragment extends Fragment {
 
         if (personLoggedIn.getSocial() != null) {
             if (personLoggedIn.getSocial().equals("Facebook")) {
-                imageViewWhichUser.setImageDrawable(drawableUserFacebook);
+                textViewLoggedIn.setCompoundDrawablesWithIntrinsicBounds(drawableUserFacebook, null, null, null);
             } else {
-                imageViewWhichUser.setImageDrawable(drawableUserNonFacebook);
+                textViewLoggedIn.setCompoundDrawablesWithIntrinsicBounds(drawableUserNonFacebook, null, null, null);
             }
         } else {
-            imageViewWhichUser.setImageDrawable(drawableUserNonFacebook);
+            textViewLoggedIn.setCompoundDrawablesWithIntrinsicBounds(drawableUserNonFacebook, null, null, null);
         }
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
@@ -146,10 +146,10 @@ public class HomeFragment extends Fragment {
         textViewGoingToEventsDate.setTypeface(RobotoCondensedLightItalic);
         textViewMyEventsDate.setTypeface(RobotoCondensedLightItalic);
         textViewInvitedEventDate.setTypeface(RobotoCondensedLightItalic);
-        textViewMyEvents.setTypeface(RobotoCondensedBold);
-        textViewGoingToEvents.setTypeface(RobotoCondensedBold);
-        textViewInvitedEvent.setTypeface(RobotoCondensedBold);
-        textViewLoggedIn.setTypeface(RobotoCondensedBold);
+        textViewMyEvents.setTypeface(RobotoCondensedLight);
+        textViewGoingToEvents.setTypeface(RobotoCondensedLight);
+        textViewInvitedEvent.setTypeface(RobotoCondensedLight);
+        textViewLoggedIn.setTypeface(RobotoCondensedLight);
 
         textViewLoggedIn.setText(personLoggedIn.getFullname());
 
