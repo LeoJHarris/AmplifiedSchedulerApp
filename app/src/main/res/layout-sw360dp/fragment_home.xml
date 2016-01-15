@@ -9,205 +9,204 @@
 
     <!--nexus 4-->
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:baselineAligned="false"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/linearLayoutForm"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                    android:id="@+id/textViewLatestEvents"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_margin="5dp"
-                    android:text="UPCOMING EVENTS:"
-                    android:textSize="18sp" />
-
-                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                    android:id="@+id/textViewLoggedIn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:padding="4dp"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/RLProgressBar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center" />
-
-            </RelativeLayout>
+            android:layout_weight="1">
 
             <LinearLayout
-                android:id="@+id/llEventsForm"
+                android:id="@+id/linearLayoutForm"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:src="@drawable/ic_mycreatedslots" />
+                    android:layout_height="wrap_content">
 
                     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                        android:id="@+id/textViewMyEvents"
+                        android:id="@+id/textViewLatestEvents"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_margin="8dp"
+                        android:text="UPCOMING EVENTS:"
+                        android:textSize="18sp" />
+
+                    <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                        android:id="@+id/textViewLoggedIn"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
                         android:gravity="center"
-                        android:textSize="15sp" />
+                        android:padding="4dp"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/RLProgressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/llEventsForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="4dp">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center">
 
                         <ImageView
-                            android:id="@+id/imageViewMyEvents"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent" />
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:src="@drawable/ic_mycreatedslots" />
 
                         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                            android:id="@+id/textViewMyEventsDate"
+                            android:id="@+id/textViewMyEvents"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:textSize="15sp" />
+                            android:textSize="17sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="4dp">
+
+                            <ImageView
+                                android:id="@+id/imageViewMyEvents"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                                android:id="@+id/textViewMyEventsDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textSize="17sp" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:src="@drawable/ic_goingtoslots" />
-
-                    <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                        android:id="@+id/textViewGoingToEvents"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textSize="15sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="4dp">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:gravity="center">
 
                         <ImageView
-                            android:id="@+id/imageViewGoingToEvents"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent" />
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:src="@drawable/ic_goingtoslots" />
 
                         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                            android:id="@+id/textViewGoingToEventsDate"
+                            android:id="@+id/textViewGoingToEvents"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:textSize="15sp" />
+                            android:textSize="17sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="4dp">
+
+                            <ImageView
+                                android:id="@+id/imageViewGoingToEvents"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                                android:id="@+id/textViewGoingToEventsDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textSize="17sp" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:src="@drawable/ic_pendingrequestslots" />
-
-                    <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                        android:id="@+id/textViewInvitedEvent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textSize="15sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="4dp">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:gravity="center">
 
                         <ImageView
-                            android:id="@+id/imageViewInvitedEvents"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent" />
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:src="@drawable/ic_pendingrequestslots" />
 
                         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                            android:id="@+id/textViewInvitedEventDate"
+                            android:id="@+id/textViewInvitedEvent"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:textSize="15sp" />
+                            android:textSize="17sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="4dp">
+
+                            <ImageView
+                                android:id="@+id/imageViewInvitedEvents"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                                android:id="@+id/textViewInvitedEventDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textSize="17sp" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/llCalendar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/linearLayoutForm"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:visibility="gone">
 
             <de.jodamob.android.calendar.CalenderWidget
                 android:id="@+id/calendar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-    </RelativeLayout>
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </LinearLayout>
 </FrameLayout>
