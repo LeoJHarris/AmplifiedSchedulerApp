@@ -62,9 +62,6 @@
             android:label="Sign Up"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UserLoggedIn"
-            android:label="" />
-        <activity
             android:name=".MyCreatedSlotsDialog"
             android:label="" />
         <activity

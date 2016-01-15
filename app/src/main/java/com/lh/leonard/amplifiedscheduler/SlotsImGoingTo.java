@@ -304,10 +304,12 @@ public class SlotsImGoingTo extends AppCompatActivity implements
             minDate.set(Calendar.DAY_OF_MONTH, 1);
             maxDate.add(Calendar.YEAR, 1);
 
+
+            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
             progressBar.setVisibility(View.GONE);
             RLProgressBar.setVisibility(View.GONE);
-            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
-            mAgendaCalendarView.setVisibility(View.VISIBLE);
+            linearLayoutWeekView.setVisibility(View.VISIBLE);
+            mWeekView.setVisibility(View.VISIBLE);
         }
     }
 

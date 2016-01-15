@@ -31,8 +31,13 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
+
+import de.jodamob.android.calendar.CalendarDataFactory;
+import de.jodamob.android.calendar.CalenderWidget;
 
 public class NavDrawerActivity extends AppCompatActivity {
 
@@ -532,12 +537,10 @@ public class NavDrawerActivity extends AppCompatActivity {
             Fragment frag = getFragmentManager().findFragmentByTag("home_tag");
 
             if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
-                Drawable drawableNotification = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_noification);
-                ((ImageView) frag.getView().findViewById(R.id.imageViewNotification)).setImageDrawable(drawableNotification);
+
                 Drawer.openDrawer(mRecyclerView);
             } else {
-                Drawable drawableNoNotification = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_no_noification);
-                ((ImageView) frag.getView().findViewById(R.id.imageViewNotification)).setImageDrawable(drawableNoNotification);
+
             }
 
             if (!personLoggedIn.getMyCreatedSlot().isEmpty()) {
@@ -597,6 +600,12 @@ public class NavDrawerActivity extends AppCompatActivity {
 
                 ((ImageView) frag.getView().findViewById(R.id.imageViewInvitedEvents)).setImageDrawable(null);
             }
+            Calendar now = Calendar.getInstance();
+
+            CalenderWidget widget = (CalenderWidget) frag.getView().findViewById(R.id.calendar);
+            widget.set(CalendarDataFactory.getInstance(Locale.getDefault()).create(now.getTime(), 4),
+                    new StyledCalendarBuilder(personLoggedIn.getMyCreatedSlot()));
+
             setRefreshActionButtonState(false);
         }
     }

@@ -37,8 +37,14 @@ import com.backendless.exceptions.BackendlessFault;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
+import de.jodamob.android.calendar.CalendarDataFactory;
+import de.jodamob.android.calendar.CalenderWidget;
 
 
 /**
@@ -53,7 +59,6 @@ public class HomeFragment extends Fragment {
     String my_var;
     ProgressDialog ringProgressDialog;
     AlertDialog alert = null;
-    ImageView imageViewNotification;
     View v;
     AutoResizeTextView textViewMyEvents;
     AutoResizeTextView textViewGoingToEvents;
@@ -68,6 +73,7 @@ public class HomeFragment extends Fragment {
     Drawable drawableTime;
     RelativeLayout RLProgressBar;
     LinearLayout llEventsForm;
+    LinearLayout llCalendar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,8 +90,6 @@ public class HomeFragment extends Fragment {
         // If the criteria is satisfied, "Rate this app" dialog will be shown
         RateThisApp.showRateDialogIfNeeded(getActivity());
 
-        imageViewNotification = (ImageView) v.findViewById(R.id.imageViewNotification);
-
         AutoResizeTextView textViewLoggedIn = (AutoResizeTextView) v.findViewById(R.id.textViewLoggedIn);
 
         textViewMyEvents = (AutoResizeTextView) v.findViewById(R.id.textViewMyEvents);
@@ -101,6 +105,7 @@ public class HomeFragment extends Fragment {
         ImageView imageViewWhichUser = (ImageView) v.findViewById(R.id.imageViewWhichUser);
         RLProgressBar = (RelativeLayout) v.findViewById(R.id.RLProgressBar);
         llEventsForm = (LinearLayout) v.findViewById(R.id.llEventsForm);
+        llCalendar = (LinearLayout) v.findViewById(R.id.llCalendar);
 
         Drawable drawableUserNonFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_logged);
         Drawable drawableUserFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_facebook);
@@ -125,19 +130,11 @@ public class HomeFragment extends Fragment {
 
         //Fame
         if (width == 320 && height == 480) {
-            imageViewNotification.requestLayout();
-            imageViewNotification.getLayoutParams().height = 50;
-            textViewLoggedIn.setTextSize(22);
-            textViewLoggedIn.setPadding(0, 20, 0, 35);
-            textViewMyEvents.setTextSize(16);
+
         }
         // 2.7" QVGA
         else if (width == 240 && height == 320) {
-            imageViewNotification.requestLayout();
-            imageViewNotification.getLayoutParams().height = 500;
-            textViewLoggedIn.setTextSize(18);
-            textViewLoggedIn.setPadding(0, 7, 0, 10);
-            textViewMyEvents.setTextSize(12);
+
         }
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
@@ -220,6 +217,15 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
 
+            Calendar now = Calendar.getInstance();
+
+            List<Slot> calendarEvents = new ArrayList<>(personLoggedIn.getGoingToSlot());
+            calendarEvents.addAll(personLoggedIn.getMyCreatedSlot());
+
+            CalenderWidget widget = (CalenderWidget) v.findViewById(R.id.calendar);
+            widget.set(CalendarDataFactory.getInstance(Locale.getDefault()).create(now.getTime(), 4),
+                    new StyledCalendarBuilder(calendarEvents));
+
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
@@ -239,14 +245,15 @@ public class HomeFragment extends Fragment {
                 imageViewInvitedEvents.setImageDrawable(drawableTime);
             }
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
-                Drawable drawableNotification = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_noification);
-                imageViewNotification.setImageDrawable(drawableNotification);
+
+                // Notification
+
             } else {
-                Drawable drawableNoNotification = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_no_noification);
-                imageViewNotification.setImageDrawable(drawableNoNotification);
+
             }
             RLProgressBar.setVisibility(View.GONE);
             llEventsForm.setVisibility(View.VISIBLE);
+            llCalendar.setVisibility(View.VISIBLE);
         }
     }
 
