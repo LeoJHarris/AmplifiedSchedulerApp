@@ -227,19 +227,17 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/LLNotification"
+            android:id="@+id/llCalendar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:gravity="center_horizontal|bottom"
+            android:layout_height="match_parent"
+            android:layout_below="@id/linearLayoutForm"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imageViewNotification"
+            <de.jodamob.android.calendar.CalenderWidget
+                android:id="@+id/calendar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:src="@drawable/ic_no_noification" />
+                android:layout_height="match_parent" />
+
         </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

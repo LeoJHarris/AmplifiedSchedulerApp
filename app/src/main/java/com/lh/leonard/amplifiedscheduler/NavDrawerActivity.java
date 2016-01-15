@@ -532,12 +532,10 @@ public class NavDrawerActivity extends AppCompatActivity {
             Fragment frag = getFragmentManager().findFragmentByTag("home_tag");
 
             if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
-                Drawable drawableNotification = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_noification);
-                ((ImageView) frag.getView().findViewById(R.id.imageViewNotification)).setImageDrawable(drawableNotification);
+
                 Drawer.openDrawer(mRecyclerView);
             } else {
-                Drawable drawableNoNotification = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_no_noification);
-                ((ImageView) frag.getView().findViewById(R.id.imageViewNotification)).setImageDrawable(drawableNoNotification);
+
             }
 
             if (!personLoggedIn.getMyCreatedSlot().isEmpty()) {

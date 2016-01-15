@@ -8,8 +8,8 @@ android {
         applicationId "com.lh.leonard.amplifiedscheduler"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 46
-        versionName "1.82"
+        versionCode 47
+        versionName "1.83"
         multiDexEnabled true
     }
     dexOptions {
@@ -38,6 +38,7 @@ dependencies {
     compile 'com.code-troopers.betterpickers:library:2.2.1'
     compile 'com.kobakei:ratethisapp:0.0.4'
     compile 'com.android.support:design:23.1.1'
+    compile 'de.jodamob.android:clean-simple-calendar:1.0'
     compile 'com.github.tibolte:agendacalendarview:1.0.2'
     compile 'com.android.support:multidex:1.0.1'
 }
