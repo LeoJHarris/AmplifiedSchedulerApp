@@ -25,6 +25,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -64,6 +66,8 @@ public class HomeFragment extends Fragment {
     ImageView imageViewMyEvents;
     ImageView imageViewGoingToEvents;
     Drawable drawableTime;
+    RelativeLayout RLProgressBar;
+    LinearLayout llEventsForm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,7 +76,6 @@ public class HomeFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_home, container, false);
 
         Backendless.Data.mapTableToClass("Person", Person.class);
-
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
@@ -95,8 +98,24 @@ public class HomeFragment extends Fragment {
         imageViewInvitedEvents = (ImageView) v.findViewById(R.id.imageViewInvitedEvents);
         imageViewMyEvents = (ImageView) v.findViewById(R.id.imageViewMyEvents);
         imageViewGoingToEvents = (ImageView) v.findViewById(R.id.imageViewGoingToEvents);
+        ImageView imageViewWhichUser = (ImageView) v.findViewById(R.id.imageViewWhichUser);
+        RLProgressBar = (RelativeLayout) v.findViewById(R.id.RLProgressBar);
+        llEventsForm = (LinearLayout) v.findViewById(R.id.llEventsForm);
+
+        Drawable drawableUserNonFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_logged);
+        Drawable drawableUserFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_facebook);
 
         drawableTime = ContextCompat.getDrawable(getActivity(), R.drawable.ic_time);
+
+        if (personLoggedIn.getSocial() != null) {
+            if (personLoggedIn.getSocial().equals("Facebook")) {
+                imageViewWhichUser.setImageDrawable(drawableUserFacebook);
+            } else {
+                imageViewWhichUser.setImageDrawable(drawableUserNonFacebook);
+            }
+        } else {
+            imageViewWhichUser.setImageDrawable(drawableUserNonFacebook);
+        }
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -222,11 +241,12 @@ public class HomeFragment extends Fragment {
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
                 Drawable drawableNotification = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_noification);
                 imageViewNotification.setImageDrawable(drawableNotification);
-
             } else {
                 Drawable drawableNoNotification = ContextCompat.getDrawable(v.getContext(), R.drawable.ic_no_noification);
                 imageViewNotification.setImageDrawable(drawableNoNotification);
             }
+            RLProgressBar.setVisibility(View.GONE);
+            llEventsForm.setVisibility(View.VISIBLE);
         }
     }
 
