@@ -83,7 +83,6 @@ public class MyCreatedSlots extends AppCompatActivity implements
 
         mAgendaCalendarView = (AgendaCalendarView) findViewById(R.id.agenda_calendar_view);
         RLProgressBar = (RelativeLayout) findViewById(R.id.RLProgressBar);
-
         linearLayoutCalendarView = (LinearLayout) findViewById(R.id.LLCalendarView);
         linearLayoutWeekView = (LinearLayout) findViewById(R.id.LLWeekView);
 
@@ -305,10 +304,11 @@ public class MyCreatedSlots extends AppCompatActivity implements
             minDate.set(Calendar.DAY_OF_MONTH, 1);
             maxDate.add(Calendar.YEAR, 1);
 
+            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
             progressBar.setVisibility(View.GONE);
             RLProgressBar.setVisibility(View.GONE);
-            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
-            mAgendaCalendarView.setVisibility(View.VISIBLE);
+            linearLayoutWeekView.setVisibility(View.VISIBLE);
+            mWeekView.setVisibility(View.VISIBLE);
         }
     }
 

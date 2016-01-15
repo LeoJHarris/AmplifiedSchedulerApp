@@ -58,7 +58,6 @@ public class HomeFragment extends Fragment {
     String my_var;
     ProgressDialog ringProgressDialog;
     AlertDialog alert = null;
-    ImageView imageViewMainLogo;
     View v;
     AutoResizeTextView textViewMyEvents;
     AutoResizeTextView textViewGoingToEvents;
@@ -73,6 +72,7 @@ public class HomeFragment extends Fragment {
     Drawable drawableTime;
     RelativeLayout RLProgressBar;
     LinearLayout llEventsForm;
+    LinearLayout llCalendar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,6 +104,7 @@ public class HomeFragment extends Fragment {
         ImageView imageViewWhichUser = (ImageView) v.findViewById(R.id.imageViewWhichUser);
         RLProgressBar = (RelativeLayout) v.findViewById(R.id.RLProgressBar);
         llEventsForm = (LinearLayout) v.findViewById(R.id.llEventsForm);
+        llCalendar = (LinearLayout) v.findViewById(R.id.llCalendar);
 
         Drawable drawableUserNonFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_logged);
         Drawable drawableUserFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_facebook);
@@ -128,19 +129,11 @@ public class HomeFragment extends Fragment {
 
         //Fame
         if (width == 320 && height == 480) {
-            imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 50;
-            textViewLoggedIn.setTextSize(22);
-            textViewLoggedIn.setPadding(0, 20, 0, 35);
-            textViewMyEvents.setTextSize(16);
+
         }
         // 2.7" QVGA
         else if (width == 240 && height == 320) {
-            imageViewMainLogo.requestLayout();
-            imageViewMainLogo.getLayoutParams().height = 500;
-            textViewLoggedIn.setTextSize(18);
-            textViewLoggedIn.setPadding(0, 7, 0, 10);
-            textViewMyEvents.setTextSize(12);
+
         }
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
@@ -256,6 +249,7 @@ public class HomeFragment extends Fragment {
             }
             RLProgressBar.setVisibility(View.GONE);
             llEventsForm.setVisibility(View.VISIBLE);
+            llCalendar.setVisibility(View.VISIBLE);
         }
     }
 

@@ -74,6 +74,7 @@
             android:id="@+id/weekView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:columnGap="8dp"
             app:dayBackgroundColor="#05000000"
             app:eventTextColor="@android:color/black"
@@ -119,8 +120,8 @@
             android:scrollbars="vertical"
             agendaCalendar:agendaCurrentDayTextColor="@color/theme_primary"
             agendaCalendar:calendarColor="@color/bluecalendar"
-            agendaCalendar:calendarCurrentDayTextColor="@color/calendar_text_current_day"
-            agendaCalendar:calendarDayTextColor="@color/theme_text_icons"
+            agendaCalendar:calendarCurrentDayTextColor="@color/theme_text_icons"
+            agendaCalendar:calendarDayTextColor="@color/calendar_text_current_day"
             agendaCalendar:calendarHeaderColor="@color/theme_primary_dark"
             agendaCalendar:calendarPastDayTextColor="@color/theme_light_primary"
             agendaCalendar:fabColor="@color/theme_accent" />

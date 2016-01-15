@@ -31,8 +31,13 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
+
+import de.jodamob.android.calendar.CalendarDataFactory;
+import de.jodamob.android.calendar.CalenderWidget;
 
 public class NavDrawerActivity extends AppCompatActivity {
 
@@ -595,6 +600,12 @@ public class NavDrawerActivity extends AppCompatActivity {
 
                 ((ImageView) frag.getView().findViewById(R.id.imageViewInvitedEvents)).setImageDrawable(null);
             }
+            Calendar now = Calendar.getInstance();
+
+            CalenderWidget widget = (CalenderWidget) frag.getView().findViewById(R.id.calendar);
+            widget.set(CalendarDataFactory.getInstance(Locale.getDefault()).create(now.getTime(), 4),
+                    new StyledCalendarBuilder(personLoggedIn.getMyCreatedSlot()));
+
             setRefreshActionButtonState(false);
         }
     }
