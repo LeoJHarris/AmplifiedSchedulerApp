@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,6 +28,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.kobakei.ratethisapp.RateThisApp;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -174,31 +176,34 @@ public class MainActivity extends Activity {
                     permissions.add("user_friends");
                     permissions.add("email");
 
-                    Backendless.UserService.loginWithFacebook(MainActivity.this, null, facebookFieldMappings, permissions, new AsyncCallback<BackendlessUser>() {
-                        @Override
-                        public void handleResponse(BackendlessUser response) {
+                    try {
 
-                            Person p = new Person();
-                            p.setGender((String) response.getProperty("gender"));
-                            p.setLname((String) response.getProperty("lname"));
-                            p.setFname((String) response.getProperty("fname"));
-                            p.setFullname(response.getProperty("fname") + " " +
-                                    response.getProperty("lname"));
-                            p.setEmail((String) response.getProperty("email"));
-                            try {
-                                new Save(p, response).execute().get();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
+                        Backendless.UserService.loginWithFacebook(MainActivity.this, null, facebookFieldMappings, permissions, new AsyncCallback<BackendlessUser>() {
+                            @Override
+                            public void handleResponse(BackendlessUser response) {
+
+                                Person p = new Person();
+                                p.setGender((String) response.getProperty("gender"));
+                                p.setLname((String) response.getProperty("lname"));
+                                p.setFname((String) response.getProperty("fname"));
+                                p.setFullname(response.getProperty("fname") + " " +
+                                        response.getProperty("lname"));
+                                p.setEmail((String) response.getProperty("email"));
+                                try {
+                                    new Save(p, response).execute().get();
+                                } catch (InterruptedException | ExecutionException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
 
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }, false);
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }catch (Exception e) {
+                        Log.e("YOUR_APP_LOG_TAG", "I got an error", e);
+                    }
                 }
             });
 
