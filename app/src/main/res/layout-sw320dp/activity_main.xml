@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLHeader"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:orientation="vertical">
 
             <EditText
@@ -47,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_top_bg"
                 android:drawableLeft="@drawable/ic_email"
+                android:drawableStart="@drawable/ic_email"
                 android:hint="Email"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
@@ -60,11 +61,11 @@
                 android:layout_below="@+id/emailSignIn"
                 android:background="@drawable/edittext_top_bg"
                 android:drawableLeft="@drawable/ic_password"
+                android:drawableStart="@drawable/ic_password"
                 android:hint="Password"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:padding="7dp"
-                android:password="true"
                 android:textSize="15sp" />
 
             <LinearLayout
@@ -86,8 +87,6 @@
                     android:id="@+id/saveLoginCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignBaseline="@id/buttonSignIn"
-                    android:layout_alignParentRight="true"
                     android:layout_weight="1"
                     android:text="Remember me"
                     android:textColor="@color/black"
@@ -96,29 +95,56 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/FacebookSignIn"
+        <RelativeLayout
+            android:id="@+id/signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/LLFormSignIn"
-            android:layout_marginTop="25dp"
+            android:layout_below="@+id/LLFormSignIn"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:orientation="vertical">
 
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/buttonRegistration"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_toLeftOf="@+id/spacer"
+                android:layout_toStartOf="@+id/spacer"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="Create Account"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/spacer"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/buttonRegistration"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="or"
+                android:textSize="15sp" />
+
             <Button
                 android:id="@+id/FBlogin_button"
-                android:layout_width="140dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/buttonRegistration"
+                android:layout_toEndOf="@+id/spacer"
+                android:layout_toRightOf="@+id/spacer"
                 android:background="@drawable/facebook_button" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/LLForGotPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/FacebookSignIn"
+            android:layout_below="@id/signup"
             android:layout_marginTop="25dp"
             android:gravity="center"
             android:orientation="vertical">
@@ -130,26 +156,6 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:text="Forgot Password?"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/LLSignUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/LLForGotPassword"
-            android:layout_marginTop="25dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/buttonRegistration"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="Create Account"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
         </LinearLayout>

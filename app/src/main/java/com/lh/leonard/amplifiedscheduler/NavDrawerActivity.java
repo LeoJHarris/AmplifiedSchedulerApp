@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import de.jodamob.android.calendar.CalendarDataFactory;
@@ -602,9 +603,12 @@ public class NavDrawerActivity extends AppCompatActivity {
             }
             Calendar now = Calendar.getInstance();
 
+            List<Slot> calendarEvents = new ArrayList<>(personLoggedIn.getGoingToSlot());
+            calendarEvents.addAll(personLoggedIn.getMyCreatedSlot());
+
             CalenderWidget widget = (CalenderWidget) frag.getView().findViewById(R.id.calendar);
             widget.set(CalendarDataFactory.getInstance(Locale.getDefault()).create(now.getTime(), 4),
-                    new StyledCalendarBuilder(personLoggedIn.getMyCreatedSlot()));
+                    new StyledCalendarBuilder(calendarEvents));
 
             setRefreshActionButtonState(false);
         }

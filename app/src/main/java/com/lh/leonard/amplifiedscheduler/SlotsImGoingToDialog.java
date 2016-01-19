@@ -269,9 +269,9 @@ public class SlotsImGoingToDialog extends Activity {
     @Override
     public void onBackPressed() {
 
-            Intent intent = new Intent(this, SlotsImGoingTo.class);
-            startActivity(intent);
-            finish();
+        Intent intent = new Intent(this, SlotsImGoingTo.class);
+        startActivity(intent);
+        finish();
 
     }
 }

@@ -2,9 +2,6 @@ package com.lh.leonard.amplifiedscheduler;
 
 import com.backendless.geo.GeoPoint;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
