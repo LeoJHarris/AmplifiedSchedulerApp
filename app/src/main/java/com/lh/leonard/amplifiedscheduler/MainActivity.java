@@ -28,7 +28,6 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.kobakei.ratethisapp.RateThisApp;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -201,7 +200,7 @@ public class MainActivity extends Activity {
                                 Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         Log.e("YOUR_APP_LOG_TAG", "I got an error", e);
                     }
                 }
@@ -244,12 +243,14 @@ public class MainActivity extends Activity {
             AutoResizeTextView buttonRegistration = (AutoResizeTextView) findViewById(R.id.buttonRegistration);
             AutoResizeTextView textViewMadeByMeMain = (AutoResizeTextView) findViewById(R.id.textViewMadeByMeMain);
             ImageView imageViewMainLogo = (ImageView) findViewById(R.id.imageViewMainLogo);
+            AutoResizeTextView spacer = (AutoResizeTextView) findViewById(R.id.spacer);
 
             final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
             final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
             final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
             final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
+            spacer.setTypeface(RobotoCondensedLight);
             buttonSignIn.setTypeface(RobotoCondensedLight);
             editTextUsername.setTypeface(RobotoCondensedLight);
             editTextPassword.setTypeface(RobotoCondensedLight);

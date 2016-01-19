@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="15dp">
 
-    <!--10" tablets-->
+    <!--9" & 10" tablets-->
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -24,9 +24,8 @@
             <ImageView
                 android:id="@+id/imageViewMainLogo"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/main_textlogo_384" />
+                android:layout_height="150dp"
+                android:src="@drawable/main_textlogo_360" />
 
         </LinearLayout>
 
@@ -35,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLHeader"
+            android:layout_marginTop="60dp"
             android:orientation="vertical">
 
             <EditText
@@ -43,11 +43,12 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_top_bg"
                 android:drawableLeft="@drawable/ic_email"
+                android:drawableStart="@drawable/ic_email"
                 android:hint="Email"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
-                android:padding="7dp"
-                android:textSize="20sp" />
+                android:padding="10dp"
+                android:textSize="30sp" />
 
             <EditText
                 android:id="@+id/passwordSignIn"
@@ -56,12 +57,12 @@
                 android:layout_below="@+id/emailSignIn"
                 android:background="@drawable/edittext_top_bg"
                 android:drawableLeft="@drawable/ic_password"
+                android:drawableStart="@drawable/ic_password"
                 android:hint="Password"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
-                android:padding="7dp"
-                android:password="true"
-                android:textSize="20sp" />
+                android:padding="10dp"
+                android:textSize="30sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,47 +76,71 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:background="@drawable/button_default_bg"
-                    android:padding="7dp"
+                    android:padding="10dp"
                     android:text="Sign In"
-                    android:textSize="20sp" />
+                    android:textSize="30sp" />
 
                 <CheckBox
                     android:id="@+id/saveLoginCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignBaseline="@id/buttonSignIn"
-                    android:layout_alignParentRight="true"
                     android:layout_weight="1"
                     android:text="Remember me"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="30sp" />
 
             </LinearLayout>
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/FacebookSignIn"
+
+        <RelativeLayout
+            android:id="@+id/signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/LLFormSignIn"
-            android:layout_marginTop="40dp"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_below="@+id/LLFormSignIn"
+            android:orientation="vertical"
+            android:paddingTop="40dp">
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/buttonRegistration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_toLeftOf="@+id/spacer"
+                android:layout_toStartOf="@+id/spacer"
+                android:clickable="true"
+                android:text="Create Account"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/spacer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/buttonRegistration"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:text="or"
+                android:textSize="35sp" />
 
             <Button
                 android:id="@+id/FBlogin_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_alignBottom="@+id/buttonRegistration"
+                android:layout_toEndOf="@+id/spacer"
+                android:layout_toRightOf="@+id/spacer"
                 android:background="@drawable/facebook_button" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/LLForGotPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/FacebookSignIn"
+            android:layout_below="@id/signup"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -123,36 +148,15 @@
                 android:id="@+id/buttonForgotPassword"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
                 android:clickable="true"
                 android:gravity="center"
+                android:paddingTop="40dp"
                 android:text="Forgot Password?"
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="35sp" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/LLSignUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/LLForGotPassword"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/buttonRegistration"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="Create Account"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
@@ -169,10 +173,10 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:gravity="center"
-            android:paddingTop="20dp"
+            android:paddingTop="35dp"
             android:text="@string/name_version_num"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="25sp" />
     </LinearLayout>
 
 </RelativeLayout>

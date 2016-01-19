@@ -1,7 +1,6 @@
 package com.lh.leonard.amplifiedscheduler;
 
 import android.view.View;
-import android.widget.TextView;
 
 import de.jodamob.android.calendar.CalendarDayViewHolder;
 import de.jodamob.android.calendar.Day;
