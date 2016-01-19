@@ -4,7 +4,7 @@
     android:background="@drawable/gradient_color_bg"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:padding="6dp">
 
     <!--7" tablets-->
 
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/LLHeader"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="50dp"
             android:orientation="vertical">
 
             <EditText
