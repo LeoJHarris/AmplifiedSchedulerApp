@@ -176,7 +176,6 @@ public class MainActivity extends Activity {
                     permissions.add("email");
 
                     try {
-
                         Backendless.UserService.loginWithFacebook(MainActivity.this, null, facebookFieldMappings, permissions, new AsyncCallback<BackendlessUser>() {
                             @Override
                             public void handleResponse(BackendlessUser response) {
