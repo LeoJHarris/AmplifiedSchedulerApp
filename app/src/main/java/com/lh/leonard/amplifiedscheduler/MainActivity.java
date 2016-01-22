@@ -163,7 +163,6 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
-                        put("password", "password");
                         put("email", "email");
                         put("gender", "gender");
                         put("last_name", "lname");
@@ -176,7 +175,6 @@ public class MainActivity extends Activity {
                     permissions.add("email");
 
                     try {
-
                         Backendless.UserService.loginWithFacebook(MainActivity.this, null, facebookFieldMappings, permissions, new AsyncCallback<BackendlessUser>() {
                             @Override
                             public void handleResponse(BackendlessUser response) {
@@ -199,7 +197,7 @@ public class MainActivity extends Activity {
                             public void handleFault(BackendlessFault fault) {
                                 Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                        });
+                        },false);
                     } catch (Exception e) {
                         Log.e("YOUR_APP_LOG_TAG", "I got an error", e);
                     }
