@@ -112,6 +112,15 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                     orig = listSlots;
                 if (constraint != null) {
                     if (orig != null & orig.size() > 0) {
+
+                        if (isValidEmail(constraint)) {
+                            for (final Person g : orig) {
+                                results.add(g);
+                                oReturn.values = results;
+                                return oReturn;
+                            }
+                        }
+
                         for (final Person g : orig) {
                             if (g.getLname().toLowerCase().contains(constraint.toString()) || g.getFname().toLowerCase().contains(constraint.toString()))
                                 results.add(g);
@@ -143,5 +152,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             personCountry = (AutoResizeTextView) itemView.findViewById(R.id.person_country);
             userImage = (ImageView) itemView.findViewById(R.id.thumbnail);
         }
+    }
+
+    private boolean isValidEmail(CharSequence target) {
+        if (target == null)
+            return false;
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 }

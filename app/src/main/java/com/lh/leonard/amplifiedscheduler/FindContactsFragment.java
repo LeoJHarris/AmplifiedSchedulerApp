@@ -116,7 +116,7 @@ public class FindContactsFragment extends Fragment {
                                                                   timer = new Timer();
                                                                   callAsynchronousTask();
                                                               } else {
-                                                                  editHintSearchContacts.setText("Try searching users by name");
+                                                                  editHintSearchContacts.setText("Search users by name or email address");
                                                                   editHintSearchContacts.setVisibility(View.VISIBLE);
                                                                   progressBarFindContacts.setVisibility(View.GONE);
                                                                   RLProgressBar.setVisibility(View.GONE);
@@ -169,8 +169,10 @@ public class FindContactsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            String whereClause = "(lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%') AND " +
-                    "objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
+            String whereClause = (isValidEmail(nameQuerySearch)) ?
+                    "email = '" + nameQuerySearch + "' AND '" + personLoggedIn.getEmail() + "' != email" :
+                    "(lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" +
+                            nameQuerySearch + "%') AND " + "objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause);
 
@@ -461,7 +463,7 @@ public class FindContactsFragment extends Fragment {
                     rv.setVisibility(View.GONE);
 
                     if (refreshed) {
-                        editHintSearchContacts.setText("Try searching users by name");
+                        editHintSearchContacts.setText("Search users by name or email address");
 
                     } else {
                         editHintSearchContacts.setText("No users found");
@@ -568,8 +570,12 @@ public class FindContactsFragment extends Fragment {
                 }
 
                 Backendless.Data.mapTableToClass("Person", Person.class);
-                String whereClause = "(lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" + nameQuerySearch + "%') AND " +
-                        "objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
+
+
+                String whereClause = (isValidEmail(nameQuerySearch)) ?
+                        "email = '" + nameQuerySearch + "' AND '" + personLoggedIn.getEmail() + "' != email" :
+                        "(lname LIKE '" + nameQuerySearch + "%' OR fname LIKE '" +
+                                nameQuerySearch + "%') AND " + "objectId NOT LIKE '" + personLoggedIn.getObjectId() + "'";
                 BackendlessDataQuery dataQuery = new BackendlessDataQuery();
                 dataQuery.setWhereClause(whereClause);
 
@@ -611,7 +617,7 @@ public class FindContactsFragment extends Fragment {
         searchViewFindContacts.setQuery("", false);
         rv.setAdapter(null);
         progressBarFindContacts.setVisibility(View.GONE);
-        editHintSearchContacts.setText("Search users by first or last name");
+        editHintSearchContacts.setText("Search users by name or email address");
         editHintSearchContacts.setVisibility(View.VISIBLE);
         timer = null;
         refreshed = true;
@@ -622,4 +628,9 @@ public class FindContactsFragment extends Fragment {
         super.onResume();
     }
 
+    private boolean isValidEmail(CharSequence target) {
+        if (target == null)
+            return false;
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
 }
