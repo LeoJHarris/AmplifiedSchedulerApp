@@ -17,8 +17,6 @@ public class Slot {
     public boolean alldayevent;
     public String subject;
     public String message;
-    public String start;
-    public String end;
     public List<Person> attendees;
     public Integer maxattendees;
     public String objectId;
@@ -26,6 +24,7 @@ public class Slot {
     public String phone;
     public String place;
     public String note;
+    public String ownername;
 
     public String getNote() {
         return note;
@@ -90,24 +89,5 @@ public class Slot {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getStart() {
-        return start;
-        //return getDate(start);
-    }
-
-    public void setStart(String start) {
-
-        this.start = start;
-    }
-
-    public String getEnd() {
-
-        return end;
-    }
-
-    public void setEnd(String end) {
-        this.end = end;
     }
 }
