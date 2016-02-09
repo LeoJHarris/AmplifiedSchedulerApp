@@ -539,7 +539,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
             if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
 
-                Drawer.openDrawer(mRecyclerView);
+              //  Drawer.openDrawer(mRecyclerView);
             } else {
 
             }

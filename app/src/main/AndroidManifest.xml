@@ -93,7 +93,7 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".AddRemoveContactsTabbed"
-            android:label=""
+            android:label="Manage Contacts"
             android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity

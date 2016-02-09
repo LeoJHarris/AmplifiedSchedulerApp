@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
 
 /**
  * Created by hp1 on 21-01-2015.
@@ -102,8 +103,17 @@ public class FindContactsFragment extends Fragment {
 
                                                               refreshed = false;
 
-                                                              if (!text.equals("")) {
+                                                              if (Pattern.compile("[^a-zA-Z0-9]")
+                                                                      .matcher(text).find() || isValidEmail("text")) {
 
+                                                                  editHintSearchContacts.
+                                                                          setText("Search users by name or email address");
+                                                                  editHintSearchContacts.setVisibility(View.VISIBLE);
+                                                                  progressBarFindContacts.setVisibility(View.GONE);
+                                                                  RLProgressBar.setVisibility(View.GONE);
+                                                                  rv.setAdapter(null);
+
+                                                              } else {
                                                                   editHintSearchContacts.setVisibility(View.GONE);
                                                                   rv.setVisibility(View.GONE);
                                                                   progressBarFindContacts.setVisibility(View.VISIBLE);
@@ -115,12 +125,6 @@ public class FindContactsFragment extends Fragment {
                                                                   }
                                                                   timer = new Timer();
                                                                   callAsynchronousTask();
-                                                              } else {
-                                                                  editHintSearchContacts.setText("Search users by name or email address");
-                                                                  editHintSearchContacts.setVisibility(View.VISIBLE);
-                                                                  progressBarFindContacts.setVisibility(View.GONE);
-                                                                  RLProgressBar.setVisibility(View.GONE);
-                                                                  rv.setAdapter(null);
                                                               }
 
                                                               return true;
