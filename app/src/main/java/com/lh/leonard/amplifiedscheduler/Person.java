@@ -26,6 +26,10 @@ public class Person {
     public String social;
     public List<Plan> myPlans;
 
+    public List<Plan> getMyPlans() {
+        return myPlans;
+    }
+
     public void setSocial(String social) {
         this.social = social;
     }

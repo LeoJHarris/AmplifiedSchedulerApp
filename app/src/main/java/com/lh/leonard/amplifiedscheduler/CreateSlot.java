@@ -215,6 +215,7 @@ public class CreateSlot extends AppCompatActivity implements
         aSwitch.setChecked(true);
         switchPlannerEvent.setTypeface(RobotoCondensedLight);
 
+        switchPlannerEvent.setChecked(true);
         setDates();
 
         textViewStartTime.setOnClickListener(new View.OnClickListener() {
@@ -538,22 +539,24 @@ public class CreateSlot extends AppCompatActivity implements
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                    if (isChecked) {
+                    if (!isChecked) {
                         lleditTextSlotMessage.setVisibility(View.GONE);
                         llnumberPickerAttendees.setVisibility(View.GONE);
                         llrecipientsForSlot.setVisibility(View.GONE);
                         llswitchAutomatedSMS.setVisibility(View.GONE);
                         editTextNumberAttendeesAvaliable.setVisibility(View.GONE);
-                        switchPlannerEvent.setText("Event");
-                        event = true;
+                        switchPlannerEvent.setText("Personal Plan");
+                        buttonSendSlot.setText("CREATE PLAN");
+                        event = false;
                     } else {
                         lleditTextSlotMessage.setVisibility(View.VISIBLE);
                         llnumberPickerAttendees.setVisibility(View.VISIBLE);
                         llrecipientsForSlot.setVisibility(View.VISIBLE);
                         llswitchAutomatedSMS.setVisibility(View.VISIBLE);
-                        switchPlannerEvent.setText("Personal Plan");
+                        switchPlannerEvent.setText("Event");
                         editTextNumberAttendeesAvaliable.setVisibility(View.VISIBLE);
-                        event = false;
+                        event = true;
+                        buttonSendSlot.setText("SEND EVENT");
                     }
                 }
             });
@@ -822,12 +825,12 @@ public class CreateSlot extends AppCompatActivity implements
                 Backendless.Events.dispatch("CreateEvent", hashMapEvent, new AsyncCallback<Map>() {
                     @Override
                     public void handleResponse(Map map) {
-                        Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Plan Saved", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void handleFault(BackendlessFault backendlessFault) {
-                        Toast.makeText(getApplicationContext(), "Error: Could not create event", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Error: Could not create plan", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -838,8 +841,11 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Void result) {
 
+            if (event) {
+                addedContactsForSlot.clear();
+            }
+
             editTextNumberAttendeesAvaliable.setText("");
-            addedContactsForSlot.clear();
             mAutocompleteTextView.setText("");
             slotSubjectEditText.setText("");
             slotMessageEditText.setText("");
@@ -849,6 +855,7 @@ public class CreateSlot extends AppCompatActivity implements
             contactsAdded = false;
             subjectSet = false;
             my_var = null;
+
         }
     }
 

@@ -75,7 +75,44 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:visibility="gone">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center">
 
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:src="@drawable/ic_action_calendar_day" />
+
+                        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                            android:id="@+id/textViewMyPlans"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="4dp">
+
+                            <ImageView
+                                android:id="@+id/imageViewMyPlans"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                                android:id="@+id/textViewMyPlansDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textSize="35sp" />
+                        </LinearLayout>
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

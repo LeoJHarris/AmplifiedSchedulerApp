@@ -54,6 +54,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     int sizeGoingToEvents;
     int sizePendingResponseEvents;
     int sizeMyCreatedEvents;
+    int sizeMyPlans;
 
     Boolean OpenDrawer = false;
 
@@ -63,6 +64,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     String valPersonsRequestingMe = "";
     String valGoingToEvents = "";
     String valMyCreatedEvents = "";
+    String valMyPlans = "";
 
     String NAME;
     String EMAIL;
@@ -91,7 +93,7 @@ public class NavDrawerActivity extends AppCompatActivity {
         setContentView(R.layout.nav_drawer);
 
         Backendless.Data.mapTableToClass("Person", Person.class);
-        Backendless.Persistence.mapTableToClass("Person", Person.class);
+        Backendless.Data.mapTableToClass("Plan", Plan.class);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -137,21 +139,24 @@ public class NavDrawerActivity extends AppCompatActivity {
                 intent = new Intent(NavDrawerActivity.this, CreateSlot.class);
                 break;
             case 2:
-                intent = new Intent(NavDrawerActivity.this, MyCreatedSlots.class);
+                intent = new Intent(NavDrawerActivity.this, MyPlans.class);
                 break;
             case 3:
-                intent = new Intent(NavDrawerActivity.this, SlotsImGoingTo.class);
+                intent = new Intent(NavDrawerActivity.this, MyCreatedSlots.class);
                 break;
             case 4:
-                intent = new Intent(NavDrawerActivity.this, SlotsAwaitingMyResponse.class);
+                intent = new Intent(NavDrawerActivity.this, SlotsImGoingTo.class);
                 break;
             case 5:
-                intent = new Intent(NavDrawerActivity.this, AddRemoveContactsTabbed.class);
+                intent = new Intent(NavDrawerActivity.this, SlotsAwaitingMyResponse.class);
                 break;
             case 6:
-                intent = new Intent(NavDrawerActivity.this, UpdateAccount.class);
+                intent = new Intent(NavDrawerActivity.this, AddRemoveContactsTabbed.class);
                 break;
             case 7:
+                intent = new Intent(NavDrawerActivity.this, UpdateAccount.class);
+                break;
+            case 8:
                 ringProgressDialog = ProgressDialog.show(NavDrawerActivity.this, "Please wait ...",
                         "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
                 ringProgressDialog.setCancelable(false);
@@ -330,10 +335,10 @@ public class NavDrawerActivity extends AppCompatActivity {
         resourceIntPersonsRequestingMe = R.drawable.ic_addcontact;
         resourceIntPendingResponseEvents = R.drawable.ic_pendingrequestslots;
 
-        int ICONS[] = {R.drawable.ic_createslot, R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
+        int ICONS[] = {R.drawable.ic_createslot, R.drawable.ic_action_calendar_day, R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
                 resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-        String TITLES[] = {"Create event", "My events " + valMyCreatedEvents, "Going to events " +
+        String TITLES[] = {"Create event", "My plans " + valMyPlans, "My events " + valMyCreatedEvents, "Going to events " +
                 valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
                 valPersonsRequestingMe, "Update account", "Sign out"};
 
@@ -417,6 +422,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             relationProps.add("contacts");
             relationProps.add("personsImRequesting");
             relationProps.add("goingToSlot");
+            relationProps.add("myPlans");
             relationProps.add("myCreatedSlot");
             relationProps.add("pendingResponseSlot");
             Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
@@ -425,11 +431,13 @@ public class NavDrawerActivity extends AppCompatActivity {
             sizePendingResponseEvents = personLoggedIn.getPendingResponseSlot().size();
             sizeGoingToEvents = personLoggedIn.getGoingToSlot().size();
             sizeMyCreatedEvents = personLoggedIn.getMyCreatedSlot().size();
+            sizeMyPlans = personLoggedIn.getMyPlans().size();
 
             valResponseEvents = " " + String.valueOf(sizePendingResponseEvents);
             valPersonsRequestingMe = " " + String.valueOf(sizePersonsRequestingMe);
             valGoingToEvents = " " + String.valueOf(sizeGoingToEvents);
             valMyCreatedEvents = " " + String.valueOf(sizeMyCreatedEvents);
+            valMyPlans = " " + String.valueOf(sizeMyPlans);
 
             if (sizePendingResponseEvents >= 1) {
                 resourceIntPendingResponseEvents = R.drawable.ic_actionrequiredinvitedevent;
@@ -463,18 +471,25 @@ public class NavDrawerActivity extends AppCompatActivity {
                     return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
                 }
             });
+            Collections.sort(personLoggedIn.getMyPlans(), new Comparator<Plan>() {
+                public int compare(Plan e1, Plan e2) {
+                    if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                        return 0;
+                    return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                }
+            });
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
 
-            int ICONS[] = {R.drawable.ic_createslot
+            int ICONS[] = {R.drawable.ic_createslot, R.drawable.ic_action_calendar_day
                     , R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
                     resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe,
                     R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-            String TITLES[] = {"Create event", "My events " + valMyCreatedEvents, "Going to events " +
+            String TITLES[] = {"Create event", "My plans", "My events " + valMyCreatedEvents, "Going to events " +
                     valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
                     valPersonsRequestingMe, "Update account", "Sign out"};
 
@@ -539,7 +554,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
             if (sizePersonsRequestingMe >= 1 || sizePendingResponseEvents >= 1) {
 
-              //  Drawer.openDrawer(mRecyclerView);
+                //  Drawer.openDrawer(mRecyclerView);
             } else {
 
             }
@@ -600,6 +615,25 @@ public class NavDrawerActivity extends AppCompatActivity {
                         .setText("No Events Avaliable");
 
                 ((ImageView) frag.getView().findViewById(R.id.imageViewInvitedEvents)).setImageDrawable(null);
+            }
+            if (!personLoggedIn.getMyPlans().isEmpty()) {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyPlans))
+                        .setTypeface(RobotoCondensedBold);
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyPlans))
+                        .setText(personLoggedIn.getMyPlans().get(0).getSubject());
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyPlansDate)).
+                        setTypeface(RobotoCondensedLightItalic);
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyPlansDate)).setText(
+                        personLoggedIn.getMyPlans().get(0).getStartCalendar().getTime().toString());
+
+                ((ImageView) frag.getView().findViewById(R.id.imageViewMyPlans)).setImageDrawable(drawableTime);
+            } else {
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyPlans))
+                        .setTypeface(RobotoCondensedBold);
+                ((AutoResizeTextView) frag.getView().findViewById(R.id.textViewMyPlans))
+                        .setText("No Plans Avaliable");
+
+                ((ImageView) frag.getView().findViewById(R.id.imageViewMyPlans)).setImageDrawable(null);
             }
             Calendar now = Calendar.getInstance();
 
