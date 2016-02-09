@@ -24,6 +24,7 @@ public class Person {
     public String gender;
     public String ownerId;
     public String social;
+    public List<Plan> myPlans;
 
     public void setSocial(String social) {
         this.social = social;

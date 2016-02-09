@@ -90,6 +90,7 @@ public class CreateSlot extends AppCompatActivity implements
     LinearLayout llTimeZone;
     String eventCategory;
 
+
     List<Person> myContactsPersonsList;
     BackendlessCollection<Person> myContactPersons;
     BackendlessCollection<Person> persons;
@@ -111,8 +112,10 @@ public class CreateSlot extends AppCompatActivity implements
     AutoResizeTextView textViewEndTime;
     //  ImageButton btnGetLocationGeoPoint;
 
-    private String mRrule;
+    LinearLayout llnumberPickerAttendees, llrecipientsForSlot, lleditTextSlotMessage, llswitchAutomatedSMS;
 
+    private String mRrule;
+    Switch switchPlannerEvent;
 
     CharSequence[] testArray;
     ArrayList<Integer> mSelectedItems;
@@ -129,6 +132,8 @@ public class CreateSlot extends AppCompatActivity implements
     AutoResizeTextView textViewStartDate;
     private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
     private static final String FRAG_TAG_TIME_ZONE_PICKER = "timeZonePickerDialogFragment";
+    Boolean event = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,6 +185,11 @@ public class CreateSlot extends AppCompatActivity implements
         llTimeZone = (LinearLayout) findViewById(R.id.llTimeZone);
         editTextNote = (EditText) findViewById(R.id.editTextNotes);
         labelAllDay = (AutoResizeTextView) findViewById(R.id.labelAllDay);
+        switchPlannerEvent = (Switch) findViewById(R.id.switchPlannerEvent);
+        llrecipientsForSlot = (LinearLayout) findViewById(R.id.llrecipientsForSlot);
+        lleditTextSlotMessage = (LinearLayout) findViewById(R.id.lleditTextSlotMessage);
+        llswitchAutomatedSMS = (LinearLayout) findViewById(R.id.llswitchAutomatedSMS);
+        llnumberPickerAttendees = (LinearLayout) findViewById(R.id.llnumberPickerAttendees);
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
@@ -203,7 +213,7 @@ public class CreateSlot extends AppCompatActivity implements
         aSwitch.setTypeface(RobotoCondensedLight);
         allDaySwitch.setTypeface(RobotoCondensedLight);
         aSwitch.setChecked(true);
-
+        switchPlannerEvent.setTypeface(RobotoCondensedLight);
 
         setDates();
 
@@ -401,49 +411,80 @@ public class CreateSlot extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
-                if (addedContactsForSlot != null) {
-                    if (!(addedContactsForSlot.isEmpty())) {
-
-                        slotSubjectEditText.getText().toString();
-                        if (editTextNumberAttendeesAvaliable.getText().toString().equals("")) {
-                            numberAttendeesAvaliable = 0;
-                        } else {
-                            numberAttendeesAvaliable = Integer.parseInt(editTextNumberAttendeesAvaliable.getText().toString());
-                        }
-                        subject = slotSubjectEditText.getText().toString();
-                        note = editTextNote.getText().toString();
-                        message = slotMessageEditText.getText().toString();
-                        //TODO Set Slot Ready to send with tick
-
-                        String emptys = "";
-
-                        if (subject.trim().equals("") || my_var == null) {
-
-                            if (subject.trim().equals("")) {
-                                if ((emptys.trim().equals(""))) {
-                                    emptys += "Title";
-                                } else {
-                                    emptys += ", Title";
-                                }
+                //event
+                if (event) {
+                    if (addedContactsForSlot != null) {
+                        if (!(addedContactsForSlot.isEmpty())) {
+                            if (editTextNumberAttendeesAvaliable.getText().toString().equals("")) {
+                                numberAttendeesAvaliable = 0;
+                            } else {
+                                numberAttendeesAvaliable = Integer.parseInt(editTextNumberAttendeesAvaliable.getText().toString());
                             }
-                            if (my_var == null) {
-                                if ((emptys.trim().equals(""))) {
-                                    emptys += "Place";
-                                } else {
-                                    emptys += ", Place";
-                                }
-                            }
-                            Toast.makeText(getApplicationContext(), "Please fill: " + emptys, Toast.LENGTH_SHORT).show();
-                        } else {
+                            subject = slotSubjectEditText.getText().toString();
+                            note = editTextNote.getText().toString();
+                            message = slotMessageEditText.getText().toString();
+                            //TODO Set Slot Ready to send with tick
 
-                            Toast.makeText(getApplicationContext(), "Sending event", Toast.LENGTH_LONG).show();
-                            new ParseURL().execute();
+                            String emptys = "";
+
+                            if (subject.trim().equals("") || my_var == null) {
+
+                                if (subject.trim().equals("")) {
+                                    if ((emptys.trim().equals(""))) {
+                                        emptys += "Title";
+                                    } else {
+                                        emptys += ", Title";
+                                    }
+                                }
+                                if (my_var == null) {
+                                    if ((emptys.trim().equals(""))) {
+                                        emptys += "Place";
+                                    } else {
+                                        emptys += ", Place";
+                                    }
+                                }
+                                Toast.makeText(getApplicationContext(), "Please fill: " + emptys, Toast.LENGTH_SHORT).show();
+                            } else {
+
+                                Toast.makeText(getApplicationContext(), "Sending event", Toast.LENGTH_LONG).show();
+                                new ParseURL().execute();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Please invite contacts for event", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "Please invite contacts for event", Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please invite contacts for event", Toast.LENGTH_LONG).show();
+                }
+                // Planner
+                else {
+
+                    subject = slotSubjectEditText.getText().toString();
+                    note = editTextNote.getText().toString();
+
+                    String emptys = "";
+
+                    if (subject.trim().equals("") || my_var == null) {
+
+                        if (subject.trim().equals("")) {
+                            if ((emptys.trim().equals(""))) {
+                                emptys += "Title";
+                            } else {
+                                emptys += ", Title";
+                            }
+                        }
+                        if (my_var == null) {
+                            if ((emptys.trim().equals(""))) {
+                                emptys += "Place";
+                            } else {
+                                emptys += ", Place";
+                            }
+                        }
+                        Toast.makeText(getApplicationContext(), "Please fill: " + emptys, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Creating plan", Toast.LENGTH_LONG).show();
+                        new ParseURL().execute();
+                    }
                 }
             }
         });
@@ -491,15 +532,38 @@ public class CreateSlot extends AppCompatActivity implements
                 }
             });
         }
+
+        if (switchPlannerEvent != null) {
+            switchPlannerEvent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if (isChecked) {
+                        lleditTextSlotMessage.setVisibility(View.GONE);
+                        llnumberPickerAttendees.setVisibility(View.GONE);
+                        llrecipientsForSlot.setVisibility(View.GONE);
+                        llswitchAutomatedSMS.setVisibility(View.GONE);
+                        editTextNumberAttendeesAvaliable.setVisibility(View.GONE);
+                        switchPlannerEvent.setText("Event");
+                        event = true;
+                    } else {
+                        lleditTextSlotMessage.setVisibility(View.VISIBLE);
+                        llnumberPickerAttendees.setVisibility(View.VISIBLE);
+                        llrecipientsForSlot.setVisibility(View.VISIBLE);
+                        llswitchAutomatedSMS.setVisibility(View.VISIBLE);
+                        switchPlannerEvent.setText("Personal Plan");
+                        editTextNumberAttendeesAvaliable.setVisibility(View.VISIBLE);
+                        event = false;
+                    }
+                }
+            });
+        }
         if (aSwitch != null) {
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        sendSMS = true;
-                    } else {
-                        sendSMS = false;
-                    }
+
+                    sendSMS = isChecked ? true : false;
                 }
             });
         }
@@ -686,55 +750,87 @@ public class CreateSlot extends AppCompatActivity implements
         @Override
         protected Void doInBackground(Void... params) {
 
-            HashMap<String, Object> hashMapEvent = new HashMap<>();
-            hashMapEvent.put("subject", subject);
-            hashMapEvent.put("message", message);
-            hashMapEvent.put("note", note);
-            hashMapEvent.put("starttime", startCalendar.getTime());
-            hashMapEvent.put("endtime", endCalendar.getTime());
-            hashMapEvent.put("attendees", numberAttendeesAvaliable);
-            hashMapEvent.put("phone", personLoggedIn.getPhone());
-            hashMapEvent.put("host", personLoggedIn.getFullname());
-            hashMapEvent.put("loggedinperson", personLoggedIn.getObjectId());
-            hashMapEvent.put("alldayevent", allDayEvent);
-            hashMapEvent.put("category", eventCategory);
+            if (event) {
+                HashMap<String, Object> hashMapEvent = new HashMap<>();
+                hashMapEvent.put("subject", subject);
+                hashMapEvent.put("message", message);
+                hashMapEvent.put("note", note);
+                hashMapEvent.put("starttime", startCalendar.getTime());
+                hashMapEvent.put("endtime", endCalendar.getTime());
+                hashMapEvent.put("attendees", numberAttendeesAvaliable);
+                hashMapEvent.put("phone", personLoggedIn.getPhone());
+                hashMapEvent.put("host", personLoggedIn.getFullname());
+                hashMapEvent.put("loggedinperson", personLoggedIn.getObjectId());
+                hashMapEvent.put("alldayevent", allDayEvent);
+                hashMapEvent.put("category", eventCategory);
+                hashMapEvent.put("id", "event");
 
-            int o = 0;
-            for (Person pId : addedContactsForSlot) {
+                int o = 0;
+                for (Person pId : addedContactsForSlot) {
 
-                hashMapEvent.put(String.valueOf(o), pId.getObjectId());
-                o++;
-            }
-
-            hashMapEvent.put("size", o);
-
-            LatLng latLngPlace = place.getLatLng(); // TODO CHECK NOT NULL place
-
-            hashMapEvent.put("lat", latLngPlace.latitude);
-            hashMapEvent.put("long", latLngPlace.longitude);
-
-            hashMapEvent.put("location", place.getAddress());
-
-            Backendless.Events.dispatch("CreateEvent", hashMapEvent, new AsyncCallback<Map>() {
-                @Override
-                public void handleResponse(Map map) {
-                    Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_LONG).show();
+                    hashMapEvent.put(String.valueOf(o), pId.getObjectId());
+                    o++;
                 }
 
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    Toast.makeText(getApplicationContext(), "Error: Could not create event", Toast.LENGTH_LONG).show();
+                hashMapEvent.put("size", o);
+
+                LatLng latLngPlace = place.getLatLng(); // TODO CHECK NOT NULL place
+
+                hashMapEvent.put("lat", latLngPlace.latitude);
+                hashMapEvent.put("long", latLngPlace.longitude);
+
+                hashMapEvent.put("location", place.getAddress());
+
+                Backendless.Events.dispatch("CreateEvent", hashMapEvent, new AsyncCallback<Map>() {
+                    @Override
+                    public void handleResponse(Map map) {
+                        Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        Toast.makeText(getApplicationContext(), "Error: Could not create event", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                //TODO reused code below here from multiple class Should make a class and method maybe
+
+                // For all the contacts add to their pending response slot
+                for (Person pId : addedContactsForSlot) {
+
+                    if (sendSMS) {
+                        sendsmss(pId.getPhone(), message, subject, startCalendar.getTime().getTime());
+                    }
                 }
-            });
+            } else {
+                HashMap<String, Object> hashMapEvent = new HashMap<>();
+                hashMapEvent.put("subject", subject);
+                hashMapEvent.put("note", note);
+                hashMapEvent.put("starttime", startCalendar.getTime());
+                hashMapEvent.put("endtime", endCalendar.getTime());
+                hashMapEvent.put("alldayevent", allDayEvent);
+                hashMapEvent.put("category", eventCategory);
+                hashMapEvent.put("loggedinperson", personLoggedIn.getObjectId());
 
-            //TODO reused code below here from multiple class Should make a class and method maybe
+                LatLng latLngPlace = place.getLatLng(); // TODO CHECK NOT NULL place
 
-            // For all the contacts add to their pending response slot
-            for (Person pId : addedContactsForSlot) {
+                hashMapEvent.put("lat", latLngPlace.latitude);
+                hashMapEvent.put("long", latLngPlace.longitude);
+                hashMapEvent.put("id", "plan");
+                hashMapEvent.put("location", place.getAddress());
 
-                if (sendSMS) {
-                    sendsmss(pId.getPhone(), message, subject, startCalendar.getTime().getTime());
-                }
+                Backendless.Events.dispatch("CreateEvent", hashMapEvent, new AsyncCallback<Map>() {
+                    @Override
+                    public void handleResponse(Map map) {
+                        Toast.makeText(getApplicationContext(), "Event Sent", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        Toast.makeText(getApplicationContext(), "Error: Could not create event", Toast.LENGTH_LONG).show();
+                    }
+                });
+
             }
             return null;
         }
