@@ -20,8 +20,7 @@ public class StyledViewHolder extends CalendarDayViewHolder {
         super.bind(day, state);
         detailView.setText("");
     }
-
-    public void bindBirthday(Slot event) {
+    public void bindBirthday(Schedule event) {
         detailView.setText(event.getSubject());
     }
 }

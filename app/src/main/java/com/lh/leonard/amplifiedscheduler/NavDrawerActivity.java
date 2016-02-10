@@ -358,7 +358,6 @@ public class NavDrawerActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(NavDrawerActivity.this);                 // Creating a layout Manager
         mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
 
-
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
         mDrawerToggle = new ActionBarDrawerToggle(NavDrawerActivity.this, Drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
@@ -489,7 +488,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                     resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe,
                     R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-            String TITLES[] = {"Create Event", "My Plans", "My Events " +
+            String TITLES[] = {"Create Event/Plan", "My Plans", "My Events " +
                     valMyCreatedEvents, "Going To Events " +
                     valGoingToEvents, "Invited Events " + valResponseEvents, "Manage Contacts" +
                     valPersonsRequestingMe, "Update Account", "Sign Out"};
@@ -638,12 +637,14 @@ public class NavDrawerActivity extends AppCompatActivity {
             }
             Calendar now = Calendar.getInstance();
 
-            List<Slot> calendarEvents = new ArrayList<>(personLoggedIn.getGoingToSlot());
-            calendarEvents.addAll(personLoggedIn.getMyCreatedSlot());
+            List<Schedule> schedulesForStyledCalendar = new ArrayList<>();
+            schedulesForStyledCalendar.addAll(personLoggedIn.getMyCreatedSlot());
+            schedulesForStyledCalendar.addAll(personLoggedIn.getGoingToSlot());
+            schedulesForStyledCalendar.addAll(personLoggedIn.getMyPlans());
 
             CalenderWidget widget = (CalenderWidget) frag.getView().findViewById(R.id.calendar);
             widget.set(CalendarDataFactory.getInstance(Locale.getDefault()).create(now.getTime(), 4),
-                    new StyledCalendarBuilder(calendarEvents));
+                    new StyledCalendarBuilder(schedulesForStyledCalendar));
 
             setRefreshActionButtonState(false);
         }

@@ -10,56 +10,16 @@ import java.util.List;
  * Created by Leonard on 25/04/2015.
  */
 
-public class Slot {
+public class Slot extends Schedule {
 
-    public Date startdate;
-    public Date enddate;
-    public boolean alldayevent;
-    public String subject;
     public String message;
     public List<Person> attendees;
     public Integer maxattendees;
-    public String objectId;
-    public GeoPoint location;
     public String phone;
-    public String place;
-    public String note;
     public String ownername;
-
-    public String getNote() {
-        return note;
-    }
-
-    public Calendar getStartCalendar() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(startdate);
-        return cal;
-    }
-
-    public Calendar getEndCalendar() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(enddate);
-        return cal;
-    }
-
-    public boolean isAllDayEvent() {
-        return alldayevent;
-    }
-
-    public String getPlace() {
-        return place;
-    }
 
     public String getPhone() {
         return phone;
-    }
-
-    public void setLocation(GeoPoint location) {
-        this.location = location;
-    }
-
-    public GeoPoint getLocation() {
-        return location;
     }
 
     public List<Person> getAttendees() {
@@ -72,15 +32,6 @@ public class Slot {
 
     public String getObjectId() {
         return objectId;
-    }
-
-    public String getSubject() {
-
-        if (subject != null) {
-            return subject;
-        } else {
-            return "";
-        }
     }
 
     public String getMessage() {
