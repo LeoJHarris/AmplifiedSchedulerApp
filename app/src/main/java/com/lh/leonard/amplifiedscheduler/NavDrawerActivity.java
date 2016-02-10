@@ -49,7 +49,6 @@ public class NavDrawerActivity extends AppCompatActivity {
     Person personLoggedIn;
     int resourceIntPendingResponseEvents;
     int resourceIntPersonsRequestingMe;
-
     int sizePersonsRequestingMe;
     int sizeGoingToEvents;
     int sizePendingResponseEvents;
@@ -211,7 +210,7 @@ public class NavDrawerActivity extends AppCompatActivity {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT,
-                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+                "Hey! Check out this free event/personal planner app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
         sendIntent.setType("text/plain");
         mShareActionProvider.setShareIntent(sendIntent);
         return super.onCreateOptionsMenu(menu);
@@ -338,9 +337,10 @@ public class NavDrawerActivity extends AppCompatActivity {
         int ICONS[] = {R.drawable.ic_createslot, R.drawable.ic_action_calendar_day, R.drawable.ic_mycreatedslots, R.drawable.ic_goingtoslots,
                 resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe, R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-        String TITLES[] = {"Create event", "My plans " + valMyPlans, "My events " + valMyCreatedEvents, "Going to events " +
-                valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
-                valPersonsRequestingMe, "Update account", "Sign out"};
+        String TITLES[] = {"Create Event/Plan", "My Plans " + valMyPlans, "My Events " +
+                valMyCreatedEvents, "Going To Events " +
+                valGoingToEvents, "Invited Events " + valResponseEvents, "Manage Contacts" +
+                valPersonsRequestingMe, "Update Account", "Sign Out"};
 
         NAME = personLoggedIn.getFullname();
         EMAIL = userLoggedIn.getEmail();
@@ -489,9 +489,10 @@ public class NavDrawerActivity extends AppCompatActivity {
                     resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe,
                     R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-            String TITLES[] = {"Create event", "My plans", "My events " + valMyCreatedEvents, "Going to events " +
-                    valGoingToEvents, "Invited events " + valResponseEvents, "Manage contacts" +
-                    valPersonsRequestingMe, "Update account", "Sign out"};
+            String TITLES[] = {"Create Event", "My Plans", "My Events " +
+                    valMyCreatedEvents, "Going To Events " +
+                    valGoingToEvents, "Invited Events " + valResponseEvents, "Manage Contacts" +
+                    valPersonsRequestingMe, "Update Account", "Sign Out"};
 
             NAME = personLoggedIn.getFullname();
             EMAIL = userLoggedIn.getEmail();

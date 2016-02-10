@@ -171,7 +171,7 @@ public class MyPlans extends AppCompatActivity implements
                 int i = 0;
                 Iterator itr = slot.iterator();
                 while (itr.hasNext()) {
-                    Slot event = (Slot) itr.next();
+                    Plan event = (Plan) itr.next();
 
                     WeekViewEvent weekViewEvent = new WeekViewEvent(Long.parseLong(String.valueOf(i)), event.getSubject(),
                             event.getStartCalendar().get(Calendar.YEAR), newMonth,
@@ -300,11 +300,11 @@ public class MyPlans extends AppCompatActivity implements
             minDate = Calendar.getInstance();
             maxDate = Calendar.getInstance();
 
-            minDate.add(Calendar.MONTH, -1);
+            minDate.add(Calendar.MONTH, -2);
             minDate.set(Calendar.DAY_OF_MONTH, 1);
             maxDate.add(Calendar.YEAR, 1);
 
-            //  mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
+            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
             progressBar.setVisibility(View.GONE);
             RLProgressBar.setVisibility(View.GONE);
             linearLayoutWeekView.setVisibility(View.VISIBLE);
@@ -398,7 +398,7 @@ public class MyPlans extends AppCompatActivity implements
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT,
-                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+                "Hey! Check out this free event/personal planner app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
         sendIntent.setType("text/plain");
         mShareActionProvider.setShareIntent(sendIntent);
 

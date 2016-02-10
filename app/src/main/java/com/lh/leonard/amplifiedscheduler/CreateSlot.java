@@ -1009,7 +1009,7 @@ public class CreateSlot extends AppCompatActivity implements
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT,
-                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+                "Hey! Check out this free event/personal planner app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
         sendIntent.setType("text/plain");
         mShareActionProvider.setShareIntent(sendIntent);
         return super.onCreateOptionsMenu(menu);
