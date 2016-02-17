@@ -85,7 +85,7 @@
             android:label="" />
         <activity
             android:name=".CreateSlot"
-            android:label="Create Event"
+            android:label="Create Event/Plan"
             android:noHistory="true" />
         <activity
             android:name=".MyPlans"

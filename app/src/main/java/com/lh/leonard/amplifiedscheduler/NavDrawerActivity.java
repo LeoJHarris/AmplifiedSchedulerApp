@@ -488,7 +488,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                     resourceIntPendingResponseEvents, resourceIntPersonsRequestingMe,
                     R.drawable.ic_updateaccount, R.drawable.ic_logout};
 
-            String TITLES[] = {"Create Event/Plan", "My Plans", "My Events " +
+            String TITLES[] = {"Create Event/Plan", "My Plans " + valMyPlans, "My Events " +
                     valMyCreatedEvents, "Going To Events " +
                     valGoingToEvents, "Invited Events " + valResponseEvents, "Manage Contacts" +
                     valPersonsRequestingMe, "Update Account", "Sign Out"};
