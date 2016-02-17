@@ -67,6 +67,8 @@ public class HomeFragment extends Fragment {
     AutoResizeTextView textViewGoingToEventsDate;
     AutoResizeTextView textViewInvitedEventDate;
     AutoResizeTextView textViewLatestEvents;
+    AutoResizeTextView textViewMyPlans;
+    AutoResizeTextView textViewMyPlansDate;
     ImageView imageViewInvitedEvents;
     ImageView imageViewMyEvents;
     ImageView imageViewGoingToEvents;
@@ -74,6 +76,7 @@ public class HomeFragment extends Fragment {
     RelativeLayout RLProgressBar;
     LinearLayout llEventsForm;
     RelativeLayout llCalendar;
+    ImageView imageViewMyPlans;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,6 +85,7 @@ public class HomeFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_home, container, false);
 
         Backendless.Data.mapTableToClass("Person", Person.class);
+        Backendless.Data.mapTableToClass("Plan", Plan.class);
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
 
@@ -102,6 +106,9 @@ public class HomeFragment extends Fragment {
         imageViewInvitedEvents = (ImageView) v.findViewById(R.id.imageViewInvitedEvents);
         imageViewMyEvents = (ImageView) v.findViewById(R.id.imageViewMyEvents);
         imageViewGoingToEvents = (ImageView) v.findViewById(R.id.imageViewGoingToEvents);
+        textViewMyPlans = (AutoResizeTextView) v.findViewById(R.id.textViewMyPlans);
+        textViewMyPlansDate = (AutoResizeTextView) v.findViewById(R.id.textViewMyPlansDate);
+        imageViewMyPlans = (ImageView) v.findViewById(R.id.imageViewMyPlans);
 
         RLProgressBar = (RelativeLayout) v.findViewById(R.id.RLProgressBar);
         llEventsForm = (LinearLayout) v.findViewById(R.id.llEventsForm);
@@ -142,6 +149,7 @@ public class HomeFragment extends Fragment {
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
+        textViewMyPlansDate.setTypeface(RobotoCondensedLight);
         textViewLatestEvents.setTypeface(RobotoCondensedBold);
         textViewGoingToEventsDate.setTypeface(RobotoCondensedLightItalic);
         textViewMyEventsDate.setTypeface(RobotoCondensedLightItalic);
@@ -150,6 +158,8 @@ public class HomeFragment extends Fragment {
         textViewGoingToEvents.setTypeface(RobotoCondensedLight);
         textViewInvitedEvent.setTypeface(RobotoCondensedLight);
         textViewLoggedIn.setTypeface(RobotoCondensedLight);
+        textViewMyEventsDate.setTypeface(RobotoCondensedLight);
+        textViewMyEvents.setTypeface(RobotoCondensedLight);
 
         textViewLoggedIn.setText(personLoggedIn.getFullname());
 
@@ -186,6 +196,7 @@ public class HomeFragment extends Fragment {
                 relationProps.add("personsImRequesting");
                 relationProps.add("goingToSlot");
                 relationProps.add("myCreatedSlot");
+                relationProps.add("myPlans");
                 relationProps.add("pendingResponseSlot");
                 Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
 
@@ -210,6 +221,13 @@ public class HomeFragment extends Fragment {
                         return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
                     }
                 });
+                Collections.sort(personLoggedIn.getMyPlans(), new Comparator<Plan>() {
+                    public int compare(Plan e1, Plan e2) {
+                        if (e1.getStartCalendar().getTime() == null || e2.getStartCalendar().getTime() == null)
+                            return 0;
+                        return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
+                    }
+                });
             }
             return null;
         }
@@ -219,12 +237,14 @@ public class HomeFragment extends Fragment {
 
             Calendar now = Calendar.getInstance();
 
-            List<Slot> calendarEvents = new ArrayList<>(personLoggedIn.getGoingToSlot());
-            calendarEvents.addAll(personLoggedIn.getMyCreatedSlot());
+            List<Schedule> schedulesForStyledCalendar = new ArrayList<>();
+            schedulesForStyledCalendar.addAll(personLoggedIn.getMyCreatedSlot());
+            schedulesForStyledCalendar.addAll(personLoggedIn.getGoingToSlot());
+            schedulesForStyledCalendar.addAll(personLoggedIn.getMyPlans());
 
             CalenderWidget widget = (CalenderWidget) v.findViewById(R.id.calendar);
             widget.set(CalendarDataFactory.getInstance(Locale.getDefault()).create(now.getTime(), 4),
-                    new StyledCalendarBuilder(calendarEvents));
+                    new StyledCalendarBuilder(schedulesForStyledCalendar));
 
             int personsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
@@ -243,6 +263,11 @@ public class HomeFragment extends Fragment {
                 textViewInvitedEvent.setText(personLoggedIn.getPendingResponseSlot().get(0).getSubject());
                 textViewInvitedEventDate.setText(personLoggedIn.getPendingResponseSlot().get(0).getStartCalendar().getTime().toString());
                 imageViewInvitedEvents.setImageDrawable(drawableTime);
+            }
+            if (!personLoggedIn.getMyPlans().isEmpty()) {
+                textViewMyPlans.setText(personLoggedIn.getMyPlans().get(0).getSubject());
+                textViewMyPlansDate.setText(personLoggedIn.getMyPlans().get(0).getStartCalendar().getTime().toString());
+                imageViewMyPlans.setImageDrawable(drawableTime);
             }
             if (personsRequestingMe >= 1 || invitedEvents >= 1) {
 

@@ -298,7 +298,7 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
             minDate = Calendar.getInstance();
             maxDate = Calendar.getInstance();
 
-            minDate.add(Calendar.MONTH, -1);
+            minDate.add(Calendar.MONTH, -2);
             minDate.set(Calendar.DAY_OF_MONTH, 1);
             maxDate.add(Calendar.YEAR, 1);
 
@@ -397,7 +397,7 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT,
-                "Hey check out this free event making app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+                "Hey! Check out this free event/personal planner app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
         sendIntent.setType("text/plain");
         mShareActionProvider.setShareIntent(sendIntent);
 

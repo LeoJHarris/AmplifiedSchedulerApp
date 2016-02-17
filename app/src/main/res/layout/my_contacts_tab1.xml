@@ -1,16 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@drawable/gradient_color_bg">
+    android:background="@drawable/gradient_color_bg"
+    android:fitsSystemWindows="true">
 
     <SearchView
         android:id="@+id/searchViewMyContacts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:queryHint="Search Slots"
-        android:textSize="20sp"
         android:searchIcon="@drawable/ic_searchicon"
+        android:textSize="20sp"
         android:visibility="gone" />
 
     <ProgressBar
@@ -33,7 +34,7 @@
         android:layout_height="match_parent"
         android:layout_margin="20dp"
         android:gravity="center"
-        android:text="You currently have no contacts"
+        android:text="No Contacts Avaliable"
         android:textSize="23sp"
         android:visibility="gone" />
 

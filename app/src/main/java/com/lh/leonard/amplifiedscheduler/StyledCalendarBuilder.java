@@ -11,9 +11,9 @@ import de.jodamob.android.calendar.VisibleMonths;
 
 public class StyledCalendarBuilder extends CalendarBuilder {
 
-    private final List<Slot> birthdays = new ArrayList<>();
+    private final List<Schedule> birthdays = new ArrayList<>();
 
-    public StyledCalendarBuilder(List<Slot> events) {
+    public StyledCalendarBuilder(List<Schedule> events) {
         super(R.layout.calendar_item, R.layout.calendar_header);
         this.birthdays.addAll(events);
     }

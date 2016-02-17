@@ -16,9 +16,9 @@ import static de.jodamob.android.calendar.CalendarUtil.isSameDayIgnoreYear;
 
 public class StyledAdapter extends CalendarAdapter {
 
-    private final List<Slot> birthdays;
+    private final List<Schedule> birthdays;
 
-    public StyledAdapter(@LayoutRes int layout, LayoutInflater inflater, VisibleMonths data, List<Slot> birthdays) {
+    public StyledAdapter(@LayoutRes int layout, LayoutInflater inflater, VisibleMonths data, List<Schedule> birthdays) {
         super(layout, inflater, data);
         this.birthdays = birthdays;
     }
@@ -33,7 +33,7 @@ public class StyledAdapter extends CalendarAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
         super.onBindViewHolder(holder, position, payloads);
         Day day = data.getAt(position);
-        for (Slot birthday : birthdays) {
+        for (Schedule birthday : birthdays) {
             if (isSameDayIgnoreYear(birthday.getStartCalendar().getTime(), day.getDate())) {
                 ((StyledViewHolder) holder).bindBirthday(birthday);
                 break;
