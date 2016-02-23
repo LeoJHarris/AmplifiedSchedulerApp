@@ -282,13 +282,14 @@ public class MyPlans extends AppCompatActivity implements
 
                     if (!event.getTitle().equals("No events")) {
 
-                        Intent slotDialogIntent = new Intent(MyPlans.this, MyCreatedSlotsDialog.class);
-
-                        int position = Integer.parseInt(String.valueOf(event.getId()));
-                        slotDialogIntent.putExtra("origin", 2);
-                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
-
-                        startActivity(slotDialogIntent);
+                        //TODO fix this
+//                        Intent slotDialogIntent = new Intent(MyPlans.this, MyCreatedSlotsDialog.class);
+//
+//                        int position = Integer.parseInt(String.valueOf(event.getId()));
+//                        slotDialogIntent.putExtra("origin", 2);
+//                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
+//
+//                        startActivity(slotDialogIntent);
                     }
                 }
             };

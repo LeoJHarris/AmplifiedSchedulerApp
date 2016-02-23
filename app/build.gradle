@@ -26,10 +26,10 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.github.alamkanak:android-week-view:1.2.3'
-    compile 'com.google.android.gms:play-services:8.3.0'
+    compile 'com.google.android.gms:play-services:8.4.0'
     compile 'se.simbio.encryption:library:1.2.0'
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
@@ -40,4 +40,5 @@ dependencies {
     compile 'de.jodamob.android:clean-simple-calendar:1.0'
     compile 'com.github.tibolte:agendacalendarview:1.0.2'
     compile 'com.android.support:multidex:1.0.1'
+    compile 'com.backendless:backendless:3.0.8.1'
 }
