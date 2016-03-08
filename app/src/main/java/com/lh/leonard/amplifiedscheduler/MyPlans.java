@@ -124,10 +124,10 @@ public class MyPlans extends AppCompatActivity implements
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
 
-//        Intent slotDialogIntent = new Intent(MyPlans.this, MyCreatedSlotsDialog.class);
-//        int position = Integer.parseInt(String.valueOf(event.getId()));
-//        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
-//        startActivity(slotDialogIntent);
+        Intent slotDialogIntent = new Intent(MyPlans.this, MyPlansDialog.class);
+        int position = Integer.parseInt(String.valueOf(event.getId()));
+        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
+        startActivity(slotDialogIntent);
     }
 
     @Override
@@ -174,11 +174,11 @@ public class MyPlans extends AppCompatActivity implements
                     Plan event = (Plan) itr.next();
 
                     WeekViewEvent weekViewEvent = new WeekViewEvent(Long.parseLong(String.valueOf(i)), event.getSubject(),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth,
+                            event.getStartCalendar().get(Calendar.YEAR), newMonth-1,
                             event.getStartCalendar().get(Calendar.DAY_OF_YEAR),
                             event.getStartCalendar().get(Calendar.HOUR_OF_DAY),
                             event.getStartCalendar().get(Calendar.MINUTE),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth,
+                            event.getStartCalendar().get(Calendar.YEAR), newMonth-1,
                             event.getEndCalendar().get(Calendar.DAY_OF_YEAR),
                             event.getEndCalendar().get(Calendar.HOUR_OF_DAY),
                             event.getStartCalendar().get(Calendar.MINUTE));
@@ -283,13 +283,13 @@ public class MyPlans extends AppCompatActivity implements
                     if (!event.getTitle().equals("No events")) {
 
                         //TODO fix this
-//                        Intent slotDialogIntent = new Intent(MyPlans.this, MyCreatedSlotsDialog.class);
-//
-//                        int position = Integer.parseInt(String.valueOf(event.getId()));
-//                        slotDialogIntent.putExtra("origin", 2);
-//                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
-//
-//                        startActivity(slotDialogIntent);
+                        Intent slotDialogIntent = new Intent(MyPlans.this, MyPlansDialog.class);
+
+                        int position = Integer.parseInt(String.valueOf(event.getId()));
+                        slotDialogIntent.putExtra("origin", 2);
+                        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
+
+                        startActivity(slotDialogIntent);
                     }
                 }
             };
@@ -301,7 +301,7 @@ public class MyPlans extends AppCompatActivity implements
             minDate = Calendar.getInstance();
             maxDate = Calendar.getInstance();
 
-            minDate.add(Calendar.MONTH, -2);
+            minDate.add(Calendar.MONTH, -1);
             minDate.set(Calendar.DAY_OF_MONTH, 1);
             maxDate.add(Calendar.YEAR, 1);
 

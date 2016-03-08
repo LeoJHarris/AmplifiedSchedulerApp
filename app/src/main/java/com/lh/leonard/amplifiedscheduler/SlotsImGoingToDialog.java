@@ -15,19 +15,16 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SlotsImGoingToDialog extends Activity {
 
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
-    List<Slot> slotsList;
     AutoResizeTextView textViewSubject;
     AutoResizeTextView textViewMessage;
     AutoResizeTextView textViewDateAndTime;
@@ -35,17 +32,13 @@ public class SlotsImGoingToDialog extends Activity {
     AutoResizeTextView textViewMyeventSpacesAvaliable;
     String objectId;
     Button buttonGoingToEventNotGoing;
-    List<Person> personsToSms;
-    BackendlessCollection<Person> personsToSmsCollection;
     Button buttonGoingToEventParticipantsSlot;
     Person person;
-    BackendlessCollection<Slot> slots;
     SpannableString content;
     ProgressBar progressBar;
-    String eventRemoved;
     Slot event;
     ProgressDialog ringProgressDialog;
-    int origin = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +89,7 @@ public class SlotsImGoingToDialog extends Activity {
                                                                   public void onClick(View v) {
 
                                                                       Intent participantsIntent = new Intent(SlotsImGoingToDialog.this, ParticipantsActivity.class);
-
                                                                       participantsIntent.putExtra("eventid", event.getObjectId());
-
                                                                       startActivity(participantsIntent);
                                                                   }
                                                               }
@@ -156,9 +147,7 @@ public class SlotsImGoingToDialog extends Activity {
             objectId = data.getString("objectId");
             event = Backendless.Data.of(Slot.class).findById(objectId);
 
-
             return (String) event.getLocation().getMetadata("address");
-
         }
 
         @Override
@@ -195,11 +184,8 @@ public class SlotsImGoingToDialog extends Activity {
                 Integer spacesAvaliable = event.getMaxattendees();
                 Integer going = event.getAttendees().size();
                 {
-                    Integer spacesLeft = spacesAvaliable - event.getAttendees().size();
                     textViewMyeventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
-
                 }
-
             }
 
             if (event.getLocation() != null) {

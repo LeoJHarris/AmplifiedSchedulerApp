@@ -175,11 +175,11 @@ public class SlotsImGoingTo extends AppCompatActivity implements
                     Slot event = (Slot) itr.next();
 
                     WeekViewEvent weekViewEvent = new WeekViewEvent(Long.parseLong(String.valueOf(i)), event.getSubject(),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth,
+                            event.getStartCalendar().get(Calendar.YEAR), newMonth-1,
                             event.getStartCalendar().get(Calendar.DAY_OF_YEAR),
                             event.getStartCalendar().get(Calendar.HOUR_OF_DAY),
                             event.getStartCalendar().get(Calendar.MINUTE),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth,
+                            event.getStartCalendar().get(Calendar.YEAR), newMonth-1,
                             event.getEndCalendar().get(Calendar.DAY_OF_YEAR),
                             event.getEndCalendar().get(Calendar.HOUR_OF_DAY),
                             event.getStartCalendar().get(Calendar.MINUTE));
@@ -300,7 +300,7 @@ public class SlotsImGoingTo extends AppCompatActivity implements
             minDate = Calendar.getInstance();
             maxDate = Calendar.getInstance();
 
-            minDate.add(Calendar.MONTH, -2);
+            minDate.add(Calendar.MONTH, -1);
             minDate.set(Calendar.DAY_OF_MONTH, 1);
             maxDate.add(Calendar.YEAR, 1);
 

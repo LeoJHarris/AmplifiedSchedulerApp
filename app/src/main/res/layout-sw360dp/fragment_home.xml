@@ -38,7 +38,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_margin="8dp"
-                        android:text="UPCOMING EVENTS:"
+                        android:text="UPCOMING EVENTl:"
                         android:textSize="16sp" />
 
                     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
