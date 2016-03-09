@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:duplicateParentState="true"
         android:gravity="center"
-        android:textSize="11sp" />
+        android:textSize="13sp" />
 
     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
         android:id="@+id/date_details"
@@ -22,7 +22,7 @@
         android:duplicateParentState="true"
         android:gravity="center"
         android:lines="2"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:textStyle="italic" />
 
 </RelativeLayout>

@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
     android:fitsSystemWindows="true"
-    android:gravity="center"
     tools:context="com.lh.leonard.amplifiedscheduler.CreateSlot">
 
     <ScrollView

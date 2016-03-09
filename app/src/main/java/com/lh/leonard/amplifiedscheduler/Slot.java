@@ -17,6 +17,7 @@ public class Slot extends Schedule {
     public Integer maxattendees;
     public String phone;
     public String ownername;
+    public String objectId;
 
     public String getPhone() {
         return phone;
