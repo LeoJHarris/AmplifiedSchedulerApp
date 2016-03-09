@@ -25,7 +25,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -73,10 +73,9 @@ public class HomeFragment extends Fragment {
     ImageView imageViewMyEvents;
     ImageView imageViewGoingToEvents;
     Drawable drawableTime;
-    RelativeLayout RLProgressBar;
-    LinearLayout llEventsForm;
-    RelativeLayout llCalendar;
     ImageView imageViewMyPlans;
+    RelativeLayout contentHome;
+    ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,10 +108,9 @@ public class HomeFragment extends Fragment {
         textViewMyPlans = (AutoResizeTextView) v.findViewById(R.id.textViewMyPlans);
         textViewMyPlansDate = (AutoResizeTextView) v.findViewById(R.id.textViewMyPlansDate);
         imageViewMyPlans = (ImageView) v.findViewById(R.id.imageViewMyPlans);
+        progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 
-        RLProgressBar = (RelativeLayout) v.findViewById(R.id.RLProgressBar);
-        llEventsForm = (LinearLayout) v.findViewById(R.id.llEventsForm);
-        llCalendar = (RelativeLayout) v.findViewById(R.id.llCalendar);
+        contentHome = (RelativeLayout) v.findViewById(R.id.contentHome);
 
         Drawable drawableUserNonFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_logged);
         Drawable drawableUserFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_facebook);
@@ -276,9 +274,8 @@ public class HomeFragment extends Fragment {
             } else {
 
             }
-            RLProgressBar.setVisibility(View.GONE);
-            llEventsForm.setVisibility(View.VISIBLE);
-            llCalendar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            contentHome.setVisibility(View.VISIBLE);
         }
     }
 
