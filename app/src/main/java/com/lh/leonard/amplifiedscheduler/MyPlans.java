@@ -108,7 +108,7 @@ public class MyPlans extends AppCompatActivity implements
         //  mWeekView.setOnEventClickListener(this); // do nothing for now
 
         // The week view has infinite scrolling horizontally. We have to provide the events of a
-// month every time the month changes on the week view.
+        // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(this);
 
         // Set long press listener for events.

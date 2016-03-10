@@ -149,7 +149,7 @@
                 android:layout_height="match_parent"
                 android:clickable="true"
                 android:gravity="center"
-                android:paddingTop="40dp"
+                android:paddingTop="50dp"
                 android:text="Forgot Password?"
                 android:textColor="@color/black"
                 android:textSize="30sp" />

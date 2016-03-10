@@ -8,12 +8,17 @@
 
     <!--nexus 4 and 7-->
 
-    <ProgressBar
+    <RelativeLayout
         android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/contentHome"
@@ -101,7 +106,7 @@
                                 android:id="@+id/textViewMyPlansDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:gravity="center"
+                                android:gravity="start|center"
                                 android:textSize="17sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -140,7 +145,7 @@
                                 android:id="@+id/textViewMyEventsDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:gravity="center"
+                                android:gravity="start|center"
                                 android:textSize="17sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -179,7 +184,7 @@
                                 android:id="@+id/textViewGoingToEventsDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:gravity="center"
+                                android:gravity="start|center"
                                 android:textSize="17sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -218,7 +223,7 @@
                                 android:id="@+id/textViewInvitedEventDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:gravity="center"
+                                android:gravity="start|center"
                                 android:textSize="17sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -233,10 +238,15 @@
             android:layout_centerVertical="true"
             android:visibility="invisible" />
 
-        <de.jodamob.android.calendar.CalenderWidget
-            android:id="@+id/calendar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/secondView" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secondView">
+
+            <de.jodamob.android.calendar.CalenderWidget
+                android:id="@+id/calendar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
     </RelativeLayout>
 </FrameLayout>

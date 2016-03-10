@@ -25,7 +25,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -75,7 +74,8 @@ public class HomeFragment extends Fragment {
     Drawable drawableTime;
     ImageView imageViewMyPlans;
     RelativeLayout contentHome;
-    ProgressBar progressBar;
+    RelativeLayout progressBar;
+    List<Schedule> schedulesForStyledCalendar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment {
         textViewMyPlans = (AutoResizeTextView) v.findViewById(R.id.textViewMyPlans);
         textViewMyPlansDate = (AutoResizeTextView) v.findViewById(R.id.textViewMyPlansDate);
         imageViewMyPlans = (ImageView) v.findViewById(R.id.imageViewMyPlans);
-        progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        progressBar = (RelativeLayout) v.findViewById(R.id.progressBar);
 
         contentHome = (RelativeLayout) v.findViewById(R.id.contentHome);
 
@@ -226,6 +226,11 @@ public class HomeFragment extends Fragment {
                         return e1.getStartCalendar().getTime().compareTo(e2.getStartCalendar().getTime());
                     }
                 });
+
+                schedulesForStyledCalendar = new ArrayList<>();
+                schedulesForStyledCalendar.addAll(personLoggedIn.getMyCreatedSlot());
+                schedulesForStyledCalendar.addAll(personLoggedIn.getGoingToSlot());
+                schedulesForStyledCalendar.addAll(personLoggedIn.getMyPlans());
             }
             return null;
         }
@@ -234,11 +239,6 @@ public class HomeFragment extends Fragment {
         protected void onPostExecute(Void result) {
 
             Calendar now = Calendar.getInstance();
-
-            List<Schedule> schedulesForStyledCalendar = new ArrayList<>();
-            schedulesForStyledCalendar.addAll(personLoggedIn.getMyCreatedSlot());
-            schedulesForStyledCalendar.addAll(personLoggedIn.getGoingToSlot());
-            schedulesForStyledCalendar.addAll(personLoggedIn.getMyPlans());
 
             CalenderWidget widget = (CalenderWidget) v.findViewById(R.id.calendar);
             widget.set(CalendarDataFactory.getInstance(Locale.getDefault()).create(now.getTime(), 4),
