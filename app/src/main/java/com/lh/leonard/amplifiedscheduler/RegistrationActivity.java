@@ -454,7 +454,7 @@ public class RegistrationActivity extends AppCompatActivity {
             try {
                 textViewPictureLocalDir.setText(filePath);
                 bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
-                btnRegPicture.setCompoundDrawables(userGoodProfileDraw, null, null, null);
+                btnRegPicture.setCompoundDrawablesWithIntrinsicBounds(userGoodProfileDraw, null, null, null);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

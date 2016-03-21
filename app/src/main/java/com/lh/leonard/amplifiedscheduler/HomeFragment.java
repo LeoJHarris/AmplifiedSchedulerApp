@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -33,9 +35,11 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.files.BackendlessFile;
 import com.kobakei.ratethisapp.RateThisApp;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -52,6 +56,7 @@ import de.jodamob.android.calendar.CalenderWidget;
  */
 public class HomeFragment extends Fragment {
 
+    Bitmap mIcon_val;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     Person personLoggedIn;
     BackendlessCollection<Person> persons;
@@ -133,10 +138,6 @@ public class HomeFragment extends Fragment {
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-
-
-        Backendless.Files.
-
 
         //Fame
         if (width == 320 && height == 480) {
@@ -236,6 +237,20 @@ public class HomeFragment extends Fragment {
                 schedulesForStyledCalendar.addAll(personLoggedIn.getMyCreatedSlot());
                 schedulesForStyledCalendar.addAll(personLoggedIn.getGoingToSlot());
                 schedulesForStyledCalendar.addAll(personLoggedIn.getMyPlans());
+
+                URL newurl = null;
+                try {
+                    newurl = new URL(personLoggedIn.getPicture());
+
+                     mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+
+
+                    // imageViewMyEvents.setIma();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             return null;
         }
@@ -253,9 +268,11 @@ public class HomeFragment extends Fragment {
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
             if (!personLoggedIn.getMyCreatedSlot().isEmpty()) {
-                textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject());
-                textViewMyEventsDate.setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
-                imageViewMyEvents.setImageDrawable(drawableTime);
+//                textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject());
+//                textViewMyEventsDate.setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
+//                imageViewMyEvents.setImageDrawable(drawableTime);
+
+                imageViewMyEvents.setImageBitmap(mIcon_val);
             }
             if (!personLoggedIn.getGoingToSlot().isEmpty()) {
                 textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().get(0).getSubject());
