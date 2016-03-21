@@ -33,6 +33,7 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.files.BackendlessFile;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import java.util.ArrayList;
@@ -132,6 +133,10 @@ public class HomeFragment extends Fragment {
         display.getSize(size);
         int width = size.x;
         int height = size.y;
+
+
+        Backendless.Files.
+
 
         //Fame
         if (width == 320 && height == 480) {

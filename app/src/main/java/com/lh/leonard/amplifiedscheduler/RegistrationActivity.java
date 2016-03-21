@@ -2,8 +2,11 @@ package com.lh.leonard.amplifiedscheduler;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,12 +23,21 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
 import com.backendless.async.callback.BackendlessCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.files.BackendlessFile;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.regex.Pattern;
 
 
 public class RegistrationActivity extends AppCompatActivity {
 
+    File f;
     String my_var;
     Drawable tickIconDraw;
     Drawable crossIconDraw;
@@ -35,7 +47,7 @@ public class RegistrationActivity extends AppCompatActivity {
     Drawable passwordIconDraw;
     Drawable countryIconDraw;
     Drawable phoneIconDraw;
-
+    Bitmap bitmap = null;
     Drawable emailGoodIconDraw;
     Drawable userGoodProfileDraw;
     Drawable passwordGoodIconDraw;
@@ -47,6 +59,10 @@ public class RegistrationActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     Validator validator = new Validator();
     String EMAILBAD = "";
+    Button btnRegPicture;
+    AutoResizeTextView textViewPictureLocalDir;
+    CharSequence fname;
+    CharSequence lname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +98,8 @@ public class RegistrationActivity extends AppCompatActivity {
         final AutoResizeTextView txtLabelGender = (AutoResizeTextView) findViewById(R.id.txtLabelGender);
         final RadioButton radioButtonMale = (RadioButton) findViewById(R.id.radioButtonMale);
         final RadioButton radioButtonFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
+        btnRegPicture = (Button) findViewById(R.id.btnRegPicture);
+        textViewPictureLocalDir = (AutoResizeTextView) findViewById(R.id.textViewPictureLocalDir);
 
         tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
         crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
@@ -137,17 +155,29 @@ public class RegistrationActivity extends AppCompatActivity {
         txtLabelPhone.setTypeface(RobotoCondensedLight);
         txtLabelTextPasswordReg.setTypeface(RobotoCondensedLight);
         txtLabelGender.setTypeface(RobotoCondensedLight);
+        btnRegPicture.setTypeface(RobotoCondensedLight);
+        textViewPictureLocalDir.setTypeface(RobotoCondensedLight);
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
+
+        final Intent intentFileDialog = new Intent(this, FilePickerActivity.class);
+
+        btnRegPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intentFileDialog.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.jpg$"));
+                intentFileDialog.putExtra(FilePickerActivity.ARG_DIRECTORIES_FILTER, false);
+                intentFileDialog.putExtra(FilePickerActivity.ARG_SHOW_HIDDEN, true);
+                startActivityForResult(intentFileDialog, 1);
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-
                 final CharSequence email = emailField.getText(); //TODO regex tester, might be it on server, handle fault with code
-
-                final CharSequence fname = fnameField.getText();
-                final CharSequence lname = lnameField.getText();
+                fname = fnameField.getText();
+                lname = lnameField.getText();
                 final CharSequence phone = phoneField.getText();
                 CharSequence county = textViewCountry.getText();
                 CharSequence password = passwordField.getText();
@@ -155,9 +185,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 Boolean genderChecked = false;
                 if (radioButtonFemale.isChecked() || radioButtonMale.isChecked()) {
                     genderChecked = true;
-
                 }
-
 
                 if (!(fname.toString().trim().equals("") && lname.toString().equals("")
                         && phone.toString().equals("") && county.toString().equals("")
@@ -191,15 +219,26 @@ public class RegistrationActivity extends AppCompatActivity {
 
                                 Backendless.UserService.register(user, new BackendlessCallback<BackendlessUser>() {
                                     @Override
-                                    public void handleResponse(BackendlessUser backendlessUser) {
+                                    public void handleResponse(final BackendlessUser backendlessUser) {
 
-//                                        Person p = (Person) backendlessUser.getProperty("persons");
-//                                        p.setOwnerId(backendlessUser.getObjectId());
-//                                        Backendless.Data.of(Person.class).save(p);
+                                        //Store the image with the users object id
+                                        Backendless.Files.Android.upload(bitmap, Bitmap.CompressFormat.PNG, 100, backendlessUser.getObjectId(), "pictures",
+                                                new AsyncCallback<BackendlessFile>() {
+                                                    @Override
+                                                    public void handleResponse(final BackendlessFile backendlessFile) {
 
-                                        Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                                        intent.putExtra("nameRegistered", fname + "," + lname);
-                                        startActivity(intent);
+                                                        new ProfilePic(backendlessFile, backendlessUser).execute();
+
+
+                                                    }
+
+                                                    @Override
+                                                    public void handleFault(BackendlessFault backendlessFault) {
+                                                        Toast.makeText(RegistrationActivity.this, backendlessFault.toString(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
+
                                     }
 
                                     public void handleFault(BackendlessFault fault) {
@@ -392,6 +431,72 @@ public class RegistrationActivity extends AppCompatActivity {
             if (target == null)
                 return false;
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //  image.setImageBitmap(bitmap);
+//        Bitmap bitmap = (Bitmap) Bitmap.
+//                File file = new File("test.txt");
+//        String filePath = file.getAbsolutePath();
+//        Bitmap photo = (Bitmap) getIntent().getExtras().get("data");
+
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+
+            f = new File(filePath);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            try {
+                textViewPictureLocalDir.setText(filePath);
+                bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
+                btnRegPicture.setCompoundDrawables(userGoodProfileDraw, null, null, null);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class ProfilePic extends AsyncTask<Void, Integer, Void> {
+
+        BackendlessFile localBackendlessFile;
+        BackendlessUser localBackendlessUser;
+
+        ProfilePic(BackendlessFile backendlessFile, BackendlessUser backendlessUser) {
+            this.localBackendlessFile = backendlessFile;
+            this.localBackendlessUser = backendlessUser;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            Person p = (Person) localBackendlessUser.getProperty("persons");
+            p.setOwnerId(localBackendlessUser.getObjectId());
+            p.setPicture(localBackendlessFile.getFileURL());
+            Backendless.Data.of(Person.class).save(p);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+            intent.putExtra("nameRegistered", fname + "," + lname);
+            startActivity(intent);
         }
     }
 }

@@ -25,6 +25,15 @@ public class Person {
     public String ownerId;
     public String social;
     public List<Plan> myPlans;
+    public String picture;
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
 
     public List<Plan> getMyPlans() {
         return myPlans;
