@@ -238,19 +238,19 @@ public class HomeFragment extends Fragment {
                 schedulesForStyledCalendar.addAll(personLoggedIn.getGoingToSlot());
                 schedulesForStyledCalendar.addAll(personLoggedIn.getMyPlans());
 
-                URL newurl = null;
-                try {
-                    newurl = new URL(personLoggedIn.getPicture());
-
-                     mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
-
-
-                    // imageViewMyEvents.setIma();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                URL newurl = null;
+//                try {
+//                    newurl = new URL(personLoggedIn.getPicture());
+//
+//                     mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+//
+//
+//                    // imageViewMyEvents.setIma();
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
             return null;
         }
@@ -268,11 +268,11 @@ public class HomeFragment extends Fragment {
             int invitedEvents = personLoggedIn.getPendingResponseSlot().size();
 
             if (!personLoggedIn.getMyCreatedSlot().isEmpty()) {
-//                textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject());
-//                textViewMyEventsDate.setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
-//                imageViewMyEvents.setImageDrawable(drawableTime);
+                textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject());
+                textViewMyEventsDate.setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
+                imageViewMyEvents.setImageDrawable(drawableTime);
 
-                imageViewMyEvents.setImageBitmap(mIcon_val);
+               // imageViewMyEvents.setImageBitmap(mIcon_val);
             }
             if (!personLoggedIn.getGoingToSlot().isEmpty()) {
                 textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().get(0).getSubject());

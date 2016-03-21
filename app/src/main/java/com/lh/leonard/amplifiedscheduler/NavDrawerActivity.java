@@ -6,6 +6,8 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -30,6 +32,9 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -64,10 +69,10 @@ public class NavDrawerActivity extends AppCompatActivity {
     String valGoingToEvents = "";
     String valMyCreatedEvents = "";
     String valMyPlans = "";
-
+    Bitmap bitmapProfile;
     String NAME;
     String EMAIL;
-    int PROFILE = R.drawable.ic_currentcontact;
+    Bitmap PROFILE;
     private Toolbar toolbar;                              // Declaring the Toolbar Object
     FragmentManager fragmentManager;
     RecyclerView mRecyclerView = null;                           // Declaring RecyclerView
@@ -122,11 +127,11 @@ public class NavDrawerActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
         setRefreshActionButtonState(true);
         getNav();
         new Refresh().execute();
         setRefreshActionButtonState(false);
-
     }
 
     private void selectItem(int position) {
@@ -345,7 +350,9 @@ public class NavDrawerActivity extends AppCompatActivity {
         NAME = personLoggedIn.getFullname();
         EMAIL = userLoggedIn.getEmail();
 
-        mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+
+
+        mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, bitmapProfile);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
 
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
 
@@ -415,6 +422,16 @@ public class NavDrawerActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
+
+            URL newurl = null;
+            try {
+                newurl = new URL(personLoggedIn.getPicture());
+
+                bitmapProfile = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             ArrayList<String> relationProps = new ArrayList<>();
             relationProps.add("personsRequestingMe");
@@ -496,7 +513,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             NAME = personLoggedIn.getFullname();
             EMAIL = userLoggedIn.getEmail();
 
-            mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+            mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, bitmapProfile);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
 
             mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
 
