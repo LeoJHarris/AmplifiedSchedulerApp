@@ -149,7 +149,7 @@ public class MyContactsFragment extends Fragment {
                     llm = new LinearLayoutManager(v.getContext());
                     rvMyContacts.setLayoutManager(llm);
 
-                    adapter = new ContactsAdapter(myContactsList,0);
+                    adapter = new ContactsAdapter(myContactsList, 0, getContext());
                     rvMyContacts.setAdapter(adapter);
                     rvMyContacts.addOnItemTouchListener(new RecyclerItemClickListener(v.getContext(), rvMyContacts, new RecyclerItemClickListener.OnItemClickListener() {
 
@@ -251,7 +251,7 @@ public class MyContactsFragment extends Fragment {
                 //  rvMyContacts.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
 
-                adapter = new ContactsAdapter(myContactsList, 0);
+                adapter = new ContactsAdapter(myContactsList, 0, getContext());
 
                 rvMyContacts.setAdapter(adapter);
 
@@ -309,7 +309,7 @@ public class MyContactsFragment extends Fragment {
                     llm = new LinearLayoutManager(v.getContext());
                     rvMyContacts.setLayoutManager(llm);
 
-                    adapter = new ContactsAdapter(myContactsList, 0);
+                    adapter = new ContactsAdapter(myContactsList, 0, getContext());
                     rvMyContacts.setAdapter(adapter);
 
                     progressBarMyContacts.setVisibility(View.GONE);

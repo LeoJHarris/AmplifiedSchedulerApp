@@ -1,5 +1,6 @@
 package com.lh.leonard.amplifiedscheduler;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,18 +37,21 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     Drawable requestingDrawable;
     Drawable friendDrawable;
     Drawable blankDrawable;
+    Context context;
 
-    public ContactsAdapter(List<Person> list, int val) {
+    public ContactsAdapter(List<Person> list, int val, Context context) {
 
         listSlots = list;
         VAL = val;
+        this.context = context;
     }
 
-    public ContactsAdapter(List<Person> list, HashMap<Integer, Integer> hashMap) {
+    public ContactsAdapter(List<Person> list, HashMap<Integer, Integer> hashMap, Context context) {
 
         listSlots = list;
         this.hashMap = hashMap;
         VAL = 10;
+        this.context = context;
     }
 
     @Override
@@ -60,28 +66,47 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         requestingDrawable = ContextCompat.getDrawable(v.getContext(), R.drawable.requesting_user);
         friendDrawable = ContextCompat.getDrawable(v.getContext(), R.drawable.friend_user);
         blankDrawable = ContextCompat.getDrawable(v.getContext(), R.drawable.user_blank);
+
+
         return pvh;
     }
 
     @Override
     public void onBindViewHolder(ContactViewHolder slotViewHolder, int i) {
 
-        if (VAL == 0) {
-            slotViewHolder.userImage.setImageDrawable(friendDrawable);
-        } else if (VAL == 1) {
-            slotViewHolder.userImage.setImageDrawable(requestingDrawable);
-        } else {
-            if (hashMap.get(i) != null) {
-                if (hashMap.get(i) == 1) {
-                    slotViewHolder.userImage.setImageDrawable(requestedDrawable);
-                } else if (hashMap.get(i) == 2) {
-                    slotViewHolder.userImage.setImageDrawable(requestingDrawable);
-                } else if (hashMap.get(i) == 3) {
-                    slotViewHolder.userImage.setImageDrawable(friendDrawable);
-                } else if (hashMap.get(i) == 4) {
-                    slotViewHolder.userImage.setImageDrawable(friendDrawable);
-                } else if (hashMap.get(i) == 0) {
-                    slotViewHolder.userImage.setImageDrawable(blankDrawable);
+        if (listSlots.get(i).getPicture() != null) {
+            if (!listSlots.get(i).getPicture().equals("")) {
+                Picasso.with(context).load(listSlots.get(i).getPicture()).into(slotViewHolder.userImage);
+            }
+        }else {
+
+
+            //In my contacts list
+            if (VAL == 0) {
+                slotViewHolder.userImage.setImageDrawable(friendDrawable);
+            }
+            //requestingDrawable
+            else if (VAL == 1) {
+                slotViewHolder.userImage.setImageDrawable(requestingDrawable);
+            } else {
+
+                if (hashMap.get(i) != null) {
+                    //requestingDrawable
+                    if (hashMap.get(i) == 1) {
+                        slotViewHolder.userImage.setImageDrawable(requestedDrawable);
+                        //requestingDrawable
+                    } else if (hashMap.get(i) == 2) {
+                        slotViewHolder.userImage.setImageDrawable(requestingDrawable);
+                        // friendDrawable
+                    } else if (hashMap.get(i) == 3) {
+                        slotViewHolder.userImage.setImageDrawable(friendDrawable);
+                        //friendDrawable
+                    } else if (hashMap.get(i) == 4) {
+                        slotViewHolder.userImage.setImageDrawable(friendDrawable);
+                        // blankDrawable not friends
+                    } else if (hashMap.get(i) == 0) {
+                        slotViewHolder.userImage.setImageDrawable(blankDrawable);
+                    }
                 }
             }
         }
