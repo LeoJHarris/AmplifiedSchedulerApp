@@ -213,10 +213,8 @@
                         android:id="@+id/btnRegPicture"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:drawableLeft="@drawable/ic_user_profile"
-                        android:drawableStart="@drawable/ic_user_profile"
                         android:text="Profile Picture"
-                        android:textSize="22sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -243,7 +241,7 @@
                         android:maxLength="40"
                         android:singleLine="true"
                         android:text="No image selected"
-                        android:textSize="18sp" />
+                        android:textSize="10sp" />
 
                 </LinearLayout>
             </RelativeLayout>

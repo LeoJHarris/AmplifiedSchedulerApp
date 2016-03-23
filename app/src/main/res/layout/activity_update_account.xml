@@ -146,7 +146,6 @@
                 android:inputType="textEmailAddress"
                 android:textSize="22sp" />
 
-
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelPhoneUpdate"
                 android:layout_width="match_parent"
@@ -188,6 +187,68 @@
                 android:hint="Tap To Enter Your New Country"
                 android:inputType="text"
                 android:textSize="22sp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center">
+
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context=".MainActivity">
+
+                    <LinearLayout
+                        android:id="@+id/firstLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toLeftOf="@+id/secondView"
+                        android:layout_toStartOf="@+id/secondView"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/btnUpdatePicture"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Update Profile Picture"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/secondView"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="invisible" />
+
+                    <LinearLayout
+                        android:id="@+id/thirdLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toEndOf="@+id/secondView"
+                        android:layout_toRightOf="@+id/secondView"
+                        android:orientation="vertical">
+
+                        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                            android:id="@+id/textViewPictureLocalDir"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:maxLength="40"
+                            android:singleLine="true"
+                            android:text="No image selected"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/buttonUpdateUser"

@@ -237,8 +237,6 @@ public class RegistrationActivity extends AppCompatActivity {
                                                         Toast.makeText(RegistrationActivity.this, backendlessFault.toString(), Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
-
-
                                     }
 
                                     public void handleFault(BackendlessFault fault) {
@@ -454,8 +452,6 @@ public class RegistrationActivity extends AppCompatActivity {
             try {
                 textViewPictureLocalDir.setText(filePath);
                 bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
-                btnRegPicture.setCompoundDrawablesWithIntrinsicBounds(userGoodProfileDraw, null, null, null);
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

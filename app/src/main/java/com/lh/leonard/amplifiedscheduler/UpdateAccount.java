@@ -2,6 +2,8 @@ package com.lh.leonard.amplifiedscheduler;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -29,6 +31,13 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.files.BackendlessFile;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.regex.Pattern;
 
 public class UpdateAccount extends AppCompatActivity {
 
@@ -43,7 +52,8 @@ public class UpdateAccount extends AppCompatActivity {
     EditText ediTextUpdatePassword;
     EditText editTextUpdatePasswordConfirmReg;
     BackendlessUser user;
-
+    File f;
+    Bitmap bitmap = null;
     Drawable tickIconDraw;
     Drawable crossIconDraw;
     Drawable emailIconDraw;
@@ -72,6 +82,8 @@ public class UpdateAccount extends AppCompatActivity {
     AutoCompleteTextView textViewCountry;
     ArrayAdapter<String> adapter;
     Boolean social = false;
+    Button btnUpdateImage;
+    AutoResizeTextView imagePathDirectory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +163,8 @@ public class UpdateAccount extends AppCompatActivity {
         final AutoResizeTextView txtLabelCountryUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelUpdateCountry);
         final AutoResizeTextView txtLabelPhoneUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelPhoneUpdate);
         AutoResizeTextView editTextNoticeUpdate = (AutoResizeTextView) findViewById(R.id.editTextNoticeUpdate);
-
+        imagePathDirectory = (AutoResizeTextView) findViewById(R.id.textViewPictureLocalDir);
+        btnUpdateImage = (Button) findViewById(R.id.btnUpdatePicture);
         final Typeface RobotoBlack = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
@@ -175,6 +188,25 @@ public class UpdateAccount extends AppCompatActivity {
         txtLabelPhoneUpdate.setTypeface(RobotoCondensedLight);
         txtLabelTextPasswordUpdate.setTypeface(RobotoCondensedLight);
         textViewCountry.setTypeface(RobotoCondensedLight);
+        btnUpdateImage.setTypeface(RobotoCondensedLight);
+
+        if (personLoggedIn.getPicture() != null) {
+            if (personLoggedIn.getPicture().equals("")) {
+                imagePathDirectory.setText("No image set");
+            }
+
+        }
+        final Intent intentFileDialog = new Intent(this, FilePickerActivity.class);
+
+        btnUpdateImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intentFileDialog.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.jpg$"));
+                intentFileDialog.putExtra(FilePickerActivity.ARG_DIRECTORIES_FILTER, false);
+                intentFileDialog.putExtra(FilePickerActivity.ARG_SHOW_HIDDEN, true);
+                startActivityForResult(intentFileDialog, 1);
+            }
+        });
 
         updateDetailsBtn.setOnClickListener(new View.OnClickListener() {
                                                 @Override
@@ -347,7 +379,7 @@ public class UpdateAccount extends AppCompatActivity {
             Boolean lastNameChange = false;
             updatePerson = false;
 
-//            HashMap<String, Object> hashMapEvent = new HashMap<>();
+            // HashMap<String, Object> hashMapEvent = new HashMap<>();
 
             if (!social) {
                 if (validator.isValidEmail(email)) {
@@ -391,6 +423,15 @@ public class UpdateAccount extends AppCompatActivity {
             if (!(phone.equals(""))) {
                 personLoggedIn.setPhone(phone.toString());
                 updatePerson = true;
+            }
+            if ((bitmap != null)) {
+                //Store the image with the users object id
+                try {
+                    BackendlessFile uploadedFile = Backendless.Files.Android.upload(bitmap, Bitmap.CompressFormat.PNG, 100, personLoggedIn.getObjectId(), "pictures");
+                    personLoggedIn.setPicture(uploadedFile.getFileURL());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             if (updatePerson) {
@@ -490,5 +531,26 @@ public class UpdateAccount extends AppCompatActivity {
         sendIntent.setType("text/plain");
         mShareActionProvider.setShareIntent(sendIntent);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+
+            f = new File(filePath);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            try {
+                imagePathDirectory.setText(filePath);
+                bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
+                btnUpdateImage.setCompoundDrawablesWithIntrinsicBounds(userGoodProfileDraw, null, null, null);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
