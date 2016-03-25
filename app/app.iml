@@ -170,8 +170,8 @@
     <orderEntry type="library" exported="" name="play-services-safetynet-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-appstate-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="rxandroid-0.25.0" level="project" />
+    <orderEntry type="library" exported="" name="backendless-3.0.11" level="project" />
     <orderEntry type="library" exported="" name="android-week-view-1.2.3" level="project" />
-    <orderEntry type="library" exported="" name="backendless-3.0.8.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-games-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="mediarouter-v7-23.0.0" level="project" />
     <orderEntry type="library" exported="" name="rxjava-1.0.15" level="project" />

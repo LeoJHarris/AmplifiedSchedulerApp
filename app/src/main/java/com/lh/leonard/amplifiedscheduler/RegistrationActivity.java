@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -63,6 +64,7 @@ public class RegistrationActivity extends AppCompatActivity {
     AutoResizeTextView textViewPictureLocalDir;
     CharSequence fname;
     CharSequence lname;
+    Drawable userBlank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +112,7 @@ public class RegistrationActivity extends AppCompatActivity {
         phoneIconDraw = getResources().getDrawable(R.drawable.ic_phone);
 
         emailGoodIconDraw = getResources().getDrawable(R.drawable.ic_email_good);
+        userBlank = getResources().getDrawable(R.drawable.user_blank_new);
         userGoodProfileDraw = getResources().getDrawable(R.drawable.ic_profile_good);
         passwordGoodIconDraw = getResources().getDrawable(R.drawable.ic_password_good);
         countryGoodIconDraw = getResources().getDrawable(R.drawable.ic_country_good);
@@ -123,8 +126,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // Get the string array
         String[] countries = getResources().getStringArray(R.array.countries_array);
         // Create the adapter and set it to the AutoCompleteTextView
-        adapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
         radioButtonMale.setChecked(false);
@@ -222,14 +224,12 @@ public class RegistrationActivity extends AppCompatActivity {
                                     public void handleResponse(final BackendlessUser backendlessUser) {
 
                                         //Store the image with the users object id
-                                        Backendless.Files.Android.upload(bitmap, Bitmap.CompressFormat.PNG, 100, backendlessUser.getObjectId(), "pictures",
+                                        Backendless.Files.Android.upload((bitmap != null) ? bitmap : ((BitmapDrawable) userBlank).getBitmap(), Bitmap.CompressFormat.PNG, 50, backendlessUser.getObjectId(), "pictures",
                                                 new AsyncCallback<BackendlessFile>() {
                                                     @Override
                                                     public void handleResponse(final BackendlessFile backendlessFile) {
 
                                                         new ProfilePic(backendlessFile, backendlessUser).execute();
-
-
                                                     }
 
                                                     @Override

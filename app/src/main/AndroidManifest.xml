@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <service android:name="com.backendless.AndroidService" />
+
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />

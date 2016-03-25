@@ -8,8 +8,8 @@ android {
         applicationId "com.lh.leonard.amplifiedscheduler"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 56
-        versionName "1.92"
+        versionCode 57
+        versionName "1.93"
         multiDexEnabled true
     }
     dexOptions {
@@ -29,7 +29,6 @@ repositories {
     mavenCentral()
 }
 dependencies {
-
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.github.alamkanak:android-week-view:1.2.3'
@@ -45,11 +44,11 @@ dependencies {
     compile 'de.jodamob.android:clean-simple-calendar:1.0'
     compile 'com.github.tibolte:agendacalendarview:1.0.2'
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.backendless:backendless:3.0.8.1'
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.google.android.gms:play-services-ads:8.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.android.gms:play-services-analytics:8.4.0'
     compile 'com.google.android.gms:play-services-identity:8.4.0'
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    compile 'com.backendless:backendless:3.0.11'
 }

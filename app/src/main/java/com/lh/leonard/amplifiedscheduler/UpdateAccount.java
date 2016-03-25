@@ -31,7 +31,6 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.files.BackendlessFile;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import java.io.File;
@@ -194,7 +193,6 @@ public class UpdateAccount extends AppCompatActivity {
             if (personLoggedIn.getPicture().equals("")) {
                 imagePathDirectory.setText("No image set");
             }
-
         }
         final Intent intentFileDialog = new Intent(this, FilePickerActivity.class);
 
@@ -381,6 +379,10 @@ public class UpdateAccount extends AppCompatActivity {
 
             // HashMap<String, Object> hashMapEvent = new HashMap<>();
 
+            if (bitmap != null) {
+                updatePerson = true;
+            }
+
             if (!social) {
                 if (validator.isValidEmail(email)) {
                     personLoggedIn.setEmail(email);
@@ -421,14 +423,13 @@ public class UpdateAccount extends AppCompatActivity {
             }
 
             if (!(phone.equals(""))) {
-                personLoggedIn.setPhone(phone.toString());
+                personLoggedIn.setPhone(phone);
                 updatePerson = true;
             }
             if ((bitmap != null)) {
                 //Store the image with the users object id
                 try {
-                    BackendlessFile uploadedFile = Backendless.Files.Android.upload(bitmap, Bitmap.CompressFormat.PNG, 100, personLoggedIn.getObjectId(), "pictures");
-                    personLoggedIn.setPicture(uploadedFile.getFileURL());
+                    Backendless.Files.Android.upload(bitmap, Bitmap.CompressFormat.PNG, 50, personLoggedIn.getObjectId(), "pictures", true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -474,6 +475,7 @@ public class UpdateAccount extends AppCompatActivity {
 
                             @Override
                             public void handleFault(BackendlessFault fault) {
+                                ringProgressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -481,6 +483,7 @@ public class UpdateAccount extends AppCompatActivity {
 
                     @Override
                     public void handleFault(BackendlessFault fault) {
+                        ringProgressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
