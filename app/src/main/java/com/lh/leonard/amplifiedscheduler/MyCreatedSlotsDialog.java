@@ -39,8 +39,6 @@ public class MyCreatedSlotsDialog extends Activity {
     AutoResizeTextView textViewMyeventSpacesAvaliable;
     String objectId;
     Button buttonCancelSlot;
-    List<Person> personsToSms;
-    BackendlessCollection<Person> personsToSmsCollection;
     Button buttonMySlotParticipantsSlot;
     Person person;
     BackendlessCollection<Slot> slots;
@@ -275,18 +273,6 @@ public class MyCreatedSlotsDialog extends Activity {
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
             dataQuery.setWhereClause(whereClause.toString());
 
-            personsToSmsCollection = Backendless.Data.of(Person.class).find(dataQuery);
-            personsToSms = personsToSmsCollection.getData();
-
-            String fullnamePersonLoggedIn = person.getFullname();
-            String subject = event.getSubject();
-            String placeofSlot = event.getPlace();
-
-            for (Person pId : personsToSms) {
-
-                sendsmss(pId.getPhone(), fullnamePersonLoggedIn, subject, event.getStartCalendar().getTime().toString(), placeofSlot);
-            }
-
             eventRemoved = event.getSubject();
 
             Map<String, String> args = new HashMap<>();
@@ -299,7 +285,6 @@ public class MyCreatedSlotsDialog extends Activity {
                 public void handleResponse(Map map) {
                     dialog.dismiss();
                     onBackPressed();
-
                 }
 
                 @Override

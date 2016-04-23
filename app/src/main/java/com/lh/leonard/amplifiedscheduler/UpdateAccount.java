@@ -46,7 +46,6 @@ public class UpdateAccount extends AppCompatActivity {
     Person personLoggedIn;
     EditText editTextUpdateFNameReg; // TODO set hints to user info
     EditText editTextUpdateLNameReg;
-    EditText editTextUpdatePhoneReg;
     EditText editTextUpdateEmail;
     EditText ediTextUpdatePassword;
     EditText editTextUpdatePasswordConfirmReg;
@@ -59,20 +58,17 @@ public class UpdateAccount extends AppCompatActivity {
     Drawable userProfileIconDraw;
     Drawable passwordIconDraw;
     Drawable countryIconDraw;
-    Drawable phoneIconDraw;
     String my_var;
     Drawable emailGoodIconDraw;
     Drawable userGoodProfileDraw;
     Drawable passwordGoodIconDraw;
     Drawable countryGoodIconDraw;
-    Drawable phoneGoodIconDraw;
     private Menu optionsMenu;
     Drawable passwordBadIconDraw;
     Drawable emailBadIconDraw;
     private Toolbar toolbar;
     String fname;
     String lname;
-    String phone;
     String email;
     String password;
     String passwordConfirm;
@@ -98,13 +94,10 @@ public class UpdateAccount extends AppCompatActivity {
         userProfileIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_user_profile);
         passwordIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_password);
         countryIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_country);
-        phoneIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_phone);
-
         emailGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_email_good);
         userGoodProfileDraw = ContextCompat.getDrawable(this, R.drawable.ic_profile_good);
         passwordGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_password_good);
         countryGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_country_good);
-        phoneGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_phone_good);
 
         emailBadIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_email_bad);
         passwordBadIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_password_bad);
@@ -126,7 +119,6 @@ public class UpdateAccount extends AppCompatActivity {
 
         editTextUpdateFNameReg = (EditText) findViewById(R.id.editTextUpdateFName);
         editTextUpdateLNameReg = (EditText) findViewById(R.id.editTextUpdateLName);
-        editTextUpdatePhoneReg = (EditText) findViewById(R.id.editTextUpdatePhone);
         editTextUpdateEmail = (EditText) findViewById(R.id.editTextUpdateEmail);
         ediTextUpdatePassword = (EditText) findViewById(R.id.ediTextUpdatePassword);
         editTextUpdatePasswordConfirmReg = (EditText) findViewById(R.id.editTextUpdatePasswordConfirm);
@@ -143,8 +135,6 @@ public class UpdateAccount extends AppCompatActivity {
                 ediTextUpdatePassword.setInputType(InputType.TYPE_NULL);
                 editTextUpdatePasswordConfirmReg.setEnabled(false);
                 editTextUpdatePasswordConfirmReg.setInputType(InputType.TYPE_NULL);
-
-                editTextUpdatePhoneReg.setFocusable(true);
                 editTextUpdateLNameReg.setHint("Using Facebook credential");
                 editTextUpdateFNameReg.setHint("Using Facebook credential");
                 editTextUpdateEmail.setHint("Using Facebook credential");
@@ -160,7 +150,6 @@ public class UpdateAccount extends AppCompatActivity {
         final AutoResizeTextView txtLabelPasswordConfirmUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelPasswordConfirmUpdate);
         final AutoResizeTextView txtLabelEmailUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelEmailUpdate);
         final AutoResizeTextView txtLabelCountryUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelUpdateCountry);
-        final AutoResizeTextView txtLabelPhoneUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelPhoneUpdate);
         AutoResizeTextView editTextNoticeUpdate = (AutoResizeTextView) findViewById(R.id.editTextNoticeUpdate);
         imagePathDirectory = (AutoResizeTextView) findViewById(R.id.textViewPictureLocalDir);
         btnUpdateImage = (Button) findViewById(R.id.btnUpdatePicture);
@@ -174,7 +163,6 @@ public class UpdateAccount extends AppCompatActivity {
         editTextNoticeUpdate.setTypeface(RobotoCondensedLightItalic);
         editTextUpdateFNameReg.setTypeface(RobotoCondensedLight);
         editTextUpdateLNameReg.setTypeface(RobotoCondensedLight);
-        editTextUpdatePhoneReg.setTypeface(RobotoCondensedLight);
         editTextUpdateEmail.setTypeface(RobotoCondensedLight);
         ediTextUpdatePassword.setTypeface(RobotoCondensedLight);
         editTextUpdatePasswordConfirmReg.setTypeface(RobotoCondensedLight);
@@ -184,8 +172,7 @@ public class UpdateAccount extends AppCompatActivity {
         txtLabelFnameUpdate.setTypeface(RobotoCondensedLight);
         txtLabeLnameUpdate.setTypeface(RobotoCondensedLight);
         txtLabelPasswordConfirmUpdate.setTypeface(RobotoCondensedLight);
-        txtLabelPhoneUpdate.setTypeface(RobotoCondensedLight);
-        txtLabelTextPasswordUpdate.setTypeface(RobotoCondensedLight);
+       txtLabelTextPasswordUpdate.setTypeface(RobotoCondensedLight);
         textViewCountry.setTypeface(RobotoCondensedLight);
         btnUpdateImage.setTypeface(RobotoCondensedLight);
 
@@ -218,7 +205,6 @@ public class UpdateAccount extends AppCompatActivity {
                                                         password = ediTextUpdatePassword.getText().toString();
                                                         passwordConfirm = editTextUpdatePasswordConfirmReg.getText().toString();
                                                     }
-                                                    phone = editTextUpdatePhoneReg.getText().toString();
                                                     country = textViewCountry.getText().toString();
                                                     new Parse().execute();
                                                 }
@@ -345,16 +331,6 @@ public class UpdateAccount extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
-        editTextUpdatePhoneReg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if ((!(editTextUpdatePhoneReg.getText().toString().equals("")))) {
-                    editTextUpdatePhoneReg.setCompoundDrawablesWithIntrinsicBounds(phoneGoodIconDraw, null, tickIconDraw, null);
-                } else {
-                    editTextUpdatePhoneReg.setCompoundDrawablesWithIntrinsicBounds(phoneIconDraw, null, null, null);
-                }
-            }
-        });
     }
 
     private class Parse extends AsyncTask<Void, Integer, Boolean> {
@@ -422,10 +398,6 @@ public class UpdateAccount extends AppCompatActivity {
                 updatePerson = true;
             }
 
-            if (!(phone.equals(""))) {
-                personLoggedIn.setPhone(phone);
-                updatePerson = true;
-            }
             if ((bitmap != null)) {
                 //Store the image with the users object id
                 try {
@@ -456,11 +428,9 @@ public class UpdateAccount extends AppCompatActivity {
                                         editTextUpdateLNameReg.setCompoundDrawablesWithIntrinsicBounds(userProfileIconDraw, null, null, null);
                                     }
 
-                                    editTextUpdatePhoneReg.setText("");
+
                                     textViewCountry.setText("");
                                     my_var = null;
-
-                                    editTextUpdatePhoneReg.setCompoundDrawablesWithIntrinsicBounds(phoneIconDraw, null, null, null);
                                     textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryIconDraw, null, null, null);
                                 }
 
@@ -502,7 +472,7 @@ public class UpdateAccount extends AppCompatActivity {
             return password.toString().length() > 4;
         }
 
-        private boolean isValidEmail(CharSequence target) {
+        private  boolean isValidEmail(CharSequence target) {
             if (target == null)
                 return false;
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();

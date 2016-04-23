@@ -139,30 +139,6 @@
             android:inputType="textEmailAddress"
             android:textSize="22sp" />
 
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/txtLabelPhone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="18dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="15dp"
-            android:text="Phone Number (For Event Notifications Via SMS):"
-            android:textSize="22sp" />
-
-        <EditText
-            android:id="@+id/editTextPhoneReg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:drawableLeft="@drawable/ic_phone"
-            android:drawableStart="@drawable/ic_phone"
-            android:hint="Tap To Enter Phone Number"
-            android:inputType="phone"
-            android:textSize="22sp" />
-
-
         <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
             android:id="@+id/txtLabelCountryReg"
             android:layout_width="match_parent"

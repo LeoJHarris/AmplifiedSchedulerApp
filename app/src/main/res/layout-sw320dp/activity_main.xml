@@ -29,7 +29,7 @@
                 android:id="@+id/imageViewMainLogo"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
-                android:src="@drawable/main_textlogo_320" />
+                android:src="@drawable/main_logo_320" />
 
         </LinearLayout>
 

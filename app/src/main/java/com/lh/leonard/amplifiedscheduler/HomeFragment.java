@@ -169,9 +169,10 @@ public class HomeFragment extends Fragment {
 
         if (personLoggedIn.getCountry() == null || personLoggedIn.getCountry().equals("")) {
             phoneCountryDialog();
-        } else if (personLoggedIn.getPhone() == null || personLoggedIn.getPhone().equals("")) {
-            phoneDialog();
         }
+//        } else if (personLoggedIn.getPhone() == null || personLoggedIn.getPhone().equals("")) {
+//            phoneDialog();
+//        }
 
         new ParseURL().execute();
         return v;
@@ -301,68 +302,68 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public void phoneDialog() {
-
-        final EditText phone = new EditText(getActivity());
-
-        phone.setHint("Phone");
-
-        phone.setInputType(InputType.TYPE_CLASS_PHONE);
-
-        final AlertDialog.Builder phoneAlert = new AlertDialog.Builder(getActivity())
-                .setTitle("Final Details")
-                .setMessage("Last step required, please provide your phone")
-                .setView(phone)
-                .setPositiveButton("DONE", null)
-                .setNeutralButton("LOGOUT", null);
-        phoneAlert.setCancelable(false);
-        alert = phoneAlert.create(); //.show().setCancelable(false);
-
-        alert.show();
-
-        final Button neutralButton = alert.getButton(DialogInterface.BUTTON_NEUTRAL);
-        neutralButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                        "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
-                ringProgressDialog.setCancelable(false);
-                Backendless.UserService.logout(new AsyncCallback<Void>() {
-                    public void handleResponse(Void response) {
-                        Intent logOutIntent = new Intent(getActivity(), MainActivity.class);
-                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
-                        startActivity(logOutIntent);
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault fault) {
-                        Toast.makeText(getActivity(), fault.getMessage(), Toast.LENGTH_SHORT).show();
-                        Intent logOutIntent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(logOutIntent);
-                    }
-                });
-            }
-        });
-        final Button positiveButton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(new View.OnClickListener()
-
-                                          {
-                                              @Override
-                                              public void onClick(View v) {
-                                                  if ((!phone.getText().toString().equals(""))) {
-                                                      new Commit(phone.getText().toString(), 2).execute();
-                                                      alert.dismiss();
-                                                      Toast.makeText(getActivity(), "Registration complete", Toast.LENGTH_SHORT).show();
-
-                                                  } else {
-                                                      phone.setFocusable(true);
-                                                      Toast.makeText(getActivity(), "Please enter phone", Toast.LENGTH_SHORT).show();
-                                                  }
-                                              }
-                                          }
-
-        );
-    }
+//    public void phoneDialog() {
+//
+//        final EditText phone = new EditText(getActivity());
+//
+//        phone.setHint("Phone");
+//
+//        phone.setInputType(InputType.TYPE_CLASS_PHONE);
+//
+//        final AlertDialog.Builder phoneAlert = new AlertDialog.Builder(getActivity())
+//                .setTitle("Final Details")
+//                .setMessage("Last step required, please provide your phone")
+//                .setView(phone)
+//                .setPositiveButton("DONE", null)
+//                .setNeutralButton("LOGOUT", null);
+//        phoneAlert.setCancelable(false);
+//        alert = phoneAlert.create(); //.show().setCancelable(false);
+//
+//        alert.show();
+//
+//        final Button neutralButton = alert.getButton(DialogInterface.BUTTON_NEUTRAL);
+//        neutralButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
+//                        "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
+//                ringProgressDialog.setCancelable(false);
+//                Backendless.UserService.logout(new AsyncCallback<Void>() {
+//                    public void handleResponse(Void response) {
+//                        Intent logOutIntent = new Intent(getActivity(), MainActivity.class);
+//                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
+//                        startActivity(logOutIntent);
+//                    }
+//
+//                    @Override
+//                    public void handleFault(BackendlessFault fault) {
+//                        Toast.makeText(getActivity(), fault.getMessage(), Toast.LENGTH_SHORT).show();
+//                        Intent logOutIntent = new Intent(getActivity(), MainActivity.class);
+//                        startActivity(logOutIntent);
+//                    }
+//                });
+//            }
+//        });
+//        final Button positiveButton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+//        positiveButton.setOnClickListener(new View.OnClickListener()
+//
+//                                          {
+//                                              @Override
+//                                              public void onClick(View v) {
+//                                                  if ((!phone.getText().toString().equals(""))) {
+//                                                      new Commit(phone.getText().toString(), 2).execute();
+//                                                      alert.dismiss();
+//                                                      Toast.makeText(getActivity(), "Registration complete", Toast.LENGTH_SHORT).show();
+//
+//                                                  } else {
+//                                                      phone.setFocusable(true);
+//                                                      Toast.makeText(getActivity(), "Please enter phone", Toast.LENGTH_SHORT).show();
+//                                                  }
+//                                              }
+//                                          }
+//
+//        );
+//    }
 
     public void phoneCountryDialog() {
 
@@ -377,9 +378,9 @@ public class HomeFragment extends Fragment {
 
         final AlertDialog.Builder countrySelectAlert = new AlertDialog.Builder(getActivity())
                 .setTitle("Additional Details")
-                .setMessage("Your nearly there, please provide your Country")
+                .setMessage("Please provide your Country to complete registration")
                 .setView(textViewCountry)
-                .setPositiveButton("NEXT", null)
+                .setPositiveButton("DONE", null)
                 .setNeutralButton("LOGOUT", null);
         countrySelectAlert.setCancelable(false);
         alert = countrySelectAlert.create(); //.show().setCancelable(false);
@@ -416,7 +417,9 @@ public class HomeFragment extends Fragment {
                 if (my_var != null) {
                     new Commit(textViewCountry.getText().toString(), 1).execute();
                     alert.dismiss();
-                    phoneDialog();
+                    Toast.makeText(getActivity(), "Registration complete", Toast.LENGTH_SHORT).show();
+
+                    // phoneDialog();
                 } else {
                     textViewCountry.setFocusable(true);
                     Toast.makeText(getActivity(), "Please enter country", Toast.LENGTH_SHORT).show();

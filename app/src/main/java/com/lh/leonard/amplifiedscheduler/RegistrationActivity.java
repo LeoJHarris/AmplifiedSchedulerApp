@@ -47,13 +47,11 @@ public class RegistrationActivity extends AppCompatActivity {
     Drawable userProfileIconDraw;
     Drawable passwordIconDraw;
     Drawable countryIconDraw;
-    Drawable phoneIconDraw;
     Bitmap bitmap = null;
     Drawable emailGoodIconDraw;
     Drawable userGoodProfileDraw;
     Drawable passwordGoodIconDraw;
     Drawable countryGoodIconDraw;
-    Drawable phoneGoodIconDraw;
     private Toolbar toolbar;
     Drawable passwordBadIconDraw;
     Drawable emailBadIconDraw;
@@ -88,7 +86,6 @@ public class RegistrationActivity extends AppCompatActivity {
         final EditText passwordConfirmField = (EditText) findViewById(R.id.editTextPasswordConfirmReg);
         final EditText fnameField = (EditText) findViewById(R.id.editTextFNameReg);
         final EditText lnameField = (EditText) findViewById(R.id.editTextLNameReg);
-        final EditText phoneField = (EditText) findViewById(R.id.editTextPhoneReg);
 
         final AutoResizeTextView txtLabelFnameReg = (AutoResizeTextView) findViewById(R.id.txtLabelFnameReg);
         final AutoResizeTextView txtLabeLnameReg = (AutoResizeTextView) findViewById(R.id.txtLabeLnameReg);
@@ -96,7 +93,6 @@ public class RegistrationActivity extends AppCompatActivity {
         final AutoResizeTextView txtLabelPasswordConfirmReg = (AutoResizeTextView) findViewById(R.id.txtLabelPasswordConfirmReg);
         final AutoResizeTextView txtLabelEmailReg = (AutoResizeTextView) findViewById(R.id.txtLabelEmailReg);
         final AutoResizeTextView txtLabelCountryReg = (AutoResizeTextView) findViewById(R.id.txtLabelCountryReg);
-        final AutoResizeTextView txtLabelPhone = (AutoResizeTextView) findViewById(R.id.txtLabelPhone);
         final AutoResizeTextView txtLabelGender = (AutoResizeTextView) findViewById(R.id.txtLabelGender);
         final RadioButton radioButtonMale = (RadioButton) findViewById(R.id.radioButtonMale);
         final RadioButton radioButtonFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
@@ -109,14 +105,12 @@ public class RegistrationActivity extends AppCompatActivity {
         userProfileIconDraw = getResources().getDrawable(R.drawable.ic_user_profile);
         passwordIconDraw = getResources().getDrawable(R.drawable.ic_password);
         countryIconDraw = getResources().getDrawable(R.drawable.ic_country);
-        phoneIconDraw = getResources().getDrawable(R.drawable.ic_phone);
 
         emailGoodIconDraw = getResources().getDrawable(R.drawable.ic_email_good);
         userBlank = getResources().getDrawable(R.drawable.user_blank_new);
         userGoodProfileDraw = getResources().getDrawable(R.drawable.ic_profile_good);
         passwordGoodIconDraw = getResources().getDrawable(R.drawable.ic_password_good);
         countryGoodIconDraw = getResources().getDrawable(R.drawable.ic_country_good);
-        phoneGoodIconDraw = getResources().getDrawable(R.drawable.ic_phone_good);
 
         emailBadIconDraw = getResources().getDrawable(R.drawable.ic_email_bad);
         passwordBadIconDraw = getResources().getDrawable(R.drawable.ic_password_bad);
@@ -136,7 +130,6 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordField.setText("");
         fnameField.setText("");
         lnameField.setText("");
-        phoneField.setText("");
         textViewCountry.setText("");
 
         radioButtonMale.setTypeface(RobotoCondensedLight);
@@ -147,14 +140,12 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordConfirmField.setTypeface(RobotoCondensedLight);
         fnameField.setTypeface(RobotoCondensedLight);
         lnameField.setTypeface(RobotoCondensedLight);
-        phoneField.setTypeface(RobotoCondensedLight);
         registerButton.setTypeface(RobotoCondensedLight);
         txtLabelCountryReg.setTypeface(RobotoCondensedLight);
         txtLabelEmailReg.setTypeface(RobotoCondensedLight);
         txtLabelFnameReg.setTypeface(RobotoCondensedLight);
         txtLabeLnameReg.setTypeface(RobotoCondensedLight);
         txtLabelPasswordConfirmReg.setTypeface(RobotoCondensedLight);
-        txtLabelPhone.setTypeface(RobotoCondensedLight);
         txtLabelTextPasswordReg.setTypeface(RobotoCondensedLight);
         txtLabelGender.setTypeface(RobotoCondensedLight);
         btnRegPicture.setTypeface(RobotoCondensedLight);
@@ -180,7 +171,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 final CharSequence email = emailField.getText(); //TODO regex tester, might be it on server, handle fault with code
                 fname = fnameField.getText();
                 lname = lnameField.getText();
-                final CharSequence phone = phoneField.getText();
+
                 CharSequence county = textViewCountry.getText();
                 CharSequence password = passwordField.getText();
                 CharSequence passwordConfirm = passwordConfirmField.getText();
@@ -190,7 +181,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
 
                 if (!(fname.toString().trim().equals("") && lname.toString().equals("")
-                        && phone.toString().equals("") && county.toString().equals("")
+                        && county.toString().equals("")
                         && password.toString().equals("") &&
                         passwordConfirm.toString().equals("")
                         && email.toString().equals("")) && my_var != null && genderChecked != false) {
@@ -213,7 +204,6 @@ public class RegistrationActivity extends AppCompatActivity {
                                 person.setLname(lname.toString());
                                 person.setGender((radioButtonMale.isChecked() ? "Male" : "Female"));
                                 person.setEmail(email.toString());
-                                person.setPhone(phone.toString());
                                 person.setCountry(county.toString());
                                 person.setFullname(fname.toString() + " " + lname.toString());
 
@@ -331,16 +321,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
         });
-        phoneField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if ((!(phoneField.getText().toString().equals("")))) {
-                    phoneField.setCompoundDrawablesWithIntrinsicBounds(phoneGoodIconDraw, null, tickIconDraw, null);
-                } else {
-                    phoneField.setCompoundDrawablesWithIntrinsicBounds(phoneIconDraw, null, null, null);
-                }
-            }
-        });
+
         passwordField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

@@ -147,28 +147,6 @@
                 android:textSize="22sp" />
 
             <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/txtLabelPhoneUpdate"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="15dp"
-                android:text="Phone Number (Event Notifications Via SMS):"
-                android:textSize="22sp" />
-
-            <EditText
-                android:id="@+id/editTextUpdatePhone"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:drawableLeft="@drawable/ic_phone"
-                android:hint="Tap To Enter New Phone Number"
-                android:inputType="phone"
-                android:numeric="integer"
-                android:textSize="22sp" />
-
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
                 android:id="@+id/txtLabelUpdateCountry"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -26,6 +26,19 @@ public class Person {
     public String social;
     public List<Plan> myPlans;
     public String picture;
+    public String deviceId;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
 
     public void setPicture(String picture) {
         this.picture = picture;

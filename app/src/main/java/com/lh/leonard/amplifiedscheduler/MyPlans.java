@@ -48,8 +48,6 @@ public class MyPlans extends AppCompatActivity implements
 
     Person personLoggedIn;
     List<Plan> slot;
-    List<Person> personsToSms;
-    BackendlessCollection<Person> personsToSmsCollection;
     private ProgressBar progressBar;
     BackendlessCollection<Person> persons;
     BackendlessCollection<Plan> slots;
@@ -85,6 +83,7 @@ public class MyPlans extends AppCompatActivity implements
         RLProgressBar = (RelativeLayout) findViewById(R.id.RLProgressBar);
         linearLayoutCalendarView = (LinearLayout) findViewById(R.id.LLCalendarView);
         linearLayoutWeekView = (LinearLayout) findViewById(R.id.LLWeekView);
+        linearLayoutCalendarView.setVisibility(View.GONE);
 
         Backendless.Data.mapTableToClass("Plan", Plan.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
@@ -103,7 +102,7 @@ public class MyPlans extends AppCompatActivity implements
 
         // Get a reference for the week view in the layout.
         mWeekView = (WeekView) findViewById(R.id.weekView);
-
+        mWeekView.setVisibility(View.GONE);
         // Set an action when any event is clicked.
         //  mWeekView.setOnEventClickListener(this); // do nothing for now
 
@@ -174,11 +173,11 @@ public class MyPlans extends AppCompatActivity implements
                     Plan event = (Plan) itr.next();
 
                     WeekViewEvent weekViewEvent = new WeekViewEvent(Long.parseLong(String.valueOf(i)), event.getSubject(),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth-1,
+                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
                             event.getStartCalendar().get(Calendar.DAY_OF_YEAR),
                             event.getStartCalendar().get(Calendar.HOUR_OF_DAY),
                             event.getStartCalendar().get(Calendar.MINUTE),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth-1,
+                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
                             event.getEndCalendar().get(Calendar.DAY_OF_YEAR),
                             event.getEndCalendar().get(Calendar.HOUR_OF_DAY),
                             event.getStartCalendar().get(Calendar.MINUTE));
@@ -308,8 +307,18 @@ public class MyPlans extends AppCompatActivity implements
             mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
             progressBar.setVisibility(View.GONE);
             RLProgressBar.setVisibility(View.GONE);
-            linearLayoutWeekView.setVisibility(View.VISIBLE);
-            mWeekView.setVisibility(View.VISIBLE);
+
+            if (weekview) {
+                mAgendaCalendarView.setVisibility(View.GONE);
+                linearLayoutCalendarView.setVisibility(View.GONE);
+                linearLayoutWeekView.setVisibility(View.VISIBLE);
+                mWeekView.setVisibility(View.VISIBLE);
+            } else {
+                linearLayoutWeekView.setVisibility(View.GONE);
+                mWeekView.setVisibility(View.GONE);
+                linearLayoutCalendarView.setVisibility(View.VISIBLE);
+                mAgendaCalendarView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -385,11 +394,15 @@ public class MyPlans extends AppCompatActivity implements
         if (weekview) {
             inflater.inflate(R.menu.menu_week_view, menu);
             linearLayoutCalendarView.setVisibility(View.GONE);
+            mAgendaCalendarView.setVisibility(View.GONE);
             linearLayoutWeekView.setVisibility(View.VISIBLE);
+            mWeekView.setVisibility(View.VISIBLE);
         } else {
             inflater.inflate(R.menu.menu_events, menu);
             linearLayoutWeekView.setVisibility(View.GONE);
+            mWeekView.setVisibility(View.GONE);
             linearLayoutCalendarView.setVisibility(View.VISIBLE);
+            mAgendaCalendarView.setVisibility(View.VISIBLE);
         }
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.share);

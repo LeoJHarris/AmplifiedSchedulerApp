@@ -6,8 +6,6 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -29,11 +27,10 @@ import android.widget.ImageView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.DeviceRegistration;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -58,20 +55,14 @@ public class NavDrawerActivity extends AppCompatActivity {
     int sizePendingResponseEvents;
     int sizeMyCreatedEvents;
     int sizeMyPlans;
-
-    Boolean OpenDrawer = false;
-
     private Menu optionsMenu;
-
     String valResponseEvents = "";
     String valPersonsRequestingMe = "";
     String valGoingToEvents = "";
     String valMyCreatedEvents = "";
     String valMyPlans = "";
-    Bitmap bitmapProfile;
     String NAME;
     String EMAIL;
-    Bitmap PROFILE;
     private Toolbar toolbar;                              // Declaring the Toolbar Object
     FragmentManager fragmentManager;
     RecyclerView mRecyclerView = null;                           // Declaring RecyclerView
@@ -85,9 +76,6 @@ public class NavDrawerActivity extends AppCompatActivity {
     Typeface RobotoCondensedLightItalic;
     Typeface RobotoCondensedBold;
 
-    ImageView imageViewInvitedEvents;
-    ImageView imageViewMyEvents;
-    ImageView imageViewGoingToEvents;
     Drawable drawableTime;
 
     @Override
@@ -126,6 +114,8 @@ public class NavDrawerActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+        new SaveDeviceID().execute();
 
         setRefreshActionButtonState(true);
         getNav();
@@ -344,7 +334,8 @@ public class NavDrawerActivity extends AppCompatActivity {
         String TITLES[] = {"Create Event/Plan", "My Plans " + valMyPlans, "My Events " +
                 valMyCreatedEvents, "Going To Events " +
                 valGoingToEvents, "Invited Events " + valResponseEvents, "Manage Contacts" +
-                valPersonsRequestingMe, "Update Account", "Sign Out"};
+                valPersonsRequestingMe, "Profile", "Sign Out"};
+
 
         NAME = personLoggedIn.getFullname();
         EMAIL = userLoggedIn.getEmail();
@@ -497,7 +488,7 @@ public class NavDrawerActivity extends AppCompatActivity {
             String TITLES[] = {"Create Event/Plan", "My Plans " + valMyPlans, "My Events " +
                     valMyCreatedEvents, "Going To Events " +
                     valGoingToEvents, "Invited Events " + valResponseEvents, "Manage Contacts" +
-                    valPersonsRequestingMe, "Update Account", "Sign Out"};
+                    valPersonsRequestingMe, "Profile", "Sign Out"};
 
             NAME = personLoggedIn.getFullname();
             EMAIL = userLoggedIn.getEmail();
@@ -655,6 +646,26 @@ public class NavDrawerActivity extends AppCompatActivity {
             setRefreshActionButtonState(false);
         }
     }
+
+    private class SaveDeviceID extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            Backendless.Messaging.registerDevice(Defaults.gcmSenderID, "Default");
+
+            DeviceRegistration deviceRegistered = Backendless.Messaging.getDeviceRegistration();
+
+            Person pp = Backendless.Persistence.of(Person.class).findById(personLoggedIn.getObjectId());
+
+            pp.setDeviceId(deviceRegistered.getDeviceId());
+
+            Backendless.Data.save(pp);
+
+            return null;
+        }
+    }
+
 
     @Override
     public void onRestart() {
