@@ -6,8 +6,6 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -15,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -25,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -37,9 +33,6 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.kobakei.ratethisapp.RateThisApp;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -56,7 +49,6 @@ import de.jodamob.android.calendar.CalenderWidget;
  */
 public class HomeFragment extends Fragment {
 
-    Bitmap mIcon_val;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     Person personLoggedIn;
     BackendlessCollection<Person> persons;
@@ -273,7 +265,7 @@ public class HomeFragment extends Fragment {
                 textViewMyEventsDate.setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
                 imageViewMyEvents.setImageDrawable(drawableTime);
 
-               // imageViewMyEvents.setImageBitmap(mIcon_val);
+                // imageViewMyEvents.setImageBitmap(mIcon_val);
             }
             if (!personLoggedIn.getGoingToSlot().isEmpty()) {
                 textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().get(0).getSubject());
@@ -301,69 +293,6 @@ public class HomeFragment extends Fragment {
             contentHome.setVisibility(View.VISIBLE);
         }
     }
-
-//    public void phoneDialog() {
-//
-//        final EditText phone = new EditText(getActivity());
-//
-//        phone.setHint("Phone");
-//
-//        phone.setInputType(InputType.TYPE_CLASS_PHONE);
-//
-//        final AlertDialog.Builder phoneAlert = new AlertDialog.Builder(getActivity())
-//                .setTitle("Final Details")
-//                .setMessage("Last step required, please provide your phone")
-//                .setView(phone)
-//                .setPositiveButton("DONE", null)
-//                .setNeutralButton("LOGOUT", null);
-//        phoneAlert.setCancelable(false);
-//        alert = phoneAlert.create(); //.show().setCancelable(false);
-//
-//        alert.show();
-//
-//        final Button neutralButton = alert.getButton(DialogInterface.BUTTON_NEUTRAL);
-//        neutralButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-//                        "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
-//                ringProgressDialog.setCancelable(false);
-//                Backendless.UserService.logout(new AsyncCallback<Void>() {
-//                    public void handleResponse(Void response) {
-//                        Intent logOutIntent = new Intent(getActivity(), MainActivity.class);
-//                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
-//                        startActivity(logOutIntent);
-//                    }
-//
-//                    @Override
-//                    public void handleFault(BackendlessFault fault) {
-//                        Toast.makeText(getActivity(), fault.getMessage(), Toast.LENGTH_SHORT).show();
-//                        Intent logOutIntent = new Intent(getActivity(), MainActivity.class);
-//                        startActivity(logOutIntent);
-//                    }
-//                });
-//            }
-//        });
-//        final Button positiveButton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-//        positiveButton.setOnClickListener(new View.OnClickListener()
-//
-//                                          {
-//                                              @Override
-//                                              public void onClick(View v) {
-//                                                  if ((!phone.getText().toString().equals(""))) {
-//                                                      new Commit(phone.getText().toString(), 2).execute();
-//                                                      alert.dismiss();
-//                                                      Toast.makeText(getActivity(), "Registration complete", Toast.LENGTH_SHORT).show();
-//
-//                                                  } else {
-//                                                      phone.setFocusable(true);
-//                                                      Toast.makeText(getActivity(), "Please enter phone", Toast.LENGTH_SHORT).show();
-//                                                  }
-//                                              }
-//                                          }
-//
-//        );
-//    }
 
     public void phoneCountryDialog() {
 
@@ -415,11 +344,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (my_var != null) {
-                    new Commit(textViewCountry.getText().toString(), 1).execute();
+                    new Commit(textViewCountry.getText().toString()).execute();
                     alert.dismiss();
                     Toast.makeText(getActivity(), "Registration complete", Toast.LENGTH_SHORT).show();
 
-                    // phoneDialog();
+
                 } else {
                     textViewCountry.setFocusable(true);
                     Toast.makeText(getActivity(), "Please enter country", Toast.LENGTH_SHORT).show();
@@ -457,22 +386,18 @@ public class HomeFragment extends Fragment {
     private class Commit extends AsyncTask<Void, Integer, Void> {
 
         String value;
-        Integer intVal = 0;
 
-        public Commit(String value, Integer i) {
+        public Commit(String value) {
 
             this.value = value;
-            this.intVal = i;
+
         }
 
         @Override
         protected Void doInBackground(Void... params) {
 
-            if (intVal == 1) {
-                personLoggedIn.setCountry(value);
-            } else if (intVal == 2) {
-                personLoggedIn.setPhone(value);
-            }
+            personLoggedIn.setCountry(value);
+
             Backendless.Data.of(Person.class).save(personLoggedIn);
             return null;
         }

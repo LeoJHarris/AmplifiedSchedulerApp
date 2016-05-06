@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-import com.backendless.DeviceRegistration;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.kobakei.ratethisapp.RateThisApp;
@@ -188,7 +187,7 @@ public class MainActivity extends Activity {
                                 p.setFullname(response.getProperty("fname") + " " +
                                         response.getProperty("lname"));
                                 p.setEmail((String) response.getProperty("email"));
-
+                                ringProgressDialog.dismiss();
                                 // System.out.println("Picture: " + response.getProperty("picture"));
                                 // p.setPicture((String) response.getProperty("picture"));
                                 try {
@@ -325,8 +324,8 @@ public class MainActivity extends Activity {
 
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
                     public void handleResponse(Void response) {
-                        if (personLoggedOut !=null && personLoggedOut.getFname() != null && personLoggedOut.getFname() !=null)
-                        Toast.makeText(getApplicationContext(), personLoggedOut.getFname() + "," + personLoggedOut.getFname(), Toast.LENGTH_LONG).show();
+                        if (personLoggedOut != null && personLoggedOut.getFname() != null && personLoggedOut.getFname() != null)
+                            Toast.makeText(getApplicationContext(), personLoggedOut.getFname() + "," + personLoggedOut.getFname(), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -386,7 +385,7 @@ public class MainActivity extends Activity {
                                         loginPrefsEditor.clear();
                                         loginPrefsEditor.commit();
                                     }
-
+                                    ringProgressDialog.dismiss();
                                     Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
                                     startActivity(loggedInIntent);
                                 }
@@ -395,9 +394,18 @@ public class MainActivity extends Activity {
                                     if (ringProgressDialog != null) {
                                         ringProgressDialog.dismiss();
                                     }
+                                   // int errorCode = Integer.valueOf(fault.getCode());
+                                    if (fault.getCode().equals("Internal client exception")) {
+                                        Toast.makeText(getApplicationContext(),
+                                                "Error unable to sign in. Please check your connection and try again later",
+                                                Toast.LENGTH_LONG).show();
+
+                                    }
+                                    else{
                                     Toast.makeText(getApplicationContext(),
                                             "Error " + fault.getMessage(),
                                             Toast.LENGTH_LONG).show();
+                                }
                                 }
                             });
                         } else {

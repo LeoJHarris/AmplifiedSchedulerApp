@@ -8,8 +8,8 @@ android {
         applicationId "com.lh.leonard.amplifiedscheduler"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 59
-        versionName "1.95"
+        versionCode 62
+        versionName "1.98"
         multiDexEnabled true
     }
     dexOptions {

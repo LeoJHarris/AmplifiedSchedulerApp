@@ -15,6 +15,8 @@ public class StyledCalendarBuilder extends CalendarBuilder {
 
     public StyledCalendarBuilder(List<Schedule> events) {
         super(R.layout.calendar_item, R.layout.calendar_header);
+
+
         this.birthdays.addAll(events);
     }
 

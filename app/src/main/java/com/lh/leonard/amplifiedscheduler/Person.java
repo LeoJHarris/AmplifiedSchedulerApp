@@ -13,7 +13,7 @@ public class Person {
     public String fullname;
     public List<Person> contacts;
     public String objectId;
-    public String phone;
+
     public String email;
     public List<Person> personsImRequesting;
     public List<Person> personsRequestingMe;
@@ -118,14 +118,6 @@ public class Person {
 
     public void setContacts(List<Person> contacts) {
         this.contacts = contacts;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getFname() {

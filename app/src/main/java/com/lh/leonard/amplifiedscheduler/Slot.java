@@ -1,9 +1,5 @@
 package com.lh.leonard.amplifiedscheduler;
 
-import com.backendless.geo.GeoPoint;
-
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,13 +11,9 @@ public class Slot extends Schedule {
     public String message;
     public List<Person> attendees;
     public Integer maxattendees;
-    public String phone;
+
     public String ownername;
     public String objectId;
-
-    public String getPhone() {
-        return phone;
-    }
 
     public List<Person> getAttendees() {
         return attendees;

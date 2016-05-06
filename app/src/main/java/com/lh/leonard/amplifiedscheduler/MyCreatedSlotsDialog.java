@@ -8,11 +8,9 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.webkit.JavascriptInterface;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
@@ -26,7 +24,6 @@ import com.backendless.persistence.BackendlessDataQuery;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MyCreatedSlotsDialog extends Activity {
@@ -299,14 +296,6 @@ public class MyCreatedSlotsDialog extends Activity {
         @Override
         protected void onPostExecute(Void result) {
         }
-    }
-
-    @JavascriptInterface
-    public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
-
-        String messageSubString = "Automated TXT - Amplified Scheduler: " + subject + " on the " + date + " at " + place + " was cancelled by ";
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }
 
     @Override

@@ -116,7 +116,7 @@
             android:id="@+id/agenda_calendar_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:visibility="gone"
+
             android:layout_weight="1"
             android:scrollbars="vertical"
             agendaCalendar:agendaCurrentDayTextColor="@color/theme_primary"
