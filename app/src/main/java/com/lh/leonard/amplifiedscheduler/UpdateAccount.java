@@ -122,6 +122,8 @@ public class UpdateAccount extends AppCompatActivity {
         editTextUpdateEmail = (EditText) findViewById(R.id.editTextUpdateEmail);
         ediTextUpdatePassword = (EditText) findViewById(R.id.ediTextUpdatePassword);
         editTextUpdatePasswordConfirmReg = (EditText) findViewById(R.id.editTextUpdatePasswordConfirm);
+        imagePathDirectory = (AutoResizeTextView) findViewById(R.id.textViewPictureLocalDir);
+        btnUpdateImage = (Button) findViewById(R.id.btnUpdatePicture);
 
         if (personLoggedIn.getSocial() != null) {
             if (personLoggedIn.getSocial().equals("Facebook")) {
@@ -135,6 +137,8 @@ public class UpdateAccount extends AppCompatActivity {
                 ediTextUpdatePassword.setInputType(InputType.TYPE_NULL);
                 editTextUpdatePasswordConfirmReg.setEnabled(false);
                 editTextUpdatePasswordConfirmReg.setInputType(InputType.TYPE_NULL);
+                btnUpdateImage.setEnabled(false);
+                imagePathDirectory.setText("Using Facebook profile image");
                 editTextUpdateLNameReg.setHint("Using Facebook credential");
                 editTextUpdateFNameReg.setHint("Using Facebook credential");
                 editTextUpdateEmail.setHint("Using Facebook credential");
@@ -151,8 +155,6 @@ public class UpdateAccount extends AppCompatActivity {
         final AutoResizeTextView txtLabelEmailUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelEmailUpdate);
         final AutoResizeTextView txtLabelCountryUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelUpdateCountry);
         AutoResizeTextView editTextNoticeUpdate = (AutoResizeTextView) findViewById(R.id.editTextNoticeUpdate);
-        imagePathDirectory = (AutoResizeTextView) findViewById(R.id.textViewPictureLocalDir);
-        btnUpdateImage = (Button) findViewById(R.id.btnUpdatePicture);
         final Typeface RobotoBlack = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
@@ -183,16 +185,6 @@ public class UpdateAccount extends AppCompatActivity {
         }
         final Intent intentFileDialog = new Intent(this, FilePickerActivity.class);
 
-        btnUpdateImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intentFileDialog.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.jpg$"));
-                intentFileDialog.putExtra(FilePickerActivity.ARG_DIRECTORIES_FILTER, false);
-                intentFileDialog.putExtra(FilePickerActivity.ARG_SHOW_HIDDEN, true);
-                startActivityForResult(intentFileDialog, 1);
-            }
-        });
-
         updateDetailsBtn.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -212,6 +204,15 @@ public class UpdateAccount extends AppCompatActivity {
         );
 
         if (!social) {
+            btnUpdateImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    intentFileDialog.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.jpg$"));
+                    intentFileDialog.putExtra(FilePickerActivity.ARG_DIRECTORIES_FILTER, false);
+                    intentFileDialog.putExtra(FilePickerActivity.ARG_SHOW_HIDDEN, true);
+                    startActivityForResult(intentFileDialog, 1);
+                }
+            });
             editTextUpdateFNameReg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {

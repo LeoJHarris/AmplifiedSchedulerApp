@@ -1,31 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView android:id="@+id/scrollView1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_color_bg"
+    android:scrollbars="vertical"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:context="com.lh.leonard.amplifiedscheduler.NavDrawerActivity">
-
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scrollbars="vertical">
+    android:background="@drawable/gradient_color_bg"
+    tools:context=".UpdateAccount"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <include
-                    android:id="@+id/tool_bar"
-                    layout="@layout/tool_bar"></include>
+                <include android:id="@+id/tool_bar"
+                    layout="@layout/tool_bar"/>
 
             </LinearLayout>
 
@@ -46,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
                 android:layout_marginTop="15dp"
                 android:text="First Name:"
                 android:textSize="22sp" />
@@ -57,6 +51,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:drawableLeft="@drawable/ic_user_profile"
+                android:drawableStart="@drawable/ic_user_profile"
                 android:ems="10"
                 android:hint="Tap To Enter First Name"
                 android:inputType="text"
@@ -67,6 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Last Name:"
                 android:textSize="22sp" />
@@ -78,6 +74,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:drawableLeft="@drawable/ic_user_profile"
+                android:drawableStart="@drawable/ic_user_profile"
                 android:ems="10"
                 android:hint="Tap To Enter Last Name"
                 android:inputType="text"
@@ -89,6 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Password:"
                 android:textSize="22sp" />
@@ -100,6 +98,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:drawableLeft="@drawable/ic_password"
+                android:drawableStart="@drawable/ic_password"
                 android:hint="Tap To Enter New Password"
                 android:inputType="textPassword"
                 android:textSize="22sp" />
@@ -109,6 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Confirm Password:"
                 android:textSize="22sp" />
@@ -120,6 +120,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:drawableLeft="@drawable/ic_password"
+                android:drawableStart="@drawable/ic_password"
                 android:hint="Tap To Enter New Password"
                 android:inputType="textPassword"
                 android:textSize="22sp" />
@@ -130,6 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Email (User Identity For Login):"
                 android:textSize="22sp" />
@@ -141,6 +143,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:drawableLeft="@drawable/ic_email"
+                android:drawableStart="@drawable/ic_email"
                 android:ems="10"
                 android:hint="Tap To Enter New Email"
                 android:inputType="textEmailAddress"
@@ -151,6 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
                 android:layout_marginTop="15dp"
                 android:text="Your Country (Helps For Finding Users):"
                 android:textSize="22sp" />
@@ -162,6 +166,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:drawableLeft="@drawable/ic_country"
+                android:drawableStart="@drawable/ic_country"
                 android:hint="Tap To Enter Your New Country"
                 android:inputType="text"
                 android:textSize="22sp" />
@@ -222,7 +227,7 @@
                             android:maxLength="40"
                             android:singleLine="true"
                             android:text="No image selected"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
                 </RelativeLayout>
@@ -239,4 +244,3 @@
                 android:textSize="22sp" />
         </LinearLayout>
     </ScrollView>
-</RelativeLayout>

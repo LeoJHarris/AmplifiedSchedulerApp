@@ -28,6 +28,9 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.kobakei.ratethisapp.RateThisApp;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -162,7 +165,7 @@ public class MainActivity extends Activity {
             facebookButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
+                    final Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
                         put("email", "email");
                         put("gender", "gender");
                         put("last_name", "lname");
@@ -172,7 +175,6 @@ public class MainActivity extends Activity {
 
                     List<String> permissions = new ArrayList<>();
                     permissions.add("public_profile");
-                    permissions.add("user_friends");
                     permissions.add("email");
 
                     try {
@@ -187,9 +189,21 @@ public class MainActivity extends Activity {
                                 p.setFullname(response.getProperty("fname") + " " +
                                         response.getProperty("lname"));
                                 p.setEmail((String) response.getProperty("email"));
-                                ringProgressDialog.dismiss();
-                                // System.out.println("Picture: " + response.getProperty("picture"));
-                                // p.setPicture((String) response.getProperty("picture"));
+
+
+                                try {
+                                    JSONObject jsonAdd = new JSONObject((String) response.getProperty("picture"));
+
+                                    String url = jsonAdd.getJSONObject("data").getString("url");
+
+                                    Boolean IsSilhouette = jsonAdd.getJSONObject("data").getBoolean("is_silhouette");
+
+                                    p.setSilhouette(IsSilhouette);
+                                    p.setPicture(url);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
                                 try {
                                     new Save(p, response).execute().get();
                                 } catch (InterruptedException | ExecutionException e) {
@@ -394,18 +408,17 @@ public class MainActivity extends Activity {
                                     if (ringProgressDialog != null) {
                                         ringProgressDialog.dismiss();
                                     }
-                                   // int errorCode = Integer.valueOf(fault.getCode());
+                                    // int errorCode = Integer.valueOf(fault.getCode());
                                     if (fault.getCode().equals("Internal client exception")) {
                                         Toast.makeText(getApplicationContext(),
                                                 "Error unable to sign in. Please check your connection and try again later",
                                                 Toast.LENGTH_LONG).show();
 
+                                    } else {
+                                        Toast.makeText(getApplicationContext(),
+                                                "Error " + fault.getMessage(),
+                                                Toast.LENGTH_LONG).show();
                                     }
-                                    else{
-                                    Toast.makeText(getApplicationContext(),
-                                            "Error " + fault.getMessage(),
-                                            Toast.LENGTH_LONG).show();
-                                }
                                 }
                             });
                         } else {

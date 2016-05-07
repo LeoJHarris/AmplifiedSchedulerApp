@@ -30,6 +30,8 @@ import com.backendless.BackendlessUser;
 import com.backendless.DeviceRegistration;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -492,6 +494,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
             NAME = personLoggedIn.getFullname();
             EMAIL = userLoggedIn.getEmail();
+
 
             mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, getApplicationContext(), personLoggedIn.getPicture());       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
 

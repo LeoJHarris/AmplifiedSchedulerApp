@@ -27,6 +27,15 @@ public class Person {
     public List<Plan> myPlans;
     public String picture;
     public String deviceId;
+    public boolean isSilhouette;
+
+    public boolean getIsSilhouette() {
+        return isSilhouette;
+    }
+
+    public void setSilhouette(boolean silhouette) {
+        isSilhouette = silhouette;
+    }
 
     public String getGender() {
         return gender;
