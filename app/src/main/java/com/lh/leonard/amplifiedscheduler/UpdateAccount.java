@@ -174,7 +174,7 @@ public class UpdateAccount extends AppCompatActivity {
         txtLabelFnameUpdate.setTypeface(RobotoCondensedLight);
         txtLabeLnameUpdate.setTypeface(RobotoCondensedLight);
         txtLabelPasswordConfirmUpdate.setTypeface(RobotoCondensedLight);
-       txtLabelTextPasswordUpdate.setTypeface(RobotoCondensedLight);
+        txtLabelTextPasswordUpdate.setTypeface(RobotoCondensedLight);
         textViewCountry.setTypeface(RobotoCondensedLight);
         btnUpdateImage.setTypeface(RobotoCondensedLight);
 
@@ -473,7 +473,7 @@ public class UpdateAccount extends AppCompatActivity {
             return password.toString().length() > 4;
         }
 
-        private  boolean isValidEmail(CharSequence target) {
+        private boolean isValidEmail(CharSequence target) {
             if (target == null)
                 return false;
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();

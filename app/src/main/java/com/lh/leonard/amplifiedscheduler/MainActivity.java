@@ -193,12 +193,15 @@ public class MainActivity extends Activity {
 
                                 try {
                                     JSONObject jsonAdd = new JSONObject((String) response.getProperty("picture"));
+                                    Boolean isSilhouette = jsonAdd.getJSONObject("data").getBoolean("is_silhouette");
+                                    String url;
 
-                                    String url = jsonAdd.getJSONObject("data").getString("url");
-
-                                    Boolean IsSilhouette = jsonAdd.getJSONObject("data").getBoolean("is_silhouette");
-
-                                    p.setSilhouette(IsSilhouette);
+                                    if (isSilhouette) {
+                                        url = "https://api.backendless.com/e9c78af2-bdc4-c5fa-ff3f-da79004b9200/v1/files/pictures/silhouette.png";
+                                    } else {
+                                        url = jsonAdd.getJSONObject("data").getString("url");
+                                    }
+                                    p.setSilhouette(isSilhouette);
                                     p.setPicture(url);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -386,7 +389,6 @@ public class MainActivity extends Activity {
 
                                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                     imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
-
 
                                     if (saveLoginCheckBox.isChecked()) {
                                         username = editTextUsername.getText().toString();

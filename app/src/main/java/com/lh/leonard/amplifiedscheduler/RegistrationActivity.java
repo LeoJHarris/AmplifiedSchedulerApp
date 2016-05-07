@@ -214,19 +214,25 @@ public class RegistrationActivity extends AppCompatActivity {
                                     public void handleResponse(final BackendlessUser backendlessUser) {
 
                                         //Store the image with the users object id
-                                        Backendless.Files.Android.upload((bitmap != null) ? bitmap : ((BitmapDrawable) userBlank).getBitmap(), Bitmap.CompressFormat.PNG, 50, backendlessUser.getObjectId(), "pictures",
-                                                new AsyncCallback<BackendlessFile>() {
-                                                    @Override
-                                                    public void handleResponse(final BackendlessFile backendlessFile) {
 
-                                                        new ProfilePic(backendlessFile, backendlessUser).execute();
-                                                    }
+                                        if (bitmap!=null) {
+                                            Backendless.Files.Android.upload(bitmap, Bitmap.CompressFormat.PNG, 50, backendlessUser.getObjectId(), "pictures",
+                                                    new AsyncCallback<BackendlessFile>() {
+                                                        @Override
+                                                        public void handleResponse(final BackendlessFile backendlessFile) {
 
-                                                    @Override
-                                                    public void handleFault(BackendlessFault backendlessFault) {
-                                                        Toast.makeText(RegistrationActivity.this, backendlessFault.toString(), Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
+                                                            new ProfilePic(backendlessFile, backendlessUser).execute();
+                                                        }
+
+                                                        @Override
+                                                        public void handleFault(BackendlessFault backendlessFault) {
+                                                            Toast.makeText(RegistrationActivity.this, backendlessFault.toString(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
+                                        else{
+                                            new SaveUser(backendlessUser).execute();
+                                        }
                                     }
 
                                     public void handleFault(BackendlessFault fault) {
@@ -417,13 +423,6 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //  image.setImageBitmap(bitmap);
-//        Bitmap bitmap = (Bitmap) Bitmap.
-//                File file = new File("test.txt");
-//        String filePath = file.getAbsolutePath();
-//        Bitmap photo = (Bitmap) getIntent().getExtras().get("data");
-
-
         if (requestCode == 1 && resultCode == RESULT_OK) {
             String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
 
@@ -465,6 +464,44 @@ public class RegistrationActivity extends AppCompatActivity {
             Person p = (Person) localBackendlessUser.getProperty("persons");
             p.setOwnerId(localBackendlessUser.getObjectId());
             p.setPicture(localBackendlessFile.getFileURL());
+            Backendless.Data.of(Person.class).save(p);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+            intent.putExtra("nameRegistered", fname + "," + lname);
+            startActivity(intent);
+        }
+    }
+    private class SaveUser extends AsyncTask<Void, Integer, Void> {
+
+
+        BackendlessUser localBackendlessUser;
+
+        SaveUser(BackendlessUser backendlessUser) {
+
+            this.localBackendlessUser = backendlessUser;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            Person p = (Person) localBackendlessUser.getProperty("persons");
+            p.setOwnerId(localBackendlessUser.getObjectId());
+            p.setPicture("https://api.backendless.com/e9c78af2-bdc4-c5fa-ff3f-da79004b9200/v1/files/pictures/silhouette.png");
+            p.setSilhouette(true);
             Backendless.Data.of(Person.class).save(p);
             return null;
         }
