@@ -4,12 +4,15 @@ package com.lh.leonard.amplifiedscheduler;
  * Created by Leonard on 8/30/2015.
  */
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by hp1 on 28-12-2014.
@@ -24,9 +27,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
     private int mIcons[];       // Int Array to store the passed icons resource value from MainActivity.java
 
     private String name;        //String Resource for header View Name
-    // private int profile;        //int Resource for header view profile picture
     private String email;       //String Resource for header view email
-
+    private String urlImage;
+    private Context context;
 
     // Creating a ViewHolder which extends the RecyclerView View Holder
     // ViewHolder are used to to store the inflated views in order to recycle them
@@ -36,7 +39,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
 
         TextView textView;
         ImageView imageView;
-        // ImageView profile;
+        ImageView profile;
         AutoResizeTextView Name;
         AutoResizeTextView email;
 
@@ -56,19 +59,21 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
 
                 Name = (AutoResizeTextView) itemView.findViewById(R.id.name);         // Creating Text View object from header.xml for name
                 email = (AutoResizeTextView) itemView.findViewById(R.id.email);       // Creating Text View object from header.xml for email
-                //profile = (ImageView) itemView.findViewById(R.id.circleView);// Creating Image view object from header.xml for profile pic
+                profile = (ImageView) itemView.findViewById(R.id.profile_image);// Creating Image view object from header.xml for profile pic
                 Holderid = 0;                                                // Setting holder id = 0 as the object being populated are of type header view
             }
         }
     }
 
-    NavDrawerAdapter(String Titles[], int Icons[], String Name, String Email, int Profile) { // MyAdapter Constructor with titles and icons parameter
+    NavDrawerAdapter(String Titles[], int Icons[], String Name, String Email, Context context, String url) { // MyAdapter Constructor with titles and icons parameter
         // titles, icons, name, email, profile pic are passed from the main activity as we
         mNavTitles = Titles;                //have seen earlier
         mIcons = Icons;
+        this.context = context;
+        this.urlImage = url;
         name = Name;
         email = Email;
-        // profile = Profile;                     //here we assign those passed values to the values we declared here
+        //here we assign those passed values to the values we declared here
         //in adapter
     }
 
@@ -98,7 +103,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
 
             return vhHeader; //returning the object created
 
-
         }
         return null;
 
@@ -114,8 +118,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
             holder.textView.setText(mNavTitles[position - 1]); // Setting the Text with the array of our Titles
             holder.imageView.setImageResource(mIcons[position - 1]);// Settimg the image with array of our icons
         } else {
-
-            // holder.profile.setImageResource(profile);           // Similarly we set the resources for header view
+            Picasso.with(context).load(urlImage).into(holder.profile);
             holder.Name.setText(name);
             holder.email.setText(email);
         }

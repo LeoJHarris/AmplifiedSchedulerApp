@@ -73,8 +73,8 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/weekView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:visibility="gone"
+            android:layout_height="match_parent"
             app:columnGap="8dp"
             app:dayBackgroundColor="#05000000"
             app:eventTextColor="@android:color/black"
@@ -114,8 +114,9 @@
 
         <com.github.tibolte.agendacalendarview.AgendaCalendarView
             android:id="@+id/agenda_calendar_view"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+
             android:layout_weight="1"
             android:scrollbars="vertical"
             agendaCalendar:agendaCurrentDayTextColor="@color/theme_primary"

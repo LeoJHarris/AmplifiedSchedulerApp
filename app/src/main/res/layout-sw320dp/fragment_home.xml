@@ -238,15 +238,11 @@
             android:layout_centerVertical="true"
             android:visibility="invisible" />
 
-        <RelativeLayout
+        <de.jodamob.android.calendar.CalenderWidget
+            android:id="@+id/calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/secondView">
-
-            <de.jodamob.android.calendar.CalenderWidget
-                android:id="@+id/calendar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </RelativeLayout>
+            android:layout_below="@+id/secondView" />
     </RelativeLayout>
+
 </FrameLayout>

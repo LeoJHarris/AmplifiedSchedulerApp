@@ -1,227 +1,272 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_color_bg"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
     tools:context="com.lh.leonard.amplifiedscheduler.RegistrationActivity">
 
-    <ScrollView
-        android:id="@+id/scrollView1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <include
-                    android:id="@+id/tool_bar"
-                    layout="@layout/tool_bar"></include>
-
-            </LinearLayout>
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/txtLabelFnameReg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="15dp"
-                android:text="First Name:"
-                android:textSize="22sp" />
-
-            <EditText
-                android:id="@+id/editTextFNameReg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:drawableLeft="@drawable/ic_user_profile"
-                android:ems="10"
-                android:hint="Tap To Enter First Name"
-                android:inputType="text"
-                android:textSize="22sp" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/txtLabeLnameReg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="15dp"
-                android:text="Last Name:"
-                android:textSize="22sp" />
-
-
-            <EditText
-                android:id="@+id/editTextLNameReg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:drawableLeft="@drawable/ic_user_profile"
-                android:ems="10"
-                android:hint="Tap To Enter Last Name"
-                android:inputType="text"
-                android:textSize="22sp" />
-
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/txtLabelTextPasswordReg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="15dp"
-                android:layout_weight="1"
-                android:text="Password:"
-                android:textSize="22sp" />
-
-            <EditText
-                android:id="@+id/editTextPassword"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:drawableLeft="@drawable/ic_password"
-                android:hint="Tap To Enter Password"
-                android:inputType="textPassword"
-                android:textSize="22sp" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/txtLabelPasswordConfirmReg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="15dp"
-                android:text="Confirm Password:"
-                android:textSize="22sp" />
-
-            <EditText
-                android:id="@+id/editTextPasswordConfirmReg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:drawableLeft="@drawable/ic_password"
-                android:hint="Tap To Enter Password"
-                android:inputType="textPassword"
-                android:textSize="22sp" />
-
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/txtLabelEmailReg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="15dp"
-                android:text="Email (User Identity For Login):"
-                android:textSize="22sp" />
-
-            <EditText
-                android:id="@+id/editTextEmail"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:drawableLeft="@drawable/ic_email"
-                android:ems="10"
-                android:hint="Tap To Enter Email Address"
-                android:inputType="textEmailAddress"
-                android:textSize="22sp" />
-
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/txtLabelPhone"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="15dp"
-                android:text="Phone Number (For Event Notifications Via SMS):"
-                android:textSize="22sp" />
-
-            <EditText
-                android:id="@+id/editTextPhoneReg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:drawableLeft="@drawable/ic_phone"
-                android:hint="Tap To Enter Phone Number"
-                android:inputType="phone"
-                android:numeric="integer"
-                android:textSize="22sp" />
-
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/txtLabelCountryReg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="15dp"
-                android:text="Your Country (Helps For Finding Users):"
-                android:textSize="22sp" />
-
-            <AutoCompleteTextView
-                android:id="@+id/autocomplete_country"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:drawableLeft="@drawable/ic_country"
-                android:hint="Tap To Enter Your Country"
-                android:inputType="text"
-                android:textSize="22sp" />
-
-            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                android:id="@+id/txtLabelGender"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="15dp"
-                android:text="Gender:"
-                android:textSize="22sp" />
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp">
-
-                <RadioButton
-                    android:id="@+id/radioButtonMale"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Male"
-                    android:textSize="22sp" />
-
-                <RadioButton
-                    android:id="@+id/radioButtonFemale"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignBaseline="@+id/radioButtonMale"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Female"
-                    android:textSize="22sp" />
-            </RelativeLayout>
-
-            <Button
-                android:id="@+id/buttonRegisterUser"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:background="@drawable/button_default_bg"
-                android:padding="10dp"
-                android:text="Sign Up"
-                android:textSize="22sp" />
+            <include
+                android:id="@+id/tool_bar"
+                layout="@layout/tool_bar"></include>
 
         </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/txtLabelFnameReg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="15dp"
+            android:text="First Name:"
+            android:textSize="22sp" />
+
+        <EditText
+            android:id="@+id/editTextFNameReg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:drawableLeft="@drawable/ic_user_profile"
+            android:drawableStart="@drawable/ic_user_profile"
+            android:ems="10"
+            android:hint="Tap To Enter First Name"
+            android:inputType="text"
+            android:textSize="22sp" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/txtLabeLnameReg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="15dp"
+            android:text="Last Name:"
+            android:textSize="22sp" />
+
+
+        <EditText
+            android:id="@+id/editTextLNameReg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:drawableLeft="@drawable/ic_user_profile"
+            android:drawableStart="@drawable/ic_user_profile"
+            android:ems="10"
+            android:hint="Tap To Enter Last Name"
+            android:inputType="text"
+            android:textSize="22sp" />
+
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/txtLabelTextPasswordReg"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:text="Password:"
+            android:textSize="22sp" />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:drawableLeft="@drawable/ic_password"
+            android:drawableStart="@drawable/ic_password"
+            android:hint="Tap To Enter Password"
+            android:inputType="textPassword"
+            android:textSize="22sp" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/txtLabelPasswordConfirmReg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="15dp"
+            android:text="Confirm Password:"
+            android:textSize="22sp" />
+
+        <EditText
+            android:id="@+id/editTextPasswordConfirmReg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:drawableLeft="@drawable/ic_password"
+            android:drawableStart="@drawable/ic_password"
+            android:hint="Tap To Enter Password"
+            android:inputType="textPassword"
+            android:textSize="22sp" />
+
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/txtLabelEmailReg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="15dp"
+            android:text="Email (User Identity For Login):"
+            android:textSize="22sp" />
+
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:drawableLeft="@drawable/ic_email"
+            android:drawableStart="@drawable/ic_email"
+            android:ems="10"
+            android:hint="Tap To Enter Email Address"
+            android:inputType="textEmailAddress"
+            android:textSize="22sp" />
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/txtLabelCountryReg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="15dp"
+            android:text="Your Country (Helps For Finding Users):"
+            android:textSize="22sp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/autocomplete_country"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:drawableLeft="@drawable/ic_country"
+            android:drawableStart="@drawable/ic_country"
+            android:hint="Tap To Enter Your Country"
+            android:inputType="text"
+            android:textSize="22sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".MainActivity">
+
+                <LinearLayout
+                    android:id="@+id/firstLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@+id/secondView"
+                    android:layout_toStartOf="@+id/secondView"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnRegPicture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Profile Picture"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/secondView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="invisible" />
+
+                <LinearLayout
+                    android:id="@+id/thirdLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toEndOf="@+id/secondView"
+                    android:layout_toRightOf="@+id/secondView"
+                    android:orientation="vertical">
+
+                    <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                        android:id="@+id/textViewPictureLocalDir"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:maxLength="40"
+                        android:singleLine="true"
+                        android:text="No image selected"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:id="@+id/txtLabelGender"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="15dp"
+            android:text="Gender:"
+            android:textSize="22sp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
+
+            <RadioButton
+                android:id="@+id/radioButtonMale"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:text="Male"
+                android:textSize="22sp" />
+
+            <RadioButton
+                android:id="@+id/radioButtonFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignBaseline="@+id/radioButtonMale"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_horizontal"
+                android:text="Female"
+                android:textSize="22sp" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/buttonRegisterUser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_default_bg"
+            android:padding="10dp"
+            android:text="Sign Up"
+            android:textSize="22sp" />
+    </LinearLayout>
+</ScrollView>

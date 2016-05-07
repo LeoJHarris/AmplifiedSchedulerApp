@@ -13,7 +13,7 @@ public class Person {
     public String fullname;
     public List<Person> contacts;
     public String objectId;
-    public String phone;
+
     public String email;
     public List<Person> personsImRequesting;
     public List<Person> personsRequestingMe;
@@ -25,6 +25,37 @@ public class Person {
     public String ownerId;
     public String social;
     public List<Plan> myPlans;
+    public String picture;
+    public String deviceId;
+    public boolean isSilhouette;
+
+    public boolean getIsSilhouette() {
+        return isSilhouette;
+    }
+
+    public void setSilhouette(boolean silhouette) {
+        isSilhouette = silhouette;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
 
     public List<Plan> getMyPlans() {
         return myPlans;
@@ -96,14 +127,6 @@ public class Person {
 
     public void setContacts(List<Person> contacts) {
         this.contacts = contacts;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getFname() {

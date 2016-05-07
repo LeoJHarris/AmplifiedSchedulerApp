@@ -28,6 +28,9 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.kobakei.ratethisapp.RateThisApp;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -162,16 +165,16 @@ public class MainActivity extends Activity {
             facebookButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
+                    final Map<String, String> facebookFieldMappings = new HashMap<String, String>() {{
                         put("email", "email");
                         put("gender", "gender");
                         put("last_name", "lname");
                         put("first_name", "fname");
+                        put("picture", "picture");
                     }};
 
                     List<String> permissions = new ArrayList<>();
                     permissions.add("public_profile");
-                    permissions.add("user_friends");
                     permissions.add("email");
 
                     try {
@@ -186,6 +189,24 @@ public class MainActivity extends Activity {
                                 p.setFullname(response.getProperty("fname") + " " +
                                         response.getProperty("lname"));
                                 p.setEmail((String) response.getProperty("email"));
+
+
+                                try {
+                                    JSONObject jsonAdd = new JSONObject((String) response.getProperty("picture"));
+                                    Boolean isSilhouette = jsonAdd.getJSONObject("data").getBoolean("is_silhouette");
+                                    String url;
+
+                                    if (isSilhouette) {
+                                        url = "https://api.backendless.com/e9c78af2-bdc4-c5fa-ff3f-da79004b9200/v1/files/pictures/silhouette.png";
+                                    } else {
+                                        url = jsonAdd.getJSONObject("data").getString("url");
+                                    }
+                                    p.setSilhouette(isSilhouette);
+                                    p.setPicture(url);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
                                 try {
                                     new Save(p, response).execute().get();
                                 } catch (InterruptedException | ExecutionException e) {
@@ -197,7 +218,7 @@ public class MainActivity extends Activity {
                             public void handleFault(BackendlessFault fault) {
                                 Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                        },false);
+                        }, false);
                     } catch (Exception e) {
                         Log.e("YOUR_APP_LOG_TAG", "I got an error", e);
                     }
@@ -243,10 +264,8 @@ public class MainActivity extends Activity {
             ImageView imageViewMainLogo = (ImageView) findViewById(R.id.imageViewMainLogo);
             AutoResizeTextView spacer = (AutoResizeTextView) findViewById(R.id.spacer);
 
-            final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
             final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
             final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
-            final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
 
             spacer.setTypeface(RobotoCondensedLight);
             buttonSignIn.setTypeface(RobotoCondensedLight);
@@ -277,7 +296,6 @@ public class MainActivity extends Activity {
                 buttonSignIn.setTextSize(15);
                 buttonSignIn.setPadding(0, 0, 0, 0);
                 saveLoginCheckBox.setTextSize(15);
-                // facebookButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.facebook_button_320));
             }
             // 2.7" QVGA
             else if (width == 240 && height == 320) {
@@ -323,7 +341,8 @@ public class MainActivity extends Activity {
 
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
                     public void handleResponse(Void response) {
-                        Toast.makeText(getApplicationContext(), personLoggedOut.getFname() + "," + personLoggedOut.getFname(), Toast.LENGTH_LONG).show();
+                        if (personLoggedOut != null && personLoggedOut.getFname() != null && personLoggedOut.getFname() != null)
+                            Toast.makeText(getApplicationContext(), personLoggedOut.getFname() + "," + personLoggedOut.getFname(), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -370,10 +389,10 @@ public class MainActivity extends Activity {
 
                                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                     imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
-                                    username = editTextUsername.getText().toString();
-                                    password = editTextPassword.getText().toString();
 
                                     if (saveLoginCheckBox.isChecked()) {
+                                        username = editTextUsername.getText().toString();
+                                        password = editTextPassword.getText().toString();
                                         loginPrefsEditor.putBoolean("saveLogin", true);
                                         loginPrefsEditor.putString("username", username);
                                         loginPrefsEditor.putString("password", encryption.encryptOrNull(password));
@@ -382,7 +401,7 @@ public class MainActivity extends Activity {
                                         loginPrefsEditor.clear();
                                         loginPrefsEditor.commit();
                                     }
-
+                                    ringProgressDialog.dismiss();
                                     Intent loggedInIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
                                     startActivity(loggedInIntent);
                                 }
@@ -391,9 +410,17 @@ public class MainActivity extends Activity {
                                     if (ringProgressDialog != null) {
                                         ringProgressDialog.dismiss();
                                     }
-                                    Toast.makeText(getApplicationContext(),
-                                            "Error " + fault.getMessage(),
-                                            Toast.LENGTH_LONG).show();
+                                    // int errorCode = Integer.valueOf(fault.getCode());
+                                    if (fault.getCode().equals("Internal client exception")) {
+                                        Toast.makeText(getApplicationContext(),
+                                                "Error unable to sign in. Please check your connection and try again later",
+                                                Toast.LENGTH_LONG).show();
+
+                                    } else {
+                                        Toast.makeText(getApplicationContext(),
+                                                "Error " + fault.getMessage(),
+                                                Toast.LENGTH_LONG).show();
+                                    }
                                 }
                             });
                         } else {
@@ -458,7 +485,6 @@ public class MainActivity extends Activity {
                 userCreated.removeProperty("user-registered");
                 Backendless.UserService.update(userCreated);
             }
-
             return null;
         }
 

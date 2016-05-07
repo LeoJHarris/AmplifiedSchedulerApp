@@ -2,8 +2,12 @@ package com.lh.leonard.amplifiedscheduler;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,12 +24,21 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
 import com.backendless.async.callback.BackendlessCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.files.BackendlessFile;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.regex.Pattern;
 
 
 public class RegistrationActivity extends AppCompatActivity {
 
+    File f;
     String my_var;
     Drawable tickIconDraw;
     Drawable crossIconDraw;
@@ -34,19 +47,22 @@ public class RegistrationActivity extends AppCompatActivity {
     Drawable userProfileIconDraw;
     Drawable passwordIconDraw;
     Drawable countryIconDraw;
-    Drawable phoneIconDraw;
-
+    Bitmap bitmap = null;
     Drawable emailGoodIconDraw;
     Drawable userGoodProfileDraw;
     Drawable passwordGoodIconDraw;
     Drawable countryGoodIconDraw;
-    Drawable phoneGoodIconDraw;
     private Toolbar toolbar;
     Drawable passwordBadIconDraw;
     Drawable emailBadIconDraw;
     ArrayAdapter<String> adapter;
     Validator validator = new Validator();
     String EMAILBAD = "";
+    Button btnRegPicture;
+    AutoResizeTextView textViewPictureLocalDir;
+    CharSequence fname;
+    CharSequence lname;
+    Drawable userBlank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +86,6 @@ public class RegistrationActivity extends AppCompatActivity {
         final EditText passwordConfirmField = (EditText) findViewById(R.id.editTextPasswordConfirmReg);
         final EditText fnameField = (EditText) findViewById(R.id.editTextFNameReg);
         final EditText lnameField = (EditText) findViewById(R.id.editTextLNameReg);
-        final EditText phoneField = (EditText) findViewById(R.id.editTextPhoneReg);
 
         final AutoResizeTextView txtLabelFnameReg = (AutoResizeTextView) findViewById(R.id.txtLabelFnameReg);
         final AutoResizeTextView txtLabeLnameReg = (AutoResizeTextView) findViewById(R.id.txtLabeLnameReg);
@@ -78,10 +93,11 @@ public class RegistrationActivity extends AppCompatActivity {
         final AutoResizeTextView txtLabelPasswordConfirmReg = (AutoResizeTextView) findViewById(R.id.txtLabelPasswordConfirmReg);
         final AutoResizeTextView txtLabelEmailReg = (AutoResizeTextView) findViewById(R.id.txtLabelEmailReg);
         final AutoResizeTextView txtLabelCountryReg = (AutoResizeTextView) findViewById(R.id.txtLabelCountryReg);
-        final AutoResizeTextView txtLabelPhone = (AutoResizeTextView) findViewById(R.id.txtLabelPhone);
         final AutoResizeTextView txtLabelGender = (AutoResizeTextView) findViewById(R.id.txtLabelGender);
         final RadioButton radioButtonMale = (RadioButton) findViewById(R.id.radioButtonMale);
         final RadioButton radioButtonFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
+        btnRegPicture = (Button) findViewById(R.id.btnRegPicture);
+        textViewPictureLocalDir = (AutoResizeTextView) findViewById(R.id.textViewPictureLocalDir);
 
         tickIconDraw = getResources().getDrawable(R.drawable.ic_tick);
         crossIconDraw = getResources().getDrawable(R.drawable.ic_cross);
@@ -89,13 +105,12 @@ public class RegistrationActivity extends AppCompatActivity {
         userProfileIconDraw = getResources().getDrawable(R.drawable.ic_user_profile);
         passwordIconDraw = getResources().getDrawable(R.drawable.ic_password);
         countryIconDraw = getResources().getDrawable(R.drawable.ic_country);
-        phoneIconDraw = getResources().getDrawable(R.drawable.ic_phone);
 
         emailGoodIconDraw = getResources().getDrawable(R.drawable.ic_email_good);
+        userBlank = getResources().getDrawable(R.drawable.user_blank_new);
         userGoodProfileDraw = getResources().getDrawable(R.drawable.ic_profile_good);
         passwordGoodIconDraw = getResources().getDrawable(R.drawable.ic_password_good);
         countryGoodIconDraw = getResources().getDrawable(R.drawable.ic_country_good);
-        phoneGoodIconDraw = getResources().getDrawable(R.drawable.ic_phone_good);
 
         emailBadIconDraw = getResources().getDrawable(R.drawable.ic_email_bad);
         passwordBadIconDraw = getResources().getDrawable(R.drawable.ic_password_bad);
@@ -105,8 +120,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // Get the string array
         String[] countries = getResources().getStringArray(R.array.countries_array);
         // Create the adapter and set it to the AutoCompleteTextView
-        adapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries);
         textViewCountry.setAdapter(adapter);
 
         radioButtonMale.setChecked(false);
@@ -116,7 +130,6 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordField.setText("");
         fnameField.setText("");
         lnameField.setText("");
-        phoneField.setText("");
         textViewCountry.setText("");
 
         radioButtonMale.setTypeface(RobotoCondensedLight);
@@ -127,40 +140,48 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordConfirmField.setTypeface(RobotoCondensedLight);
         fnameField.setTypeface(RobotoCondensedLight);
         lnameField.setTypeface(RobotoCondensedLight);
-        phoneField.setTypeface(RobotoCondensedLight);
         registerButton.setTypeface(RobotoCondensedLight);
         txtLabelCountryReg.setTypeface(RobotoCondensedLight);
         txtLabelEmailReg.setTypeface(RobotoCondensedLight);
         txtLabelFnameReg.setTypeface(RobotoCondensedLight);
         txtLabeLnameReg.setTypeface(RobotoCondensedLight);
         txtLabelPasswordConfirmReg.setTypeface(RobotoCondensedLight);
-        txtLabelPhone.setTypeface(RobotoCondensedLight);
         txtLabelTextPasswordReg.setTypeface(RobotoCondensedLight);
         txtLabelGender.setTypeface(RobotoCondensedLight);
+        btnRegPicture.setTypeface(RobotoCondensedLight);
+        textViewPictureLocalDir.setTypeface(RobotoCondensedLight);
 
         Backendless.Persistence.mapTableToClass("Person", Person.class);
+
+        final Intent intentFileDialog = new Intent(this, FilePickerActivity.class);
+
+        btnRegPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intentFileDialog.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.jpg$"));
+                intentFileDialog.putExtra(FilePickerActivity.ARG_DIRECTORIES_FILTER, false);
+                intentFileDialog.putExtra(FilePickerActivity.ARG_SHOW_HIDDEN, true);
+                startActivityForResult(intentFileDialog, 1);
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-
                 final CharSequence email = emailField.getText(); //TODO regex tester, might be it on server, handle fault with code
+                fname = fnameField.getText();
+                lname = lnameField.getText();
 
-                final CharSequence fname = fnameField.getText();
-                final CharSequence lname = lnameField.getText();
-                final CharSequence phone = phoneField.getText();
                 CharSequence county = textViewCountry.getText();
                 CharSequence password = passwordField.getText();
                 CharSequence passwordConfirm = passwordConfirmField.getText();
                 Boolean genderChecked = false;
                 if (radioButtonFemale.isChecked() || radioButtonMale.isChecked()) {
                     genderChecked = true;
-
                 }
 
-
                 if (!(fname.toString().trim().equals("") && lname.toString().equals("")
-                        && phone.toString().equals("") && county.toString().equals("")
+                        && county.toString().equals("")
                         && password.toString().equals("") &&
                         passwordConfirm.toString().equals("")
                         && email.toString().equals("")) && my_var != null && genderChecked != false) {
@@ -183,7 +204,6 @@ public class RegistrationActivity extends AppCompatActivity {
                                 person.setLname(lname.toString());
                                 person.setGender((radioButtonMale.isChecked() ? "Male" : "Female"));
                                 person.setEmail(email.toString());
-                                person.setPhone(phone.toString());
                                 person.setCountry(county.toString());
                                 person.setFullname(fname.toString() + " " + lname.toString());
 
@@ -191,15 +211,28 @@ public class RegistrationActivity extends AppCompatActivity {
 
                                 Backendless.UserService.register(user, new BackendlessCallback<BackendlessUser>() {
                                     @Override
-                                    public void handleResponse(BackendlessUser backendlessUser) {
+                                    public void handleResponse(final BackendlessUser backendlessUser) {
 
-//                                        Person p = (Person) backendlessUser.getProperty("persons");
-//                                        p.setOwnerId(backendlessUser.getObjectId());
-//                                        Backendless.Data.of(Person.class).save(p);
+                                        //Store the image with the users object id
 
-                                        Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                                        intent.putExtra("nameRegistered", fname + "," + lname);
-                                        startActivity(intent);
+                                        if (bitmap!=null) {
+                                            Backendless.Files.Android.upload(bitmap, Bitmap.CompressFormat.PNG, 50, backendlessUser.getObjectId(), "pictures",
+                                                    new AsyncCallback<BackendlessFile>() {
+                                                        @Override
+                                                        public void handleResponse(final BackendlessFile backendlessFile) {
+
+                                                            new ProfilePic(backendlessFile, backendlessUser).execute();
+                                                        }
+
+                                                        @Override
+                                                        public void handleFault(BackendlessFault backendlessFault) {
+                                                            Toast.makeText(RegistrationActivity.this, backendlessFault.toString(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
+                                        else{
+                                            new SaveUser(backendlessUser).execute();
+                                        }
                                     }
 
                                     public void handleFault(BackendlessFault fault) {
@@ -294,16 +327,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
         });
-        phoneField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if ((!(phoneField.getText().toString().equals("")))) {
-                    phoneField.setCompoundDrawablesWithIntrinsicBounds(phoneGoodIconDraw, null, tickIconDraw, null);
-                } else {
-                    phoneField.setCompoundDrawablesWithIntrinsicBounds(phoneIconDraw, null, null, null);
-                }
-            }
-        });
+
         passwordField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -392,6 +416,101 @@ public class RegistrationActivity extends AppCompatActivity {
             if (target == null)
                 return false;
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+
+            f = new File(filePath);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            try {
+                textViewPictureLocalDir.setText(filePath);
+                bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class ProfilePic extends AsyncTask<Void, Integer, Void> {
+
+        BackendlessFile localBackendlessFile;
+        BackendlessUser localBackendlessUser;
+
+        ProfilePic(BackendlessFile backendlessFile, BackendlessUser backendlessUser) {
+            this.localBackendlessFile = backendlessFile;
+            this.localBackendlessUser = backendlessUser;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            Person p = (Person) localBackendlessUser.getProperty("persons");
+            p.setOwnerId(localBackendlessUser.getObjectId());
+            p.setPicture(localBackendlessFile.getFileURL());
+            Backendless.Data.of(Person.class).save(p);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+            intent.putExtra("nameRegistered", fname + "," + lname);
+            startActivity(intent);
+        }
+    }
+    private class SaveUser extends AsyncTask<Void, Integer, Void> {
+
+
+        BackendlessUser localBackendlessUser;
+
+        SaveUser(BackendlessUser backendlessUser) {
+
+            this.localBackendlessUser = backendlessUser;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            Person p = (Person) localBackendlessUser.getProperty("persons");
+            p.setOwnerId(localBackendlessUser.getObjectId());
+            p.setPicture("https://api.backendless.com/e9c78af2-bdc4-c5fa-ff3f-da79004b9200/v1/files/pictures/silhouette.png");
+            p.setSilhouette(true);
+            Backendless.Data.of(Person.class).save(p);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+            intent.putExtra("nameRegistered", fname + "," + lname);
+            startActivity(intent);
         }
     }
 }

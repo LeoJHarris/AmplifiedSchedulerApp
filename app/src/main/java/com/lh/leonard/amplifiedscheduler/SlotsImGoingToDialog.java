@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.webkit.JavascriptInterface;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
@@ -222,9 +220,6 @@ public class SlotsImGoingToDialog extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            sendsmss(event.getPhone(), person.getFullname(), event.subject,
-                    event.getStartCalendar().getTime().toString(), event.getStartCalendar().getTime().toString());
-
             Map<String, String> args = new HashMap<>();
             args.put("id", "removeevent");
 
@@ -242,14 +237,6 @@ public class SlotsImGoingToDialog extends Activity {
             ringProgressDialog.dismiss();
             onBackPressed();
         }
-    }
-
-    @JavascriptInterface
-    public void sendsmss(String phoneNumber, String from, String subject, String date, String place) {
-
-        String messageSubString = "Automated TXT - Amplified Scheduler: " + subject + " on the " + date + " at " + place + " was cancelled by ";
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
     }
 
     @Override

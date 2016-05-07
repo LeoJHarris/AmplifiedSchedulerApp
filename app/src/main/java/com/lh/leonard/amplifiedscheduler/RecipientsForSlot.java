@@ -109,7 +109,7 @@ public class RecipientsForSlot extends Activity {
 
             llm.setOrientation(LinearLayoutManager.VERTICAL);
 
-            ContactsAdapter adapter = new ContactsAdapter(myContactsPersonsList, 0);
+            ContactsAdapter adapter = new ContactsAdapter(myContactsPersonsList, 0,getApplicationContext());
 
             rv.setAdapter(adapter);
 

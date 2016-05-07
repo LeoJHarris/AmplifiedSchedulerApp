@@ -11,7 +11,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -21,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.JavascriptInterface;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -40,6 +38,9 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.geo.GeoPoint;
+import com.backendless.messaging.DeliveryOptions;
+import com.backendless.messaging.MessageStatus;
+import com.backendless.messaging.PublishOptions;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter;
@@ -83,7 +84,6 @@ public class CreateSlot extends AppCompatActivity implements
     private AutoResizeTextView textViewStartTime;
     private Menu optionsMenu;
     int datePickerSelected = 0;
-    Boolean sendSMS = true;
     Boolean subjectSet = false;
     Boolean contactsAdded = false;
     AutoResizeTextView timeZone;
@@ -105,14 +105,13 @@ public class CreateSlot extends AppCompatActivity implements
     EditText slotSubjectEditText;
     EditText slotMessageEditText;
     EditText editTextNote;
-    Switch aSwitch;
     CheckBox allDaySwitch;
     Calendar startCalendar;
     Calendar endCalendar;
     AutoResizeTextView textViewEndTime;
     //  ImageButton btnGetLocationGeoPoint;
 
-    LinearLayout llnumberPickerAttendees, llrecipientsForSlot, lleditTextSlotMessage, llswitchAutomatedSMS;
+    LinearLayout llnumberPickerAttendees, llrecipientsForSlot, lleditTextSlotMessage;
 
     private String mRrule;
     Switch switchPlannerEvent;
@@ -168,7 +167,6 @@ public class CreateSlot extends AppCompatActivity implements
                 null, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
 
-        aSwitch = (Switch) findViewById(R.id.switchAutomatedSMS);
         allDaySwitch = (CheckBox) findViewById(R.id.checkboxAllDay);
         editTextNumberAttendeesAvaliable = (EditText) findViewById(R.id.numberPickerAttendees);
         recipientsForSlotBtn = (Button) findViewById(R.id.recipientsForSlot);
@@ -188,7 +186,7 @@ public class CreateSlot extends AppCompatActivity implements
         switchPlannerEvent = (Switch) findViewById(R.id.switchPlannerEvent);
         llrecipientsForSlot = (LinearLayout) findViewById(R.id.llrecipientsForSlot);
         lleditTextSlotMessage = (LinearLayout) findViewById(R.id.lleditTextSlotMessage);
-        llswitchAutomatedSMS = (LinearLayout) findViewById(R.id.llswitchAutomatedSMS);
+
         llnumberPickerAttendees = (LinearLayout) findViewById(R.id.llnumberPickerAttendees);
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
@@ -210,9 +208,9 @@ public class CreateSlot extends AppCompatActivity implements
         mAttTextView.setTypeface(RobotoCondensedLight);
         mAutocompleteTextView.setTypeface(RobotoCondensedLight);
         buttonSendSlot.setTypeface(RobotoCondensedLight);
-        aSwitch.setTypeface(RobotoCondensedLight);
+
         allDaySwitch.setTypeface(RobotoCondensedLight);
-        aSwitch.setChecked(true);
+
         switchPlannerEvent.setTypeface(RobotoCondensedLight);
 
         switchPlannerEvent.setChecked(true);
@@ -543,7 +541,7 @@ public class CreateSlot extends AppCompatActivity implements
                         lleditTextSlotMessage.setVisibility(View.GONE);
                         llnumberPickerAttendees.setVisibility(View.GONE);
                         llrecipientsForSlot.setVisibility(View.GONE);
-                        llswitchAutomatedSMS.setVisibility(View.GONE);
+
                         editTextNumberAttendeesAvaliable.setVisibility(View.GONE);
                         switchPlannerEvent.setText("Personal Plan");
                         buttonSendSlot.setText("CREATE PLAN");
@@ -552,21 +550,12 @@ public class CreateSlot extends AppCompatActivity implements
                         lleditTextSlotMessage.setVisibility(View.VISIBLE);
                         llnumberPickerAttendees.setVisibility(View.VISIBLE);
                         llrecipientsForSlot.setVisibility(View.VISIBLE);
-                        llswitchAutomatedSMS.setVisibility(View.VISIBLE);
+
                         switchPlannerEvent.setText("Event");
                         editTextNumberAttendeesAvaliable.setVisibility(View.VISIBLE);
                         event = true;
                         buttonSendSlot.setText("SEND EVENT");
                     }
-                }
-            });
-        }
-        if (aSwitch != null) {
-            aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                    sendSMS = isChecked ? true : false;
                 }
             });
         }
@@ -761,7 +750,6 @@ public class CreateSlot extends AppCompatActivity implements
                 hashMapEvent.put("starttime", startCalendar.getTime());
                 hashMapEvent.put("endtime", endCalendar.getTime());
                 hashMapEvent.put("attendees", numberAttendeesAvaliable);
-                hashMapEvent.put("phone", personLoggedIn.getPhone());
                 hashMapEvent.put("host", personLoggedIn.getFullname());
                 hashMapEvent.put("loggedinperson", personLoggedIn.getObjectId());
                 hashMapEvent.put("alldayevent", allDayEvent);
@@ -796,15 +784,21 @@ public class CreateSlot extends AppCompatActivity implements
                     }
                 });
 
-                //TODO reused code below here from multiple class Should make a class and method maybe
 
-                // For all the contacts add to their pending response slot
+                DeliveryOptions deliveryOptions = new DeliveryOptions();
+                // deliveryOptions.setRepeatExpiresAt(); how long before to remind
+                PublishOptions publishOptions = new PublishOptions();
+                publishOptions.putHeader("android-ticker-text", "Event invite received");
+                publishOptions.putHeader("android-content-title", "Amplified Scheduler");
+                publishOptions.putHeader("android-content-text", personLoggedIn.fname +
+                        " has invited you to " + subject);
                 for (Person pId : addedContactsForSlot) {
-
-                    if (sendSMS) {
-                        sendsmss(pId.getPhone(), message, subject, startCalendar.getTime().getTime());
-                    }
+                    deliveryOptions.addPushSinglecast(pId.getDeviceId());
                 }
+
+                MessageStatus status = Backendless.Messaging.publish("this is a  message!", publishOptions, deliveryOptions);
+
+
             } else {
                 HashMap<String, Object> hashMapEvent = new HashMap<>();
                 hashMapEvent.put("subject", subject);
@@ -815,7 +809,7 @@ public class CreateSlot extends AppCompatActivity implements
                 hashMapEvent.put("category", eventCategory);
                 hashMapEvent.put("loggedinperson", personLoggedIn.getObjectId());
 
-                LatLng latLngPlace = place.getLatLng(); // TODO CHECK NOT NULL place
+                LatLng latLngPlace = place.getLatLng();
 
                 hashMapEvent.put("lat", latLngPlace.latitude);
                 hashMapEvent.put("long", latLngPlace.longitude);
@@ -856,35 +850,6 @@ public class CreateSlot extends AppCompatActivity implements
             subjectSet = false;
             my_var = null;
 
-        }
-    }
-
-    @JavascriptInterface
-    public void sendsmss(String phoneNumber, String message, String subject, Long startDate) {
-
-        String fullnameLoggedin = personLoggedIn.getFullname();
-        String dots = "";
-
-        if (!message.trim().equals("")) {
-            int lengthToSubString;
-            int lengthMessage = message.length();
-            if (lengthMessage <= 150) {
-                lengthToSubString = lengthMessage;
-
-            } else {
-                lengthToSubString = 150;
-                dots = "...";
-            }
-            String messageSubString = message.substring(0, lengthToSubString);
-            messageSubString = "Amplified Scheduler: Invited Event from " + fullnameLoggedin +
-                    ". " + subject + messageSubString + dots + " When: " + startDate;
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
-        } else {
-            String messageSubString = "Amplified Scheduler: Invited Event. Host: " + fullnameLoggedin +
-                    ". " + subject + " no message included " + "When: " + startDate;
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, messageSubString, null, null);
         }
     }
 

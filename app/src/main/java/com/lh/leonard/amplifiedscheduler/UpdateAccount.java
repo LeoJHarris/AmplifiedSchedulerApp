@@ -2,6 +2,8 @@ package com.lh.leonard.amplifiedscheduler;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -29,6 +31,12 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.regex.Pattern;
 
 public class UpdateAccount extends AppCompatActivity {
 
@@ -38,32 +46,29 @@ public class UpdateAccount extends AppCompatActivity {
     Person personLoggedIn;
     EditText editTextUpdateFNameReg; // TODO set hints to user info
     EditText editTextUpdateLNameReg;
-    EditText editTextUpdatePhoneReg;
     EditText editTextUpdateEmail;
     EditText ediTextUpdatePassword;
     EditText editTextUpdatePasswordConfirmReg;
     BackendlessUser user;
-
+    File f;
+    Bitmap bitmap = null;
     Drawable tickIconDraw;
     Drawable crossIconDraw;
     Drawable emailIconDraw;
     Drawable userProfileIconDraw;
     Drawable passwordIconDraw;
     Drawable countryIconDraw;
-    Drawable phoneIconDraw;
     String my_var;
     Drawable emailGoodIconDraw;
     Drawable userGoodProfileDraw;
     Drawable passwordGoodIconDraw;
     Drawable countryGoodIconDraw;
-    Drawable phoneGoodIconDraw;
     private Menu optionsMenu;
     Drawable passwordBadIconDraw;
     Drawable emailBadIconDraw;
     private Toolbar toolbar;
     String fname;
     String lname;
-    String phone;
     String email;
     String password;
     String passwordConfirm;
@@ -72,6 +77,8 @@ public class UpdateAccount extends AppCompatActivity {
     AutoCompleteTextView textViewCountry;
     ArrayAdapter<String> adapter;
     Boolean social = false;
+    Button btnUpdateImage;
+    AutoResizeTextView imagePathDirectory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +94,10 @@ public class UpdateAccount extends AppCompatActivity {
         userProfileIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_user_profile);
         passwordIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_password);
         countryIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_country);
-        phoneIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_phone);
-
         emailGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_email_good);
         userGoodProfileDraw = ContextCompat.getDrawable(this, R.drawable.ic_profile_good);
         passwordGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_password_good);
         countryGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_country_good);
-        phoneGoodIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_phone_good);
 
         emailBadIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_email_bad);
         passwordBadIconDraw = ContextCompat.getDrawable(this, R.drawable.ic_password_bad);
@@ -115,10 +119,11 @@ public class UpdateAccount extends AppCompatActivity {
 
         editTextUpdateFNameReg = (EditText) findViewById(R.id.editTextUpdateFName);
         editTextUpdateLNameReg = (EditText) findViewById(R.id.editTextUpdateLName);
-        editTextUpdatePhoneReg = (EditText) findViewById(R.id.editTextUpdatePhone);
         editTextUpdateEmail = (EditText) findViewById(R.id.editTextUpdateEmail);
         ediTextUpdatePassword = (EditText) findViewById(R.id.ediTextUpdatePassword);
         editTextUpdatePasswordConfirmReg = (EditText) findViewById(R.id.editTextUpdatePasswordConfirm);
+        imagePathDirectory = (AutoResizeTextView) findViewById(R.id.textViewPictureLocalDir);
+        btnUpdateImage = (Button) findViewById(R.id.btnUpdatePicture);
 
         if (personLoggedIn.getSocial() != null) {
             if (personLoggedIn.getSocial().equals("Facebook")) {
@@ -132,8 +137,8 @@ public class UpdateAccount extends AppCompatActivity {
                 ediTextUpdatePassword.setInputType(InputType.TYPE_NULL);
                 editTextUpdatePasswordConfirmReg.setEnabled(false);
                 editTextUpdatePasswordConfirmReg.setInputType(InputType.TYPE_NULL);
-
-                editTextUpdatePhoneReg.setFocusable(true);
+                btnUpdateImage.setEnabled(false);
+                imagePathDirectory.setText("Using Facebook profile image");
                 editTextUpdateLNameReg.setHint("Using Facebook credential");
                 editTextUpdateFNameReg.setHint("Using Facebook credential");
                 editTextUpdateEmail.setHint("Using Facebook credential");
@@ -149,9 +154,7 @@ public class UpdateAccount extends AppCompatActivity {
         final AutoResizeTextView txtLabelPasswordConfirmUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelPasswordConfirmUpdate);
         final AutoResizeTextView txtLabelEmailUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelEmailUpdate);
         final AutoResizeTextView txtLabelCountryUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelUpdateCountry);
-        final AutoResizeTextView txtLabelPhoneUpdate = (AutoResizeTextView) findViewById(R.id.txtLabelPhoneUpdate);
         AutoResizeTextView editTextNoticeUpdate = (AutoResizeTextView) findViewById(R.id.editTextNoticeUpdate);
-
         final Typeface RobotoBlack = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
@@ -162,7 +165,6 @@ public class UpdateAccount extends AppCompatActivity {
         editTextNoticeUpdate.setTypeface(RobotoCondensedLightItalic);
         editTextUpdateFNameReg.setTypeface(RobotoCondensedLight);
         editTextUpdateLNameReg.setTypeface(RobotoCondensedLight);
-        editTextUpdatePhoneReg.setTypeface(RobotoCondensedLight);
         editTextUpdateEmail.setTypeface(RobotoCondensedLight);
         ediTextUpdatePassword.setTypeface(RobotoCondensedLight);
         editTextUpdatePasswordConfirmReg.setTypeface(RobotoCondensedLight);
@@ -172,9 +174,16 @@ public class UpdateAccount extends AppCompatActivity {
         txtLabelFnameUpdate.setTypeface(RobotoCondensedLight);
         txtLabeLnameUpdate.setTypeface(RobotoCondensedLight);
         txtLabelPasswordConfirmUpdate.setTypeface(RobotoCondensedLight);
-        txtLabelPhoneUpdate.setTypeface(RobotoCondensedLight);
         txtLabelTextPasswordUpdate.setTypeface(RobotoCondensedLight);
         textViewCountry.setTypeface(RobotoCondensedLight);
+        btnUpdateImage.setTypeface(RobotoCondensedLight);
+
+        if (personLoggedIn.getPicture() != null) {
+            if (personLoggedIn.getPicture().equals("")) {
+                imagePathDirectory.setText("No image set");
+            }
+        }
+        final Intent intentFileDialog = new Intent(this, FilePickerActivity.class);
 
         updateDetailsBtn.setOnClickListener(new View.OnClickListener() {
                                                 @Override
@@ -188,7 +197,6 @@ public class UpdateAccount extends AppCompatActivity {
                                                         password = ediTextUpdatePassword.getText().toString();
                                                         passwordConfirm = editTextUpdatePasswordConfirmReg.getText().toString();
                                                     }
-                                                    phone = editTextUpdatePhoneReg.getText().toString();
                                                     country = textViewCountry.getText().toString();
                                                     new Parse().execute();
                                                 }
@@ -196,6 +204,15 @@ public class UpdateAccount extends AppCompatActivity {
         );
 
         if (!social) {
+            btnUpdateImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    intentFileDialog.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.jpg$"));
+                    intentFileDialog.putExtra(FilePickerActivity.ARG_DIRECTORIES_FILTER, false);
+                    intentFileDialog.putExtra(FilePickerActivity.ARG_SHOW_HIDDEN, true);
+                    startActivityForResult(intentFileDialog, 1);
+                }
+            });
             editTextUpdateFNameReg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -315,16 +332,6 @@ public class UpdateAccount extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
-        editTextUpdatePhoneReg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if ((!(editTextUpdatePhoneReg.getText().toString().equals("")))) {
-                    editTextUpdatePhoneReg.setCompoundDrawablesWithIntrinsicBounds(phoneGoodIconDraw, null, tickIconDraw, null);
-                } else {
-                    editTextUpdatePhoneReg.setCompoundDrawablesWithIntrinsicBounds(phoneIconDraw, null, null, null);
-                }
-            }
-        });
     }
 
     private class Parse extends AsyncTask<Void, Integer, Boolean> {
@@ -347,7 +354,11 @@ public class UpdateAccount extends AppCompatActivity {
             Boolean lastNameChange = false;
             updatePerson = false;
 
-//            HashMap<String, Object> hashMapEvent = new HashMap<>();
+            // HashMap<String, Object> hashMapEvent = new HashMap<>();
+
+            if (bitmap != null) {
+                updatePerson = true;
+            }
 
             if (!social) {
                 if (validator.isValidEmail(email)) {
@@ -388,9 +399,13 @@ public class UpdateAccount extends AppCompatActivity {
                 updatePerson = true;
             }
 
-            if (!(phone.equals(""))) {
-                personLoggedIn.setPhone(phone.toString());
-                updatePerson = true;
+            if ((bitmap != null)) {
+                //Store the image with the users object id
+                try {
+                    Backendless.Files.Android.upload(bitmap, Bitmap.CompressFormat.PNG, 50, personLoggedIn.getObjectId(), "pictures", true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             if (updatePerson) {
@@ -414,11 +429,9 @@ public class UpdateAccount extends AppCompatActivity {
                                         editTextUpdateLNameReg.setCompoundDrawablesWithIntrinsicBounds(userProfileIconDraw, null, null, null);
                                     }
 
-                                    editTextUpdatePhoneReg.setText("");
+
                                     textViewCountry.setText("");
                                     my_var = null;
-
-                                    editTextUpdatePhoneReg.setCompoundDrawablesWithIntrinsicBounds(phoneIconDraw, null, null, null);
                                     textViewCountry.setCompoundDrawablesWithIntrinsicBounds(countryIconDraw, null, null, null);
                                 }
 
@@ -433,6 +446,7 @@ public class UpdateAccount extends AppCompatActivity {
 
                             @Override
                             public void handleFault(BackendlessFault fault) {
+                                ringProgressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -440,6 +454,7 @@ public class UpdateAccount extends AppCompatActivity {
 
                     @Override
                     public void handleFault(BackendlessFault fault) {
+                        ringProgressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -490,5 +505,26 @@ public class UpdateAccount extends AppCompatActivity {
         sendIntent.setType("text/plain");
         mShareActionProvider.setShareIntent(sendIntent);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+
+            f = new File(filePath);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            try {
+                imagePathDirectory.setText(filePath);
+                bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
+                btnUpdateImage.setCompoundDrawablesWithIntrinsicBounds(userGoodProfileDraw, null, null, null);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

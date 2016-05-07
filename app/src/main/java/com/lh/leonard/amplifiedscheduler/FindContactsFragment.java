@@ -257,7 +257,7 @@ public class FindContactsFragment extends Fragment {
 
                     //   rv.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
 
-                    adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS);
+                    adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS, getContext());
 
                     rv.setAdapter(adapter);
 
@@ -605,7 +605,7 @@ public class FindContactsFragment extends Fragment {
 
             rv.setLayoutManager(llm);
 
-            adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS);
+            adapter = new ContactsAdapter(personsFoundQuery, hashMapSTATUS, getContext());
 
             rv.setAdapter(adapter);
 

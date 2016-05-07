@@ -27,8 +27,11 @@ import android.widget.ImageView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.DeviceRegistration;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,20 +57,14 @@ public class NavDrawerActivity extends AppCompatActivity {
     int sizePendingResponseEvents;
     int sizeMyCreatedEvents;
     int sizeMyPlans;
-
-    Boolean OpenDrawer = false;
-
     private Menu optionsMenu;
-
     String valResponseEvents = "";
     String valPersonsRequestingMe = "";
     String valGoingToEvents = "";
     String valMyCreatedEvents = "";
     String valMyPlans = "";
-
     String NAME;
     String EMAIL;
-    int PROFILE = R.drawable.ic_currentcontact;
     private Toolbar toolbar;                              // Declaring the Toolbar Object
     FragmentManager fragmentManager;
     RecyclerView mRecyclerView = null;                           // Declaring RecyclerView
@@ -81,9 +78,6 @@ public class NavDrawerActivity extends AppCompatActivity {
     Typeface RobotoCondensedLightItalic;
     Typeface RobotoCondensedBold;
 
-    ImageView imageViewInvitedEvents;
-    ImageView imageViewMyEvents;
-    ImageView imageViewGoingToEvents;
     Drawable drawableTime;
 
     @Override
@@ -122,11 +116,13 @@ public class NavDrawerActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+        new SaveDeviceID().execute();
+
         setRefreshActionButtonState(true);
         getNav();
         new Refresh().execute();
         setRefreshActionButtonState(false);
-
     }
 
     private void selectItem(int position) {
@@ -340,12 +336,14 @@ public class NavDrawerActivity extends AppCompatActivity {
         String TITLES[] = {"Create Event/Plan", "My Plans " + valMyPlans, "My Events " +
                 valMyCreatedEvents, "Going To Events " +
                 valGoingToEvents, "Invited Events " + valResponseEvents, "Manage Contacts" +
-                valPersonsRequestingMe, "Update Account", "Sign Out"};
+                valPersonsRequestingMe, "Profile", "Sign Out"};
+
 
         NAME = personLoggedIn.getFullname();
         EMAIL = userLoggedIn.getEmail();
 
-        mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+
+        mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, getApplicationContext(), personLoggedIn.getPicture());       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
 
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
 
@@ -415,6 +413,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
+
 
             ArrayList<String> relationProps = new ArrayList<>();
             relationProps.add("personsRequestingMe");
@@ -491,12 +490,13 @@ public class NavDrawerActivity extends AppCompatActivity {
             String TITLES[] = {"Create Event/Plan", "My Plans " + valMyPlans, "My Events " +
                     valMyCreatedEvents, "Going To Events " +
                     valGoingToEvents, "Invited Events " + valResponseEvents, "Manage Contacts" +
-                    valPersonsRequestingMe, "Update Account", "Sign Out"};
+                    valPersonsRequestingMe, "Profile", "Sign Out"};
 
             NAME = personLoggedIn.getFullname();
             EMAIL = userLoggedIn.getEmail();
 
-            mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+
+            mAdapter = new NavDrawerAdapter(TITLES, ICONS, NAME, EMAIL, getApplicationContext(), personLoggedIn.getPicture());       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
 
             mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
 
@@ -649,6 +649,26 @@ public class NavDrawerActivity extends AppCompatActivity {
             setRefreshActionButtonState(false);
         }
     }
+
+    private class SaveDeviceID extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            Backendless.Messaging.registerDevice(Defaults.gcmSenderID, "Default");
+
+            DeviceRegistration deviceRegistered = Backendless.Messaging.getDeviceRegistration();
+
+            Person pp = Backendless.Persistence.of(Person.class).findById(personLoggedIn.getObjectId());
+
+            pp.setDeviceId(deviceRegistered.getDeviceId());
+
+            Backendless.Data.save(pp);
+
+            return null;
+        }
+    }
+
 
     @Override
     public void onRestart() {

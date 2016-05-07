@@ -48,8 +48,6 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
 
     Person personLoggedIn;
     List<Slot> slot;
-    List<Person> personsToSms;
-    BackendlessCollection<Person> personsToSmsCollection;
     private ProgressBar progressBar;
     BackendlessCollection<Person> persons;
     BackendlessCollection<Slot> slots;
@@ -306,8 +304,17 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
             mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
             progressBar.setVisibility(View.GONE);
             RLProgressBar.setVisibility(View.GONE);
-            linearLayoutWeekView.setVisibility(View.VISIBLE);
-            mWeekView.setVisibility(View.VISIBLE);
+            if (weekview) {
+                mAgendaCalendarView.setVisibility(View.GONE);
+                linearLayoutCalendarView.setVisibility(View.GONE);
+                linearLayoutWeekView.setVisibility(View.VISIBLE);
+                mWeekView.setVisibility(View.VISIBLE);
+            } else {
+                linearLayoutWeekView.setVisibility(View.GONE);
+                mWeekView.setVisibility(View.GONE);
+                linearLayoutCalendarView.setVisibility(View.VISIBLE);
+                mAgendaCalendarView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -382,12 +389,16 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         if (weekview) {
             inflater.inflate(R.menu.menu_week_view, menu);
+            mAgendaCalendarView.setVisibility(View.GONE);
             linearLayoutCalendarView.setVisibility(View.GONE);
             linearLayoutWeekView.setVisibility(View.VISIBLE);
+            mWeekView.setVisibility(View.VISIBLE);
         } else {
             inflater.inflate(R.menu.menu_events, menu);
             linearLayoutWeekView.setVisibility(View.GONE);
+            mWeekView.setVisibility(View.GONE);
             linearLayoutCalendarView.setVisibility(View.VISIBLE);
+            mAgendaCalendarView.setVisibility(View.VISIBLE);
         }
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.share);

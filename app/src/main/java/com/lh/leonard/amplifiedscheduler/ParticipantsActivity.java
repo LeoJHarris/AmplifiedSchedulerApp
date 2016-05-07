@@ -40,7 +40,7 @@ public class ParticipantsActivity extends Activity {
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
-        r= getResources();
+        r = getResources();
 
         final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
@@ -127,7 +127,7 @@ public class ParticipantsActivity extends Activity {
                 LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                 rv.setLayoutManager(llm);
 
-                adapter = new ContactsAdapter(slot, 0);
+                adapter = new ContactsAdapter(slot, 0, getApplicationContext());
 
                 rv.setAdapter(adapter);
 

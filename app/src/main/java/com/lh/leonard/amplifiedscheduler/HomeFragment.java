@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -163,9 +161,10 @@ public class HomeFragment extends Fragment {
 
         if (personLoggedIn.getCountry() == null || personLoggedIn.getCountry().equals("")) {
             phoneCountryDialog();
-        } else if (personLoggedIn.getPhone() == null || personLoggedIn.getPhone().equals("")) {
-            phoneDialog();
         }
+//        } else if (personLoggedIn.getPhone() == null || personLoggedIn.getPhone().equals("")) {
+//            phoneDialog();
+//        }
 
         new ParseURL().execute();
         return v;
@@ -231,6 +230,20 @@ public class HomeFragment extends Fragment {
                 schedulesForStyledCalendar.addAll(personLoggedIn.getMyCreatedSlot());
                 schedulesForStyledCalendar.addAll(personLoggedIn.getGoingToSlot());
                 schedulesForStyledCalendar.addAll(personLoggedIn.getMyPlans());
+
+//                URL newurl = null;
+//                try {
+//                    newurl = new URL(personLoggedIn.getPicture());
+//
+//                     mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+//
+//
+//                    // imageViewMyEvents.setIma();
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
             return null;
         }
@@ -251,6 +264,8 @@ public class HomeFragment extends Fragment {
                 textViewMyEvents.setText(personLoggedIn.getMyCreatedSlot().get(0).getSubject());
                 textViewMyEventsDate.setText(personLoggedIn.getMyCreatedSlot().get(0).getStartCalendar().getTime().toString());
                 imageViewMyEvents.setImageDrawable(drawableTime);
+
+                // imageViewMyEvents.setImageBitmap(mIcon_val);
             }
             if (!personLoggedIn.getGoingToSlot().isEmpty()) {
                 textViewGoingToEvents.setText(personLoggedIn.getGoingToSlot().get(0).getSubject());
@@ -279,69 +294,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public void phoneDialog() {
-
-        final EditText phone = new EditText(getActivity());
-
-        phone.setHint("Phone");
-
-        phone.setInputType(InputType.TYPE_CLASS_PHONE);
-
-        final AlertDialog.Builder phoneAlert = new AlertDialog.Builder(getActivity())
-                .setTitle("Final Details")
-                .setMessage("Last step required, please provide your phone")
-                .setView(phone)
-                .setPositiveButton("DONE", null)
-                .setNeutralButton("LOGOUT", null);
-        phoneAlert.setCancelable(false);
-        alert = phoneAlert.create(); //.show().setCancelable(false);
-
-        alert.show();
-
-        final Button neutralButton = alert.getButton(DialogInterface.BUTTON_NEUTRAL);
-        neutralButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ringProgressDialog = ProgressDialog.show(getActivity(), "Please wait ...",
-                        "Logging out " + personLoggedIn.getFname() + " " + personLoggedIn.getLname() + " ...", true);
-                ringProgressDialog.setCancelable(false);
-                Backendless.UserService.logout(new AsyncCallback<Void>() {
-                    public void handleResponse(Void response) {
-                        Intent logOutIntent = new Intent(getActivity(), MainActivity.class);
-                        logOutIntent.putExtra("loggedoutperson", personLoggedIn.getFname() + "," + personLoggedIn.getLname());
-                        startActivity(logOutIntent);
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault fault) {
-                        Toast.makeText(getActivity(), fault.getMessage(), Toast.LENGTH_SHORT).show();
-                        Intent logOutIntent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(logOutIntent);
-                    }
-                });
-            }
-        });
-        final Button positiveButton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(new View.OnClickListener()
-
-                                          {
-                                              @Override
-                                              public void onClick(View v) {
-                                                  if ((!phone.getText().toString().equals(""))) {
-                                                      new Commit(phone.getText().toString(), 2).execute();
-                                                      alert.dismiss();
-                                                      Toast.makeText(getActivity(), "Registration complete", Toast.LENGTH_SHORT).show();
-
-                                                  } else {
-                                                      phone.setFocusable(true);
-                                                      Toast.makeText(getActivity(), "Please enter phone", Toast.LENGTH_SHORT).show();
-                                                  }
-                                              }
-                                          }
-
-        );
-    }
-
     public void phoneCountryDialog() {
 
         // Get a reference to the AutoCompleteTextView in the layout
@@ -355,9 +307,9 @@ public class HomeFragment extends Fragment {
 
         final AlertDialog.Builder countrySelectAlert = new AlertDialog.Builder(getActivity())
                 .setTitle("Additional Details")
-                .setMessage("Your nearly there, please provide your Country")
+                .setMessage("Please provide your Country to complete registration")
                 .setView(textViewCountry)
-                .setPositiveButton("NEXT", null)
+                .setPositiveButton("DONE", null)
                 .setNeutralButton("LOGOUT", null);
         countrySelectAlert.setCancelable(false);
         alert = countrySelectAlert.create(); //.show().setCancelable(false);
@@ -392,9 +344,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (my_var != null) {
-                    new Commit(textViewCountry.getText().toString(), 1).execute();
+                    new Commit(textViewCountry.getText().toString()).execute();
                     alert.dismiss();
-                    phoneDialog();
+                    Toast.makeText(getActivity(), "Registration complete", Toast.LENGTH_SHORT).show();
+
+
                 } else {
                     textViewCountry.setFocusable(true);
                     Toast.makeText(getActivity(), "Please enter country", Toast.LENGTH_SHORT).show();
@@ -432,22 +386,18 @@ public class HomeFragment extends Fragment {
     private class Commit extends AsyncTask<Void, Integer, Void> {
 
         String value;
-        Integer intVal = 0;
 
-        public Commit(String value, Integer i) {
+        public Commit(String value) {
 
             this.value = value;
-            this.intVal = i;
+
         }
 
         @Override
         protected Void doInBackground(Void... params) {
 
-            if (intVal == 1) {
-                personLoggedIn.setCountry(value);
-            } else if (intVal == 2) {
-                personLoggedIn.setPhone(value);
-            }
+            personLoggedIn.setCountry(value);
+
             Backendless.Data.of(Person.class).save(personLoggedIn);
             return null;
         }
