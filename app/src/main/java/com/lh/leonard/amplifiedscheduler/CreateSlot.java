@@ -426,7 +426,7 @@ public class CreateSlot extends AppCompatActivity implements
 
                             String emptys = "";
 
-                            if (subject.trim().equals("") || my_var == null) {
+                            if (subject.trim().equals("") || my_var == null ) {
 
                                 if (subject.trim().equals("")) {
                                     if ((emptys.trim().equals(""))) {
@@ -765,7 +765,7 @@ public class CreateSlot extends AppCompatActivity implements
 
                 hashMapEvent.put("size", o);
 
-                LatLng latLngPlace = place.getLatLng(); // TODO CHECK NOT NULL place
+                LatLng latLngPlace = place.getLatLng();
 
                 hashMapEvent.put("lat", latLngPlace.latitude);
                 hashMapEvent.put("long", latLngPlace.longitude);
@@ -796,7 +796,7 @@ public class CreateSlot extends AppCompatActivity implements
                     deliveryOptions.addPushSinglecast(pId.getDeviceId());
                 }
 
-                MessageStatus status = Backendless.Messaging.publish("this is a  message!", publishOptions, deliveryOptions);
+                Backendless.Messaging.publish("this is a  message!", publishOptions, deliveryOptions);
 
 
             } else {

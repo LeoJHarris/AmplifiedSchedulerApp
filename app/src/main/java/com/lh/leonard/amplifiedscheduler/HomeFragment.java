@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -31,6 +32,8 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import java.util.ArrayList;
@@ -71,7 +74,7 @@ public class HomeFragment extends Fragment {
     ImageView imageViewGoingToEvents;
     Drawable drawableTime;
     ImageView imageViewMyPlans;
-    RelativeLayout contentHome;
+    LinearLayout contentHome;
     RelativeLayout progressBar;
     List<Schedule> schedulesForStyledCalendar;
 
@@ -108,7 +111,7 @@ public class HomeFragment extends Fragment {
         imageViewMyPlans = (ImageView) v.findViewById(R.id.imageViewMyPlans);
         progressBar = (RelativeLayout) v.findViewById(R.id.progressBar);
 
-        contentHome = (RelativeLayout) v.findViewById(R.id.contentHome);
+        contentHome = (LinearLayout) v.findViewById(R.id.contentHome);
 
         Drawable drawableUserNonFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_logged);
         Drawable drawableUserFacebook = ContextCompat.getDrawable(getActivity(), R.drawable.ic_user_facebook);
@@ -140,7 +143,6 @@ public class HomeFragment extends Fragment {
 
         }
 
-        final Typeface RobotoBlack = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
         final Typeface RobotoCondensedLight = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
         final Typeface RobotoCondensedBold = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
@@ -251,9 +253,14 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
 
+            AdView mAdView = (AdView) getActivity().findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+
             Calendar now = Calendar.getInstance();
 
             CalenderWidget widget = (CalenderWidget) v.findViewById(R.id.calendar);
+            assert schedulesForStyledCalendar != null;
             widget.set(CalendarDataFactory.getInstance(Locale.getDefault()).create(now.getTime(), 4),
                     new StyledCalendarBuilder(schedulesForStyledCalendar));
 
@@ -362,7 +369,7 @@ public class HomeFragment extends Fragment {
         textViewCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                my_var = adapter.getItem(position).toString();
+                my_var = adapter.getItem(position);
             }
         });
 

@@ -8,7 +8,7 @@
     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
         android:id="@id/day"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textStyle="bold" />
 </LinearLayout>

@@ -22,6 +22,7 @@
         android:duplicateParentState="true"
         android:gravity="center"
         android:lines="1"
+        android:paddingTop="5dp"
         android:textStyle="italic" />
 
 </RelativeLayout>

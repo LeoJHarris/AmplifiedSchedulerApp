@@ -5,13 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -24,55 +23,54 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
+import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.alamkanak.weekview.WeekViewLoader;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.github.tibolte.agendacalendarview.AgendaCalendarView;
 import com.github.tibolte.agendacalendarview.CalendarPickerController;
+import com.github.tibolte.agendacalendarview.models.BaseCalendarEvent;
 import com.github.tibolte.agendacalendarview.models.CalendarEvent;
 import com.github.tibolte.agendacalendarview.models.DayItem;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class MyPlans extends AppCompatActivity implements
-        WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.MonthChangeListener {
-
+public class MyPlans extends AppCompatActivity implements MonthLoader.MonthChangeListener,
+        WeekView.EventClickListener, WeekView.EventLongPressListener {
+    LinearLayout wrapperViews;
     Person personLoggedIn;
     List<Plan> slot;
-    private ProgressBar progressBar;
     BackendlessCollection<Person> persons;
     BackendlessCollection<Plan> slots;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     View v;
     ProgressDialog ringProgressDialog;
     AlertDialog dialog;
-    RecyclerView rv;
-    LinearLayoutManager llm;
-    String eventRemoved;
     AgendaCalendarView mAgendaCalendarView;
     List<CalendarEvent> eventList;
-    LinearLayout linearLayoutWeekView;
-    LinearLayout linearLayoutCalendarView;
-
-    Boolean weekview = true;
-
-    private Toolbar toolbar;
-    RelativeLayout RLProgressBar;
-    private Menu optionsMenu;
+    Boolean loadingPage = true;
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
     private WeekView mWeekView;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +78,6 @@ public class MyPlans extends AppCompatActivity implements
         setContentView(R.layout.event_view);
 
         mAgendaCalendarView = (AgendaCalendarView) findViewById(R.id.agenda_calendar_view);
-        RLProgressBar = (RelativeLayout) findViewById(R.id.RLProgressBar);
-        linearLayoutCalendarView = (LinearLayout) findViewById(R.id.LLCalendarView);
-        linearLayoutWeekView = (LinearLayout) findViewById(R.id.LLWeekView);
-        linearLayoutCalendarView.setVisibility(View.GONE);
-
         Backendless.Data.mapTableToClass("Plan", Plan.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
@@ -94,42 +87,37 @@ public class MyPlans extends AppCompatActivity implements
         AutoResizeTextView textViewCulturalEvents = (AutoResizeTextView) findViewById(R.id.textViewCulturalEvents);
         AutoResizeTextView textViewAcademicEvents = (AutoResizeTextView) findViewById(R.id.textViewAcademicEvents);
         AutoResizeTextView textViewWorkEvents = (AutoResizeTextView) findViewById(R.id.textViewWorkEvents);
-
+        wrapperViews = (LinearLayout) findViewById(R.id.wrapperViews);
+        assert tvSocial != null;
         tvSocial.setTypeface(RobotoCondensedLightItalic);
+        assert textViewCulturalEvents != null;
         textViewCulturalEvents.setTypeface(RobotoCondensedLightItalic);
+        assert textViewAcademicEvents != null;
         textViewAcademicEvents.setTypeface(RobotoCondensedLightItalic);
+        assert textViewWorkEvents != null;
         textViewWorkEvents.setTypeface(RobotoCondensedLightItalic);
 
         // Get a reference for the week view in the layout.
         mWeekView = (WeekView) findViewById(R.id.weekView);
-        mWeekView.setVisibility(View.GONE);
-        // Set an action when any event is clicked.
-        //  mWeekView.setOnEventClickListener(this); // do nothing for now
-
         // The week view has infinite scrolling horizontally. We have to provide the events of a
         // month every time the month changes on the week view.
+        assert mWeekView != null;
+        // Set an action when any event is clicked.
+        mWeekView.setOnEventClickListener(this); // do nothing for now
         mWeekView.setMonthChangeListener(this);
 
-        // Set long press listener for events.
-        mWeekView.setEventLongPressListener(this);
-
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         new ParseURL().execute();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    @Override
-    public void onEventClick(WeekViewEvent event, RectF eventRect) {
 
-        Intent slotDialogIntent = new Intent(MyPlans.this, MyPlansDialog.class);
-        int position = Integer.parseInt(String.valueOf(event.getId()));
-        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
-        startActivity(slotDialogIntent);
-    }
-
-    @Override
+    //  @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
 //        dialog = new AlertDialog.Builder(getApplicationContext())
 //                .setTitle("Go to event")
@@ -162,43 +150,6 @@ public class MyPlans extends AppCompatActivity implements
 //                }).show();
     }
 
-    @Override
-    public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        List<WeekViewEvent> events = new ArrayList<>();
-        if (slot != null) {
-            if (!slot.isEmpty()) {
-                int i = 0;
-                Iterator itr = slot.iterator();
-                while (itr.hasNext()) {
-                    Plan event = (Plan) itr.next();
-
-                    WeekViewEvent weekViewEvent = new WeekViewEvent(Long.parseLong(String.valueOf(i)), event.getSubject(),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
-                            event.getStartCalendar().get(Calendar.DAY_OF_YEAR),
-                            event.getStartCalendar().get(Calendar.HOUR_OF_DAY),
-                            event.getStartCalendar().get(Calendar.MINUTE),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
-                            event.getEndCalendar().get(Calendar.DAY_OF_YEAR),
-                            event.getEndCalendar().get(Calendar.HOUR_OF_DAY),
-                            event.getStartCalendar().get(Calendar.MINUTE));
-
-                    if (event.getLocation().getMetadata("category").equals("Social Event")) {
-                        weekViewEvent.setColor(getResources().getColor(R.color.green));
-                    } else if (event.getLocation().getMetadata("category").equals("Work Event")) {
-                        weekViewEvent.setColor(getResources().getColor(R.color.orange));
-                    } else if (event.getLocation().getMetadata("category").equals("Cultural Event")) {
-                        weekViewEvent.setColor(getResources().getColor(R.color.wallet_holo_blue_light));
-                    } else if (event.getLocation().getMetadata("category").equals("Academic Event")) {
-                        weekViewEvent.setColor(getResources().getColor(R.color.purple));
-                    }
-                    i++;
-                    events.add(weekViewEvent);
-                }
-            }
-        }
-        return events;
-    }
-
     /**
      * Set up a date time interpreter which will show short date values when in week view and long
      * date values otherwise.
@@ -228,14 +179,91 @@ public class MyPlans extends AppCompatActivity implements
         });
     }
 
-    private class ParseURL extends AsyncTask<Void, Integer, Void> {
+    @Override
+    public void onStart() {
+        super.onStart();
 
-        @Override
-        protected void onPreExecute() {
-            progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
-            super.onPreExecute();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "MyPlans Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.lh.leonard.amplifiedscheduler/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "MyPlans Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.lh.leonard.amplifiedscheduler/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
+    @Override
+    public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        Intent slotDialogIntent = new Intent(MyPlans.this, MyPlansDialog.class);
+        int position = Integer.parseInt(String.valueOf(event.getId()));
+        slotDialogIntent.putExtra("objectId", String.valueOf(slot.get(position).getObjectId()));
+        startActivity(slotDialogIntent);
+    }
+
+
+    @Override
+    public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
+        List<WeekViewEvent> events = new ArrayList<>();
+        if (slot != null) {
+            if (!slot.isEmpty()) {
+                int i = 0;
+                for (Plan event : slot) {
+                    WeekViewEvent weekViewEvent = new WeekViewEvent(Long.parseLong(String.valueOf(i)), event.getSubject(),
+                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
+                            event.getStartCalendar().get(Calendar.DAY_OF_YEAR),
+                            event.getStartCalendar().get(Calendar.HOUR_OF_DAY),
+                            event.getStartCalendar().get(Calendar.MINUTE),
+                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
+                            event.getEndCalendar().get(Calendar.DAY_OF_YEAR),
+                            event.getEndCalendar().get(Calendar.HOUR_OF_DAY),
+                            event.getStartCalendar().get(Calendar.MINUTE));
+
+                    if (event.getLocation().getMetadata("category").equals("Social Event")) {
+                        weekViewEvent.setColor(getResources().getColor(R.color.green));
+                    } else if (event.getLocation().getMetadata("category").equals("Work Event")) {
+                        weekViewEvent.setColor(getResources().getColor(R.color.orange));
+                    } else if (event.getLocation().getMetadata("category").equals("Cultural Event")) {
+                        weekViewEvent.setColor(getResources().getColor(R.color.wallet_holo_blue_light));
+                    } else if (event.getLocation().getMetadata("category").equals("Academic Event")) {
+                        weekViewEvent.setColor(getResources().getColor(R.color.purple));
+                    }
+                    i++;
+                    events.add(weekViewEvent);
+                }
+            }
         }
+
+        return events;
+    }
+
+    private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onProgressUpdate(Integer... values) {
@@ -245,12 +273,11 @@ public class MyPlans extends AppCompatActivity implements
         @Override
         protected Void doInBackground(Void... params) {
 
-            StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Person[myPlans]");
-            whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
+            String whereClause = "Person[myPlans]" +
+                    ".objectId='" + personLoggedIn.getObjectId() + "'";
 
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-            dataQuery.setWhereClause(whereClause.toString());
+            dataQuery.setWhereClause(whereClause);
 
             slots = Backendless.Data.of(Plan.class).find(dataQuery);
             slot = slots.getData();
@@ -262,6 +289,8 @@ public class MyPlans extends AppCompatActivity implements
             now.setTimeZone(tz);
 
             getEventsFromList(slot);
+
+
 
             return null;
         }
@@ -291,6 +320,11 @@ public class MyPlans extends AppCompatActivity implements
                         startActivity(slotDialogIntent);
                     }
                 }
+
+                @Override
+                public void onScrollToDate(Calendar calendar) {
+
+                }
             };
 
             Calendar minDate;
@@ -305,103 +339,101 @@ public class MyPlans extends AppCompatActivity implements
             maxDate.add(Calendar.YEAR, 1);
 
             mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
-            progressBar.setVisibility(View.GONE);
+            mAgendaCalendarView.setVisibility(View.VISIBLE);
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+            RelativeLayout RLProgressBar = (RelativeLayout) findViewById(R.id.RLProgressBar);
+            assert RLProgressBar != null;
             RLProgressBar.setVisibility(View.GONE);
+            assert progressBar != null;
+            progressBar.setVisibility(View.GONE);
+            wrapperViews.setVisibility(View.VISIBLE);
 
-            if (weekview) {
-                mAgendaCalendarView.setVisibility(View.GONE);
-                linearLayoutCalendarView.setVisibility(View.GONE);
-                linearLayoutWeekView.setVisibility(View.VISIBLE);
-                mWeekView.setVisibility(View.VISIBLE);
-            } else {
-                linearLayoutWeekView.setVisibility(View.GONE);
-                mWeekView.setVisibility(View.GONE);
-                linearLayoutCalendarView.setVisibility(View.VISIBLE);
-                mAgendaCalendarView.setVisibility(View.VISIBLE);
-            }
+            loadingPage = false;
         }
     }
 
-    public void setRefreshActionButtonState(final boolean refreshing) {
-        if (optionsMenu != null) {
-            final MenuItem refreshItem = optionsMenu
-                    .findItem(R.id.action_refresh);
-            if (refreshItem != null) {
-                if (refreshing) {
-                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
-                } else {
-                    refreshItem.setActionView(null);
-                }
-            }
-        }
-    }
+//    public void setRefreshActionButtonState(final boolean refreshing) {
+//        if (optionsMenu != null) {
+//            final MenuItem refreshItem = optionsMenu
+//                    .findItem(R.id.action_refresh);
+//            if (refreshItem != null) {
+//                if (refreshing) {
+//                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+//                } else {
+//                    refreshItem.setActionView(null);
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
-        setupDateTimeInterpreter(id == R.id.action_week_view);
-        switch (id) {
-            case R.id.action_today:
-                mWeekView.goToToday();
-                return true;
-            case R.id.action_day_view:
-                if (mWeekViewType != TYPE_DAY_VIEW) {
-                    item.setChecked(!item.isChecked());
-                    mWeekViewType = TYPE_DAY_VIEW;
-                    mWeekView.setNumberOfVisibleDays(1);
+        if (!loadingPage) {
+            int id = item.getItemId();
 
-                    // Lets change some dimensions to best fit the view.
-                    mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                }
-                return true;
-            case R.id.action_three_day_view:
-                if (mWeekViewType != TYPE_THREE_DAY_VIEW) {
-                    item.setChecked(!item.isChecked());
-                    mWeekViewType = TYPE_THREE_DAY_VIEW;
-                    mWeekView.setNumberOfVisibleDays(3);
+            setupDateTimeInterpreter(id == R.id.action_week_view);
+            switch (id) {
+                case R.id.action_today:
+                    mWeekView.goToToday();
+                    return true;
+                case R.id.action_day_view:
+                    if (mWeekViewType != TYPE_DAY_VIEW) {
+                        item.setChecked(!item.isChecked());
+                        mWeekViewType = TYPE_DAY_VIEW;
+                        mWeekView.setNumberOfVisibleDays(1);
 
-                    // Lets change some dimensions to best fit the view.
-                    mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                }
-                return true;
-            case R.id.action_week_view:
-                if (mWeekViewType != TYPE_WEEK_VIEW) {
-                    item.setChecked(!item.isChecked());
-                    mWeekViewType = TYPE_WEEK_VIEW;
-                    mWeekView.setNumberOfVisibleDays(7);
+                        // Lets change some dimensions to best fit the view.
+                        mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
+                        mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                        mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                        return true;
+                    }
+                    return true;
+                case R.id.action_three_day_view:
+                    if (mWeekViewType != TYPE_THREE_DAY_VIEW) {
+                        item.setChecked(!item.isChecked());
+                        mWeekViewType = TYPE_THREE_DAY_VIEW;
+                        mWeekView.setNumberOfVisibleDays(3);
 
-                    // Lets change some dimensions to best fit the view.
-                    mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
-                }
-            case R.id.action_switch:
-                invalidateOptionsMenu();
-                return true;
+                        // Lets change some dimensions to best fit the view.
+                        mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
+                        mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                        mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                        return true;
+                    }
+                    return true;
+                case R.id.action_week_view:
+                    if (mWeekViewType != TYPE_WEEK_VIEW) {
+                        item.setChecked(!item.isChecked());
+                        mWeekViewType = TYPE_WEEK_VIEW;
+                        mWeekView.setNumberOfVisibleDays(7);
+
+                        // Lets change some dimensions to best fit the view.
+                        mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
+                        mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
+                        mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
+                        return true;
+                    }
+                case R.id.action_switch:
+                    invalidateOptionsMenu();
+                    return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.optionsMenu = menu;
+        Menu optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
-        if (weekview) {
+        if (mAgendaCalendarView.isShown()) {
             inflater.inflate(R.menu.menu_week_view, menu);
-            linearLayoutCalendarView.setVisibility(View.GONE);
             mAgendaCalendarView.setVisibility(View.GONE);
-            linearLayoutWeekView.setVisibility(View.VISIBLE);
             mWeekView.setVisibility(View.VISIBLE);
         } else {
             inflater.inflate(R.menu.menu_events, menu);
-            linearLayoutWeekView.setVisibility(View.GONE);
             mWeekView.setVisibility(View.GONE);
-            linearLayoutCalendarView.setVisibility(View.VISIBLE);
             mAgendaCalendarView.setVisibility(View.VISIBLE);
         }
         // Locate MenuItem with ShareActionProvider
@@ -449,7 +481,7 @@ public class MyPlans extends AppCompatActivity implements
             }
 
             String location = (String) eventListSlots.get(i).getLocation().getMetadata("address");
-            CalendarEvent event = new CalendarEvent(eventListSlots.get(i).getSubject(),
+            BaseCalendarEvent event = new BaseCalendarEvent(eventListSlots.get(i).getSubject(),
                     eventListSlots.get(i).getNote(), location,
                     color, startTime, endTime, allDay);
 
@@ -533,8 +565,6 @@ public class MyPlans extends AppCompatActivity implements
 
     @Override
     public void invalidateOptionsMenu() {
-
-        weekview = (weekview) ? false : true;
 
         super.invalidateOptionsMenu();
     }

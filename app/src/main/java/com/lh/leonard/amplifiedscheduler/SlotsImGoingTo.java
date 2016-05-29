@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -24,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
+import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.backendless.Backendless;
@@ -32,6 +31,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.github.tibolte.agendacalendarview.AgendaCalendarView;
 import com.github.tibolte.agendacalendarview.CalendarPickerController;
+import com.github.tibolte.agendacalendarview.models.BaseCalendarEvent;
 import com.github.tibolte.agendacalendarview.models.CalendarEvent;
 import com.github.tibolte.agendacalendarview.models.DayItem;
 
@@ -44,29 +44,20 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class SlotsImGoingTo extends AppCompatActivity implements
-        WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.MonthChangeListener {
-
+        WeekView.EventClickListener, WeekView.EventLongPressListener, MonthLoader.MonthChangeListener {
+    LinearLayout wrapperViews;
     Person personLoggedIn;
     List<Slot> slot;
-    private ProgressBar progressBar;
     BackendlessCollection<Person> persons;
     BackendlessCollection<Slot> slots;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     View v;
     ProgressDialog ringProgressDialog;
     AlertDialog dialog;
-    RecyclerView rv;
-    LinearLayoutManager llm;
-    String eventRemoved;
     AgendaCalendarView mAgendaCalendarView;
     List<CalendarEvent> eventList;
-    LinearLayout linearLayoutWeekView;
-    LinearLayout linearLayoutCalendarView;
-
+    Boolean loadingPage = true;
     Boolean weekview = true;
-
-    private Toolbar toolbar;
-    RelativeLayout RLProgressBar;
     private Menu optionsMenu;
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
@@ -80,14 +71,9 @@ public class SlotsImGoingTo extends AppCompatActivity implements
         setContentView(R.layout.event_view);
 
         mAgendaCalendarView = (AgendaCalendarView) findViewById(R.id.agenda_calendar_view);
-        RLProgressBar = (RelativeLayout) findViewById(R.id.RLProgressBar);
-
-        linearLayoutCalendarView = (LinearLayout) findViewById(R.id.LLCalendarView);
-        linearLayoutWeekView = (LinearLayout) findViewById(R.id.LLWeekView);
-
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
-
+        wrapperViews = (LinearLayout) findViewById(R.id.wrapperViews);
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
 
         AutoResizeTextView tvSocial = (AutoResizeTextView) findViewById(R.id.textViewSocial);
@@ -95,25 +81,30 @@ public class SlotsImGoingTo extends AppCompatActivity implements
         AutoResizeTextView textViewAcademicEvents = (AutoResizeTextView) findViewById(R.id.textViewAcademicEvents);
         AutoResizeTextView textViewWorkEvents = (AutoResizeTextView) findViewById(R.id.textViewWorkEvents);
 
+        assert tvSocial != null;
         tvSocial.setTypeface(RobotoCondensedLightItalic);
+        assert textViewCulturalEvents != null;
         textViewCulturalEvents.setTypeface(RobotoCondensedLightItalic);
+        assert textViewAcademicEvents != null;
         textViewAcademicEvents.setTypeface(RobotoCondensedLightItalic);
+        assert textViewWorkEvents != null;
         textViewWorkEvents.setTypeface(RobotoCondensedLightItalic);
 
         // Get a reference for the week view in the layout.
         mWeekView = (WeekView) findViewById(R.id.weekView);
 
         // Set an action when any event is clicked.
+        assert mWeekView != null;
         mWeekView.setOnEventClickListener(this);
 
         // The week view has infinite scrolling horizontally. We have to provide the events of a
-// month every time the month changes on the week view.
+        // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(this);
 
         // Set long press listener for events.
         mWeekView.setEventLongPressListener(this);
 
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
         personLoggedIn = (Person) userLoggedIn.getProperty("persons");
@@ -173,11 +164,11 @@ public class SlotsImGoingTo extends AppCompatActivity implements
                     Slot event = (Slot) itr.next();
 
                     WeekViewEvent weekViewEvent = new WeekViewEvent(Long.parseLong(String.valueOf(i)), event.getSubject(),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth-1,
+                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
                             event.getStartCalendar().get(Calendar.DAY_OF_YEAR),
                             event.getStartCalendar().get(Calendar.HOUR_OF_DAY),
                             event.getStartCalendar().get(Calendar.MINUTE),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth-1,
+                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
                             event.getEndCalendar().get(Calendar.DAY_OF_YEAR),
                             event.getEndCalendar().get(Calendar.HOUR_OF_DAY),
                             event.getStartCalendar().get(Calendar.MINUTE));
@@ -230,13 +221,6 @@ public class SlotsImGoingTo extends AppCompatActivity implements
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
         @Override
-        protected void onPreExecute() {
-            progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
-            super.onPreExecute();
-        }
-
-        @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
         }
@@ -244,12 +228,11 @@ public class SlotsImGoingTo extends AppCompatActivity implements
         @Override
         protected Void doInBackground(Void... params) {
 
-            StringBuilder whereClause = new StringBuilder();
-            whereClause.append("Person[goingToSlot]");
-            whereClause.append(".objectId='").append(personLoggedIn.getObjectId()).append("'");
+            String whereClause = "Person[goingToSlot]" +
+                    ".objectId='" + personLoggedIn.getObjectId() + "'";
 
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-            dataQuery.setWhereClause(whereClause.toString());
+            dataQuery.setWhereClause(whereClause);
 
             slots = Backendless.Data.of(Slot.class).find(dataQuery);
             slot = slots.getData();
@@ -289,6 +272,11 @@ public class SlotsImGoingTo extends AppCompatActivity implements
                         startActivity(slotDialogIntent);
                     }
                 }
+
+                @Override
+                public void onScrollToDate(Calendar calendar) {
+
+                }
             };
 
             Calendar minDate;
@@ -304,19 +292,15 @@ public class SlotsImGoingTo extends AppCompatActivity implements
 
 
             mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
-            progressBar.setVisibility(View.GONE);
+            mAgendaCalendarView.setVisibility(View.VISIBLE);
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+            RelativeLayout RLProgressBar = (RelativeLayout)findViewById(R.id.RLProgressBar);
+            assert RLProgressBar !=null;
             RLProgressBar.setVisibility(View.GONE);
-            if (weekview) {
-                mAgendaCalendarView.setVisibility(View.GONE);
-                linearLayoutCalendarView.setVisibility(View.GONE);
-                linearLayoutWeekView.setVisibility(View.VISIBLE);
-                mWeekView.setVisibility(View.VISIBLE);
-            } else {
-                linearLayoutWeekView.setVisibility(View.GONE);
-                mWeekView.setVisibility(View.GONE);
-                linearLayoutCalendarView.setVisibility(View.VISIBLE);
-                mAgendaCalendarView.setVisibility(View.VISIBLE);
-            }
+            assert progressBar != null;
+            progressBar.setVisibility(View.GONE);
+            wrapperViews.setVisibility(View.VISIBLE);
+            loadingPage = false;
         }
     }
 
@@ -353,8 +337,8 @@ public class SlotsImGoingTo extends AppCompatActivity implements
                     mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
                     mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
                     mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                    return true;
                 }
-                return true;
             case R.id.action_three_day_view:
                 if (mWeekViewType != TYPE_THREE_DAY_VIEW) {
                     item.setChecked(!item.isChecked());
@@ -365,8 +349,8 @@ public class SlotsImGoingTo extends AppCompatActivity implements
                     mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
                     mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
                     mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                }
                 return true;
+                }
             case R.id.action_week_view:
                 if (mWeekViewType != TYPE_WEEK_VIEW) {
                     item.setChecked(!item.isChecked());
@@ -377,6 +361,7 @@ public class SlotsImGoingTo extends AppCompatActivity implements
                     mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
                     mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
                     mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
+                    return true;
                 }
             case R.id.action_switch:
                 invalidateOptionsMenu();
@@ -389,17 +374,13 @@ public class SlotsImGoingTo extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         this.optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
-        if (weekview) {
+        if (mAgendaCalendarView.isShown()) {
             inflater.inflate(R.menu.menu_week_view, menu);
             mAgendaCalendarView.setVisibility(View.GONE);
-            linearLayoutCalendarView.setVisibility(View.GONE);
-            linearLayoutWeekView.setVisibility(View.VISIBLE);
             mWeekView.setVisibility(View.VISIBLE);
         } else {
             inflater.inflate(R.menu.menu_events, menu);
-            linearLayoutWeekView.setVisibility(View.GONE);
             mWeekView.setVisibility(View.GONE);
-            linearLayoutCalendarView.setVisibility(View.VISIBLE);
             mAgendaCalendarView.setVisibility(View.VISIBLE);
         }
         // Locate MenuItem with ShareActionProvider
@@ -447,7 +428,7 @@ public class SlotsImGoingTo extends AppCompatActivity implements
             }
 
             String location = (String) eventListSlots.get(i).getLocation().getMetadata("address");
-            CalendarEvent event = new CalendarEvent(eventListSlots.get(i).getSubject(),
+            BaseCalendarEvent event = new BaseCalendarEvent(eventListSlots.get(i).getSubject(),
                     eventListSlots.get(i).getMessage(), location,
                     color, startTime, endTime, allDay);
 
@@ -531,9 +512,6 @@ public class SlotsImGoingTo extends AppCompatActivity implements
 
     @Override
     public void invalidateOptionsMenu() {
-
-        weekview = (weekview) ? false : true;
-
         super.invalidateOptionsMenu();
     }
 

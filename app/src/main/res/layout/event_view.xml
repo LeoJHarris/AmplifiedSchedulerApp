@@ -7,73 +7,68 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <include
-            android:id="@+id/tool_bar"
-            layout="@layout/tool_bar"></include>
-    </LinearLayout>
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar" />
 
     <LinearLayout
+        android:id="@+id/wrapperViews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewSocial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/green"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="Social Events" />
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewWorkEvents"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/orange"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="Work Events" />
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewCulturalEvents"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/wallet_holo_blue_light"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="Cultural Events" />
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewAcademicEvents"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/purple"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="Academic Events" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/LLWeekView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/textViewGroupsColors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/textViewSocial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/green"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Social Events" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/textViewWorkEvents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/orange"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Work Events" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/textViewCulturalEvents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/wallet_holo_blue_light"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Cultural Events" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/textViewAcademicEvents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/purple"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Academic Events" />
+        </LinearLayout>
 
         <com.alamkanak.weekview.WeekView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/weekView"
             android:layout_width="match_parent"
-            android:visibility="gone"
             android:layout_height="match_parent"
             app:columnGap="8dp"
             app:dayBackgroundColor="#05000000"
@@ -89,6 +84,19 @@
             app:todayBackgroundColor="#1848adff"
             app:todayHeaderTextColor="@color/black" />
 
+        <com.github.tibolte.agendacalendarview.AgendaCalendarView
+            android:id="@+id/agenda_calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:visibility="visible"
+            agendaCalendar:agendaCurrentDayTextColor="@color/theme_primary"
+            agendaCalendar:calendarColor="@color/bluecalendar"
+            agendaCalendar:calendarCurrentDayTextColor="@color/theme_text_icons"
+            agendaCalendar:calendarDayTextColor="@color/calendar_text_current_day"
+            agendaCalendar:calendarHeaderColor="@color/theme_primary_dark"
+            agendaCalendar:calendarPastDayTextColor="@color/theme_light_primary"
+            agendaCalendar:fabColor="@color/theme_accent" />
     </LinearLayout>
 
     <RelativeLayout
@@ -106,25 +114,4 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/LLCalendarView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <com.github.tibolte.agendacalendarview.AgendaCalendarView
-            android:id="@+id/agenda_calendar_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-
-            android:layout_weight="1"
-            android:scrollbars="vertical"
-            agendaCalendar:agendaCurrentDayTextColor="@color/theme_primary"
-            agendaCalendar:calendarColor="@color/bluecalendar"
-            agendaCalendar:calendarCurrentDayTextColor="@color/theme_text_icons"
-            agendaCalendar:calendarDayTextColor="@color/calendar_text_current_day"
-            agendaCalendar:calendarHeaderColor="@color/theme_primary_dark"
-            agendaCalendar:calendarPastDayTextColor="@color/theme_light_primary"
-            agendaCalendar:fabColor="@color/theme_accent" />
-    </LinearLayout>
 </LinearLayout>
