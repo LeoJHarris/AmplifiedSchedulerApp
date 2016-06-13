@@ -153,6 +153,16 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
 //                    }
 //                }).show();
     }
+    /**
+     * Checks if an event falls into a specific year and month.
+     * @param event The event to check for.
+     * @param year The year.
+     * @param month The month.
+     * @return True if the event matches the year and month.
+     */
+    private boolean eventMatches(WeekViewEvent event, int year, int month) {
+        return (event.getStartTime().get(Calendar.YEAR) == year && event.getStartTime().get(Calendar.MONTH) == month - 1) || (event.getEndTime().get(Calendar.YEAR) == year && event.getEndTime().get(Calendar.MONTH) == month - 1);
+    }
 
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
@@ -165,14 +175,8 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
                     Slot event = (Slot) itr.next();
 
                     WeekViewEvent weekViewEvent = new WeekViewEvent(Long.parseLong(String.valueOf(i)), event.getSubject(),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
-                            event.getStartCalendar().get(Calendar.DAY_OF_YEAR),
-                            event.getStartCalendar().get(Calendar.HOUR_OF_DAY),
-                            event.getStartCalendar().get(Calendar.MINUTE),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
-                            event.getEndCalendar().get(Calendar.DAY_OF_YEAR),
-                            event.getEndCalendar().get(Calendar.HOUR_OF_DAY),
-                            event.getStartCalendar().get(Calendar.MINUTE));
+                            (String) event.getLocation().getMetadata("address"),
+                            event.getStartCalendar(), event.getEndCalendar());
                     if (event.getLocation().getMetadata("category").equals("Social Event")) {
                         weekViewEvent.setColor(getResources().getColor(R.color.green));
                     } else if (event.getLocation().getMetadata("category").equals("Work Event")) {
@@ -183,7 +187,9 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
                         weekViewEvent.setColor(getResources().getColor(R.color.purple));
                     }
                     i++;
-                    events.add(weekViewEvent);
+                    if (eventMatches(weekViewEvent, newYear, newMonth)) {
+                        events.add(weekViewEvent);
+                    }
                 }
             }
         }
@@ -374,7 +380,7 @@ public class SlotsAwaitingMyResponse extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         this.optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
-        if (mAgendaCalendarView.isShown()) {
+        if (!mWeekView.isShown()) {
             inflater.inflate(R.menu.menu_week_view, menu);
             mAgendaCalendarView.setVisibility(View.GONE);
             mWeekView.setVisibility(View.VISIBLE);

@@ -47,8 +47,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class MyPlans extends AppCompatActivity implements MonthLoader.MonthChangeListener,
-        WeekView.EventClickListener, WeekView.EventLongPressListener {
+public class MyPlans extends AppCompatActivity implements
+        WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
     LinearLayout wrapperViews;
     Person personLoggedIn;
     List<Plan> slot;
@@ -56,6 +56,7 @@ public class MyPlans extends AppCompatActivity implements MonthLoader.MonthChang
     BackendlessCollection<Plan> slots;
     BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     View v;
+    private Menu optionsMenu;
     ProgressDialog ringProgressDialog;
     AlertDialog dialog;
     AgendaCalendarView mAgendaCalendarView;
@@ -227,23 +228,34 @@ public class MyPlans extends AppCompatActivity implements MonthLoader.MonthChang
         startActivity(slotDialogIntent);
     }
 
+    /**
+     * Checks if an event falls into a specific year and month.
+     * @param event The event to check for.
+     * @param year The year.
+     * @param month The month.
+     * @return True if the event matches the year and month.
+     */
+    private boolean eventMatches(WeekViewEvent event, int year, int month) {
+        return (event.getStartTime().get(Calendar.YEAR) == year && event.getStartTime().get(Calendar.MONTH) == month - 1) || (event.getEndTime().get(Calendar.YEAR) == year && event.getEndTime().get(Calendar.MONTH) == month - 1);
+    }
 
     @Override
-    public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
+    public void onEmptyViewLongPress(Calendar time) {
+
+    }
+
+    @Override
+    public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         List<WeekViewEvent> events = new ArrayList<>();
         if (slot != null) {
             if (!slot.isEmpty()) {
                 int i = 0;
                 for (Plan event : slot) {
+
+
                     WeekViewEvent weekViewEvent = new WeekViewEvent(Long.parseLong(String.valueOf(i)), event.getSubject(),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
-                            event.getStartCalendar().get(Calendar.DAY_OF_YEAR),
-                            event.getStartCalendar().get(Calendar.HOUR_OF_DAY),
-                            event.getStartCalendar().get(Calendar.MINUTE),
-                            event.getStartCalendar().get(Calendar.YEAR), newMonth - 1,
-                            event.getEndCalendar().get(Calendar.DAY_OF_YEAR),
-                            event.getEndCalendar().get(Calendar.HOUR_OF_DAY),
-                            event.getStartCalendar().get(Calendar.MINUTE));
+                            (String) event.getLocation().getMetadata("address"),
+                            event.getStartCalendar(), event.getEndCalendar());
 
                     if (event.getLocation().getMetadata("category").equals("Social Event")) {
                         weekViewEvent.setColor(getResources().getColor(R.color.green));
@@ -255,13 +267,16 @@ public class MyPlans extends AppCompatActivity implements MonthLoader.MonthChang
                         weekViewEvent.setColor(getResources().getColor(R.color.purple));
                     }
                     i++;
-                    events.add(weekViewEvent);
+                    if (eventMatches(weekViewEvent, newYear, newMonth)) {
+                        events.add(weekViewEvent);
+                    }
                 }
             }
         }
 
         return events;
     }
+
 
     private class ParseURL extends AsyncTask<Void, Integer, Void> {
 
@@ -289,8 +304,6 @@ public class MyPlans extends AppCompatActivity implements MonthLoader.MonthChang
             now.setTimeZone(tz);
 
             getEventsFromList(slot);
-
-
 
             return null;
         }
@@ -339,7 +352,7 @@ public class MyPlans extends AppCompatActivity implements MonthLoader.MonthChang
             maxDate.add(Calendar.YEAR, 1);
 
             mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
-            mAgendaCalendarView.setVisibility(View.VISIBLE);
+          // mWeekView.setVisibility(View.VISIBLE);
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             RelativeLayout RLProgressBar = (RelativeLayout) findViewById(R.id.RLProgressBar);
             assert RLProgressBar != null;
@@ -425,9 +438,9 @@ public class MyPlans extends AppCompatActivity implements MonthLoader.MonthChang
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Menu optionsMenu = menu;
+        this.optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
-        if (mAgendaCalendarView.isShown()) {
+        if (!mWeekView.isShown()) {
             inflater.inflate(R.menu.menu_week_view, menu);
             mAgendaCalendarView.setVisibility(View.GONE);
             mWeekView.setVisibility(View.VISIBLE);

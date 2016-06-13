@@ -79,6 +79,7 @@
             app:headerRowBackgroundColor="@color/theme_primary_dark"
             app:headerRowPadding="12dp"
             app:hourHeight="60dp"
+            android:visibility="visible"
             app:noOfVisibleDays="3"
             app:textSize="12sp"
             app:todayBackgroundColor="#1848adff"
@@ -89,7 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            android:visibility="visible"
+
             agendaCalendar:agendaCurrentDayTextColor="@color/theme_primary"
             agendaCalendar:calendarColor="@color/bluecalendar"
             agendaCalendar:calendarCurrentDayTextColor="@color/theme_text_icons"
