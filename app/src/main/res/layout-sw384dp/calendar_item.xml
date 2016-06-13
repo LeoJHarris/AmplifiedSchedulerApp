@@ -3,8 +3,8 @@
     android:id="@id/custom_cell"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:selectableItemBackground"
     android:orientation="vertical"
+    android:background="?android:selectableItemBackground"
     android:selectable="false">
 
     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
@@ -12,16 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:duplicateParentState="true"
-        android:gravity="center" />
+        android:gravity="center"
+        />
 
     <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
         android:id="@+id/date_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/date_text"
         android:duplicateParentState="true"
+        android:layout_below="@id/date_text"
         android:gravity="center"
         android:lines="1"
+
         android:textStyle="italic" />
 
 </RelativeLayout>

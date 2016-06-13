@@ -161,7 +161,15 @@
             android:inputType="text"
             android:textSize="22sp" />
 
-
+        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+            android:layout_width="match_parent"
+            android:id="@+id/labelProfilePic"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="15dp"
+            android:text="Your Profile Picture:"
+            android:textSize="22sp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -171,11 +179,9 @@
             android:layout_marginTop="15dp"
             android:gravity="center">
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".MainActivity">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:id="@+id/firstLayout"
@@ -189,7 +195,7 @@
                         android:id="@+id/btnRegPicture"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Profile Picture"
+                        android:text="Upload Picture"
                         android:textSize="18sp" />
 
                 </LinearLayout>
@@ -216,8 +222,8 @@
                         android:gravity="center"
                         android:maxLength="40"
                         android:singleLine="true"
-                        android:text="No image selected"
-                        android:textSize="10sp" />
+                        android:text="Default image will be set"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
             </RelativeLayout>
@@ -229,7 +235,6 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="18dp"
             android:layout_marginStart="18dp"
-            android:layout_marginTop="15dp"
             android:text="Gender:"
             android:textSize="22sp" />
 
@@ -266,7 +271,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/button_default_bg"
             android:padding="10dp"
-            android:text="Sign Up"
+            android:text="Sign Up!"
             android:textSize="22sp" />
     </LinearLayout>
 </ScrollView>

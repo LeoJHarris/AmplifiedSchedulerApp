@@ -30,8 +30,6 @@ import com.backendless.BackendlessUser;
 import com.backendless.DeviceRegistration;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -117,7 +115,39 @@ public class NavDrawerActivity extends AppCompatActivity {
             finish();
         }
 
-        new SaveDeviceID().execute();
+        Backendless.Messaging.registerDevice(Defaults.gcmSenderID, "Default");
+
+        Backendless.Messaging.getDeviceRegistration(new AsyncCallback<DeviceRegistration>() {
+            @Override
+            public void handleResponse(DeviceRegistration response) {
+                Backendless.Persistence.of(Person.class).findById(personLoggedIn.getObjectId(), new AsyncCallback<Person>() {
+                    @Override
+                    public void handleResponse(Person response) {
+                        response.setDeviceId(response.getDeviceId());
+                        Backendless.Data.save(response, new AsyncCallback<Person>() {
+                            @Override
+                            public void handleResponse(Person response) {
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+
+            }
+        });
 
         setRefreshActionButtonState(true);
         getNav();
@@ -647,25 +677,6 @@ public class NavDrawerActivity extends AppCompatActivity {
                     new StyledCalendarBuilder(schedulesForStyledCalendar));
 
             setRefreshActionButtonState(false);
-        }
-    }
-
-    private class SaveDeviceID extends AsyncTask<Void, Integer, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            Backendless.Messaging.registerDevice(Defaults.gcmSenderID, "Default");
-
-            DeviceRegistration deviceRegistered = Backendless.Messaging.getDeviceRegistration();
-
-            Person pp = Backendless.Persistence.of(Person.class).findById(personLoggedIn.getObjectId());
-
-            pp.setDeviceId(deviceRegistered.getDeviceId());
-
-            Backendless.Data.save(pp);
-
-            return null;
         }
     }
 

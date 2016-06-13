@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -87,6 +86,7 @@ public class RegistrationActivity extends AppCompatActivity {
         final EditText fnameField = (EditText) findViewById(R.id.editTextFNameReg);
         final EditText lnameField = (EditText) findViewById(R.id.editTextLNameReg);
 
+        final AutoResizeTextView labelProfilePic = (AutoResizeTextView) findViewById(R.id.labelProfilePic);
         final AutoResizeTextView txtLabelFnameReg = (AutoResizeTextView) findViewById(R.id.txtLabelFnameReg);
         final AutoResizeTextView txtLabeLnameReg = (AutoResizeTextView) findViewById(R.id.txtLabeLnameReg);
         final AutoResizeTextView txtLabelTextPasswordReg = (AutoResizeTextView) findViewById(R.id.txtLabelTextPasswordReg);
@@ -131,7 +131,7 @@ public class RegistrationActivity extends AppCompatActivity {
         fnameField.setText("");
         lnameField.setText("");
         textViewCountry.setText("");
-
+        labelProfilePic.setTypeface(RobotoCondensedLight);
         radioButtonMale.setTypeface(RobotoCondensedLight);
         radioButtonFemale.setTypeface(RobotoCondensedLight);
         emailField.setTypeface(RobotoCondensedLight);
@@ -215,7 +215,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                                         //Store the image with the users object id
 
-                                        if (bitmap!=null) {
+                                        if (bitmap != null) {
                                             Backendless.Files.Android.upload(bitmap, Bitmap.CompressFormat.PNG, 50, backendlessUser.getObjectId(), "pictures",
                                                     new AsyncCallback<BackendlessFile>() {
                                                         @Override
@@ -229,8 +229,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                                             Toast.makeText(RegistrationActivity.this, backendlessFault.toString(), Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
-                                        }
-                                        else{
+                                        } else {
                                             new SaveUser(backendlessUser).execute();
                                         }
                                     }
@@ -475,6 +474,7 @@ public class RegistrationActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
     private class SaveUser extends AsyncTask<Void, Integer, Void> {
 
 

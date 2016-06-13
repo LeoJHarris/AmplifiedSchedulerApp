@@ -85,8 +85,9 @@ public class MainActivity extends Activity {
 
             } else if (extras.getString("nameRegistered") != null) {
                 loginPrefsEditor.clear();
-                loginPrefsEditor.commit();
+                loginPrefsEditor.apply();
                 String NameArray = extras.getString("nameRegistered");
+                assert NameArray != null;
                 String[] NameSplit = NameArray.split(",");
 
                 Toast.makeText(getApplication(),
@@ -113,9 +114,7 @@ public class MainActivity extends Activity {
         }
 
         private boolean isValidEmail(CharSequence target) {
-            if (target == null)
-                return false;
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+            return target != null && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
     }
 
@@ -230,6 +229,7 @@ public class MainActivity extends Activity {
             if (extras != null) {
                 if (extras.getString("loggedoutperson") != null) {
                     String NameArray = extras.getString("loggedoutperson");
+                    assert NameArray != null;
                     String[] NameSplit = NameArray.split(",");
 
                     Toast.makeText(getApplication(),
@@ -238,6 +238,7 @@ public class MainActivity extends Activity {
                     loggedOutPersons = true;
                 } else if (extras.getString("loggedoutpersonError") != null) {
                     String NameArray = extras.getString("loggedoutperson");
+                    assert NameArray != null;
                     String[] NameSplit = NameArray.split(",");
 
                     Toast.makeText(getApplication(),
@@ -367,8 +368,6 @@ public class MainActivity extends Activity {
                     startActivity(recoveryPasswordIntent);
                 }
             });
-
-            //TODO Threading when users registers, show spinner.
 
             buttonSignIn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
