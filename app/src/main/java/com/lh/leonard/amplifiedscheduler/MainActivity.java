@@ -189,18 +189,24 @@ public class MainActivity extends Activity {
                                         response.getProperty("lname"));
                                 p.setEmail((String) response.getProperty("email"));
 
-
                                 try {
-                                    JSONObject jsonAdd = new JSONObject((String) response.getProperty("picture"));
-                                    Boolean isSilhouette = jsonAdd.getJSONObject("data").getBoolean("is_silhouette");
                                     String url;
+                                    if(response.getProperty("picture") !=null) {
+                                        JSONObject jsonAdd = new JSONObject((String) response.getProperty("picture"));
+                                        Boolean isSilhouette = jsonAdd.getJSONObject("data").getBoolean("is_silhouette");
 
-                                    if (isSilhouette) {
-                                        url = "https://api.backendless.com/e9c78af2-bdc4-c5fa-ff3f-da79004b9200/v1/files/pictures/silhouette.png";
-                                    } else {
-                                        url = jsonAdd.getJSONObject("data").getString("url");
+
+                                        if (isSilhouette) {
+                                            url = "https://api.backendless.com/e9c78af2-bdc4-c5fa-ff3f-da79004b9200/v1/files/pictures/silhouette.png";
+                                        } else {
+                                            url = jsonAdd.getJSONObject("data").getString("url");
+                                        }
+                                        p.setSilhouette(isSilhouette);
                                     }
-                                    p.setSilhouette(isSilhouette);
+                                    else{
+                                        url = "https://api.backendless.com/e9c78af2-bdc4-c5fa-ff3f-da79004b9200/v1/files/pictures/silhouette.png";
+                                    }
+
                                     p.setPicture(url);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -217,7 +223,7 @@ public class MainActivity extends Activity {
                             public void handleFault(BackendlessFault fault) {
                                 Toast.makeText(getApplicationContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                        }, false);
+                        },false);
                     } catch (Exception e) {
                         Log.e("YOUR_APP_LOG_TAG", "I got an error", e);
                     }
@@ -478,6 +484,10 @@ public class MainActivity extends Activity {
                         checkUser.getProperty("lname"));
                 pp.setEmail((String) checkUser.getProperty("email"));
                 pp.setSocial("Facebook");
+                pp.pendingResponseSlot = null;
+                pp.myPlans = null;
+                pp.myCreatedSlot = null;
+                pp.goingToSlot =null;
                 Backendless.Persistence.of(Person.class).save(pp);
                 userCreated.setProperty("persons", pp);
                 userCreated.removeProperty("socialAccount");

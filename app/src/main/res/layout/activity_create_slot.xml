@@ -1,16 +1,258 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/gradient_color_bg"
     android:fitsSystemWindows="true"
+    android:scrollbars="vertical"
     tools:context="com.lh.leonard.amplifiedscheduler.CreateSlot">
 
-    <ScrollView
-        android:id="@+id/scrollView1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical">
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/tool_bar"
+                layout="@layout/tool_bar" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:src="@drawable/ic_action_info" />
+
+            <Switch
+                android:id="@+id/switchPlannerEvent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Event"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/editSlotSubject"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="Enter title"
+                android:inputType="text"
+                android:padding="15dp"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/lleditTextSlotMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/imageViewMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:src="@drawable/ic_message" />
+
+            <EditText
+                android:id="@+id/editTextSlotMessage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Message"
+                android:inputType="textMultiLine"
+                android:lines="2"
+                android:maxLines="3"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/imageNotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_action_notes" />
+
+                <EditText
+                    android:id="@+id/editTextNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Private note"
+                    android:inputType="textMultiLine"
+                    android:lines="2"
+                    android:maxLines="3"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--DATE STUFF STARTS-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/imageViewTime"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:padding="15dp"
+                android:src="@drawable/ic_time" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/labelAllDay"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@id/imageViewTime"
+                android:layout_toRightOf="@id/imageViewTime"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="All-day"
+                android:textSize="18sp" />
+
+            <CheckBox
+                android:id="@+id/checkboxAllDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/labelAllDay"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="20dp"
+                android:textSize="18sp" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/textViewStartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@id/labelAllDay"
+                android:layout_toEndOf="@+id/imageViewTime"
+                android:layout_toRightOf="@+id/imageViewTime"
+                android:padding="20dp"
+                android:textSize="18sp" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/textViewStartTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textViewStartDate"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/checkboxAllDay"
+                android:gravity="center"
+                android:padding="20dp"
+                android:textSize="18sp" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/textViewEndDate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/textViewStartDate"
+                android:layout_toEndOf="@+id/imageViewTime"
+                android:layout_toRightOf="@+id/imageViewTime"
+                android:padding="20dp"
+                android:textSize="18sp" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/textViewEndTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textViewEndDate"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/checkboxAllDay"
+                android:gravity="center"
+                android:padding="20dp"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/llTimeZone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="15dp"
+                android:src="@drawable/ic_timezone" />
+
+            <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                android:id="@+id/editTextTimeZone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="15dp"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <!--DATE STUFF ENDS-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_place" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextView"
+                    android:layout_width="245dp"
+                    android:layout_height="match_parent"
+                    android:hint="Add location"
+                    android:inputType="textMultiLine"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/poweredBy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/powered_by_google_light" />
+
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,330 +263,94 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <include
-                    android:id="@+id/tool_bar"
-                    layout="@layout/tool_bar"></include>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="3dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_action_info" />
-
-                <Switch
-                    android:id="@+id/switchPlannerEvent"
-                    android:layout_width="match_parent"
+                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                    android:id="@+id/att"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Event"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <EditText
-                    android:id="@+id/editSlotSubject"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:autoLink="web"
                     android:ems="10"
-                    android:hint="Enter title"
-                    android:inputType="text"
-                    android:padding="15dp"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"
+                    android:visibility="gone" />
 
-
-            <LinearLayout
-                android:id="@+id/lleditTextSlotMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <ImageView
-                    android:id="@+id/imageViewMessage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_message" />
-
-                <EditText
-                    android:id="@+id/editTextSlotMessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Message"
-                    android:inputType="textMultiLine"
-                    android:lines="2"
-                    android:maxLines="3"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp">
-
-                    <ImageView
-                        android:id="@+id/imageNotes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:src="@drawable/ic_action_notes" />
-
-                    <EditText
-                        android:id="@+id/editTextNotes"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Private note"
-                        android:inputType="textMultiLine"
-                        android:lines="2"
-                        android:maxLines="3"
-                        android:textSize="18sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <!--DATE STUFF STARTS-->
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <ImageView
-                    android:id="@+id/imageViewTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_time" />
-
-                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                    android:id="@+id/labelAllDay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_toRightOf="@id/imageViewTime"
-                    android:gravity="center"
-                    android:padding="20dp"
-                    android:text="All-day"
-                    android:textSize="18sp" />
-
-                <CheckBox
-                    android:id="@+id/checkboxAllDay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/labelAllDay"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="20dp"
-                    android:textSize="18sp" />
-
-                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                    android:id="@+id/textViewStartDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/labelAllDay"
-                    android:layout_toRightOf="@+id/imageViewTime"
-                    android:padding="20dp"
-                    android:textSize="18sp" />
-
-                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                    android:id="@+id/textViewStartTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/textViewStartDate"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/checkboxAllDay"
-                    android:gravity="center"
-                    android:padding="20dp"
-                    android:textSize="18sp" />
-
-                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                    android:id="@+id/textViewEndDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/textViewStartDate"
-                    android:layout_toRightOf="@+id/imageViewTime"
-                    android:padding="20dp"
-                    android:textSize="18sp" />
-
-                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                    android:id="@+id/textViewEndTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/textViewEndDate"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/checkboxAllDay"
-                    android:gravity="center"
-                    android:padding="20dp"
-                    android:textSize="18sp" />
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/llTimeZone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_timezone" />
-
-                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                    android:id="@+id/editTextTimeZone"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="15dp"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-
-            <!--DATE STUFF ENDS-->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:src="@drawable/ic_place" />
-
-                    <AutoCompleteTextView
-                        android:id="@+id/autoCompleteTextView"
-                        android:layout_width="245dp"
-                        android:layout_height="match_parent"
-                        android:hint="Add location"
-                        android:inputType="textMultiLine"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:id="@+id/poweredBy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_above="@+id/att"
-                        android:src="@drawable/powered_by_google_light" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-                        android:id="@+id/att"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:autoLink="web"
-                        android:ems="10"
-                        android:textSize="18sp"
-                        android:visibility="gone" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llnumberPickerAttendees"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_spaces" />
-
-                <EditText
-                    android:id="@+id/numberPickerAttendees"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Set limited spaces"
-                    android:inputType="number"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <Spinner
-                    android:id="@+id/static_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llrecipientsForSlot"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <Button
-                    android:id="@+id/recipientsForSlot"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_default_bg"
-                    android:drawableLeft="@drawable/ic_contacts"
-                    android:paddingLeft="15dp"
-                    android:text="Invite Contacts"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <Button
-                    android:id="@+id/buttonSendSlot"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_default_bg"
-                    android:drawableLeft="@drawable/ic_send_event"
-                    android:drawableStart="@drawable/ic_send_event"
-                    android:paddingLeft="15dp"
-                    android:text="Send Event"
-                    android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/llnumberPickerAttendees"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:src="@drawable/ic_spaces" />
+
+            <EditText
+                android:id="@+id/numberPickerAttendees"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Set limited spaces"
+                android:inputType="number"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <Spinner
+                android:id="@+id/static_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llrecipientsForSlot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <Button
+                android:id="@+id/recipientsForSlot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_default_bg"
+                android:drawableLeft="@drawable/ic_contacts"
+                android:drawableStart="@drawable/ic_contacts"
+                android:paddingEnd="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingStart="15dp"
+                android:text="Invite Contacts"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <Button
+                android:id="@+id/buttonSendSlot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_default_bg"
+                android:drawableLeft="@drawable/ic_send_event"
+                android:drawableStart="@drawable/ic_send_event"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:text="Send Event"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

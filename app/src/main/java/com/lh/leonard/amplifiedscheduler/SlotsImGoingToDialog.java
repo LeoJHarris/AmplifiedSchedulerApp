@@ -1,113 +1,141 @@
 package com.lh.leonard.amplifiedscheduler;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
 import android.widget.ProgressBar;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class SlotsImGoingToDialog extends Activity {
+public class SlotsImGoingToDialog extends AppCompatActivity {
 
-    BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
-    AutoResizeTextView textViewSubject;
     AutoResizeTextView textViewMessage;
+    AutoResizeTextView textViewMyeventSpacesAvaliable;
+    Slot event;
+    AutoResizeTextView textViewMyNote;
+    BackendlessUser userLoggedIn = Backendless.UserService.CurrentUser();
     AutoResizeTextView textViewDateAndTime;
     AutoResizeTextView textViewLocation;
-    AutoResizeTextView textViewMyeventSpacesAvaliable;
     String objectId;
-    Button buttonGoingToEventNotGoing;
-    Button buttonGoingToEventParticipantsSlot;
     Person person;
+    BackendlessCollection<Slot> slots;
     SpannableString content;
     ProgressBar progressBar;
-    Slot event;
     ProgressDialog ringProgressDialog;
-
+    AlertDialog dialog;
+    private Menu optionsMenu;
+    private View rootView;
+    GoogleMap googleMap;
+    MarkerOptions markerOptions;
+    boolean messageSet = false;
+    boolean locationSet = false;
+    LatLng latLng;
+    boolean timeSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_slots_im_going_to_dialog);
-
+        setTitle("fetching event ...");
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
-        final Typeface RobotoBlack = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
-        final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
-        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
-        final Typeface RobotoCondensedBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
-        textViewSubject = (AutoResizeTextView) findViewById(R.id.textViewMySlotSubject);
+        final Typeface RobotoCondensedLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-Light.ttf");
+
         textViewMessage = (AutoResizeTextView) findViewById(R.id.textViewMySlotMessage);
         textViewDateAndTime = (AutoResizeTextView) findViewById(R.id.textViewMySlotDateAndTime);
         textViewLocation = (AutoResizeTextView) findViewById(R.id.textViewMySlotLocation);
         textViewMyeventSpacesAvaliable = (AutoResizeTextView) findViewById(R.id.textViewMyEventSpacesAvaliable);
-        buttonGoingToEventNotGoing = (Button) findViewById(R.id.buttonGoingToEventNotGoing);
-        buttonGoingToEventParticipantsSlot = (Button) findViewById(R.id.buttonGoingToEventParticipantsSlot);
-
-        textViewSubject.setTypeface(RobotoCondensedLight);
+        textViewMyNote = (AutoResizeTextView) findViewById(R.id.textViewMyNote);
+        textViewMyNote.setTypeface(RobotoCondensedLight);
         textViewMessage.setTypeface(RobotoCondensedLight);
         textViewDateAndTime.setTypeface(RobotoCondensedLight);
         textViewLocation.setTypeface(RobotoCondensedLight);
         textViewMyeventSpacesAvaliable.setTypeface(RobotoCondensedLight);
-        buttonGoingToEventNotGoing.setTypeface(RobotoCondensedLight);
-        buttonGoingToEventParticipantsSlot.setTypeface(RobotoCondensedLight);
 
         person = (Person) userLoggedIn.getProperty("persons");
 
+        this.rootView = findViewById(R.id.map_view);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        FragmentManager myFragmentManager = getSupportFragmentManager();
+        SupportMapFragment mySupportMapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.just_map);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        googleMap = mySupportMapFragment.getMap();
         new LoadMyContacts().execute();
-
-        buttonGoingToEventNotGoing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                ringProgressDialog = ProgressDialog.show(SlotsImGoingToDialog.this, "Please wait ...", "removing " + event.getSubject() + " ...", true);
-                ringProgressDialog.setCancelable(false);
-                new NotGoingToEvent().execute();
-
-            }
-        });
-
-        buttonGoingToEventParticipantsSlot.setOnClickListener(new View.OnClickListener() {
-                                                                  @Override
-                                                                  public void onClick(View v) {
-
-                                                                      Intent participantsIntent = new Intent(SlotsImGoingToDialog.this, ParticipantsActivity.class);
-                                                                      participantsIntent.putExtra("eventid", event.getObjectId());
-                                                                      startActivity(participantsIntent);
-                                                                  }
-                                                              }
-        );
-
-        textViewLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                Intent mapIntent = new Intent(SlotsImGoingToDialog.this, JustMapActivity.class);
-
-                mapIntent.putExtra("lat", event.getLocation().getLatitude());
-                mapIntent.putExtra("long", event.getLocation().getLongitude());
-                mapIntent.putExtra("subject", event.getSubject());
-                startActivity(mapIntent);
-            }
-        });
     }
 
+    @SuppressLint("NewApi")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Rect rect = new Rect();
+        rootView.getHitRect(rect);
+        if (!rect.contains((int) event.getX(), (int) event.getY())) {
+            setFinishOnTouchOutside(false);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+
+            finish();
+        }
+        return true;
+    }
 
     private String getDateFormat(Calendar c) {
         SimpleDateFormat sdf = new SimpleDateFormat("E d MMM");
@@ -145,24 +173,42 @@ public class SlotsImGoingToDialog extends Activity {
             objectId = data.getString("objectId");
             event = Backendless.Data.of(Slot.class).findById(objectId);
 
+            latLng = new LatLng(event.getLocation().getLatitude(), event.getLocation().getLongitude());
             return (String) event.getLocation().getMetadata("address");
+
         }
 
         @Override
         protected void onPostExecute(String addresses) {
 
-            if (event.getSubject() != null) {
-                textViewSubject.setText(event.getSubject());
-            }
+            setTitle(event.getSubject());
+            textViewLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            if (event.getMessage() != null) {
-                if (event.getMessage().equals("")) {
-                    textViewMessage.setText("Message: No message avaliable");
-                } else {
-                    textViewMessage.setText("Message: " + event.getMessage());
+                    Intent mapIntent = new Intent(SlotsImGoingToDialog.this, JustMapActivity.class);
+
+                    mapIntent.putExtra("lat", event.getLocation().getLatitude());
+                    mapIntent.putExtra("long", event.getLocation().getLongitude());
+                    mapIntent.putExtra("subject", event.getSubject());
+                    startActivity(mapIntent);
+                }
+            });
+            if (event.getMaxattendees() != 0) {
+
+                String message = "";
+                Integer spacesAvaliable = event.getMaxattendees();
+                Integer going = event.getAttendees().size();
+                Integer spacesLeft = (spacesAvaliable - going);
+                {
+                    if (spacesLeft > 1 || spacesLeft == 0) {
+                        message = spacesLeft + " spaces remaining";
+                    } else if (spacesLeft == 1) {
+                        message = spacesLeft + " space remaining";
+                    }
+                    textViewMyeventSpacesAvaliable.setText(going + " going, " + message);
                 }
             }
-
             if (event.getStartCalendar() != null) {
 
                 if (event.getStartCalendar().equals(event.getEndCalendar())) {
@@ -175,36 +221,99 @@ public class SlotsImGoingToDialog extends Activity {
                             getDateFormat(event.getEndCalendar()) + " " + getTimeFormat(event.getEndCalendar()) +
                             " " + getYearFormat(event.getEndCalendar()));
                 }
+
             }
-
-            if (event.getMaxattendees() != 0) {
-
-                Integer spacesAvaliable = event.getMaxattendees();
-                Integer going = event.getAttendees().size();
-                {
-                    textViewMyeventSpacesAvaliable.setText(going + " going, waiting response from " + (spacesAvaliable - going));
-                }
+            if (event.getMessage() != null) {
+                textViewMessage.setText(event.getMessage());
+                messageSet = true;
             }
 
             if (event.getLocation() != null) {
-                content = new SpannableString("Where: " + (String) event.getLocation().getMetadata("address"));
+                content = new SpannableString("Where: " + event.getLocation().getMetadata("address"));
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                textViewLocation.setText(content); //TODO Button to get Location else just Text
+                textViewLocation.setText(content);
+                locationSet = true;
+            }
+            new GeocoderTask().execute();
+        }
+    }
+
+    private void displayConfirmationDelete() {
+        dialog = new AlertDialog.Builder(SlotsImGoingToDialog.this)
+                .setTitle("Discard")
+                .setMessage("Discard this event")
+                .setPositiveButton("DISCARD", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        dialog.dismiss();
+                        ringProgressDialog = ProgressDialog.show(SlotsImGoingToDialog.this, "Please wait ...", "Cancelling Event: " + event.getSubject() + " ...", true);
+                        ringProgressDialog.setCancelable(false);
+                        new CancelEvent().execute();
+                    }
+                })
+                .setNegativeButton("KEEP", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
+
+    private class GeocoderTask extends AsyncTask<Void, Integer, List<Address>> {
+
+        @Override
+        protected List<Address> doInBackground(Void... result) {
+            // Creating an instance of Geocoder class
+            Geocoder geocoder = new Geocoder(getBaseContext());
+            List<Address> addresses = null;
+
+            try {
+                // Getting a maximum of 3 Address that matches the input text
+                addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return addresses;
+        }
+
+        @Override
+        protected void onPostExecute(List<Address> addresses) {
+
+            for (int i = 0; i < addresses.size(); i++) {
+                Address address = addresses.get(i);
+                String addressText = String.format("%s, %s",
+                        address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                        address.getCountryName());
+
+                Marker location = googleMap.addMarker(new MarkerOptions()
+                        .position(latLng).title(addressText)
+                        .draggable(true));
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(latLng) // Center Set
+                        .zoom(11.0f)                // Zoom
+                        .bearing(0)                // Orientation of the camera to east
+                        .tilt(30)                   // Tilt of the camera to 30 degrees
+                        .build();                   // Creates a CameraPosition from the builder
+
+
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
             progressBar = (ProgressBar) findViewById(R.id.progressBarMyCreatedSlotsDialog);
             progressBar.setVisibility(View.GONE);
 
-            textViewMyeventSpacesAvaliable.setVisibility(View.VISIBLE);
-            textViewSubject.setVisibility(View.VISIBLE);
-            textViewMessage.setVisibility(View.VISIBLE);
+
             textViewLocation.setVisibility(View.VISIBLE);
+            rootView.setVisibility(View.VISIBLE);
+
             textViewDateAndTime.setVisibility(View.VISIBLE);
-            buttonGoingToEventNotGoing.setVisibility(View.VISIBLE);
-            buttonGoingToEventParticipantsSlot.setVisibility(View.VISIBLE);
+
+            textViewMessage.setVisibility(View.VISIBLE);
         }
     }
 
-    private class NotGoingToEvent extends AsyncTask<Void, Integer, Void> {
+    private class CancelEvent extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -221,30 +330,80 @@ public class SlotsImGoingToDialog extends Activity {
         protected Void doInBackground(Void... params) {
 
             Map<String, String> args = new HashMap<>();
-            args.put("id", "removeevent");
-
-            args.put("objectIdPerson", person.getObjectId());
+            args.put("id", "deleteevent");
 
             args.put("event", event.getObjectId());
 
-            Backendless.Events.dispatch("ManageEvent", args);
+            Backendless.Events.dispatch("ManageEvent", args, new AsyncCallback<Map>() {
+                @Override
+                public void handleResponse(Map map) {
+                    dialog.dismiss();
+                    onBackPressed();
+                }
+
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    dialog.dismiss();
+                }
+            });
 
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            ringProgressDialog.dismiss();
-            onBackPressed();
         }
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_discard_event:
+                displayConfirmationDelete();
+                return true;
+
+            case R.id.action_people_going:
+                Intent participantsIntent = new Intent(SlotsImGoingToDialog.this, ParticipantsActivity.class);
+                participantsIntent.putExtra("eventid", event.getObjectId());
+                startActivity(participantsIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.optionsMenu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_goingto, menu);
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.share);
+
+        // Fetch and store ShareActionProvider
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey! Check out this free event/personal planner app: https://play.google.com/store/apps/details?id=com.lh.leonard.amplifiedscheduler");
+        sendIntent.setType("text/plain");
+        mShareActionProvider.setShareIntent(sendIntent);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void invalidateOptionsMenu() {
+
+        super.invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onBackPressed() {
         Intent intent = new Intent(this, SlotsImGoingTo.class);
         startActivity(intent);
         finish();
-
     }
 }

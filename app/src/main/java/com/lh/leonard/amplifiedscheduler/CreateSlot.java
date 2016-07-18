@@ -39,7 +39,6 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.geo.GeoPoint;
 import com.backendless.messaging.DeliveryOptions;
-import com.backendless.messaging.MessageStatus;
 import com.backendless.messaging.PublishOptions;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
@@ -141,7 +140,14 @@ public class CreateSlot extends AppCompatActivity implements
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         Backendless.Data.mapTableToClass("Slot", Slot.class);
         Backendless.Data.mapTableToClass("Person", Person.class);
 
@@ -426,7 +432,7 @@ public class CreateSlot extends AppCompatActivity implements
 
                             String emptys = "";
 
-                            if (subject.trim().equals("") || my_var == null ) {
+                            if (subject.trim().equals("") || my_var == null) {
 
                                 if (subject.trim().equals("")) {
                                     if ((emptys.trim().equals(""))) {
