@@ -85,6 +85,8 @@ public class NavDrawerActivity extends AppCompatActivity {
 
         Backendless.Data.mapTableToClass("Person", Person.class);
         Backendless.Data.mapTableToClass("Plan", Plan.class);
+        Backendless.Data.mapTableToClass("Slot", Slot.class);
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -107,6 +109,7 @@ public class NavDrawerActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
+
         if (userLoggedIn != null) {
             personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         } else {
@@ -120,7 +123,7 @@ public class NavDrawerActivity extends AppCompatActivity {
         Backendless.Messaging.getDeviceRegistration(new AsyncCallback<DeviceRegistration>() {
             @Override
             public void handleResponse(DeviceRegistration response) {
-                Backendless.Persistence.of(Person.class).findById(personLoggedIn.getObjectId(), new AsyncCallback<Person>() {
+                Backendless.Data.of(Person.class).findById(personLoggedIn.getObjectId(), new AsyncCallback<Person>() {
                     @Override
                     public void handleResponse(Person response) {
                         response.setDeviceId(response.getDeviceId());
@@ -453,7 +456,8 @@ public class NavDrawerActivity extends AppCompatActivity {
             relationProps.add("myPlans");
             relationProps.add("myCreatedSlot");
             relationProps.add("pendingResponseSlot");
-            Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps);
+
+            Backendless.Data.of(Person.class).loadRelations(personLoggedIn, relationProps); // TODO handle connection not avaliable pull from cache otherwise
 
             sizePersonsRequestingMe = personLoggedIn.getPersonsRequestingMe().size();
             sizePendingResponseEvents = personLoggedIn.getPendingResponseSlot().size();

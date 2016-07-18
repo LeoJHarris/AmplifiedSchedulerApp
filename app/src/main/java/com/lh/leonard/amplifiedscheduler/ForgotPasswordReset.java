@@ -24,6 +24,14 @@ public class ForgotPasswordReset extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         final EditText emailPasswordRecovery = (EditText) findViewById(R.id.emailPasswordRecovery);
         Button passwordwordRecoveryButton = (Button) findViewById(R.id.buttonEmailNewPassword);
         AutoResizeTextView editTextNoticeUpdate = (AutoResizeTextView) findViewById(R.id.editTextNoticeUpdate);

@@ -1,15 +1,19 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
 
     <RelativeLayout
         android:id="@+id/dialogInfo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/gradient_color_bg"
-        android:paddingBottom="10dp">
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_color_bg">
+
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/tool_bar" />
 
         <ProgressBar
             android:id="@+id/progressBarMyCreatedSlotsDialog"
@@ -17,118 +21,99 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewMySlotSubject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/bluecalendar"
-            android:gravity="center"
-            android:padding="10dp"
-            android:textColor="@android:color/white"
-            android:textSize="35sp"
-            android:visibility="gone" />
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewMySlotMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewMySlotSubject"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:textSize="22sp"
-            android:visibility="gone" />
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewMySlotDateAndTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewMySlotMessage"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:textSize="22sp"
-            android:visibility="gone" />
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewMySlotLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewMySlotDateAndTime"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:textSize="22sp"
-            android:visibility="gone" />
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewMyEventSpacesAvaliable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewMySlotLocation"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:textSize="22sp"
-            android:visibility="gone" />
-
-        <!--<LinearLayout-->
-        <!--android:id="@+id/LinearLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_below="@id/textViewMyEventSpacesAvaliable"-->
-        <!--android:layout_margin="10px"-->
-        <!--android:gravity="center_horizontal|bottom"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<Button-->
-        <!--android:id="@+id/buttonMySlotParticipantsSlot"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:background="@drawable/button_default_bg"-->
-        <!--android:text="Persons Going"-->
-        <!--android:textSize="22sp"-->
-        <!--android:visibility="gone" />-->
-        <!--</LinearLayout>-->
-
-
         <LinearLayout
-            android:id="@+id/LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/textViewMyEventSpacesAvaliable"
-            android:layout_margin="10px"
-            android:gravity="center_horizontal|bottom"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="5dp">
 
-            <Button
-                android:id="@+id/buttonGoingToEventParticipantsSlot"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/buttonMySlotCancelSlot"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/button_default_bg"
-                android:text="People Going"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:padding="10dp">
 
-            <Button
-                android:id="@+id/buttonGoingToEventNotGoing"
+                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                    android:id="@+id/textViewMySlotMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                    android:id="@+id/textViewMyNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                    android:id="@+id/textViewMySlotDateAndTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                    android:id="@+id/textViewMyEventSpacesAvaliable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/button_default_bg"
-                android:text="Cant Go"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                    android:id="@+id/textViewMySlotLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/map_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:visibility="gone">
+
+                    <fragment
+                        android:id="@+id/just_map"
+                        class="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

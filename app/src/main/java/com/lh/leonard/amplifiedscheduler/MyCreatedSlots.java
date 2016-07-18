@@ -65,6 +65,7 @@ public class MyCreatedSlots extends AppCompatActivity implements
     private WeekView mWeekView;
     Boolean loadingPage = true;
     LinearLayout wrapperViews;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,8 +107,18 @@ public class MyCreatedSlots extends AppCompatActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
-        personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+
+        if (userLoggedIn.getProperty("persons") != null)
+            personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         new ParseURL().execute();
     }
 
@@ -155,8 +166,9 @@ public class MyCreatedSlots extends AppCompatActivity implements
 
     /**
      * Checks if an event falls into a specific year and month.
+     *
      * @param event The event to check for.
-     * @param year The year.
+     * @param year  The year.
      * @param month The month.
      * @return True if the event matches the year and month.
      */

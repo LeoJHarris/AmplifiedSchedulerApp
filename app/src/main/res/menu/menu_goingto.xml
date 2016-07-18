@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.lh.leonard.amplifiedscheduler.NavDrawerActivity">
+
+    <item
+        android:id="@+id/action_discard_event"
+        android:icon="@drawable/ic_thumb_down_black"
+        android:title="Cant go"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_people_going"
+        android:icon="@drawable/ic_contacts_selected"
+        android:title="Friends Status"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic__action_share"
+        android:title="Share"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        app:showAsAction="ifRoom" />
+</menu>

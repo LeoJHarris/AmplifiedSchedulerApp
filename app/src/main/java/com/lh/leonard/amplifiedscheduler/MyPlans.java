@@ -26,7 +26,6 @@ import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
-import com.alamkanak.weekview.WeekViewLoader;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
@@ -84,6 +83,7 @@ public class MyPlans extends AppCompatActivity implements
 
         final Typeface RobotoCondensedLightItalic = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/RobotoCondensed-LightItalic.ttf");
 
+
         AutoResizeTextView tvSocial = (AutoResizeTextView) findViewById(R.id.textViewSocial);
         AutoResizeTextView textViewCulturalEvents = (AutoResizeTextView) findViewById(R.id.textViewCulturalEvents);
         AutoResizeTextView textViewAcademicEvents = (AutoResizeTextView) findViewById(R.id.textViewAcademicEvents);
@@ -110,7 +110,17 @@ public class MyPlans extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
-        personLoggedIn = (Person) userLoggedIn.getProperty("persons");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        if (userLoggedIn.getProperty("persons") != null)
+            personLoggedIn = (Person) userLoggedIn.getProperty("persons");
         new ParseURL().execute();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -230,8 +240,9 @@ public class MyPlans extends AppCompatActivity implements
 
     /**
      * Checks if an event falls into a specific year and month.
+     *
      * @param event The event to check for.
-     * @param year The year.
+     * @param year  The year.
      * @param month The month.
      * @return True if the event matches the year and month.
      */
@@ -352,7 +363,7 @@ public class MyPlans extends AppCompatActivity implements
             maxDate.add(Calendar.YEAR, 1);
 
             mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), mPickerController);
-          // mWeekView.setVisibility(View.VISIBLE);
+            // mWeekView.setVisibility(View.VISIBLE);
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             RelativeLayout RLProgressBar = (RelativeLayout) findViewById(R.id.RLProgressBar);
             assert RLProgressBar != null;

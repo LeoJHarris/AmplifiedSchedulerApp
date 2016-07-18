@@ -4,12 +4,16 @@
     android:fillViewport="true"
     android:fitsSystemWindows="true">
 
+
     <RelativeLayout
         android:id="@+id/dialogInfo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/gradient_color_bg"
-        android:paddingBottom="10dp">
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_color_bg">
+
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/tool_bar" />
 
         <ProgressBar
             android:id="@+id/progressBarMyPlanDialog"
@@ -17,95 +21,67 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewMyPlanSubject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/bluecalendar"
-            android:gravity="center"
-            android:padding="10dp"
-            android:textColor="@android:color/white"
-            android:textSize="35sp"
-            android:visibility="gone" />
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewMyPlanNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewMyPlanSubject"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:textSize="22sp"
-            android:visibility="gone" />
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewMyPlanDateAndTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewMyPlanNote"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:textSize="22sp"
-            android:visibility="gone" />
-
-        <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
-            android:id="@+id/textViewMyPlanLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewMyPlanDateAndTime"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:textSize="22sp"
-            android:visibility="gone" />
-
-        <!--<LinearLayout-->
-        <!--android:id="@+id/LinearLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_below="@id/textViewMyEventSpacesAvaliable"-->
-        <!--android:layout_margin="10px"-->
-        <!--android:gravity="center_horizontal|bottom"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<Button-->
-        <!--android:id="@+id/buttonMySlotParticipantsSlot"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:background="@drawable/button_default_bg"-->
-        <!--android:text="Persons Going"-->
-        <!--android:textSize="22sp"-->
-        <!--android:visibility="gone" />-->
-        <!--</LinearLayout>-->
-
-
         <LinearLayout
-            android:id="@+id/LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/textViewMyPlanLocation"
-            android:gravity="center_horizontal|bottom"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/buttonMyPlanCancelSlot"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/button_default_bg"
-                android:text="Cancel Plan"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                        android:id="@+id/textViewPlanNote"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                        android:id="@+id/textViewPlanDateAndTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="10dp"
+
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <com.lh.leonard.amplifiedscheduler.AutoResizeTextView
+                    android:id="@+id/textViewMyPlanLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:paddingTop="10dp"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/map_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <fragment
+                        android:id="@+id/just_map"
+                        class="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>
